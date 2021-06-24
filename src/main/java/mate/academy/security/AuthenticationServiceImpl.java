@@ -36,8 +36,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public User login(String login, String password) throws AuthenticationException {
         Optional<User> user = userService.findByEmail(login);
-        String encodedPassword = passwordEncoder.encode(password);
-        if (user.isEmpty() || user.get().getPassword().equals(encodedPassword)) {
+        if (user.isEmpty() || !passwordEncoder.matches(password, user.get().getPassword())) {
             throw new AuthenticationException("Incorrect username or password!!!");
         }
         return user.get();
