@@ -3,7 +3,6 @@ package mate.academy.controller;
 import mate.academy.model.Role;
 import mate.academy.security.AuthenticationService;
 import mate.academy.service.RoleService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,11 +10,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/inject")
 public class InjectController {
-    @Autowired
-    private RoleService roleService;
+    private final RoleService roleService;
 
-    @Autowired
-    private AuthenticationService authenticationService;
+    private final AuthenticationService authenticationService;
+
+    public InjectController(RoleService roleService,
+                            AuthenticationService authenticationService) {
+        this.roleService = roleService;
+        this.authenticationService = authenticationService;
+    }
 
     @GetMapping
     public String injectData() {

@@ -10,6 +10,7 @@ public class IndexController {
     @GetMapping("/")
     public String hello(Authentication authentication, HttpServletRequest request) {
         String sessionId = request.getSession().getId();
-        return String.format("Hello, %s!", authentication.getName() + ". Your session id is: " + sessionId);
+        return String.format("Hello, %s!", authentication.getName()
+                + ". Your session id is: " + sessionId);
     }
 }
