@@ -1,7 +1,5 @@
 package mate.academy.validation;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import javax.validation.ConstraintValidatorContext;
 import mate.academy.model.dto.UserRegistrationDto;
 import org.junit.jupiter.api.Assertions;
