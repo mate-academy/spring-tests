@@ -15,6 +15,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 
 class JwtTokenProviderTest {
+    private static final String USERNAME = "bob";
+    private static final List<String> ROLES = List.of("User");
     private static final String MOCK_TOKEN = "eyJhbGciOiJIUzI1NiJ9"
             + ".eyJzdWIiOiJib2IiLCJyb2xlcyI6WyJVc2VyIl0sImlhdCI6MTYyNTc0NTE0NSwiZXhwIjoxNjI1"
             + "NzQ4NzQ1fQ"
@@ -34,13 +36,13 @@ class JwtTokenProviderTest {
 
     @Test
     void createToken_Ok() {
-        String actual = tokenProvider.createToken("bob", List.of("User"));
+        String actual = tokenProvider.createToken(USERNAME, ROLES);
         Assertions.assertNotEquals(MOCK_TOKEN, actual);
     }
 
     @Test
     void getAuthentication_Ok() {
-        UserBuilder builder = org.springframework.security.core.userdetails.User.withUsername("bob");
+        UserBuilder builder = org.springframework.security.core.userdetails.User.withUsername(USERNAME);
         builder.password("132456789");
         builder.roles("User");
         UserDetails userDetails = builder.build();
@@ -48,15 +50,16 @@ class JwtTokenProviderTest {
                 userDetails.getAuthorities());
         Mockito.when(userDetailsService.loadUserByUsername(Mockito.any())).thenReturn(userDetails);
 
-        Authentication actual = tokenProvider.getAuthentication(MOCK_TOKEN);
+        String token = tokenProvider.createToken(USERNAME, ROLES);
+        Authentication actual = tokenProvider.getAuthentication(token);
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     void getUsername_Ok() {
-        String token = tokenProvider.createToken("bob", List.of("User"));
+        String token = tokenProvider.createToken(USERNAME, ROLES);
         String username = tokenProvider.getUsername(token);
-        Assertions.assertEquals("bob", username);
+        Assertions.assertEquals(USERNAME, username);
     }
 
     @Test
@@ -85,14 +88,14 @@ class JwtTokenProviderTest {
 
     @Test
     void validateToken_Ok() {
-        String token = tokenProvider.createToken("bob", List.of("User"));
+        String token = tokenProvider.createToken(USERNAME, ROLES);
         Assertions.assertTrue(tokenProvider.validateToken(token));
     }
 
     @Test
     void validateToken_tooOld() {
         ReflectionTestUtils.setField(tokenProvider, "validityInMilliseconds", 0L);
-        String token = tokenProvider.createToken("bob", List.of("User"));
+        String token = tokenProvider.createToken(USERNAME, ROLES);
         try {
             tokenProvider.validateToken(token);
         } catch (RuntimeException e) {

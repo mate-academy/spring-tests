@@ -1,5 +1,6 @@
 package mate.academy.dao.impl;
 
+import java.util.Collections;
 import java.util.Optional;
 import mate.academy.dao.UserDao;
 import mate.academy.model.Role;
@@ -35,11 +36,12 @@ class UserDaoImplTest extends AbstractTest {
     @Test
     void findByEmail_Ok() {
         User user = new User();
-        user.setEmail("tema@gmail.com");
+        user.setEmail(EMAIL);
         user.setPassword(PASSWORD);
+        user.setRoles(Collections.emptySet());
         User expected = userDao.save(user);
 
-        Optional<User> actual = userDao.findByEmail("tema@gmail.com");
+        Optional<User> actual = userDao.findByEmail(EMAIL);
         Assertions.assertTrue(actual.isPresent());
         Assertions.assertEquals(expected, actual.get());
     }
@@ -47,11 +49,12 @@ class UserDaoImplTest extends AbstractTest {
     @Test
     void findById_Ok() {
         User user = new User();
-        user.setEmail("alice@gmail.com");
+        user.setEmail(EMAIL);
         user.setPassword(PASSWORD);
+        user.setRoles(Collections.emptySet());
         User expected = userDao.save(user);
 
-        Optional<User> actual = userDao.findById(1L);
+        Optional<User> actual = userDao.findById(expected.getId());
         Assertions.assertTrue(actual.isPresent());
         Assertions.assertEquals(expected, actual.get());
     }
