@@ -2,6 +2,7 @@ package mate.academy.dao.impl;
 
 import java.util.Optional;
 import mate.academy.dao.UserDao;
+import mate.academy.exception.DataProcessingException;
 import mate.academy.model.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -19,9 +20,12 @@ public class UserDaoImpl extends AbstractDao<User, Long> implements UserDao {
     public Optional<User> findByEmail(String email) {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery(
-                    "from User u join fetch u.roles where u.email = :email", User.class)
+                    "from User u left join fetch u.roles where u.email = :email", User.class)
                     .setParameter("email", email)
                     .uniqueResultOptional();
+        } catch (Exception e) {
+            throw new DataProcessingException("Couldn't get user with login: "
+                    + email, e);
         }
     }
 }
