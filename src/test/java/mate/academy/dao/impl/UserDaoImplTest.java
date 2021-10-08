@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class UserDaoImplTest extends AbstractTest {
-    UserDao userDao;
+    private UserDao userDao;
 
     @Override
     protected Class<?>[] entities() {
@@ -45,6 +45,7 @@ class UserDaoImplTest extends AbstractTest {
 
         Optional<User> actual = userDao.findByEmail(email);
         Assertions.assertNotNull(actual);
+        Assertions.assertTrue(actual.isPresent(), "Email was not found");
         Assertions.assertEquals(email, actual.get().getEmail(), "Email is not equal");
         Assertions.assertEquals(password, actual.get().getPassword(), "Password is not equal");
     }

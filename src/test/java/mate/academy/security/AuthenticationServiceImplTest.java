@@ -76,7 +76,8 @@ class AuthenticationServiceImplTest {
 
     @Test
     void login_IncorrectCredentials() {
-        Mockito.when(userService.findByEmail(userAlice.getEmail())).thenReturn(Optional.of(userBob));
+        Mockito.when(userService.findByEmail(userAlice.getEmail()))
+                        .thenReturn(Optional.of(userBob));
 
         try {
             authenticationService.login(userAlice.getEmail(), userAlice.getPassword());

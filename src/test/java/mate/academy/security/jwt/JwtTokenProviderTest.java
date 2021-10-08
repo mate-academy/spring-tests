@@ -14,9 +14,9 @@ import org.springframework.test.util.ReflectionTestUtils;
 class JwtTokenProviderTest {
     private static final String CORRECT_LOGIN = "bob@i.ua";
     private static final List<String> ROLES = List.of("USER");
-    private static final String VALID_TOKEN = "eyJhbGciOiJIUzI1NiJ9." +
-            "eyJzdWIiOiJib2JAaS51YSIsInJvbGVzIjpbIlVTRVIiXSwiaWF0IjoxNjMzNjQzNDk1LCJleHAiOjE2M" +
-            "zM2NDcwOTV9.4rb5gw0g-6_NPhQZT3krqUKUu4TvZqDxhI4O1dFYF88";
+    private static final String VALID_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib2JAaS51YSIsIn"
+            + "JvbGVzIjpbIlVTRVIiXSwiaWF0IjoxNjMzNjkxODcyLCJleHAiOjE2MzM2OTU0NzJ9.a2uXKMKHy9BnWr"
+            + "rgwFvNpM5NU3RiDSHhi0t11GuvWBk";
     private static final String INVALID_TOKEN = "ey";
     private JwtTokenProvider jwtTokenProvider;
     private UserDetailsService userDetailsService;
@@ -31,7 +31,7 @@ class JwtTokenProviderTest {
             ReflectionTestUtils.setField(jwtTokenProvider, "validityInMilliseconds", 3600000,
                     long.class);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
     }
 

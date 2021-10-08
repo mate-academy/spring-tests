@@ -23,10 +23,10 @@ class RoleServiceImplTest extends AbstractTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        Class[] cArg = new Class[1];
-        cArg[0] = SessionFactory.class;
+        Class[] classArguments = new Class[1];
+        classArguments[0] = SessionFactory.class;
 
-        Constructor constructor = RoleDaoImpl.class.getDeclaredConstructor(cArg);
+        Constructor constructor = RoleDaoImpl.class.getDeclaredConstructor(classArguments);
         constructor.setAccessible(true);
         Assertions.assertTrue(Modifier.isProtected(constructor.getModifiers()),
                 "Constructor is not protected");

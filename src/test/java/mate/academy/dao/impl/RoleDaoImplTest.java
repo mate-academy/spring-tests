@@ -26,6 +26,7 @@ class RoleDaoImplTest extends AbstractTest {
         roleAdmin.setRoleName(Role.RoleName.ADMIN);
         Role actual = roleDao.save(roleAdmin);
         Assertions.assertNotNull(actual);
+        Assertions.assertEquals(1L, actual.getId());
         Assertions.assertEquals("ADMIN", actual.getRoleName().name());
     }
 
