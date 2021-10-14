@@ -23,10 +23,10 @@ public class JwtTokenProviderTest {
     private static final String EMAIL = "bob@gmail.com";
     private static final String PASSWORD = "bobTheBest";
     private static final String USER_ROLE = "USER";
-    private static final String TOKEN = "eyJhbGciOiJIUzI1NiJ9"
-            + ".eyJzdWIiOiJib2JAZ21haWwuY29tIiwicm9sZXMiOlsiVVNFU"
-            + "iJdLCJpYXQiOjE2MzQxMzI2NDcsImV4cCI6MTYzNDEzNjI0N30"
-            + ".uZGgd-ytnrqmOcxrmuS-mHXj_xJGcvssijQHUy-uVZM";
+    private static final String TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib2"
+            + "JAZ21haWwuY29tIiwicm9sZXMiOlsiVVNFU"
+            + "iJdLCJpYXQiOjE2MzQyMTg2NjMsImV4cCI6MTYzNDIyMjI2M30"
+            + ".9mP5p7gdfqvB2ueeQgvgVQHbMwqQkMICkf_SaWz6ZJc";
     private static final String INCORRECT_TOKEN = "eyJhbGciOiJIUzI1NiJ9"
             + ".eyJzdWIiOiJib2dsafdafafddasfdfdadffdafdfdaiOlsiVVNFU"
             + "iJdLCJpYXQiOjE2MzQxMzI2NDcsImV4cCI6MTYzNDEzNjI0N30"
