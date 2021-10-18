@@ -6,7 +6,7 @@ import mate.academy.model.Role;
 import mate.academy.model.User;
 import mate.academy.service.UserService;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,18 +14,24 @@ import org.springframework.security.core.userdetails.UserDetails;
 class CustomUserDetailsServiceTest {
     private static final String EMAIL = "robokop@mail.com";
     private static final String PASSWORD = "12345";
-    private User user;
-    private CustomUserDetailsService customUserDetailsService;
-    private UserService userService;
+    private static final String NON_EXISTING_EMAIL = "neo@mail.com";
+    private static final String  NON_EXISTING_PASSWORD = "777";
+    private static User user;
+    private static CustomUserDetailsService customUserDetailsService;
+    private static UserService userService;
+    private static User non_existing_user;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void setUp() {
         userService = Mockito.mock(UserService.class);
         customUserDetailsService = new CustomUserDetailsService(userService);
         user = new User();
         user.setEmail(EMAIL);
         user.setPassword(PASSWORD);
         user.setRoles(Set.of(new Role(Role.RoleName.USER)));
+        non_existing_user = new User();
+        non_existing_user.setPassword(NON_EXISTING_PASSWORD);
+        non_existing_user.setEmail(NON_EXISTING_EMAIL);
     }
 
     @Test
@@ -34,5 +40,13 @@ class CustomUserDetailsServiceTest {
         UserDetails actual = customUserDetailsService.loadUserByUsername(EMAIL);
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(user.getEmail(), actual.getUsername());
+    }
+
+    @Test
+    void loadByUserName_NotOk() {
+        Mockito.when(userService.findByEmail(NON_EXISTING_EMAIL)).thenReturn(Optional.of(non_existing_user));
+        Assertions.assertThrows(Exception.class, () ->
+                customUserDetailsService.loadUserByUsername(NON_EXISTING_EMAIL)
+        );
     }
 }

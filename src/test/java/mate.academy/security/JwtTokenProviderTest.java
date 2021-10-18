@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import mate.academy.security.jwt.JwtTokenProvider;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,11 +21,11 @@ class JwtTokenProviderTest {
     private static final String TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQG1haWwuY29tIiwicm9" +
             "sZXMiOlsiVVNFUiIsIkFETUlOIl0sImlhdCI6MTYzNDM3NTM4MiwiZXhwIjoxNjM0M" +
             "zc4OTgyfQ.H9QvQ0o7SVAvCPuo2cM0eLSg3L24IKJar0meheYBARE";
-    private JwtTokenProvider jwtTokenProvider;
-    private UserDetailsService userDetailsService;
+    private static JwtTokenProvider jwtTokenProvider;
+    private static UserDetailsService userDetailsService;
 
-    @BeforeEach
-    void name() {
+    @BeforeAll
+    static void name() {
         userDetailsService = Mockito.mock(UserDetailsService.class);
         jwtTokenProvider = new JwtTokenProvider(userDetailsService);
         ReflectionTestUtils.setField(jwtTokenProvider, "secretKey", "secret");
