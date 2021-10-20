@@ -26,14 +26,17 @@ class RoleServiceImplTest {
     void save_ok() {
         Mockito.when(roleService.save(role)).thenReturn(role);
         Role actual = roleService.save(role);
-        Assertions.assertNotNull(actual);
+        Assertions.assertNotNull(actual,
+                "Should not be null after saving new role");
     }
 
     @Test
     void getRoleByName_ok() {
         Mockito.when(roleDao.getRoleByName(USER_ROLE)).thenReturn(Optional.of(role));
         Role actual = roleService.getRoleByName(USER_ROLE);
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(actual.getRoleName(), Role.RoleName.USER);
+        Assertions.assertNotNull(actual,
+                "Should not return null for valid input");
+        Assertions.assertEquals(actual.getRoleName(), Role.RoleName.USER,
+                "Should return correct role for valid input");
     }
 }

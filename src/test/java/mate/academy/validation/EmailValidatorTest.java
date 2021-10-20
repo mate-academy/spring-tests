@@ -15,12 +15,14 @@ class EmailValidatorTest {
 
     @Test
     void isValid_ok() {
-        Assertions.assertTrue(emailValidator.isValid(EMAIL, null));
+        Assertions.assertTrue(emailValidator.isValid(EMAIL, null),
+                "Should be true for valid email");
     }
 
     @Test
     void isValid_notOk() {
-        Assertions.assertFalse(emailValidator.isValid("wrongemailcom", null));
+        Assertions.assertFalse(emailValidator.isValid("wrongemailcom", null),
+                "Should be false for invalid email");
     }
 
 }

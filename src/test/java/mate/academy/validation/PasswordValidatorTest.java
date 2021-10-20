@@ -25,13 +25,15 @@ class PasswordValidatorTest {
     void isValid_ok() {
         userDto.setPassword(PASSWORD);
         userDto.setRepeatPassword(PASSWORD);
-        Assertions.assertTrue(passwordValidator.isValid(userDto, null));
+        Assertions.assertTrue(passwordValidator.isValid(userDto, null),
+                "Should be true for same passwords");
     }
 
     @Test
     void isValid_notOk() {
         userDto.setPassword(PASSWORD);
         userDto.setRepeatPassword("notPassword");
-        Assertions.assertFalse(passwordValidator.isValid(userDto, null));
+        Assertions.assertFalse(passwordValidator.isValid(userDto, null),
+                "Should be false for different passwords");
     }
 }

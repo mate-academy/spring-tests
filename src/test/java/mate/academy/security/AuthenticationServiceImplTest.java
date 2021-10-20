@@ -39,9 +39,12 @@ class AuthenticationServiceImplTest {
     void login_Ok() throws AuthenticationException {
         Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
         User actual = authenticationService.login(EMAIL, PASSWORD);
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(EMAIL, actual.getEmail());
-        Assertions.assertTrue(passwordEncoder.matches(PASSWORD, actual.getPassword()));
+        Assertions.assertNotNull(actual,
+                "User should not be null after logging in using valid data");
+        Assertions.assertEquals(EMAIL, actual.getEmail(),
+                "Should return valid email for logged in user");
+        Assertions.assertTrue(passwordEncoder.matches(PASSWORD, actual.getPassword()),
+                "Should return valid password for logged in user");
     }
 
     @Test
@@ -49,9 +52,12 @@ class AuthenticationServiceImplTest {
         Mockito.when(roleService.getRoleByName("USER")).thenReturn(new Role(Role.RoleName.USER));
         Mockito.when(userService.save(Mockito.any())).thenReturn(user);
         User actual = authenticationService.register(EMAIL, PASSWORD);
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(EMAIL, actual.getEmail());
-        Assertions.assertEquals(PASSWORD, actual.getPassword());
+        Assertions.assertNotNull(actual,
+                "User should not be null after successful registration");
+        Assertions.assertEquals(EMAIL, actual.getEmail(),
+                "User's email should be the same as the one used during registration");
+        Assertions.assertEquals(PASSWORD, actual.getPassword(),
+                "User's password should be the same as the one used during registration");
     }
 
     @Test

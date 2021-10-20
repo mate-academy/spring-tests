@@ -30,24 +30,31 @@ public class UserServiceImplTest {
     void save_ok() {
         Mockito.when(userService.save(user)).thenReturn(user);
         User actual = userService.save(user);
-        Assertions.assertNotNull(actual);
+        Assertions.assertNotNull(actual,
+                "Should not be null after saving new user");
     }
 
     @Test
     void findByEmail_ok() {
         Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
         Optional<User> actual = userService.findByEmail(EMAIL);
-        Assertions.assertTrue(actual.isPresent());
-        Assertions.assertEquals(actual.get().getEmail(), EMAIL);
-        Assertions.assertEquals(actual.get().getPassword(), PASSWORD);
+        Assertions.assertTrue(actual.isPresent(),
+                "Should not return empty Optional for valid email");
+        Assertions.assertEquals(actual.get().getEmail(), EMAIL,
+                "User's email should be the same as the one used for search");
+        Assertions.assertEquals(actual.get().getPassword(), PASSWORD,
+                "Should return correct password for valid input");
     }
 
     @Test
     void findById_ok() {
         Mockito.when(userService.findById(1L)).thenReturn(Optional.of(user));
         Optional<User> actual = userService.findById(1L);
-        Assertions.assertTrue(actual.isPresent());
-        Assertions.assertEquals(actual.get().getEmail(), EMAIL);
-        Assertions.assertEquals(actual.get().getPassword(), PASSWORD);
+        Assertions.assertTrue(actual.isPresent(),
+                "Should not return empty Optional for valid id");
+        Assertions.assertEquals(actual.get().getEmail(), EMAIL,
+                "Should return correct email for valid input");
+        Assertions.assertEquals(actual.get().getPassword(), PASSWORD,
+                "Should return correct password for valid input");
     }
 }

@@ -35,13 +35,13 @@ class JwtTokenProviderTest {
     @Test
     void createToken_ok() {
         String actual = jwtTokenProvider.createToken(EMAIL, List.of(USER_ROLE));
-        Assertions.assertNotNull(actual);
+        Assertions.assertNotNull(actual, "After creation token should no be null");
     }
 
     @Test
     void getUsername_Ok() {
         String actual = jwtTokenProvider.getUsername(TOKEN);
-        Assertions.assertEquals(EMAIL, actual);
+        Assertions.assertEquals(EMAIL, actual, "Should return valid email for correct token");
     }
 
     @Test
@@ -49,13 +49,13 @@ class JwtTokenProviderTest {
         HttpServletRequest req = Mockito.mock(HttpServletRequest.class);
         Mockito.when(req.getHeader("Authorization")).thenReturn("Bearer " + TOKEN);
         String actual = jwtTokenProvider.resolveToken(req);
-        Assertions.assertEquals(TOKEN, actual);
+        Assertions.assertEquals(TOKEN, actual, "Should return valid token");
     }
 
     @Test
     void validateToken_Ok() {
         boolean actual = jwtTokenProvider.validateToken(TOKEN);
-        Assertions.assertTrue(actual);
+        Assertions.assertTrue(actual, "Should return true for valid token");
     }
 
     @Test
@@ -65,9 +65,13 @@ class JwtTokenProviderTest {
         Mockito.when(userDetailsService.loadUserByUsername(Mockito.any())).thenReturn(userDetails);
         Authentication actual = jwtTokenProvider.getAuthentication(TOKEN);
         User actualUser = (User) actual.getPrincipal();
-        Assertions.assertNotNull(actual);
-        Assertions.assertNotNull(actualUser);
-        Assertions.assertEquals(EMAIL, actualUser.getUsername());
-        Assertions.assertEquals(PASSWORD, actualUser.getPassword());
+        Assertions.assertNotNull(actual,
+                "Authentication object should not be null for valid token");
+        Assertions.assertNotNull(actualUser,
+                "Should return valid user for valid token");
+        Assertions.assertEquals(EMAIL, actualUser.getUsername(),
+                "Should be valid email for user with valid token");
+        Assertions.assertEquals(PASSWORD, actualUser.getPassword(),
+                "Should be valid password for user with valid token");
     }
 }

@@ -34,9 +34,11 @@ class CustomUserDetailsServiceTest {
     void loadUserByUsername_Ok() {
         Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
         UserDetails actual = userDetailsService.loadUserByUsername(EMAIL);
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(EMAIL, actual.getUsername());
-        Assertions.assertEquals(PASSWORD, actual.getPassword());
+        Assertions.assertNotNull(actual, "Should not return null for valid email");
+        Assertions.assertEquals(EMAIL, actual.getUsername(),
+                "Should return valid email for correct input");
+        Assertions.assertEquals(PASSWORD, actual.getPassword(),
+                "Should return valid password for correct input");
     }
 
     @Test

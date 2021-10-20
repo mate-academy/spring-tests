@@ -35,22 +35,23 @@ class UserDaoImplTest extends AbstractTest {
     void save_ok() {
         User actual = userDao.save(user);
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(actual.getId(), 1L);
+        Assertions.assertEquals(1L, actual.getId(), "Id for first saved user should be 1");
     }
 
     @Test
     void findByEmail_ok() {
         userDao.save(user);
         Optional<User> actual = userDao.findByEmail(EMAIL);
-        Assertions.assertTrue(actual.isPresent());
-        Assertions.assertEquals(actual.get().getId(), 1L);
+        Assertions.assertTrue(actual.isPresent(),
+                "For existing user with valid email Optional should no be empty");
+        Assertions.assertEquals(1L, actual.get().getId());
     }
 
     @Test
     void findByEmail_notOk() {
         userDao.save(user);
         Optional<User> actual = userDao.findByEmail("notemail");
-        Assertions.assertTrue(actual.isEmpty());
+        Assertions.assertTrue(actual.isEmpty(), "For non existing email Optional should be empty");
     }
 
     @Override
