@@ -13,7 +13,6 @@ import org.junit.jupiter.api.BeforeEach;
 
 public abstract class AbstractTest {
     protected interface DataSourceProvider {
-
         enum IdentifierStrategy {
             IDENTITY,
             SEQUENCE
