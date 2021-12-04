@@ -7,13 +7,12 @@ import mate.academy.model.Role;
 import mate.academy.model.User;
 import mate.academy.service.RoleService;
 import mate.academy.service.UserService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class AuthenticationServiceTest {
     private static String email;
@@ -21,7 +20,7 @@ class AuthenticationServiceTest {
     private static User user;
     private static UserService userService;
     private static PasswordEncoder passwordEncoder;
-    private  static RoleService roleService;
+    private static RoleService roleService;
 
     @BeforeAll
     static void beforeAll() {
@@ -43,37 +42,39 @@ class AuthenticationServiceTest {
         AuthenticationService authenticationService =
                 new AuthenticationServiceImpl(userService,roleService,passwordEncoder);
         User actual = authenticationService.register(email, password);
-        assertNotNull(actual);
-        assertEquals(email,actual.getEmail());
-        assertEquals("123",actual.getPassword());
-        assertEquals(Set.of(new Role(Role.RoleName.USER)),actual.getRoles());
+        Assertions.assertNotNull(actual);
+        Assertions.assertEquals(email,actual.getEmail());
+        Assertions.assertEquals("123",actual.getPassword());
+        Assertions.assertEquals(Set.of(new Role(Role.RoleName.USER)),actual.getRoles());
     }
 
     @Test
     void login_Ok() throws AuthenticationException {
         Mockito.when(userService.findByEmail(email)).thenReturn(Optional.of(user));
-        Mockito.when(passwordEncoder.matches(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
+        Mockito.when(passwordEncoder.matches(Mockito.anyString(),
+                Mockito.anyString())).thenReturn(true);
         AuthenticationService authenticationService =
                 new AuthenticationServiceImpl(userService,roleService,passwordEncoder);
         User actual = authenticationService.login(email, password);
-        assertNotNull(actual);
-        assertEquals(email,actual.getEmail());
-        assertEquals("123",actual.getPassword());
-        assertEquals(Set.of(new Role(Role.RoleName.USER)),actual.getRoles());
+        Assertions.assertNotNull(actual);
+        Assertions.assertEquals(email,actual.getEmail());
+        Assertions.assertEquals("123",actual.getPassword());
+        Assertions.assertEquals(Set.of(new Role(Role.RoleName.USER)),actual.getRoles());
     }
 
     @Test
     void login_NotOk() throws AuthenticationException {
         Mockito.when(userService.findByEmail(email)).thenReturn(Optional.of(user));
-        Mockito.when(passwordEncoder.matches(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
+        Mockito.when(passwordEncoder.matches(Mockito.anyString(),
+                Mockito.anyString())).thenReturn(true);
         AuthenticationService authenticationService =
                 new AuthenticationServiceImpl(userService,roleService,passwordEncoder);
         try {
             authenticationService.login("alice@i.ua", "34");
         } catch (AuthenticationException e) {
-            assertEquals("Incorrect username or password!!!", e.getMessage());
+            Assertions.assertEquals("Incorrect username or password!!!", e.getMessage());
             return;
         }
-        fail();
+        Assertions.fail();
     }
 }

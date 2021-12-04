@@ -4,10 +4,10 @@ import java.util.Optional;
 import mate.academy.dao.RoleDao;
 import mate.academy.model.Role;
 import mate.academy.service.impl.RoleServiceImpl;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import static org.junit.jupiter.api.Assertions.*;
 
 class RoleServiceTest {
     private static RoleDao roleDao;
@@ -29,8 +29,8 @@ class RoleServiceTest {
     void save_Ok() {
         Mockito.when(roleDao.save(adminRole)).thenReturn(adminRole);
         Role actual = roleService.save(adminRole);
-        assertNotNull(actual);
-        assertEquals(Role.RoleName.ADMIN,actual.getRoleName());
+        Assertions.assertNotNull(actual);
+        Assertions.assertEquals(Role.RoleName.ADMIN,actual.getRoleName());
     }
 
     @Test
@@ -38,7 +38,7 @@ class RoleServiceTest {
         Mockito.when(roleDao.getRoleByName(userRole.getRoleName().toString()))
                 .thenReturn(Optional.ofNullable(userRole));
         Role actual = roleService.getRoleByName(userRole.getRoleName().toString());
-        assertNotNull(actual);
-        assertEquals(userRole,actual);
+        Assertions.assertNotNull(actual);
+        Assertions.assertEquals(userRole,actual);
     }
 }

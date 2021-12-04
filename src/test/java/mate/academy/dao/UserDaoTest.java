@@ -5,11 +5,11 @@ import java.util.Optional;
 import mate.academy.dao.impl.UserDaoImpl;
 import mate.academy.model.Role;
 import mate.academy.model.User;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
-class UserDaoTest extends AbstractTest{
+class UserDaoTest extends AbstractTest {
     private static UserDao userDao;
     private static User user;
 
@@ -25,20 +25,20 @@ class UserDaoTest extends AbstractTest{
     @Test
     void save_Ok() {
         User actual = userDao.save(user);
-        assertNotNull(actual);
-        assertEquals(1L,actual.getId());
-        assertEquals(user,actual);
+        Assertions.assertNotNull(actual);
+        Assertions.assertEquals(1L,actual.getId());
+        Assertions.assertEquals(user,actual);
     }
 
     @Test
     void findByEmail_Ok() {
         userDao.save(user);
         Optional<User> actual = userDao.findByEmail(user.getEmail());
-        assertFalse(actual.isEmpty());
-        assertEquals(1L,actual.get().getId());
-        assertEquals(user,actual.get());
+        Assertions.assertFalse(actual.isEmpty());
+        Assertions.assertEquals(1L,actual.get().getId());
+        Assertions.assertEquals(user,actual.get());
         Optional<User> emptyValue = userDao.findByEmail("alice@i.ua");
-        assertTrue(emptyValue.isEmpty());
+        Assertions.assertTrue(emptyValue.isEmpty());
     }
 
     @Test
@@ -50,9 +50,9 @@ class UserDaoTest extends AbstractTest{
         bob.setRoles(Collections.emptySet());
         userDao.save(bob);
         Optional<User> actual = userDao.findById(2L);
-        assertFalse(actual.isEmpty());
-        assertEquals(2L,actual.get().getId());
-        assertEquals(bob,actual.get());
+        Assertions.assertFalse(actual.isEmpty());
+        Assertions.assertEquals(2L,actual.get().getId());
+        Assertions.assertEquals(bob,actual.get());
     }
 
     @Override

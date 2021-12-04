@@ -6,11 +6,11 @@ import mate.academy.dao.UserDao;
 import mate.academy.model.Role;
 import mate.academy.model.User;
 import mate.academy.service.impl.UserServiceImpl;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import static org.junit.jupiter.api.Assertions.*;
 
 class UserServiceTest {
     private static User user;
@@ -33,8 +33,8 @@ class UserServiceTest {
     void save() {
         Mockito.when(userDao.save(user)).thenReturn(user);
         User actual = userService.save(user);
-        assertNotNull(actual);
-        assertEquals(user,actual);
+        Assertions.assertNotNull(actual);
+        Assertions.assertEquals(user,actual);
     }
 
     @Test
@@ -42,8 +42,8 @@ class UserServiceTest {
         Mockito.when(userDao.findById(user.getId()))
                 .thenReturn(Optional.ofNullable(user));
         Optional<User> actual = userService.findById(user.getId());
-        assertNotNull(actual);
-        assertEquals(Optional.of(user),actual);
+        Assertions.assertNotNull(actual);
+        Assertions.assertEquals(Optional.of(user),actual);
     }
 
     @Test
@@ -51,7 +51,7 @@ class UserServiceTest {
         Mockito.when(userDao.findByEmail(user.getEmail()))
                 .thenReturn(Optional.ofNullable(user));
         Optional<User> actual = userService.findByEmail(user.getEmail());
-        assertNotNull(actual);
-        assertEquals(Optional.of(user),actual);
+        Assertions.assertNotNull(actual);
+        Assertions.assertEquals(Optional.of(user),actual);
     }
 }

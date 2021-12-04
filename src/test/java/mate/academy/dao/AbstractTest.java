@@ -51,7 +51,7 @@ public abstract class AbstractTest {
         }
         String[] packages = packages();
         if (packages != null) {
-            for(String scannedPackage : packages) {
+            for (String scannedPackage : packages) {
                 configuration.addPackage(scannedPackage);
             }
         }

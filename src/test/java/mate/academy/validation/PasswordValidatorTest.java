@@ -1,12 +1,12 @@
 package mate.academy.validation;
 
+import javax.validation.ConstraintValidatorContext;
 import mate.academy.model.dto.UserRegistrationDto;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import javax.validation.*;
 
-import static org.junit.jupiter.api.Assertions.*;
 class PasswordValidatorTest {
     private static ConstraintValidatorContext context;
     private static Password constraintAnnotation;
@@ -31,7 +31,7 @@ class PasswordValidatorTest {
         PasswordValidator passwordValidator = new PasswordValidator();
         passwordValidator.initialize(constraintAnnotation);
         boolean result = passwordValidator.isValid(userRegistrationDto, context);
-        assertTrue(result);
+        Assertions.assertTrue(result);
     }
 
     @Test
@@ -42,7 +42,7 @@ class PasswordValidatorTest {
         PasswordValidator passwordValidator = new PasswordValidator();
         passwordValidator.initialize(constraintAnnotation);
         boolean result = passwordValidator.isValid(userRegistrationDto, context);
-        assertFalse(result);
+        Assertions.assertFalse(result);
     }
 
     @Test
@@ -54,6 +54,6 @@ class PasswordValidatorTest {
         PasswordValidator passwordValidator = new PasswordValidator();
         passwordValidator.initialize(constraintAnnotation);
         boolean result = passwordValidator.isValid(userRegistrationDto, context);
-        assertFalse(result);
+        Assertions.assertFalse(result);
     }
 }

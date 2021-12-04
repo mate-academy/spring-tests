@@ -1,10 +1,10 @@
 package mate.academy.validation;
 
 import javax.validation.ConstraintValidatorContext;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import static org.junit.jupiter.api.Assertions.*;
 
 class EmailValidatorTest {
     private static EmailValidator emailValidator;
@@ -23,12 +23,12 @@ class EmailValidatorTest {
     @Test
     void isValid_Ok() {
         boolean actual = emailValidator.isValid(validEmail,constraintValidatorContext);
-        assertTrue(actual);
+        Assertions.assertTrue(actual);
     }
 
     @Test
     void isValid_NotOk() {
         boolean actual = emailValidator.isValid(invalidEmail,constraintValidatorContext);
-        assertFalse(actual);
+        Assertions.assertFalse(actual);
     }
 }

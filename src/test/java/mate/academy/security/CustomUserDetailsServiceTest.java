@@ -5,13 +5,13 @@ import java.util.Set;
 import mate.academy.model.Role;
 import mate.academy.model.User;
 import mate.academy.service.UserService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import static org.junit.jupiter.api.Assertions.*;
 
 class CustomUserDetailsServiceTest {
     private static String email;
@@ -34,9 +34,9 @@ class CustomUserDetailsServiceTest {
     void loadUserByUsername_OK() {
         Mockito.when(userService.findByEmail(email)).thenReturn(Optional.of(user));
         UserDetails actual = userDetailsService.loadUserByUsername(email);
-        assertNotNull(actual);
-        assertEquals(email,actual.getUsername());
-        assertEquals("1234",actual.getPassword());
+        Assertions.assertNotNull(actual);
+        Assertions.assertEquals(email,actual.getUsername());
+        Assertions.assertEquals("1234",actual.getPassword());
     }
 
     @Test
@@ -45,9 +45,9 @@ class CustomUserDetailsServiceTest {
         try {
             userDetailsService.loadUserByUsername("alice@i.ua");
         } catch (UsernameNotFoundException e) {
-            assertEquals("User not found.", e.getMessage());
+            Assertions.assertEquals("User not found.", e.getMessage());
             return;
         }
-        fail();
+        Assertions.fail();
     }
 }
