@@ -31,7 +31,7 @@ class PasswordValidatorTest {
         PasswordValidator passwordValidator = new PasswordValidator();
         passwordValidator.initialize(constraintAnnotation);
         boolean result = passwordValidator.isValid(userRegistrationDto, context);
-        Assertions.assertTrue(result);
+        Assertions.assertTrue(result,"Fields password and repeat password should match");
     }
 
     @Test

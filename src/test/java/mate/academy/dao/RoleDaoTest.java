@@ -8,9 +8,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class RoleDaoTest extends AbstractTest {
-    private RoleDao roleDao;
-    private Role adminRole;
-    private Role userRole;
+    private static RoleDao roleDao;
+    private static Role adminRole;
+    private static Role userRole;
 
     @BeforeEach
     void setUp() {
@@ -42,7 +42,7 @@ class RoleDaoTest extends AbstractTest {
         if (roleDao.getRoleByName(adminRole.getRoleName().toString()).isEmpty()) {
             return;
         }
-        Assertions.fail();
+        Assertions.fail("We shouldn't get no existing role from db");
     }
 
     @Override

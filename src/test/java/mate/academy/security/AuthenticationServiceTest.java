@@ -21,6 +21,7 @@ class AuthenticationServiceTest {
     private static UserService userService;
     private static PasswordEncoder passwordEncoder;
     private static RoleService roleService;
+    private static AuthenticationService authenticationService;
 
     @BeforeAll
     static void beforeAll() {
@@ -33,14 +34,14 @@ class AuthenticationServiceTest {
         user.setEmail(email);
         user.setPassword(password);
         user.setRoles(Set.of(new Role(Role.RoleName.USER)));
+        authenticationService =
+                new AuthenticationServiceImpl(userService,roleService,passwordEncoder);
     }
 
     @Test
     void register_Ok() {
         Mockito.when(roleService.getRoleByName("USER")).thenReturn(new Role(Role.RoleName.USER));
         Mockito.when(userService.save(user)).thenReturn(user);
-        AuthenticationService authenticationService =
-                new AuthenticationServiceImpl(userService,roleService,passwordEncoder);
         User actual = authenticationService.register(email, password);
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(email,actual.getEmail());
@@ -53,8 +54,6 @@ class AuthenticationServiceTest {
         Mockito.when(userService.findByEmail(email)).thenReturn(Optional.of(user));
         Mockito.when(passwordEncoder.matches(Mockito.anyString(),
                 Mockito.anyString())).thenReturn(true);
-        AuthenticationService authenticationService =
-                new AuthenticationServiceImpl(userService,roleService,passwordEncoder);
         User actual = authenticationService.login(email, password);
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(email,actual.getEmail());
@@ -67,8 +66,6 @@ class AuthenticationServiceTest {
         Mockito.when(userService.findByEmail(email)).thenReturn(Optional.of(user));
         Mockito.when(passwordEncoder.matches(Mockito.anyString(),
                 Mockito.anyString())).thenReturn(true);
-        AuthenticationService authenticationService =
-                new AuthenticationServiceImpl(userService,roleService,passwordEncoder);
         try {
             authenticationService.login("alice@i.ua", "34");
         } catch (AuthenticationException e) {

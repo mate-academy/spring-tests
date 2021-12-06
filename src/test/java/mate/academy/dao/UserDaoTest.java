@@ -37,8 +37,6 @@ class UserDaoTest extends AbstractTest {
         Assertions.assertFalse(actual.isEmpty());
         Assertions.assertEquals(1L,actual.get().getId());
         Assertions.assertEquals(user,actual.get());
-        Optional<User> emptyValue = userDao.findByEmail("alice@i.ua");
-        Assertions.assertTrue(emptyValue.isEmpty());
     }
 
     @Test
