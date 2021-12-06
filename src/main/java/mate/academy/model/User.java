@@ -1,8 +1,10 @@
 package mate.academy.model;
 
+import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,7 +23,7 @@ public class User {
 
     private String password;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
     public Set<Role> getRoles() {
@@ -57,10 +59,30 @@ public class User {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        User user = (User) o;
+        return Objects.equals(id, user.id) && Objects.equals(email, user.email)
+                && Objects.equals(password, user.password)
+                && Objects.equals(roles, user.roles);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email, password, roles);
+    }
+
+    @Override
     public String toString() {
         return "User{"
                 + "id=" + id
                 + ", email='" + email + '\''
+                + ", roles=" + roles
                 + '}';
     }
 }
