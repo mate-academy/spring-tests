@@ -49,6 +49,6 @@ class CustomUserDetailsServiceTest {
             assertEquals("User not found.", e.getMessage());
             return;
         }
-        fail("Expected UsernameNotFoundException");
+        fail("Expected UsernameNotFoundException for user with name " + STATIC_USERNAME);
     }
 }
