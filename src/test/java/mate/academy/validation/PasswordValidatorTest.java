@@ -9,10 +9,10 @@ import org.mockito.Mockito;
 class PasswordValidatorTest {
     private PasswordValidator passwordValidator;
     private String password;
-    private Password constraintAnnotation;
 
     @BeforeEach
     void setUp() {
+        Password constraintAnnotation;
         password = "1234";
         passwordValidator = new PasswordValidator();
         constraintAnnotation = Mockito.mock(Password.class);

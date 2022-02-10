@@ -17,8 +17,9 @@ class JwtTokenProviderTest {
     UserDetailsService userDetailsService;
     private List<String> ROLES;
     private String login;
+    private String password;
     private String token;
-    String bobToken;
+    private String bobToken;
 
     @BeforeEach
     void setUp() {
@@ -26,6 +27,7 @@ class JwtTokenProviderTest {
                 + ".eyJzdWIiOiJib2JAaS51YSIsInJvbGVzIjpbIlVTRVIiXSwiaWF0IjoxNjQ0MzU2MTAyLCJleHAiOjE"
                 + "2NDQzNTk3MDJ9.9Audbu7yJul9ZTk9Bze_muV31IJZJwfZheW_HRc4bSo";
         login = "bob@i.ua";
+        password = "1234";
         userDetailsService = Mockito.mock(UserDetailsService.class);
         jwtTokenProvider = new JwtTokenProvider(userDetailsService);
         jwtTokenProvider = Mockito.spy(jwtTokenProvider);
@@ -65,8 +67,8 @@ class JwtTokenProviderTest {
     @Test
     void getAuthentication_Ok() {
         User.UserBuilder builder;
-        builder = org.springframework.security.core.userdetails.User.withUsername("bob@i.ua");
-        builder.password("1234");
+        builder = org.springframework.security.core.userdetails.User.withUsername(login);
+        builder.password(password);
         builder.roles(ROLES.toArray(String[]::new));
         UserDetails userDetails = builder.build();
         Mockito.when(userDetailsService.loadUserByUsername(Mockito.any())).thenReturn(userDetails);
@@ -74,6 +76,6 @@ class JwtTokenProviderTest {
         Authentication actual = jwtTokenProvider.getAuthentication(bobToken);
         User actualUser = (User) actual.getPrincipal();
         Assertions.assertNotNull(actualUser);
-        Assertions.assertEquals("bob@i.ua", actualUser.getUsername());
+        Assertions.assertEquals(login, actualUser.getUsername());
     }
 }
