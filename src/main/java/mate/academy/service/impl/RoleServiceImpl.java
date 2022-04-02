@@ -1,5 +1,6 @@
 package mate.academy.service.impl;
 
+import java.util.List;
 import mate.academy.dao.RoleDao;
 import mate.academy.model.Role;
 import mate.academy.service.RoleService;
@@ -21,5 +22,10 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role getRoleByName(String roleName) {
         return roleDao.getRoleByName(roleName).orElseThrow();
+    }
+
+    @Override
+    public List<Role> findAll() {
+        return roleDao.findAll();
     }
 }
