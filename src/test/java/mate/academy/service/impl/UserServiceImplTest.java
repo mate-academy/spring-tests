@@ -23,7 +23,7 @@ class UserServiceImplTest {
     @Test
     void save() {
         User user = getTestUserWithId();
-        Mockito.when(passwordEncoder.encode(Mockito.any())).thenReturn("");
+        Mockito.when(passwordEncoder.encode(Mockito.any())).thenReturn(user.getPassword());
         Mockito.when(userService.save(Mockito.any())).thenReturn(user);
         User savedUser = userService.save(user);
         assertEquals(savedUser.toString(), user.toString());
@@ -32,7 +32,7 @@ class UserServiceImplTest {
     @Test
     void findById() {
         User user = getTestUserWithId();
-        Mockito.when(passwordEncoder.encode(Mockito.any())).thenReturn("");
+        Mockito.when(passwordEncoder.encode(Mockito.any())).thenReturn(user.getPassword());
         Mockito.when(userService.findById(Mockito.any())).thenReturn(Optional.of(user));
         assertFalse(userService.findById(1L).isEmpty());
     }

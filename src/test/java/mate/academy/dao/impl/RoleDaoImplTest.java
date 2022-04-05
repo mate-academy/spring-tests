@@ -25,7 +25,7 @@ class RoleDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void getRoleByName_DataProcessingException() {
+    void getRoleByName_notOk() {
         try {
             roleDao.getRoleByName("USER_TEST");
         } catch (DataProcessingException e) {

@@ -1,7 +1,9 @@
 package mate.academy.controller;
 
 import java.util.List;
+import java.util.Set;
 import mate.academy.model.Role;
+import mate.academy.model.User;
 import mate.academy.security.AuthenticationService;
 import mate.academy.service.RoleService;
 import mate.academy.service.UserService;
@@ -27,15 +29,16 @@ public class InjectController {
     @GetMapping
     public String injectData() {
         List<Role> roles = roleService.findAll();
-        if (!roles.isEmpty()) {
-            return "Injection was completed";
-        }
         roleService.save(new Role(Role.RoleName.ADMIN));
         roleService.save(new Role(Role.RoleName.USER));
 
         authenticationService.register("bob", "1234");
-        authenticationService.register("alice", "1234");
         // feel free to save some users for testing
+        User user = new User();
+        user.setEmail("alice");
+        user.setPassword("1234");
+        user.setRoles(Set.of(roleService.getRoleByName("ADMIN")));
+        userService.save(user);
         // hint: you can save users with different roles
         return "Done!";
     }
