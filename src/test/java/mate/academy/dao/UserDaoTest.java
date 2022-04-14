@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-
 class UserDaoTest extends AbstractTest {
     private static final String EMAIL = "bob@i.ua";
     private static final String PASSWORD = "1234";
@@ -43,7 +42,7 @@ class UserDaoTest extends AbstractTest {
         userDao.save(bob);
         User repeatBob = bob;
         try {
-           userDao.save(repeatBob);
+            userDao.save(repeatBob);
         } catch (DataProcessingException e) {
             Assertions.assertEquals("Can't create entity: " + bob, e.getMessage());
             return;
@@ -70,12 +69,11 @@ class UserDaoTest extends AbstractTest {
 
     @Test
     void findById() {
-        String email = "bob@i.ua";
         userDao.save(bob);
         Optional<User> actual = userDao.findById(1L);
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(1L, actual.get().getId());
-        Assertions.assertEquals(email, actual.get().getEmail());
+        Assertions.assertEquals("bob@i.ua", actual.get().getEmail());
         Assertions.assertEquals(PASSWORD, actual.get().getPassword());
     }
 }
