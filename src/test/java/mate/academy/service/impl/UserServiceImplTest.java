@@ -13,9 +13,9 @@ import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 class UserServiceImplTest {
-    private static final String USER_EMAIL = "user@gmail.com";
-    private static final String USER_PASSWORD = "12345";
-    private static final Long USER_ID = 1L;
+    private String userEmail;
+    private String userPassword;
+    private Long userId;
     private UserDao userDao;
     private PasswordEncoder passwordEncoder;
     private User user;
@@ -26,35 +26,38 @@ class UserServiceImplTest {
         userDao = Mockito.mock(UserDao.class);
         passwordEncoder = Mockito.mock(PasswordEncoder.class);
         userService = new UserServiceImpl(userDao, passwordEncoder);
+        userEmail = "user@gmail.com";
+        userPassword = "12345";
+        userId = 1L;
         user = new User();
-        user.setId(USER_ID);
-        user.setPassword(USER_PASSWORD);
-        user.setEmail(USER_EMAIL);
+        user.setId(userId);
+        user.setPassword(userPassword);
+        user.setEmail(userEmail);
     }
 
     @Test
-    void save_OK() {
+    void save_Ok() {
         Mockito.when(userDao.save(user)).thenReturn(user);
         Mockito.when(passwordEncoder.encode(any())).thenReturn(user.getPassword());
         User actual = userService.save(user);
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(USER_EMAIL, actual.getEmail());
-        Assertions.assertEquals(USER_PASSWORD, actual.getPassword());
-        Assertions.assertEquals(USER_ID, actual.getId());
+        Assertions.assertEquals(userEmail, actual.getEmail());
+        Assertions.assertEquals(userPassword, actual.getPassword());
+        Assertions.assertEquals(userId, actual.getId());
     }
 
     @Test
-    void findById_OK() {
+    void findById_Ok() {
         Mockito.when(userDao.findById(any())).thenReturn(Optional.of(user));
-        Optional<User> actual = userService.findById(USER_ID);
+        Optional<User> actual = userService.findById(userId);
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(user.getClass(), actual.get().getClass());
     }
 
     @Test
-    void findByEmail_OK() {
+    void findByEmail_Ok() {
         Mockito.when(userDao.findByEmail(any())).thenReturn(Optional.of(user));
-        Optional<User> actual = userService.findByEmail(USER_EMAIL);
+        Optional<User> actual = userService.findByEmail(userEmail);
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(user.getClass(), actual.get().getClass());
     }

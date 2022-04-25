@@ -11,10 +11,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 class CustomUserDetailsServiceTest {
-    private static final String USER_EMAIL = "user@gmail.com";
-    private static final String USER_PASSWORD = "12345";
+    private String userEmail;
+    private String userPassword;
     private UserService userService;
     private UserDetailsService userDetailsService;
     private User user;
@@ -23,18 +24,28 @@ class CustomUserDetailsServiceTest {
     void setUp() {
         userService = Mockito.mock(UserService.class);
         userDetailsService = new CustomUserDetailsService(userService);
+        userEmail = "user@gmail.com";
+        userPassword = "12345";
         user = new User();
-        user.setEmail(USER_EMAIL);
-        user.setPassword(USER_PASSWORD);
+        user.setEmail(userEmail);
+        user.setPassword(userPassword);
         user.setRoles(Set.of(new Role(Role.RoleName.USER)));
     }
 
     @Test
-    void loadUserByUsername() {
-        Mockito.when(userService.findByEmail(USER_EMAIL)).thenReturn(Optional.of(user));
-        UserDetails actual = userDetailsService.loadUserByUsername(USER_EMAIL);
+    void loadUserByUsername_Ok() {
+        Mockito.when(userService.findByEmail(userEmail)).thenReturn(Optional.of(user));
+        UserDetails actual = userDetailsService.loadUserByUsername(userEmail);
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(USER_EMAIL, actual.getUsername());
-        Assertions.assertEquals(USER_PASSWORD, actual.getPassword());
+        Assertions.assertEquals(userEmail, actual.getUsername());
+        Assertions.assertEquals(userPassword, actual.getPassword());
+    }
+
+    @Test
+    void loadUserByUsername_nonExistentUsername_Ok() {
+        Mockito.when(userService.findByEmail(userEmail)).thenReturn(Optional.empty());
+        Assertions.assertThrows(UsernameNotFoundException.class,
+                () -> userDetailsService.loadUserByUsername(userEmail),
+                "Expected UsernameNotFoundException when User email doesn't exist");
     }
 }

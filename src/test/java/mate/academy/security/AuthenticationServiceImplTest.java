@@ -16,8 +16,8 @@ import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 class AuthenticationServiceImplTest {
-    private static final String USER_EMAIL = "user@gmail.com";
-    private static final String USER_PASSWORD = "12345";
+    private String userEmail;
+    private String userPassword;
     private AuthenticationService authenticationService;
     private UserService userService;
     private PasswordEncoder passwordEncoder;
@@ -32,50 +32,40 @@ class AuthenticationServiceImplTest {
         authenticationService = new AuthenticationServiceImpl(userService,
                                                             roleService,
                                                             passwordEncoder);
+        userEmail = "user@gmail.com";
+        userPassword = "12345";
         user = new User();
-        user.setEmail(USER_EMAIL);
-        user.setPassword(USER_PASSWORD);
+        user.setEmail(userEmail);
+        user.setPassword(userPassword);
         user.setRoles(Set.of(new Role(Role.RoleName.USER)));
     }
 
     @Test
-    void register_OK() {
+    void register_Ok() {
         Mockito.when(userService.save(any())).thenReturn(user);
         Mockito.when(roleService.getRoleByName("USER")).thenReturn(new Role(Role.RoleName.USER));
-
-        User actual = authenticationService.register(USER_EMAIL, USER_PASSWORD);
+        User actual = authenticationService.register(userEmail, userPassword);
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(USER_EMAIL, actual.getEmail());
-        Assertions.assertEquals(USER_PASSWORD, actual.getPassword());
+        Assertions.assertEquals(userEmail, actual.getEmail());
+        Assertions.assertEquals(userPassword, actual.getPassword());
     }
 
     @Test
-    void login_OK() {
-        Mockito.when(userService.findByEmail(USER_EMAIL)).thenReturn(Optional.of(user));
-        Mockito.when(passwordEncoder.matches(USER_PASSWORD, user.getPassword())).thenReturn(true);
-
-        try {
-            User actual = authenticationService.login(USER_EMAIL, USER_PASSWORD);
-            Assertions.assertNotNull(actual);
-            Assertions.assertEquals(USER_EMAIL, actual.getEmail());
-            Assertions.assertEquals(USER_PASSWORD, actual.getPassword());
-
-        } catch (AuthenticationException e) {
-            throw new RuntimeException("AuthenticationServiceImpl login test have failed.", e);
-        }
+    void login_Ok() throws AuthenticationException {
+        Mockito.when(userService.findByEmail(userEmail)).thenReturn(Optional.of(user));
+        Mockito.when(passwordEncoder.matches(userPassword, user.getPassword())).thenReturn(true);
+        User actual = authenticationService.login(userEmail, userPassword);
+        Assertions.assertNotNull(actual);
+        Assertions.assertEquals(userEmail, actual.getEmail());
+        Assertions.assertEquals(userPassword, actual.getPassword());
     }
 
     @Test
-    void login_NotOk() {
-        Mockito.when(userService.findByEmail(USER_EMAIL))
+    void login_nonExistentUser_Ok() {
+        Mockito.when(userService.findByEmail(userEmail))
                 .thenReturn(Optional.of(new User()));
-
-        try {
-            authenticationService.login(USER_EMAIL, USER_PASSWORD);
-        } catch (AuthenticationException e) {
-            Assertions.assertEquals("Incorrect username or password!!!", e.getMessage());
-            return;
-        }
-        Assertions.fail("Expected to receive AuthenticationException");
+        Assertions.assertThrows(AuthenticationException.class, () ->
+                        authenticationService.login(userEmail, userPassword),
+                "Expected AuthenticationException for nonExistent User");
     }
 }
