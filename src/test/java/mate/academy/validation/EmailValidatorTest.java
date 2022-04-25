@@ -17,7 +17,7 @@ class EmailValidatorTest {
     }
 
     @Test
-    void isValid_OK() {
+    void isValid_validEmail_OK() {
         String email = "test@gmail.com";
         Assertions.assertTrue(validator.isValid(email, constraintValidatorContext));
         String emailShort = "i@i.com";
@@ -27,7 +27,7 @@ class EmailValidatorTest {
     }
 
     @Test
-    void isValid_NotOk() {
+    void isValid_invalidEmail_Ok() {
         String emailNoDomain = "test@.com";
         Assertions.assertFalse(validator.isValid(emailNoDomain, constraintValidatorContext));
         String emailNoName = "@gmail.com";

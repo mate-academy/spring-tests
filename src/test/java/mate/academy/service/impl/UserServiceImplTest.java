@@ -56,9 +56,10 @@ class UserServiceImplTest {
 
     @Test
     void findByEmail_Ok() {
-        Mockito.when(userDao.findByEmail(any())).thenReturn(Optional.of(user));
+        Mockito.when(userDao.findByEmail(userEmail)).thenReturn(Optional.of(user));
         Optional<User> actual = userService.findByEmail(userEmail);
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(user.getClass(), actual.get().getClass());
+        Assertions.assertEquals(user.getEmail(), actual.get().getEmail());
     }
 }

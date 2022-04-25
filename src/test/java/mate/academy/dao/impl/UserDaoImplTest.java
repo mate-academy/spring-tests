@@ -1,7 +1,9 @@
 package mate.academy.dao.impl;
 
 import java.util.Optional;
+import java.util.Set;
 import mate.academy.AbstractTest;
+import mate.academy.dao.RoleDao;
 import mate.academy.dao.UserDao;
 import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
@@ -13,6 +15,7 @@ import org.junit.jupiter.api.Test;
 class UserDaoImplTest extends AbstractTest {
     private String userEmail;
     private UserDao userDao;
+    private RoleDao roleDao;
     private User user;
 
     @Override
@@ -22,9 +25,10 @@ class UserDaoImplTest extends AbstractTest {
 
     @BeforeEach
     void setUp() {
+        userDao = new UserDaoImpl(getSessionFactory());
+        roleDao = new RoleDaoImpl(getSessionFactory());
         userEmail = "user@gmail.com";
         String userPassword = "12345";
-        userDao = new UserDaoImpl(getSessionFactory());
         user = new User();
         user.setPassword(userPassword);
         user.setEmail(userEmail);
@@ -49,17 +53,21 @@ class UserDaoImplTest extends AbstractTest {
 
     @Test
     void findByEmail_Ok() {
-        User savedUser = userDao.save(user);
+        Role roleFromDb = roleDao.save(new Role(Role.RoleName.USER));
+        user.setRoles(Set.of(roleFromDb));
+        User userFromDb = userDao.save(user);
         String userEmail = "user@gmail.com";
         Optional<User> actual = userDao.findByEmail(userEmail);
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(savedUser.getEmail(), actual.get().getEmail());
+        Assertions.assertEquals(userFromDb.getId(), actual.get().getId());
+        Assertions.assertEquals(userFromDb.getEmail(), actual.get().getEmail());
+        Assertions.assertEquals(userFromDb.getRoles().size(), actual.get().getRoles().size());
     }
 
     @Test
     void findByEmail_nonExistentUser_Ok() {
-        userDao.save(user);
-        String userEmail = "userNotExist@gmail.com";
+        User userFromDb = userDao.save(user);
+        String userEmail = "prefix" + userFromDb.getEmail();
         Optional<User> actual = userDao.findByEmail(userEmail);
         Assertions.assertNotNull(actual);
         Assertions.assertTrue(actual.isEmpty());

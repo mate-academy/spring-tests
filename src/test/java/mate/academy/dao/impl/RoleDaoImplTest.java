@@ -32,7 +32,7 @@ class RoleDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void add_duplicatedRole_Ok() {
+    void get_duplicatedRole_Ok() {
         Role actual = roleDao.save(role);
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(role.getRoleName(), actual.getRoleName());
