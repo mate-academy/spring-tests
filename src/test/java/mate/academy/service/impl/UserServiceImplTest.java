@@ -11,8 +11,6 @@ import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class UserServiceImplTest {
-    private static final String EMAIL = "bchupika@mate.academy";
-    private static final String PASSWORD = "12345678";
     private UserService userService;
     private User user;
     private UserDao userDao;
@@ -23,8 +21,8 @@ public class UserServiceImplTest {
         PasswordEncoder passwordEncoder = Mockito.mock(PasswordEncoder.class);
         userService = new UserServiceImpl(userDao, passwordEncoder);
         user = new User();
-        user.setEmail(EMAIL);
-        user.setPassword(PASSWORD);
+        user.setEmail("bchupika@mate.academy");
+        user.setPassword("12345678");
     }
 
     @Test
@@ -36,11 +34,18 @@ public class UserServiceImplTest {
 
     @Test
     void findByEmail_ok() {
-        Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
-        Optional<User> actual = userService.findByEmail(EMAIL);
+        Mockito.when(userService.findByEmail("bchupika@mate.academy")).thenReturn(Optional.of(user));
+        Optional<User> actual = userService.findByEmail("bchupika@mate.academy");
         Assertions.assertTrue(actual.isPresent());
-        Assertions.assertEquals(actual.get().getEmail(), EMAIL);
-        Assertions.assertEquals(actual.get().getPassword(), PASSWORD);
+        Assertions.assertEquals(actual.get().getEmail(), "bchupika@mate.academy");
+        Assertions.assertEquals(actual.get().getPassword(), "12345678");
+    }
+
+    @Test
+    void findByEmail_invalidEmail_ok() {
+        Mockito.when(userDao.findByEmail("wrong@gmail.com")).thenReturn(Optional.ofNullable(null));
+        Optional<User> userFromDb = userService.findByEmail("wrong@gmail.com");
+        Assertions.assertEquals(Optional.ofNullable(null), userFromDb);
     }
 
     @Test
@@ -48,7 +53,14 @@ public class UserServiceImplTest {
         Mockito.when(userDao.findById(1L)).thenReturn(Optional.of(user));
         Optional<User> actual = userService.findById(1L);
         Assertions.assertTrue(actual.isPresent());
-        Assertions.assertEquals(actual.get().getEmail(), EMAIL);
-        Assertions.assertEquals(actual.get().getPassword(), PASSWORD);
+        Assertions.assertEquals(actual.get().getEmail(), "bchupika@mate.academy");
+        Assertions.assertEquals(actual.get().getPassword(), "12345678");
+    }
+
+    @Test
+    void findById_invalidId_ok(){
+        Mockito.when(userDao.findById(2L)).thenReturn(Optional.ofNullable(null));
+        Optional<User> userFromDb = userService.findById(2L);
+        Assertions.assertEquals(Optional.ofNullable(null), userFromDb);
     }
 }

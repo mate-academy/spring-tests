@@ -39,13 +39,13 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void getUsername_Ok() {
+    void getUsername_ok() {
         String actual = jwtTokenProvider.getUsername(TOKEN);
         Assertions.assertEquals(EMAIL, actual, "Should return valid email for correct token");
     }
 
     @Test
-    void resolveToken_Ok() {
+    void resolveToken_ok() {
         HttpServletRequest req = Mockito.mock(HttpServletRequest.class);
         Mockito.when(req.getHeader("Authorization")).thenReturn("Bearer " + TOKEN);
         String actual = jwtTokenProvider.resolveToken(req);
@@ -53,13 +53,13 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void validateToken_Ok() {
+    void validateToken_ok() {
         boolean actual = jwtTokenProvider.validateToken(TOKEN);
         Assertions.assertTrue(actual, "Should return true for valid token");
     }
 
     @Test
-    void getAuthentication_Ok() {
+    void getAuthentication_ok() {
         UserBuilder builder = User.withUsername(EMAIL);
         UserDetails userDetails = builder.password(PASSWORD).roles(USER_ROLE).build();
         Mockito.when(userDetailsService.loadUserByUsername(Mockito.any())).thenReturn(userDetails);

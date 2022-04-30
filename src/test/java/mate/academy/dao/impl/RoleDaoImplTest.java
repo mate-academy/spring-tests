@@ -10,26 +10,27 @@ import org.junit.jupiter.api.Test;
 import test.java.mate.academy.AbstractTest;
 
 class RoleDaoImplTest extends AbstractTest {
-    public static final String USER_ROLE = "USER";
+    private static final String USER_ROLE = "USER";
     private RoleDao roleDao;
-    private Role role;
 
     @BeforeEach
     void setUp() {
         roleDao = new RoleDaoImpl(getSessionFactory());
-        role = new Role();
+        Role role = new Role();
         role.setRoleName(Role.RoleName.USER);
     }
 
     @Test
     void save_ok() {
+        Role role = new Role();
         Role actual = roleDao.save(role);
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(actual.getId(), 1L);
     }
 
     @Test
-    void getRoleByName_Ok() {
+    void getRoleByName_ok() {
+        Role role = new Role();
         roleDao.save(role);
         Optional<Role> actual = roleDao.getRoleByName(USER_ROLE);
         Assertions.assertTrue(actual.isPresent());

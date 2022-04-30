@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class EmailValidatorTest {
-    private static final String EMAIL = "bchupika@mate.academy";
     private EmailValidator emailValidator;
 
     @BeforeEach
@@ -15,7 +14,7 @@ class EmailValidatorTest {
 
     @Test
     void isValid_ok() {
-        Assertions.assertTrue(emailValidator.isValid(EMAIL, null),
+        Assertions.assertTrue(emailValidator.isValid("bchupika@mate.academy", null),
                 "Should be true for valid email");
     }
 
