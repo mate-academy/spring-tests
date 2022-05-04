@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 public class UserTestUtil {
     public final static String EMAIL = "bob@gmail.com";
     public final static String PASSWORD = "12345678";
+    public final static String INCORRECT_EMAIL = "123aaa@678bbb";
+
 
     public static List<String> getListOfStringRoles(User user) {
         return user.getRoles().stream()
