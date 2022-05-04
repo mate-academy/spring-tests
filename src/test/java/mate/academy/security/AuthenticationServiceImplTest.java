@@ -5,6 +5,7 @@ import mate.academy.model.Role;
 import mate.academy.model.User;
 import mate.academy.service.RoleService;
 import mate.academy.service.UserService;
+import mate.academy.util.UserTestUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,8 +20,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 class AuthenticationServiceImplTest {
-    private final static String EMAIL = "bob@gmail.com";
-    private final static String PASSWORD = "12345678";
     private AuthenticationService authenticationService;
     private UserService userService;
     private RoleService roleService;
@@ -43,24 +42,26 @@ class AuthenticationServiceImplTest {
                 .thenReturn(userRole);
         Mockito.when(userService.save(Mockito.argThat(
                 u -> u != null
-                        && u.getPassword().equals(PASSWORD)
-                        && u.getEmail().equals(EMAIL)
+                        && u.getPassword().equals(UserTestUtil.PASSWORD)
+                        && u.getEmail().equals(UserTestUtil.EMAIL)
                         && u.getRoles().contains(userRole))))
                 .thenAnswer((Answer<User>) invocation -> {
                     User user1 = invocation.getArgument(0);
                     user1.setId(1L);
                     return user1;
                 });
-        User actual = authenticationService.register(EMAIL, PASSWORD);
-        Assertions.assertEquals(EMAIL, actual.getEmail());
+        User actual = authenticationService.register(UserTestUtil.EMAIL,
+                UserTestUtil.PASSWORD);
+        Assertions.assertEquals(UserTestUtil.EMAIL, actual.getEmail());
     }
 
     @Test
     void login_Ok() {
-        User expected = getUserBob();
+        User expected = UserTestUtil.getUserBob();
         prepareMockForLogin(expected);
         try {
-            User actual = authenticationService.login(EMAIL, PASSWORD);
+            User actual = authenticationService.login(UserTestUtil.EMAIL,
+                    UserTestUtil.PASSWORD);
             checkUsers(expected, actual);
         } catch (AuthenticationException e) {
             Assertions.fail("No exception should be thrown: " + e.getMessage());
@@ -69,10 +70,11 @@ class AuthenticationServiceImplTest {
 
     @Test
     void loginWithIncorrectEmail_NotOk() {
-        User expected = getUserBob();
+        User expected = UserTestUtil.getUserBob();
         prepareMockForLogin(expected);
         try {
-            User actual = authenticationService.login("incorrect", PASSWORD);
+            User actual = authenticationService.login("incorrect",
+                    UserTestUtil.PASSWORD);
             checkUsers(expected, actual);
             Assertions.fail("Exception should be thrown");
         } catch (AuthenticationException e) {
@@ -83,10 +85,11 @@ class AuthenticationServiceImplTest {
 
     @Test
     void loginWithIncorrectPassword_NotOk() {
-        User expected = getUserBob();
+        User expected = UserTestUtil.getUserBob();
         prepareMockForLogin(expected);
         try {
-            User actual = authenticationService.login(EMAIL, "incorrect");
+            User actual = authenticationService.login(UserTestUtil.EMAIL,
+                    "incorrect");
             checkUsers(expected, actual);
             Assertions.fail("Exception should be thrown");
         } catch (AuthenticationException e) {
@@ -98,28 +101,15 @@ class AuthenticationServiceImplTest {
     private void checkUsers(User expected, User actual) {
         Assertions.assertEquals(expected.getEmail(), actual.getEmail());
         Assertions.assertEquals(expected.getPassword(), actual.getPassword());
-        List<String> actualRoles = getListOfStringRoles(actual);
-        List<String> expectedRoles = getListOfStringRoles(expected);
+        List<String> actualRoles = UserTestUtil.getListOfStringRoles(actual);
+        List<String> expectedRoles = UserTestUtil.getListOfStringRoles(expected);
         Assertions.assertEquals(expectedRoles, actualRoles);
     }
 
     private void prepareMockForLogin(User expected) {
         expected.setPassword(new BCryptPasswordEncoder().encode(expected.getPassword()));
-        Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(expected));
+        Mockito.when(userService.findByEmail(UserTestUtil.EMAIL))
+                .thenReturn(Optional.of(expected));
     }
 
-    private List<String> getListOfStringRoles(User user) {
-        return user.getRoles().stream()
-                .map(r -> r.getRoleName().name())
-                .collect(Collectors.toList());
-    }
-
-    private User getUserBob() {
-        User user = new User();
-        user.setEmail(EMAIL);
-        user.setPassword(PASSWORD);
-        Role userRole = new Role(Role.RoleName.USER);
-        user.setRoles(Set.of(userRole));
-        return user;
-    }
 }

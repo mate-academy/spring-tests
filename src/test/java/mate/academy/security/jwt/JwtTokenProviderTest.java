@@ -1,6 +1,7 @@
 package mate.academy.security.jwt;
 
 import mate.academy.model.Role;
+import mate.academy.util.UserTestUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,8 +22,6 @@ class JwtTokenProviderTest {
     private final static String INCORRECT_TOKEN = "11111111111"
             + ".2222222222222"
             + ".3333333333333";
-    private final static String EMAIL = "bob@gmail.com";
-    private final static String PASSWORD = "12345678";
     private JwtTokenProvider jwtTokenProvider;
     private UserDetailsService userDetailsService;
     @BeforeEach
@@ -51,7 +50,7 @@ class JwtTokenProviderTest {
 
     @Test
     void createToken_Ok() {
-        String token = jwtTokenProvider.createToken(EMAIL,
+        String token = jwtTokenProvider.createToken(UserTestUtil.EMAIL,
                 List.of(Role.RoleName.USER.name()));
         Assertions.assertNotNull(token);
         Assertions.assertEquals(3, token.split("\\.").length);
@@ -77,18 +76,18 @@ class JwtTokenProviderTest {
     @Test
     void getUsername_Ok() {
         String actual = jwtTokenProvider.getUsername(CORRECT_TOKEN);
-        Assertions.assertEquals(EMAIL, actual);
+        Assertions.assertEquals(UserTestUtil.EMAIL, actual);
     }
 
     @Test
     void getAuthentication_Ok() {
-        User.UserBuilder userBuilder = User.withUsername(EMAIL);
-        userBuilder.password(PASSWORD);
+        User.UserBuilder userBuilder = User.withUsername(UserTestUtil.EMAIL);
+        userBuilder.password(UserTestUtil.PASSWORD);
         userBuilder.roles(Role.RoleName.USER.name());
-        Mockito.when(userDetailsService.loadUserByUsername(EMAIL))
+        Mockito.when(userDetailsService.loadUserByUsername(UserTestUtil.EMAIL))
                 .thenReturn(userBuilder.build());
         Authentication actual = jwtTokenProvider.getAuthentication(CORRECT_TOKEN);
-        Assertions.assertEquals(EMAIL, actual.getName());
+        Assertions.assertEquals(UserTestUtil.EMAIL, actual.getName());
         Assertions.assertTrue(actual.getAuthorities()
                 .stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_" + Role.RoleName.USER.name())));
