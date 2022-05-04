@@ -27,4 +27,10 @@ public class UserTestUtil {
         user.setRoles(Set.of(userRole));
         return user;
     }
+    
+    public static Role getUserRole() {
+        Role expected = new Role();
+        expected.setRoleName(Role.RoleName.USER);
+        return expected;
+    }
 }
