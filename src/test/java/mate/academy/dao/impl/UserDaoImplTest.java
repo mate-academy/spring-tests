@@ -1,5 +1,6 @@
 package mate.academy.dao.impl;
 
+import java.util.Optional;
 import mate.academy.dao.AbstractTest;
 import mate.academy.dao.UserDao;
 import mate.academy.model.Role;
@@ -12,12 +13,10 @@ import org.hibernate.query.Query;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
-import org.mockito.Mockito;
-
-import java.util.Optional;
 
 class UserDaoImplTest extends AbstractTest {
     private UserDao userDao;

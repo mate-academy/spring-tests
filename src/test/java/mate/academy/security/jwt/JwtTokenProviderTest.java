@@ -1,5 +1,8 @@
 package mate.academy.security.jwt;
 
+import java.lang.reflect.Field;
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import mate.academy.model.Role;
 import mate.academy.util.UserTestUtil;
 import org.junit.jupiter.api.Assertions;
@@ -10,12 +13,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.Field;
-import java.util.List;
-
 class JwtTokenProviderTest {
-    private final static String CORRECT_TOKEN = "eyJhbGciOiJIUzI1NiJ9"
+    private static final String CORRECT_TOKEN = "eyJhbGciOiJIUzI1NiJ9"
             + ".eyJzdWIiOiJib2JAZ21haWwuY29tIiwicm9sZXMiOlsiVVNFUiJdLCJpYXQ"
             + "iOjE2NTE2NjMwNTcsImV4cCI6OTQ0NTEwMjQyNjU3fQ"
             + ".mk_l0poZNHTAqbunh6BQ22KQfoIowdbs4MsfR9ixKMw";
@@ -24,6 +23,7 @@ class JwtTokenProviderTest {
             + ".3333333333333";
     private JwtTokenProvider jwtTokenProvider;
     private UserDetailsService userDetailsService;
+
     @BeforeEach
     void setUp() throws RuntimeException {
         userDetailsService = Mockito.mock(UserDetailsService.class);
@@ -92,7 +92,6 @@ class JwtTokenProviderTest {
                 .stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_" + Role.RoleName.USER.name())));
     }
-
 
     @Test
     void resolveTokenOk() {

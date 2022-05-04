@@ -1,13 +1,11 @@
 package mate.academy.validation;
 
+import javax.validation.ConstraintValidatorContext;
 import mate.academy.util.UserTestUtil;
 import org.junit.jupiter.api.Assertions;
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import javax.validation.ConstraintValidatorContext;
 
 class EmailValidatorTest {
     private EmailValidator emailValidator;

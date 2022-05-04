@@ -1,18 +1,15 @@
 package mate.academy.service.impl;
 
+import java.util.Optional;
 import mate.academy.dao.RoleDao;
 import mate.academy.model.Role;
 import mate.academy.service.RoleService;
 import mate.academy.util.UserTestUtil;
 import org.junit.jupiter.api.Assertions;
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import org.mockito.Mockito;
-
-import java.util.Optional;
+import static org.mockito.ArgumentMatchers.any;
 
 class RoleServiceImplTest {
     private static final String ROLE_NAME = "USER";

@@ -1,5 +1,6 @@
 package mate.academy.dao.impl;
 
+import java.util.Optional;
 import mate.academy.dao.AbstractTest;
 import mate.academy.dao.RoleDao;
 import mate.academy.exception.DataProcessingException;
@@ -11,11 +12,9 @@ import org.hibernate.query.Query;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
-import org.mockito.Mockito;
-
-import java.util.Optional;
 
 class RoleDaoImplTest extends AbstractTest {
     private RoleDao roleDao;

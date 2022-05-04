@@ -1,18 +1,16 @@
 package mate.academy.service.impl;
 
+import java.util.Optional;
 import mate.academy.dao.UserDao;
 import mate.academy.model.User;
 import mate.academy.service.UserService;
 import mate.academy.util.UserTestUtil;
 import org.junit.jupiter.api.Assertions;
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.mockito.ArgumentMatchers.any;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import java.util.Optional;
+import static org.mockito.ArgumentMatchers.any;
 
 class UserServiceImplTest {
     private UserService userService;
@@ -38,7 +36,6 @@ class UserServiceImplTest {
         Assertions.assertEquals(1L, actual.getId());
         checkUser(expected, actual);
     }
-
 
     @Test
     void findById_Ok() {

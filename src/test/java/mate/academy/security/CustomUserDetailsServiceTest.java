@@ -1,22 +1,18 @@
 package mate.academy.security;
 
-import mate.academy.model.Role;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import mate.academy.model.User;
 import mate.academy.service.UserService;
 import mate.academy.util.UserTestUtil;
 import org.junit.jupiter.api.Assertions;
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 class CustomUserDetailsServiceTest {
     private UserDetailsService userDetailsService;
