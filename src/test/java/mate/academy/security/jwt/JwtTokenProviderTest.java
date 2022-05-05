@@ -66,7 +66,8 @@ class JwtTokenProviderTest {
     void validateToken_NotOk() {
         try {
             boolean actual = jwtTokenProvider.validateToken(INCORRECT_TOKEN);
-            Assertions.fail("Expected to receive Exception");
+            Assertions.fail("Expected to receive Exception "
+                    + "when validate incorrect token");
         } catch (Exception e) {
             Assertions.assertEquals("Expired or invalid JWT token",
                     e.getMessage());
