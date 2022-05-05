@@ -7,7 +7,7 @@ import mate.academy.model.User;
 import mate.academy.service.UserService;
 import mate.academy.util.UserTestUtil;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,19 +15,20 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 class CustomUserDetailsServiceTest {
-    private UserDetailsService userDetailsService;
-    private UserService userService;
+    private static UserDetailsService userDetailsService;
 
-    @BeforeEach
-    void setUp() {
-        userService = Mockito.mock(UserService.class);
+    @BeforeAll
+    static void beforeAll() {
+        UserService userService = Mockito.mock(UserService.class);
         userDetailsService = new CustomUserDetailsService(userService);
+        Mockito.when(userService.findByEmail(UserTestUtil.EMAIL))
+                .thenReturn(Optional.of(UserTestUtil.getUserBob()));
     }
+
 
     @Test
     void loadUserByUsername_Ok() {
         User expected = UserTestUtil.getUserBob();
-        prepareMock(expected);
         UserDetails actual = userDetailsService
                 .loadUserByUsername(UserTestUtil.EMAIL);
         checkUser(expected, actual);
@@ -36,12 +37,12 @@ class CustomUserDetailsServiceTest {
     @Test
     void loadUserByUsername_NotOk() {
         User expected = UserTestUtil.getUserBob();
-        prepareMock(expected);
         try {
             UserDetails actual = userDetailsService
                     .loadUserByUsername("incorrect");
             checkUser(expected, actual);
-            Assertions.fail("Exception should be thrown");
+            Assertions.fail("Exception should be thrown "
+                    + "while load user with non exist email");
         } catch (UsernameNotFoundException e) {
             Assertions.assertEquals("User not found.",
                     e.getMessage());
@@ -58,8 +59,4 @@ class CustomUserDetailsServiceTest {
         Assertions.assertEquals(expectedRoles, actualRoles);
     }
 
-    private void prepareMock(User expected) {
-        Mockito.when(userService.findByEmail(UserTestUtil.EMAIL))
-                .thenReturn(Optional.of(expected));
-    }
 }
