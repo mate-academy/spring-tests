@@ -2,44 +2,37 @@ package mate.academy.dao.impl;
 
 import java.util.Optional;
 import mate.academy.dao.AbstractTest;
+import mate.academy.dao.RoleDao;
 import mate.academy.dao.UserDao;
 import mate.academy.model.Role;
 import mate.academy.model.User;
 import mate.academy.util.UserTestUtil;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.query.Query;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 
 class UserDaoImplTest extends AbstractTest {
+    private RoleDao roleDao;
     private UserDao userDao;
-    private SessionFactory sessionFactory;
 
     @BeforeEach
     void setUp() {
-        sessionFactory = Mockito.spy(getSessionFactory());
+        SessionFactory sessionFactory = getSessionFactory();
         userDao = new UserDaoImpl(sessionFactory);
+        roleDao = new RoleDaoImpl(sessionFactory);
     }
 
     @Test
     void findByEmail_Ok() {
-        Session session = Mockito.mock(Session.class);
-        Mockito.when(sessionFactory.openSession()).thenReturn(session);
-        Query query = Mockito.mock(Query.class);
-        Mockito.when(session.createQuery(anyString(), eq(User.class)))
-                .thenReturn(query);
-        Mockito.when(query.setParameter(anyString(), eq(UserTestUtil.EMAIL)))
-                .thenReturn(query);
-        Mockito.when(query.uniqueResultOptional())
-                .thenReturn(Optional.of(UserTestUtil.getUserBob()));
-        userDao.findByEmail(UserTestUtil.EMAIL);
+        User expected = UserTestUtil.getUserBob();
+        roleDao.save(expected.getRoles().stream().findFirst().get());
+        userDao.save(expected);
+        Optional<User> actual = userDao.findByEmail(expected.getEmail());
+        Assertions.assertTrue(actual.isPresent());
+        checkUsers(expected, actual.get());
+        Assertions.assertEquals(UserTestUtil.getListOfStringRoles(expected),
+                UserTestUtil.getListOfStringRoles(actual.get()));
     }
 
     @Test
@@ -51,20 +44,13 @@ class UserDaoImplTest extends AbstractTest {
 
     @Test
     void findById_Ok() {
-        Session session = Mockito.mock(Session.class);
-        Mockito.when(sessionFactory.openSession()).thenReturn(session);
         User expected = UserTestUtil.getUserBob();
-        expected.setId(1L);
-        Mockito.when(session.get(eq(User.class), eq(1L)))
-                .thenReturn(expected);
+        roleDao.save(expected.getRoles().stream().findFirst().get());
+        userDao.save(expected);
         Optional<User> actual = userDao.findById(1L);
         Assertions.assertTrue(actual.isPresent());
         User actualUser = actual.get();
-        Assertions.assertEquals(expected.getEmail(), actualUser.getEmail());
-        Assertions.assertEquals(expected.getPassword(), actualUser.getPassword());
-        Assertions.assertEquals(expected.getId(), actualUser.getId());
-        Assertions.assertEquals(UserTestUtil.getListOfStringRoles(expected),
-                UserTestUtil.getListOfStringRoles(actualUser));
+        checkUsers(expected, actualUser);
     }
 
     @Test
@@ -76,26 +62,21 @@ class UserDaoImplTest extends AbstractTest {
     @Test
     void save_Ok() {
         User expected = UserTestUtil.getUserBob();
-        Session session = Mockito.mock(Session.class);
-        Mockito.when(sessionFactory.openSession())
-                .thenReturn(session);
-        Mockito.when(session.beginTransaction())
-                .thenReturn(Mockito.mock(Transaction.class));
-        Mockito.when(session.save(any(User.class))).thenAnswer(invocation -> {
-            Object argument = invocation.getArgument(0);
-            if (argument.getClass() == User.class
-                    && ((User) argument).getEmail().equals(expected.getEmail())
-                    && ((User) argument).getPassword().equals(expected.getPassword())) {
-                ((User) argument).setId(1L);
-            }
-            return 1L;
-        });
-        userDao.save(expected);
-        Assertions.assertEquals(1L, expected.getId());
+        roleDao.save(expected.getRoles().stream().findFirst().get());
+        User actual = userDao.save(expected);
+        checkUsers(expected, actual);
+        Assertions.assertEquals(UserTestUtil.getListOfStringRoles(expected),
+                UserTestUtil.getListOfStringRoles(actual));
     }
 
     @Override
     protected Class<?>[] entities() {
         return new Class[] {Role.class, User.class};
+    }
+
+    private void checkUsers(User expected, User actual) {
+        Assertions.assertEquals(expected.getId(), actual.getId());
+        Assertions.assertEquals(expected.getEmail(), actual.getEmail());
+        Assertions.assertEquals(expected.getPassword(), actual.getPassword());
     }
 }
