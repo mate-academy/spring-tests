@@ -30,7 +30,7 @@ class RoleDaoImplTest extends AbstractTest {
     void saveNull_NotOk() {
         try {
             Role role = roleDao.save(null);
-            Assertions.fail("it should thrown exception");
+            Assertions.fail("An exception must be thrown when saving a Null role");
         } catch (DataProcessingException e) {
             Assertions.assertTrue(e.getMessage().contains("Can't create entity: "));
         }
