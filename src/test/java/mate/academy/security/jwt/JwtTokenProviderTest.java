@@ -94,7 +94,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void resolveTokenOk() {
+    void resolveToken_Ok() {
         HttpServletRequest req = Mockito.mock(HttpServletRequest.class);
         Mockito.when(req.getHeader("Authorization")).thenReturn("Bearer " + CORRECT_TOKEN);
         String actual = jwtTokenProvider.resolveToken(req);
