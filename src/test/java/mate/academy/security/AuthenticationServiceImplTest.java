@@ -54,7 +54,7 @@ class AuthenticationServiceImplTest {
     @Test
     void login_Ok() {
         User expected = UserTestUtil.getUserBob();
-        prepareMockForLogin(expected);
+        prepareMockUserForLogin(expected);
         try {
             User actual = authenticationService.login(UserTestUtil.EMAIL,
                     UserTestUtil.PASSWORD);
@@ -67,12 +67,13 @@ class AuthenticationServiceImplTest {
     @Test
     void loginWithIncorrectEmail_NotOk() {
         User expected = UserTestUtil.getUserBob();
-        prepareMockForLogin(expected);
+        prepareMockUserForLogin(expected);
         try {
             User actual = authenticationService.login("incorrect",
                     UserTestUtil.PASSWORD);
             checkUsers(expected, actual);
-            Assertions.fail("Exception should be thrown");
+            Assertions.fail("Exception should be thrown while login user "
+                    + "with non existent email");
         } catch (AuthenticationException e) {
             Assertions.assertEquals("Incorrect username or password!!!",
                     e.getMessage());
@@ -82,12 +83,13 @@ class AuthenticationServiceImplTest {
     @Test
     void loginWithIncorrectPassword_NotOk() {
         User expected = UserTestUtil.getUserBob();
-        prepareMockForLogin(expected);
+        prepareMockUserForLogin(expected);
         try {
             User actual = authenticationService.login(UserTestUtil.EMAIL,
                     "incorrect");
             checkUsers(expected, actual);
-            Assertions.fail("Exception should be thrown");
+            Assertions.fail("Exception should be thrown while login user"
+                    + " with incorrect password");
         } catch (AuthenticationException e) {
             Assertions.assertEquals("Incorrect username or password!!!",
                     e.getMessage());
@@ -102,7 +104,7 @@ class AuthenticationServiceImplTest {
         Assertions.assertEquals(expectedRoles, actualRoles);
     }
 
-    private void prepareMockForLogin(User expected) {
+    private void prepareMockUserForLogin(User expected) {
         expected.setPassword(new BCryptPasswordEncoder().encode(expected.getPassword()));
         Mockito.when(userService.findByEmail(UserTestUtil.EMAIL))
                 .thenReturn(Optional.of(expected));
