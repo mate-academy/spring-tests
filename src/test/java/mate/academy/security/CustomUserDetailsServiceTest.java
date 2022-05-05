@@ -42,7 +42,7 @@ class CustomUserDetailsServiceTest {
     }
 
     @Test
-    void loadUserByUsername_UsernameNotFound() {
+    void loadUserByUsername_UsernameNotFound_notOk() {
         Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
         try {
             userDetailsService.loadUserByUsername("wrong@email.com");

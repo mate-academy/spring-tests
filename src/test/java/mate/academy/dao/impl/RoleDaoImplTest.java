@@ -7,10 +7,9 @@ import mate.academy.model.Role;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import test.java.mate.academy.AbstractTest;
 
 class RoleDaoImplTest extends AbstractTest {
-    private static final String USER_ROLE = "USER";
+    private static final String INVALID_ROLE = "MANAGER";
     private RoleDao roleDao;
 
     @BeforeEach
@@ -30,22 +29,24 @@ class RoleDaoImplTest extends AbstractTest {
 
     @Test
     void getRoleByName_ok() {
-        Role role = new Role();
-        roleDao.save(role);
-        Optional<Role> actual = roleDao.getRoleByName(USER_ROLE);
-        Assertions.assertTrue(actual.isPresent());
-        Assertions.assertEquals(USER_ROLE, actual.get().getRoleName().name());
+        Role roleAdmin = new Role();
+        roleAdmin.setRoleName(Role.RoleName.ADMIN);
+        roleDao.save(roleAdmin);
+        Optional<Role> actual = roleDao.getRoleByName("ADMIN");
+        Assertions.assertNotNull(actual);
+        Assertions.assertTrue(actual.isPresent(), "ADMIN role should be at the database.");
+        Assertions.assertEquals("ADMIN", actual.get().getRoleName().name());
     }
 
     @Test
-    void getRoleByName_DataProcessing() {
+    void getRoleByName_nonExistentRole_notOk() {
         try {
-            roleDao.getRoleByName("NOT_A_ROLE");
+            roleDao.getRoleByName(INVALID_ROLE);
         } catch (DataProcessingException e) {
-            Assertions.assertEquals("Couldn't get role by role name: NOT_A_ROLE", e.getMessage());
+            Assertions.assertEquals("Couldn't get role by role name: " + INVALID_ROLE, e.getMessage());
             return;
         }
-        Assertions.fail("Expected to throw DataProcessingException for role name" + "NOT_A_ROLE");
+        Assertions.fail("Expected to throw DataProcessingException for role name");
     }
 
     @Override

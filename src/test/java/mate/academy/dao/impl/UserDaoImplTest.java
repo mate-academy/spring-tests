@@ -9,7 +9,6 @@ import mate.academy.model.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import test.java.mate.academy.AbstractTest;
 
 class UserDaoImplTest extends AbstractTest {
     private static final String EMAIL = "bchupika@mate.academy";
@@ -18,6 +17,11 @@ class UserDaoImplTest extends AbstractTest {
     private RoleDao roleDao;
     private User user;
     private Role role;
+
+    @Override
+    protected Class<?>[] entities() {
+        return new Class[] {User.class, Role.class};
+    }
 
     @BeforeEach
     void setUp() {
@@ -52,10 +56,5 @@ class UserDaoImplTest extends AbstractTest {
         userDao.save(user);
         Optional<User> actual = userDao.findByEmail("not email");
         Assertions.assertTrue(actual.isEmpty(), "For non existing email Optional should be empty");
-    }
-
-    @Override
-    protected Class<?>[] entities() {
-        return new Class[] {User.class, Role.class};
     }
 }

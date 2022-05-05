@@ -14,12 +14,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.util.ReflectionTestUtils;
 
 class JwtTokenProviderTest {
-    private static final String EMAIL = "bchupika@mate.academy";
+    private static final String EMAIL = "bob@gmail.com";
     private static final String PASSWORD = "12345678";
     private static final String USER_ROLE = "USER";
-    private static final String TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJiY2h1cGlrYUBtYXRlLmF"
-            + "jYWRlbXkiLCJyb2xlcyI6WyJVU0VSIl0sImlhdCI6MTYzNDA0MzU0MywiZXh"
-            + "wIjoxNjM0MDQ3MTQzfQ._jmQOP_3pSXmPNMxVWoCLQjIQaRqjWUS0FvbuRhbmvA";
+    private static final String VALID_TOKEN  = "eyJhbGciOiJIUzI1NiJ9"
+            + ".eyJzdWIiOiJib2JAZ21haWwuY29tIiwicm9sZXMiOlsiVVNFUiJdLCJpYXQ"
+            + "iOjE2NTE2NjMwNTcsImV4cCI6OTQ0NTEwMjQyNjU3fQ"
+            + ".mk_l0poZNHTAqbunh6BQ22KQfoIowdbs4MsfR9ixKMw";
     private JwtTokenProvider jwtTokenProvider;
     private UserDetailsService userDetailsService;
 
@@ -40,21 +41,21 @@ class JwtTokenProviderTest {
 
     @Test
     void getUsername_ok() {
-        String actual = jwtTokenProvider.getUsername(TOKEN);
-        Assertions.assertEquals(EMAIL, actual, "Should return valid email for correct token");
+        String actual = jwtTokenProvider.getUsername(VALID_TOKEN);
+        Assertions.assertEquals(EMAIL, actual);
     }
 
     @Test
     void resolveToken_ok() {
         HttpServletRequest req = Mockito.mock(HttpServletRequest.class);
-        Mockito.when(req.getHeader("Authorization")).thenReturn("Bearer " + TOKEN);
+        Mockito.when(req.getHeader("Authorization")).thenReturn("Bearer " + VALID_TOKEN);
         String actual = jwtTokenProvider.resolveToken(req);
-        Assertions.assertEquals(TOKEN, actual, "Should return valid token");
+        Assertions.assertEquals(VALID_TOKEN, actual, "Should return valid token");
     }
 
     @Test
     void validateToken_ok() {
-        boolean actual = jwtTokenProvider.validateToken(TOKEN);
+        boolean actual = jwtTokenProvider.validateToken(VALID_TOKEN);
         Assertions.assertTrue(actual, "Should return true for valid token");
     }
 
@@ -63,7 +64,7 @@ class JwtTokenProviderTest {
         UserBuilder builder = User.withUsername(EMAIL);
         UserDetails userDetails = builder.password(PASSWORD).roles(USER_ROLE).build();
         Mockito.when(userDetailsService.loadUserByUsername(Mockito.any())).thenReturn(userDetails);
-        Authentication actual = jwtTokenProvider.getAuthentication(TOKEN);
+        Authentication actual = jwtTokenProvider.getAuthentication(VALID_TOKEN);
         User actualUser = (User) actual.getPrincipal();
         Assertions.assertNotNull(actual,
                 "Authentication object should not be null for valid token");
