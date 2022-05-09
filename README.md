@@ -35,3 +35,5 @@ Your task is to cover with unit tests some classes:
     - RoleDaoImpl
     - UserDaoImpl
 - all classes from `service` package
+
+#### [Try to avoid these common mistakes while solving task](https://mate-academy.github.io/jv-program-common-mistakes/java-spring-boot/testing/java-spring-tests.html)
