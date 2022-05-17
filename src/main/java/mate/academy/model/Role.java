@@ -44,8 +44,14 @@ public class Role {
 
     @Override
     public boolean equals(Object obj) {
-        Role castedToRole = (Role) obj;
-        return this.roleName.equals(castedToRole.roleName);
+        if (obj == this) {
+            return true;
+        }
+        if (obj != null && obj.getClass().equals(Role.class)) {
+            Role castedToRole = (Role) obj;
+            return this.roleName.equals(castedToRole.roleName);
+        }
+        return false;
     }
 
     public enum RoleName {
