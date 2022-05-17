@@ -1,5 +1,6 @@
 package mate.academy.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -14,6 +15,7 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true, nullable = false)
     @Enumerated(EnumType.STRING)
     private RoleName roleName;
 
@@ -38,6 +40,12 @@ public class Role {
 
     public void setRoleName(RoleName roleName) {
         this.roleName = roleName;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        Role castedToRole = (Role) obj;
+        return this.roleName.equals(castedToRole.roleName);
     }
 
     public enum RoleName {
