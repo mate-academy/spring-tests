@@ -48,7 +48,7 @@ class RoleDaoTest extends AbstractTest {
     }
 
     @Test
-    void getRoleByName_ok() {
+    void get_byName_ok() {
         Role expectedRole = new Role();
         expectedRole.setRoleName(Role.RoleName.USER);
         roleDao.save(expectedRole);
