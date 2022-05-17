@@ -33,7 +33,7 @@ class UserDaoTest extends AbstractTest {
 
     @Test
     void save_ok() {
-        User expectedUser = createExpectedUser();
+        User expectedUser = createUser();
         User actualUser = userDao.save(expectedUser);
         Assertions.assertNotNull(actualUser);
         Assertions.assertEquals(expectedUser.getId(), actualUser.getId());
@@ -42,7 +42,7 @@ class UserDaoTest extends AbstractTest {
 
     @Test
     void findByEmailExisting_ok() {
-        User expectedUser = createExpectedUser();
+        User expectedUser = createUser();
         userDao.save(expectedUser);
         Optional<User> actualUserOptional = userDao.findByEmail(expectedUser.getEmail());
         Assertions.assertTrue(actualUserOptional.isPresent());
@@ -59,7 +59,7 @@ class UserDaoTest extends AbstractTest {
 
     @Test
     void findById_ok() {
-        User expectedUser = createExpectedUser();
+        User expectedUser = createUser();
         userDao.save(expectedUser);
         Optional<User> actualUserOptional = userDao.findById(expectedUser.getId());
         Assertions.assertTrue(actualUserOptional.isPresent());
@@ -76,15 +76,15 @@ class UserDaoTest extends AbstractTest {
         Assertions.assertTrue(actualUserOptional.isEmpty());
     }
 
-    private User createExpectedUser() {
+    private User createUser() {
         String email = "bob@i.ua";
         String password = "1234";
-        User expectedUser = new User();
-        expectedUser.setEmail(email);
-        expectedUser.setPassword(password);
+        User user = new User();
+        user.setEmail(email);
+        user.setPassword(password);
         roleAdmin = roleDao.getRoleByName("ADMIN").get();
         roleUser = roleDao.getRoleByName("USER").get();
-        expectedUser.setRoles(Set.of(roleAdmin, roleUser));
-        return expectedUser;
+        user.setRoles(Set.of(roleAdmin, roleUser));
+        return user;
     }
 }
