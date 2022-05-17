@@ -32,7 +32,7 @@ class RoleDaoTest extends AbstractTest {
     }
 
     @Test
-    void saveExistingRole_Exception() {
+    void save_existingRole_notOk() {
         Role roleA = new Role();
         roleA.setRoleName(Role.RoleName.USER);
         Role roleB = new Role();
