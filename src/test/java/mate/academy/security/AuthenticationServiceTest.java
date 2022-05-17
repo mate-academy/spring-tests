@@ -64,7 +64,7 @@ class AuthenticationServiceTest {
             Assertions.assertEquals(expectedUser.getPassword(), actualUser.getPassword(),
                     "Password is not correct or encoding done wrong!");
         } catch (AuthenticationException e) {
-            Assertions.fail(e.getMessage());
+            Assertions.fail("AuthenticationException was thrown. Message: " + e.getMessage());
         }
     }
 
