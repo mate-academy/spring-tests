@@ -57,9 +57,12 @@ class AuthenticationServiceTest {
         try {
             User actualUser = authenticationService.login(expectedUser.getEmail(),
                     expectedUser.getPassword());
-            Assertions.assertNotNull(actualUser);
-            Assertions.assertEquals(expectedUser.getEmail(), actualUser.getEmail());
-            Assertions.assertEquals(expectedUser.getPassword(), actualUser.getPassword());
+            Assertions.assertNotNull(actualUser,
+                    "User after login should not be null");
+            Assertions.assertEquals(expectedUser.getEmail(), actualUser.getEmail(),
+                    "Email is not correct!");
+            Assertions.assertEquals(expectedUser.getPassword(), actualUser.getPassword(),
+                    "Password is not correct or encoding done wrong!");
         } catch (AuthenticationException e) {
             Assertions.fail(e.getMessage());
         }
