@@ -32,19 +32,16 @@ class RoleDaoTest extends AbstractTest {
     }
 
     @Test
-    void save_existingRole_notOk() {
-        Role roleA = new Role();
-        roleA.setRoleName(Role.RoleName.USER);
-        Role roleB = new Role();
-        roleB.setRoleName(Role.RoleName.USER);
-        Role actualRoleA = roleDao.save(roleA);
-        Assertions.assertNotNull(actualRoleA);
+    void save_duplicatedRole_notOk() {
+        Role role = new Role();
+        role.setRoleName(Role.RoleName.USER);
+        Role duplicatedRole = new Role();
+        duplicatedRole.setRoleName(Role.RoleName.USER);
+        Role actualRole = roleDao.save(role);
+        Assertions.assertNotNull(actualRole);
         try {
-            roleDao.save(roleB);
-        } catch (Exception e) {
-            Class<? extends Exception> expected = DataProcessingException.class;
-            Class<? extends Exception> actual = e.getClass();
-            Assertions.assertEquals(expected, actual);
+            roleDao.save(duplicatedRole);
+        } catch (DataProcessingException e) {
             return;
         }
         Assertions.fail("Expected to receive DataProcessingException");
