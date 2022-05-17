@@ -6,9 +6,7 @@ import mate.academy.model.Role;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import java.util.Optional;
-
 
 class RoleDaoTest extends AbstractTest {
     private RoleDao roleDao;
