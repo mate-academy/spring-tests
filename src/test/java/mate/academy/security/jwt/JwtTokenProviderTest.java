@@ -95,13 +95,13 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void validateToken_notOk() {
+    void validateToken_invalidToken_notOk() {
         try {
             jwtTokenProvider.validateToken(invalidToken);
         } catch (RuntimeException e) {
             Assertions.assertEquals("Expired or invalid JWT token", e.getMessage());
             return;
         }
-        Assertions.fail("Test failed, method 'validateToken' not working correctly");
+        Assertions.fail("Expected RuntimeException while trying check invalid token");
     }
 }

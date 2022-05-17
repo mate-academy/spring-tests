@@ -38,7 +38,7 @@ class PasswordValidatorTest {
     }
 
     @Test
-    void isValid_ok() {
+    void isValid_validPasswords_ok() {
         boolean actual = passwordValidator.isValid(userRegistrationDto,
                 constraintValidatorContext);
         Assertions.assertTrue(actual);

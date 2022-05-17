@@ -48,7 +48,7 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    void login_ok () {
+    void login_validEmailAndPassword_ok () {
         User expected = userUtil.getUserNadja();
         Mockito.when(userService.findByEmail(Mockito.any())).thenReturn(Optional.of(expected));
         Mockito.when(passwordEncoder.matches(Mockito.any(), Mockito.any())).thenReturn(true);
@@ -57,7 +57,8 @@ class AuthenticationServiceImplTest {
         try {
             actual = authenticationService.login(expected.getEmail(), expected.getPassword());
         } catch (AuthenticationException e) {
-            Assertions.fail();
+            Assertions.fail("Expected user " + expected + " while trying login by "
+                    + expected.getEmail() + " and password " + expected.getPassword());
         }
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(expected.getEmail(), actual.getEmail());
@@ -72,6 +73,7 @@ class AuthenticationServiceImplTest {
             Assertions.assertEquals("Incorrect username or password!!!", e.getMessage());
             return;
         }
-        Assertions.fail("Test failed, method 'login' not working correctly");
+        Assertions.fail("Expected AuthenticationException "
+                + "while trying login with not valid name and password");
     }
 }

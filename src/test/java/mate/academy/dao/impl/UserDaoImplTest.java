@@ -30,7 +30,7 @@ class UserDaoImplTest extends AbstractTest{
     }
 
     @Test
-    void saveUser_ok() {
+    void saveUser_validUser_ok() {
         Role admin = roleDao.save(userUtil.getAdminRole());
         Role user = roleDao.save(userUtil.getUserRole());
         User expectedBoris = userUtil.getUserBoris();
@@ -52,7 +52,7 @@ class UserDaoImplTest extends AbstractTest{
     }
 
     @Test
-    void findUserByEmail_ok() {
+    void findByEmail_ok() {
         User expectedBoris = userUtil.getUserBoris();
         User expectedNadja = userUtil.getUserNadja();
         expectedBoris.setRoles(Set.of(roleDao.save(userUtil.getAdminRole())));
@@ -71,17 +71,17 @@ class UserDaoImplTest extends AbstractTest{
     }
 
     @Test
-    void findUserByEmail_noElementException_notOk() {
+    void findByEmail_notExistentUser_notOk() {
         try{
         userDao.findByEmail("john@.ua").get();
         }catch (NoSuchElementException e) {
             Assertions.assertEquals("No value present", e.getMessage());
             return;
         }
-        Assertions.fail();
+        Assertions.fail("Expected NoSuchElementException while trying to get not existent user");
     }
     @Test
-    void findUserById_ok() {
+    void findById_validId_ok() {
         User expectedBoris = userDao.save(userUtil.getUserBoris());
         User expectedNadja = userDao.save(userUtil.getUserNadja());
         User actualBoris = userDao.findById(expectedBoris.getId()).get();
@@ -95,7 +95,7 @@ class UserDaoImplTest extends AbstractTest{
     }
 
     @Test
-    void findUserById_notOk() {
+    void findById_notExistentId_notOk() {
         Optional<User> actual = userDao.findById(4L);
         Assertions.assertTrue(actual.isEmpty());
     }

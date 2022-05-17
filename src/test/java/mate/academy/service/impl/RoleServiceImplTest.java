@@ -35,7 +35,8 @@ class RoleServiceImplTest {
     @Test
     void getRoleByName_ok() {
         Role expected = userUtil.getUserRole();
-        Mockito.when(roleDao.getRoleByName(expected.getRoleName().name())).thenReturn(Optional.of(expected));
+        Mockito.when(roleDao.getRoleByName(expected.getRoleName().name()))
+                .thenReturn(Optional.of(expected));
         Role actual = roleService.getRoleByName(expected.getRoleName().name());
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(expected.getRoleName(), actual.getRoleName());
@@ -51,6 +52,7 @@ class RoleServiceImplTest {
             Assertions.assertEquals("No value present", e.getMessage());
             return;
         }
-        Assertions.fail("Test failed, method 'getRoleByName' not working correctly");
+        Assertions.fail("Expect to get DataProcessingException "
+                + "while trying to get not existent role");
     }
 }

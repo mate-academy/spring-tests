@@ -21,14 +21,14 @@ class EmailValidatorTest {
     }
 
     @Test
-    void isValid_ok() {
+    void isValid_validEmail_ok() {
         boolean actual = emailValidator.isValid(userUtil.getBorisEmail(),
                 constraintValidatorContext);
         Assertions.assertTrue(actual);
     }
 
     @Test
-    void isValid_notOk() {
+    void isValid_notValidEmail_notOk() {
         boolean actual = emailValidator.isValid(userUtil.getBorisEmail().substring(0,6),
                 constraintValidatorContext);
         Assertions.assertFalse(actual);

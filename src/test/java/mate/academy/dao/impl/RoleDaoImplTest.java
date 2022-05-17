@@ -59,6 +59,7 @@ class RoleDaoImplTest extends AbstractTest{
                     e.getMessage());
             return;
         }
-        Assertions.fail("Test failed, method 'getRoleByName' not working correctly");
+        Assertions.fail("Expect to get DataProcessingException"
+                + " while trying to get not existent role");
     }
 }

@@ -32,7 +32,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void save_ok() {
+    void save_validUser_ok() {
         Mockito.when(userDao.save(expected)).thenReturn(expected);
         Mockito.when(passwordEncoder.encode(Mockito.any()))
                 .thenReturn(userUtil.getBorisPassword());
@@ -61,7 +61,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findByEmail_ok() {
+    void findByEmail_validEmail_ok() {
         Mockito.when(userDao.findByEmail(expected.getEmail())).thenReturn(Optional.of(expected));
         Optional<User> actual = userService.findByEmail(expected.getEmail());
         Assertions.assertTrue(actual.isPresent());

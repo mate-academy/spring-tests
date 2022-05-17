@@ -47,6 +47,7 @@ class CustomUserDetailsServiceTest {
             Assertions.assertEquals("User not found.", e.getMessage());
             return;
         }
-        Assertions.fail("Test failed, method 'loadUserByUsername' not working correctly");
+        Assertions.fail("Expected to get UsernameNotFoundException "
+                + "while trying to get not existent user");
     }
 }
