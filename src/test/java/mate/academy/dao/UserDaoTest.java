@@ -39,24 +39,7 @@ class UserDaoTest extends AbstractTest {
         Assertions.assertEquals(expectedUser.getId(), actualUser.getId());
         Assertions.assertEquals(expectedUser, actualUser);
     }
-    /*
-    @Test
-    void saveExistingUser_DataProcessingException() {
-        User userA = createExpectedUser();
-        User userB = createExpectedUser();
-        User actualUserA = userDao.save(userA);
-        Assertions.assertNotNull(actualUserA);
-        try {
-            userDao.save(userB);
-        } catch (Exception e) {
-            Class<? extends Exception> expected = DataProcessingException.class;
-            Class<? extends Exception> actual = e.getClass();
-            Assertions.assertEquals(expected, actual);
-            return;
-        }
-        Assertions.fail("Expected to receive DataProcessingException");
-    }
-*/
+
     @Test
     void findByEmailExisting_ok() {
         User expectedUser = createExpectedUser();
