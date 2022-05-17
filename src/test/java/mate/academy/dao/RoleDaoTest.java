@@ -22,7 +22,7 @@ class RoleDaoTest extends AbstractTest {
     }
 
     @Test
-    void saveNotExistingRole_ok() {
+    void save_validRole_ok() {
         Role expectedRole = new Role();
         expectedRole.setRoleName(Role.RoleName.USER);
         Role actualRole = roleDao.save(expectedRole);
