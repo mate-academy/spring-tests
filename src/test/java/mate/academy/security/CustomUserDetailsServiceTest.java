@@ -39,7 +39,7 @@ class CustomUserDetailsServiceTest {
     }
 
     @Test
-    void loadUserByUsername_emptyUser_usernameNotFoundException() {
+    void loadUserByUsername_usernameNotFoundException_notOk() {
         Mockito.when(userService.findByEmail(Mockito.any())).thenReturn(Optional.empty());
         try {
             customUserDetailsService.loadUserByUsername("randomUser");
@@ -47,6 +47,6 @@ class CustomUserDetailsServiceTest {
             Assertions.assertEquals("User not found.", e.getMessage());
             return;
         }
-        Assertions.fail();
+        Assertions.fail("Test failed, method 'loadUserByUsername' not working correctly");
     }
 }

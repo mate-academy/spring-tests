@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 class UserDaoImplTest extends AbstractTest{
     private UserDao userDao;
     private RoleDao roleDao;
-    private UserUtilForTest utilUtil;
+    private UserUtilForTest userUtil;
 
     @Override
     protected Class<?>[] entities() {
@@ -26,15 +26,15 @@ class UserDaoImplTest extends AbstractTest{
     void setUp() {
         userDao = new UserDaoImpl(getSessionFactory());
         roleDao = new RoleDaoImpl(getSessionFactory());
-        utilUtil = new UserUtilForTest();
+        userUtil = new UserUtilForTest();
     }
 
     @Test
     void saveUser_ok() {
-        Role admin = roleDao.save(utilUtil.getAdminRole());
-        Role user = roleDao.save(utilUtil.getUserRole());
-        User expectedBoris = utilUtil.getUserBoris();
-        User expectedNadja = utilUtil.getUserNadja();
+        Role admin = roleDao.save(userUtil.getAdminRole());
+        Role user = roleDao.save(userUtil.getUserRole());
+        User expectedBoris = userUtil.getUserBoris();
+        User expectedNadja = userUtil.getUserNadja();
         expectedBoris.setRoles(Set.of(admin));
         expectedNadja.setRoles(Set.of(user));
 
@@ -53,15 +53,15 @@ class UserDaoImplTest extends AbstractTest{
 
     @Test
     void findUserByEmail_ok() {
-        User expectedBoris = utilUtil.getUserBoris();
-        User expectedNadja = utilUtil.getUserNadja();
-        expectedBoris.setRoles(Set.of(roleDao.save(utilUtil.getAdminRole())));
-        expectedNadja.setRoles(Set.of(roleDao.save(utilUtil.getUserRole())));
+        User expectedBoris = userUtil.getUserBoris();
+        User expectedNadja = userUtil.getUserNadja();
+        expectedBoris.setRoles(Set.of(roleDao.save(userUtil.getAdminRole())));
+        expectedNadja.setRoles(Set.of(roleDao.save(userUtil.getUserRole())));
         userDao.save(expectedBoris);
         userDao.save(expectedNadja);
 
-        Optional<User> actualBoris = userDao.findByEmail(utilUtil.getBorisEmail());
-        Optional<User> actualNadja = userDao.findByEmail(utilUtil.getNadjaEmail());
+        Optional<User> actualBoris = userDao.findByEmail(userUtil.getBorisEmail());
+        Optional<User> actualNadja = userDao.findByEmail(userUtil.getNadjaEmail());
         Assertions.assertFalse(actualBoris.isEmpty());
         Assertions.assertFalse(actualNadja.isEmpty());
         Assertions.assertEquals(expectedBoris.getId(), actualBoris.get().getId());
@@ -71,7 +71,7 @@ class UserDaoImplTest extends AbstractTest{
     }
 
     @Test
-    void findUserByEmail_noSuchElementException() {
+    void findUserByEmail_noElementException_notOk() {
         try{
         userDao.findByEmail("john@.ua").get();
         }catch (NoSuchElementException e) {
@@ -82,8 +82,8 @@ class UserDaoImplTest extends AbstractTest{
     }
     @Test
     void findUserById_ok() {
-        User expectedBoris = userDao.save(utilUtil.getUserBoris());
-        User expectedNadja = userDao.save(utilUtil.getUserNadja());
+        User expectedBoris = userDao.save(userUtil.getUserBoris());
+        User expectedNadja = userDao.save(userUtil.getUserNadja());
         User actualBoris = userDao.findById(expectedBoris.getId()).get();
         User actualNadja = userDao.findById(expectedNadja.getId()).get();
         Assertions.assertNotNull(actualBoris);

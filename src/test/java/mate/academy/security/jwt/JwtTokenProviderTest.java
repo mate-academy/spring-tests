@@ -11,7 +11,6 @@ import org.mockito.Mockito;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.User.UserBuilder;
-
 import javax.servlet.http.HttpServletRequest;
 
 class JwtTokenProviderTest {
@@ -35,7 +34,7 @@ class JwtTokenProviderTest {
             secretKey.set(jwtTokenProvider, "secret");
             validityInMilliseconds.set(jwtTokenProvider, 3600000L);
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException("Unable to insert values into fields");
+            throw new RuntimeException("Unable to insert values into fields", e);
         }
         invalidToken = "122341";
         validToken = jwtTokenProvider.createToken(userUtil.getBorisEmail(),
@@ -84,7 +83,7 @@ class JwtTokenProviderTest {
     @Test
     void resolveToken_notBearer_notOk() {
         HttpServletRequest httpMock = Mockito.mock(HttpServletRequest.class);
-        Mockito.when(httpMock.getHeader("Authorization")).thenReturn(validToken);
+        Mockito.when(httpMock.getHeader("Authorization")).thenReturn(invalidToken);
         String action = jwtTokenProvider.resolveToken(httpMock);
         Assertions.assertNull(action);
     }
@@ -103,6 +102,6 @@ class JwtTokenProviderTest {
             Assertions.assertEquals("Expired or invalid JWT token", e.getMessage());
             return;
         }
-        Assertions.fail();
+        Assertions.fail("Test failed, method 'validateToken' not working correctly");
     }
 }

@@ -3,7 +3,6 @@ package mate.academy.service.impl;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import mate.academy.dao.RoleDao;
-import mate.academy.dao.impl.RoleDaoImpl;
 import mate.academy.model.Role;
 import mate.academy.service.RoleService;
 import mate.academy.util.UserUtilForTest;
@@ -52,6 +51,6 @@ class RoleServiceImplTest {
             Assertions.assertEquals("No value present", e.getMessage());
             return;
         }
-        Assertions.fail();
+        Assertions.fail("Test failed, method 'getRoleByName' not working correctly");
     }
 }

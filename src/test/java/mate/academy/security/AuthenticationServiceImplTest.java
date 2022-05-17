@@ -65,13 +65,13 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    void login_authenticationException() {
+    void login_NonExistentUser_notOk() {
         try {
             authenticationService.login("randomName","randomPassword");
         } catch (AuthenticationException e) {
             Assertions.assertEquals("Incorrect username or password!!!", e.getMessage());
             return;
         }
-        Assertions.fail();
+        Assertions.fail("Test failed, method 'login' not working correctly");
     }
 }
