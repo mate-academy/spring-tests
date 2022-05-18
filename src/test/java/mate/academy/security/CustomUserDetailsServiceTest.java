@@ -1,6 +1,7 @@
 package mate.academy.security;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Optional;
 import java.util.Set;
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 class CustomUserDetailsServiceTest {
     private UserDetailsService userDetailsService;
@@ -33,7 +33,8 @@ class CustomUserDetailsServiceTest {
 
     @Test
     void loadUserByUsername_validData_ok() {
-        Mockito.when(userService.findByEmail(expectedUser.getEmail())).thenReturn(Optional.of(expectedUser));
+        Mockito.when(userService.findByEmail(expectedUser.getEmail()))
+                .thenReturn(Optional.of(expectedUser));
         UserDetails actualUser = userDetailsService.loadUserByUsername(expectedUser.getEmail());
         assertNotNull(expectedUser.getEmail());
         assertEquals(expectedUser.getEmail(), actualUser.getUsername());
