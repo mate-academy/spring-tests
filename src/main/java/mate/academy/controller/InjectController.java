@@ -31,7 +31,7 @@ public class InjectController {
         bob.setRoles(Set.of(roleService.getRoleByName(Role.RoleName.USER.name())));
         User alice = authenticationService.register("alice@i.com", "5678");
         alice.setRoles(Set.of(roleService.getRoleByName(Role.RoleName.ADMIN.name())));
-        User anotherUser = authenticationService.register("user", "9012");
+        User anotherUser = authenticationService.register("user@i.com", "9012");
         anotherUser.setRoles(Set.of(roleService.getRoleByName(Role.RoleName.ADMIN.name())));
 
         return "Done!";
