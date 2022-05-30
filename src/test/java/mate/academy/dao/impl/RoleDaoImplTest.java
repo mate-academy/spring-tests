@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 
 class RoleDaoImplTest extends AbstractTest {
     private RoleDao roleDao;
-    private Role testRole_1;
-    private Role testRole_2;
+    private Role adminRole;
+    private Role userRole;
 
     @Override
     protected Class<?>[] entities() {
@@ -21,35 +21,35 @@ class RoleDaoImplTest extends AbstractTest {
     @BeforeEach
     void setUp() {
         roleDao = new RoleDaoImpl(getSessionFactory());
-        testRole_1 = new Role(Role.RoleName.ADMIN);
-        testRole_2 = new Role(Role.RoleName.USER);
+        adminRole = new Role(Role.RoleName.ADMIN);
+        userRole = new Role(Role.RoleName.USER);
     }
 
     @Test
     void save_Ok() {
-        Role actual_1 = roleDao.save(testRole_1);
-        Role actual_2 = roleDao.save(testRole_2);
-        Assertions.assertNotNull(actual_1);
-        Assertions.assertNotNull(actual_2);
-        Assertions.assertEquals(1L, actual_1.getId());
-        Assertions.assertEquals(2L, actual_2.getId());
-        Assertions.assertEquals(testRole_1.getRoleName(), actual_1.getRoleName());
-        Assertions.assertEquals(testRole_2.getRoleName(), actual_2.getRoleName());
+        Role actualAdmin = roleDao.save(adminRole);
+        Role actualUser = roleDao.save(userRole);
+        Assertions.assertNotNull(actualAdmin);
+        Assertions.assertNotNull(actualUser);
+        Assertions.assertEquals(1L, actualAdmin.getId());
+        Assertions.assertEquals(2L, actualUser.getId());
+        Assertions.assertEquals(adminRole.getRoleName(), actualAdmin.getRoleName());
+        Assertions.assertEquals(userRole.getRoleName(), actualUser.getRoleName());
     }
 
     @Test
     void getRoleByName_existRole_Ok() {
-        roleDao.save(testRole_1);
-        String existRole = testRole_1.getRoleName().name();
+        roleDao.save(adminRole);
+        String existRole = adminRole.getRoleName().name();
         Optional<Role> actual = roleDao.getRoleByName(existRole);
         Assertions.assertFalse(actual.isEmpty());
-        Assertions.assertEquals(testRole_1.getRoleName(), actual.get().getRoleName());
+        Assertions.assertEquals(adminRole.getRoleName(), actual.get().getRoleName());
     }
 
     @Test
     void getRoleByName_notExistRole_Ok() {
-        roleDao.save(testRole_1);
-        roleDao.save(testRole_2);
+        roleDao.save(adminRole);
+        roleDao.save(userRole);
         String notExistRole = "MODERATOR";
         Assertions.assertThrows(DataProcessingException.class,
                 () -> roleDao.getRoleByName(notExistRole),

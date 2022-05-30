@@ -15,8 +15,8 @@ import org.junit.jupiter.api.Test;
 class UserDaoImplTest extends AbstractTest {
     private UserDao userDao;
     private RoleDao roleDao;
-    private User testUser_1;
-    private User testUser_2;
+    private User admin;
+    private User user;
 
     @Override
     protected Class<?>[] entities() {
@@ -28,35 +28,35 @@ class UserDaoImplTest extends AbstractTest {
         userDao = new UserDaoImpl(getSessionFactory());
         roleDao = new RoleDaoImpl(getSessionFactory());
 
-        testUser_1 = new User();
-        testUser_1.setEmail("testUser_1@mail.com");
-        testUser_1.setPassword("testUser_1_1234");
-        testUser_1.setRoles(Set.of(roleDao.save(new Role(Role.RoleName.ADMIN))));
+        admin = new User();
+        admin.setEmail("testUser_1@mail.com");
+        admin.setPassword("testUser_1_1234");
+        admin.setRoles(Set.of(roleDao.save(new Role(Role.RoleName.ADMIN))));
 
-        testUser_2 = new User();
-        testUser_2.setEmail("testUser_2@mail.com");
-        testUser_2.setPassword("testUser_2_1234");
-        testUser_2.setRoles(Set.of(roleDao.save(new Role(Role.RoleName.USER))));
+        user = new User();
+        user.setEmail("testUser_2@mail.com");
+        user.setPassword("testUser_2_1234");
+        user.setRoles(Set.of(roleDao.save(new Role(Role.RoleName.USER))));
     }
 
     @Test
     void save_Ok() {
-        User actual_1 = userDao.save(testUser_1);
-        User actual_2 = userDao.save(testUser_2);
-        Assertions.assertNotNull(actual_1);
-        Assertions.assertNotNull(actual_2);
-        Assertions.assertEquals(1L, actual_1.getId());
-        Assertions.assertEquals(2L, actual_2.getId());
-        Assertions.assertEquals(testUser_1.getEmail(), actual_1.getEmail());
-        Assertions.assertEquals(testUser_2.getEmail(), actual_2.getEmail());
-        Assertions.assertEquals(testUser_1.getPassword(), actual_1.getPassword());
-        Assertions.assertEquals(testUser_2.getPassword(), actual_2.getPassword());
+        User actualAdmin = userDao.save(admin);
+        User actualUser = userDao.save(user);
+        Assertions.assertNotNull(actualAdmin);
+        Assertions.assertNotNull(actualUser);
+        Assertions.assertEquals(1L, actualAdmin.getId());
+        Assertions.assertEquals(2L, actualUser.getId());
+        Assertions.assertEquals(admin.getEmail(), actualAdmin.getEmail());
+        Assertions.assertEquals(user.getEmail(), actualUser.getEmail());
+        Assertions.assertEquals(admin.getPassword(), actualAdmin.getPassword());
+        Assertions.assertEquals(user.getPassword(), actualUser.getPassword());
     }
 
     @Test
     void findByEmail_existEmail_Ok() {
-        User expected = userDao.save(testUser_1);
-        String existEmail = testUser_1.getEmail();
+        User expected = userDao.save(admin);
+        String existEmail = admin.getEmail();
         Optional<User> actual = userDao.findByEmail(existEmail);
         Assertions.assertFalse(actual.isEmpty());
         Assertions.assertEquals(expected.getId(), actual.get().getId());
@@ -75,8 +75,8 @@ class UserDaoImplTest extends AbstractTest {
 
     @Test
     void findByEmail_notExistEmail_NotOk() {
-        userDao.save(testUser_1);
-        userDao.save(testUser_2);
+        userDao.save(admin);
+        userDao.save(user);
         String notExistEmail = "alice@i.ua";
         Optional<User> actual = userDao.findByEmail(notExistEmail);
         Assertions.assertTrue(actual.isEmpty());
@@ -84,8 +84,8 @@ class UserDaoImplTest extends AbstractTest {
 
     @Test
     void findByEmail_notExistEmail_Ok() {
-        userDao.save(testUser_1);
-        userDao.save(testUser_2);
+        userDao.save(admin);
+        userDao.save(user);
         String notExistEmail = "alice@i.ua";
         Assertions.assertThrows(NoSuchElementException.class,
                 () -> userDao.findByEmail(notExistEmail).get(),
@@ -94,8 +94,8 @@ class UserDaoImplTest extends AbstractTest {
 
     @Test
     void findById_existId_Ok() {
-        User expected = userDao.save(testUser_1);
-        Long existId = testUser_1.getId();
+        User expected = userDao.save(admin);
+        Long existId = admin.getId();
         Optional<User> actual = userDao.findById(existId);
         Assertions.assertFalse(actual.isEmpty());
         Assertions.assertEquals(expected.getId(), actual.get().getId());
@@ -105,8 +105,8 @@ class UserDaoImplTest extends AbstractTest {
 
     @Test
     void findById_notExistId_NotOk() {
-        userDao.save(testUser_1);
-        userDao.save(testUser_2);
+        userDao.save(admin);
+        userDao.save(user);
         Long notExistId = 3L;
         Optional<User> actual = userDao.findById(notExistId);
         Assertions.assertTrue(actual.isEmpty());
@@ -114,8 +114,8 @@ class UserDaoImplTest extends AbstractTest {
 
     @Test
     void findById_notExistId_Ok() {
-        userDao.save(testUser_1);
-        userDao.save(testUser_2);
+        userDao.save(admin);
+        userDao.save(user);
         Long notExistId = 3L;
         Assertions.assertThrows(NoSuchElementException.class,
                 () -> userDao.findById(notExistId).get(),
