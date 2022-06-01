@@ -10,8 +10,6 @@ import org.mockito.Mockito;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class RoleServiceImplTest {
     private RoleDao roleDao;
     private RoleServiceImpl roleService;
@@ -24,12 +22,12 @@ class RoleServiceImplTest {
 
     @Test
     void save_OK() {
-        Role roleExpected_Admin = new Role();
-        roleExpected_Admin.setId(1L);
-        roleExpected_Admin.setRoleName(Role.RoleName.ADMIN);
-        Mockito.when(roleDao.save(roleExpected_Admin)).thenReturn(roleExpected_Admin);
-        Role roleActual = roleService.save(roleExpected_Admin);
-        Assertions.assertEquals(roleExpected_Admin, roleActual);
+        Role expected = new Role();
+        expected.setId(1L);
+        expected.setRoleName(Role.RoleName.ADMIN);
+        Mockito.when(roleDao.save(expected)).thenReturn(expected);
+        Role roleActual = roleService.save(expected);
+        Assertions.assertEquals(expected, roleActual);
     }
 
     @Test

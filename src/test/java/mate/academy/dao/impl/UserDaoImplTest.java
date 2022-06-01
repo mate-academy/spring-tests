@@ -13,8 +13,8 @@ import java.util.Set;
 class UserDaoImplTest extends AbstractDaoTest {
     private UserDao userDao;
     private static RoleDao roleDao;
-    private static Role roleAdmin;
-    private static Role roleUser;
+    private static Role adminRole;
+    private static Role userRole;
 
     @Override
     protected Class<?>[] entities() {
@@ -25,10 +25,10 @@ class UserDaoImplTest extends AbstractDaoTest {
     void setUp() {
         userDao = new UserDaoImpl(getSessionFactory());
         roleDao = new RoleDaoImpl(getSessionFactory());
-        roleAdmin = new Role(Role.RoleName.ADMIN);
-        roleUser = new Role(Role.RoleName.USER);
-        roleDao.save(roleAdmin);
-        roleDao.save(roleUser);
+        adminRole = new Role(Role.RoleName.ADMIN);
+        userRole = new Role(Role.RoleName.USER);
+        roleDao.save(adminRole);
+        roleDao.save(userRole);
     }
 
     @Test
@@ -81,9 +81,9 @@ class UserDaoImplTest extends AbstractDaoTest {
         User user = new User();
         user.setEmail(email);
         user.setPassword(password);
-        roleAdmin = roleDao.getRoleByName("ADMIN").get();
-        roleUser = roleDao.getRoleByName("USER").get();
-        user.setRoles(Set.of(roleAdmin, roleUser));
+        adminRole = roleDao.getRoleByName("ADMIN").get();
+        userRole = roleDao.getRoleByName("USER").get();
+        user.setRoles(Set.of(adminRole, userRole));
         return user;
     }
 }

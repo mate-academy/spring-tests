@@ -23,31 +23,31 @@ class RoleDaoImplTest extends AbstractDaoTest {
 
     @Test
     void save_validRole_ok() {
-        Role expectedRole = new Role();
-        expectedRole.setRoleName(Role.RoleName.USER);
-        Role actualRole = roleDao.save(expectedRole);
+        Role expected = new Role();
+        expected.setRoleName(Role.RoleName.USER);
+        Role actualRole = roleDao.save(expected);
         Assertions.assertNotNull(actualRole);
         Assertions.assertEquals(1L, actualRole.getId());
-        Assertions.assertEquals(expectedRole.getRoleName(), actualRole.getRoleName());
+        Assertions.assertEquals(expected.getRoleName(), actualRole.getRoleName());
     }
 
     @Test
     void get_byName_ok() {
-        Role expectedRole = new Role();
-        expectedRole.setRoleName(Role.RoleName.USER);
-        roleDao.save(expectedRole);
-        Optional<Role> actualRoleOptional = roleDao.getRoleByName(expectedRole.getRoleName().name());
+        Role expected = new Role();
+        expected.setRoleName(Role.RoleName.USER);
+        roleDao.save(expected);
+        Optional<Role> actualRoleOptional = roleDao.getRoleByName(expected.getRoleName().name());
         Assertions.assertTrue(actualRoleOptional.isPresent());
         Role actualRole = actualRoleOptional.get();
-        Assertions.assertEquals(expectedRole.getId(), actualRole.getId());
-        Assertions.assertEquals(expectedRole.getRoleName(), actualRole.getRoleName());
+        Assertions.assertEquals(expected.getId(), actualRole.getId());
+        Assertions.assertEquals(expected.getRoleName(), actualRole.getRoleName());
     }
 
     @Test
-    void getRoleByName_NOK() {
-        Role expectedRole = new Role();
-        expectedRole.setRoleName(Role.RoleName.USER);
-        roleDao.save(expectedRole);
+    void get_byNotExistentName_NotOk() {
+        Role role = new Role();
+        role.setRoleName(Role.RoleName.USER);
+        roleDao.save(role);
         String unknownRoleName = "unknown";
         try {
             roleDao.getRoleByName(unknownRoleName);

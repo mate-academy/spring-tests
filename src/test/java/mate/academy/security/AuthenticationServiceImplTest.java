@@ -60,12 +60,11 @@ class AuthenticationServiceImplTest {
                     "Dude, you made mistake in password!");
         } catch (AuthenticationException e) {
             Assertions.assertEquals("Incorrect username or password!!!", e.getMessage());
-            Assertions.fail("Expected to receive AuthenticationException");
         }
     }
 
     @Test
-    void login_NOK_emailsAreDifferent() {
+    void login_notExistentEmail_NotOk() {
         User expectedVitalii = new User();
         String login = "vitalii@gmail.com";
         String password = "1234";

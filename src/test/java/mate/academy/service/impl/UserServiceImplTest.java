@@ -26,7 +26,7 @@ class UserServiceImplTest {
 
     @Test
     void save_ok() {
-        User expectedUser = createExpectedUser();
+        User expectedUser = getTestUser();
         Mockito.when(userDao.save(expectedUser)).thenReturn(expectedUser);
         User actualUser = userService.save(expectedUser);
         Assertions.assertNotNull(actualUser);
@@ -36,7 +36,7 @@ class UserServiceImplTest {
 
     @Test
     void findById_ok() {
-        User expectedUser = createExpectedUser();
+        User expectedUser = getTestUser();
         Mockito.when(userDao.findById(any())).thenReturn(Optional.of(expectedUser));
         Optional<User> actualUserOptional = userService.findById(expectedUser.getId());
         Assertions.assertTrue(actualUserOptional.isPresent());
@@ -47,7 +47,7 @@ class UserServiceImplTest {
 
     @Test
     void findByEmail_ok() {
-        User expectedUser = createExpectedUser();
+        User expectedUser = getTestUser();
         Mockito.when(userDao.findByEmail(expectedUser.getEmail()))
                 .thenReturn(Optional.of(expectedUser));
         Optional<User> actualUserOptional = userService.findByEmail(expectedUser.getEmail());
@@ -57,7 +57,7 @@ class UserServiceImplTest {
         Assertions.assertEquals(expectedUser, actualUser);
     }
 
-    private User createExpectedUser() {
+    private User getTestUser() {
         User expectedUser = new User();
         expectedUser.setId(1L);
         expectedUser.setEmail("expected@i.ua");
