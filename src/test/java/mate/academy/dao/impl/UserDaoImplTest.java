@@ -41,7 +41,7 @@ class UserDaoImplTest extends AbstractDaoTest {
     }
 
     @Test
-    void findByEmailExisting_ok() {
+    void findByEmail_Ok() {
         User expectedUser = createUser();
         userDao.save(expectedUser);
         Optional<User> actualUserOptional = userDao.findByEmail(expectedUser.getEmail());
@@ -52,7 +52,7 @@ class UserDaoImplTest extends AbstractDaoTest {
     }
 
     @Test
-    void findByEmailNotExisting_emptyOptional() {
+    void findByEmail_notExistingEmail_Ok() {
         Optional<User> actualUserOptional = userDao.findByEmail("unknown@i.ua");
         Assertions.assertTrue(actualUserOptional.isEmpty());
     }
@@ -76,11 +76,9 @@ class UserDaoImplTest extends AbstractDaoTest {
     }
 
     private User createUser() {
-        String email = "bob@i.ua";
-        String password = "1234";
         User user = new User();
-        user.setEmail(email);
-        user.setPassword(password);
+        user.setEmail("bob@i.ua");
+        user.setPassword("1234");
         adminRole = roleDao.getRoleByName("ADMIN").get();
         userRole = roleDao.getRoleByName("USER").get();
         user.setRoles(Set.of(adminRole, userRole));

@@ -57,6 +57,22 @@ class UserServiceImplTest {
         Assertions.assertEquals(expectedUser, actualUser);
     }
 
+    @Test
+    void findById_nonExistId_NotOk() {
+        long nonExistId = 5L;
+        Mockito.when(userDao.findById(any())).thenReturn(Optional.empty());
+        Optional<User> actual = userService.findById(nonExistId);
+        Assertions.assertTrue(actual.isEmpty());
+    }
+
+    @Test
+    void findByEmail_nonExistEmail_NotOk() {
+        String nonExistEmail = "alexa@ukr.net";
+        Mockito.when(userDao.findByEmail(any())).thenReturn(Optional.empty());
+        Optional<User> actual = userService.findByEmail(nonExistEmail);
+        Assertions.assertTrue(actual.isEmpty());
+    }
+
     private User getTestUser() {
         User expectedUser = new User();
         expectedUser.setId(1L);

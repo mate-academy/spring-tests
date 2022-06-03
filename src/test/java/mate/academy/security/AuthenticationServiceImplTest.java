@@ -1,6 +1,7 @@
 package mate.academy.security;
 
 import java.util.Optional;
+import java.util.Set;
 import mate.academy.exception.AuthenticationException;
 import mate.academy.model.Role;
 import mate.academy.model.User;
@@ -18,108 +19,65 @@ class AuthenticationServiceImplTest {
     private UserService userService;
     private RoleService roleService;
     private PasswordEncoder passwordEncoder;
+    private User testUser;
 
     @BeforeEach
     void setUp() {
         userService = Mockito.mock(UserService.class);
         roleService = Mockito.mock(RoleService.class);
         passwordEncoder = Mockito.mock(PasswordEncoder.class);
-        authenticationService = new AuthenticationServiceImpl(userService, roleService, passwordEncoder);
+        authenticationService = new AuthenticationServiceImpl(userService,
+                roleService, passwordEncoder);
+
+        testUser = new User();
+        testUser.setEmail("testUser@mail.com");
+        testUser.setPassword("testUser_1234");
+        testUser.setRoles(Set.of((new Role(Role.RoleName.USER))));
     }
 
     @Test
-    void register_OK() {
-        User vitalii = new User();
-        String email = "vitalii@gmail.com";
-        String password = "1234";
-        Role vitalisRole = new Role(Role.RoleName.USER);
-        vitalii.setEmail(email);
-        vitalii.setPassword(password);
-        Mockito.when(roleService.getRoleByName(any())).thenReturn(vitalisRole);
-        Mockito.when(userService.save(any())).thenReturn(vitalii);
-        User actualUser = authenticationService.register(vitalii.getEmail(), vitalii.getPassword());
-        Assertions.assertEquals(vitalii.getEmail(), actualUser.getEmail());
-        Assertions.assertEquals(vitalii.getPassword(), actualUser.getPassword());
+    void register_Ok() {
+        Mockito.when(roleService.getRoleByName(Role.RoleName.USER.name()))
+                .thenReturn(new Role(Role.RoleName.USER));
+        Mockito.when(userService.save(any())).thenReturn(testUser);
+        User actual = authenticationService.register(testUser.getEmail(), testUser.getPassword());
+        Assertions.assertNotNull(actual);
+        Assertions.assertEquals(testUser.getEmail(), actual.getEmail());
+        Assertions.assertEquals(testUser.getPassword(), actual.getPassword());
     }
 
     @Test
-    void login_OK() {
-        User expectedVitalii = new User();
-        String login = "vitalii@gmail.com";
-        String password = "1234";
-        Mockito.when(userService.findByEmail(expectedVitalii.getEmail()))
-                .thenReturn(Optional.of(expectedVitalii));
-        Mockito.when(passwordEncoder.matches(expectedVitalii.getPassword(), expectedVitalii.getPassword()))
+    void login_Ok() throws AuthenticationException {
+        Mockito.when(userService.findByEmail(testUser.getEmail()))
+                .thenReturn(Optional.of(testUser));
+        Mockito.when(passwordEncoder.matches(testUser.getPassword(), testUser.getPassword()))
                 .thenReturn(true);
-        try {
-            User actualVitalii = authenticationService.login(expectedVitalii.getEmail(),
-                    expectedVitalii.getPassword());
-            Assertions.assertNotNull(actualVitalii, "Actual user can not be null");
-            Assertions.assertEquals(expectedVitalii.getEmail(),actualVitalii.getEmail(), "Dude, e-mail is not correct!");
-            Assertions.assertEquals(expectedVitalii.getPassword(), actualVitalii.getPassword(),
-                    "Dude, you made mistake in password!");
-        } catch (AuthenticationException e) {
-            Assertions.assertEquals("Incorrect username or password!!!", e.getMessage());
-        }
+        User actual = authenticationService.login(testUser.getEmail(), testUser.getPassword());
+        Assertions.assertNotNull(actual);
+        Assertions.assertEquals(testUser.getEmail(), actual.getEmail());
+        Assertions.assertEquals(testUser.getPassword(), actual.getPassword());
     }
 
     @Test
-    void login_notExistentEmail_NotOk() {
-        User expectedVitalii = new User();
-        String login = "vitalii@gmail.com";
-        String password = "1234";
-        Mockito.when(userService.findByEmail(expectedVitalii.getEmail()))
-                .thenReturn(Optional.of(expectedVitalii));
-        Mockito.when(passwordEncoder.matches(expectedVitalii.getPassword(), expectedVitalii.getPassword()))
+    void login_invalidLogin_NotOk() {
+        Mockito.when(userService.findByEmail(any())).thenReturn(Optional.empty());
+        Mockito.when(passwordEncoder.matches(testUser.getPassword(), testUser.getPassword()))
                 .thenReturn(true);
-        try {
-            User actualVitalii = authenticationService.login("vitali@gmail.com", "1234");
-            Assertions.assertNotNull(expectedVitalii.getEmail(), actualVitalii.getEmail());
-            Assertions.assertEquals(expectedVitalii.getPassword(), actualVitalii.getPassword());
-        } catch (AuthenticationException e) {
-            Assertions.assertEquals("Incorrect username or password!!!", e.getMessage());
-            return;
-        }
-        Assertions.fail("Expected to receive AuthenticationException");
+        Assertions.assertThrows(AuthenticationException.class,
+                () -> authenticationService.login(testUser.getEmail(), testUser.getPassword()),
+                "Expected to receive AuthenticationException "
+                        + "while login with not existent login");
     }
 
     @Test
-    void login_NOK_passwordsAreDifferent() {
-        User expectedVitalii = new User();
-        String login = "vitalii@gmail.com";
-        String password = "1234";
-        Mockito.when(userService.findByEmail(expectedVitalii.getEmail()))
-                .thenReturn(Optional.of(expectedVitalii));
-        Mockito.when(passwordEncoder.matches(expectedVitalii.getPassword(), expectedVitalii.getPassword()))
-                .thenReturn(true);
-        try {
-            User actualVitalii = authenticationService.login("vitalii@gmail.com", "12345678");
-            Assertions.assertEquals(expectedVitalii.getEmail(), actualVitalii.getEmail());
-            Assertions.assertNotEquals(expectedVitalii.getPassword(), actualVitalii.getPassword());
-        } catch (AuthenticationException e) {
-            Assertions.assertEquals("Incorrect username or password!!!", e.getMessage());
-            return;
-        }
-        Assertions.fail("Expected to receive AuthenticationException");
-    }
-
-    @Test
-    void login_NOK_emailAndPassword_wrong() {
-        User expectedVitalii = new User();
-        String login = "vitalii@gmail.com";
-        String password = "1234";
-        Mockito.when(userService.findByEmail(expectedVitalii.getEmail()))
-                .thenReturn(Optional.of(expectedVitalii));
-        Mockito.when(passwordEncoder.matches(expectedVitalii.getPassword(), expectedVitalii.getPassword()))
-                .thenReturn(true);
-        try {
-            User actualNOTVitalii = authenticationService.login("alexa@ukr.net", "87654321");
-            Assertions.assertNotEquals(expectedVitalii.getEmail(), actualNOTVitalii.getEmail());
-            Assertions.assertNotEquals(expectedVitalii.getPassword(), actualNOTVitalii.getPassword());
-        } catch (AuthenticationException e) {
-            Assertions.assertEquals("Incorrect username or password!!!", e.getMessage());
-            return;
-        }
-        Assertions.fail("Expected to receive AuthenticationException");
+    void login_invalidPassword_NotOk() {
+        Mockito.when(userService.findByEmail(testUser.getEmail()))
+                .thenReturn(Optional.of(testUser));
+        Mockito.when(passwordEncoder.matches(testUser.getPassword(), testUser.getPassword()))
+                .thenReturn(false);
+        Assertions.assertThrows(AuthenticationException.class,
+                () -> authenticationService.login(testUser.getEmail(), testUser.getPassword()),
+                "Expected AuthenticationException "
+                        + "while trying to get user by invalid password");
     }
 }

@@ -38,7 +38,7 @@ class PasswordValidatorTest {
     }
 
     @Test
-    void isValid_notOk() {
+    void isValid_differentPasswords_notOk() {
         registrationDto.setPassword(PASSWORD);
         registrationDto.setRepeatPassword(INVALID_PASSWORD);
         Assertions.assertFalse(passwordValidator.isValid(registrationDto,

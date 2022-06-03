@@ -33,4 +33,14 @@ class EmailValidatorTest {
         Assertions.assertFalse(emailValidator.isValid(EMAIL_WITHOUT_DOT, constraintValidatorContext));
         Assertions.assertFalse(emailValidator.isValid(EMAIL_WITHOUT_AT, constraintValidatorContext));
     }
+
+    @Test
+    void isValid_nullEmail_NotOk() {
+        Assertions.assertFalse(emailValidator.isValid(null, constraintValidatorContext));
+    }
+
+    @Test
+    void isValid_emptyEmail_NotOk() {
+        Assertions.assertFalse(emailValidator.isValid("", constraintValidatorContext));
+    }
 }

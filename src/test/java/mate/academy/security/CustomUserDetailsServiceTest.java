@@ -41,7 +41,7 @@ class CustomUserDetailsServiceTest {
     }
 
     @Test
-    void loadUserByUsername_exception() {
+    void loadUserByUsername_NotOK() {
         User vitalii = new User();
         String email = "vitalii@gmail.com";
         vitalii.setEmail(email);
