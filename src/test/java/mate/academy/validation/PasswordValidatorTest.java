@@ -1,12 +1,13 @@
 package mate.academy.validation;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
+import javax.validation.ConstraintValidatorContext;
 import mate.academy.model.dto.UserRegistrationDto;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import javax.validation.ConstraintValidatorContext;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class PasswordValidatorTest {
     private static final String PASS_REGULAR = "1234";
