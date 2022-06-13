@@ -1,6 +1,6 @@
-package mate.academy.dao;
+package mate.academy.dao.impl;
 
-import mate.academy.dao.impl.RoleDaoImpl;
+import mate.academy.dao.RoleDao;
 import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,7 +10,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class RoleDaoTest extends AbstractTest{
+class RoleDaoTest extends AbstractTest {
     private static final Role USER_ROLE = new Role(Role.RoleName.USER);
     private static final Role ADMIN_ROLE = new Role(Role.RoleName.ADMIN);
     private RoleDao roleDao;
