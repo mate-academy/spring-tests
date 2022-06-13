@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-class UserServiceImplTest {
+class UserServiceTest {
     private static User user;
     private static User admin;
     private final UserDao userDao = Mockito.mock(UserDao.class);

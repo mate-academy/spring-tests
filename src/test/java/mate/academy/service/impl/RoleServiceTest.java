@@ -13,7 +13,7 @@ import mate.academy.service.RoleService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-class RoleServiceImplTest {
+class RoleServiceTest {
     private static final String USER_ROLE_NAME = "USER";
     private static final String ADMIN_ROLE_NAME = "ADMIN";
     private static final String NONEXIST_ROLE_NAME = "NONEXIST";
