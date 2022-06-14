@@ -121,7 +121,7 @@ class UserDaoTest extends AbstractTest{
     }
 
     @Test
-    void findByEmail_nullId_notOk() {
+    void findByEmail_nullEmail_notOk() {
         Optional<User> actualUser = userDao.findByEmail(null);
         assertNotNull(actualUser);
         assertTrue(actualUser.isEmpty());

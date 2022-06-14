@@ -59,7 +59,7 @@ class UserServiceTest {
     }
 
     @Test
-    void save_Exception_notOk() {
+    void save_exception_notOk() {
         Mockito.when(userDao.save(any())).thenThrow(DataProcessingException.class);
         assertThrows(DataProcessingException.class, () -> userService.save(user));
     }
@@ -88,7 +88,7 @@ class UserServiceTest {
     }
 
     @Test
-    void findById_Exception_NotOk() {
+    void findById_exception_notOk() {
         Mockito.when(userDao.findById(any())).thenThrow(DataProcessingException.class);
         assertThrows(DataProcessingException.class, () -> userService.findById(user.getId()));
     }
@@ -116,7 +116,7 @@ class UserServiceTest {
     }
 
     @Test
-    void findByEmail_Exception_NotOk() {
+    void findByEmail_exception_notOk() {
         Mockito.when(userDao.findByEmail(any())).thenThrow(DataProcessingException.class);
         assertThrows(DataProcessingException.class, () -> userService.findByEmail(user.getEmail()));
     }

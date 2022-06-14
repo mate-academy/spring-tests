@@ -31,7 +31,7 @@ class EmailValidatorTest {
     }
 
     @Test
-    void isValid_NotOk() {
+    void isValid_notOk() {
         assertFalse(emailValidator.isValid(INVALID_VALUE_1, constraintValidatorContext));
         assertFalse(emailValidator.isValid(INVALID_VALUE_2, constraintValidatorContext));
         assertFalse(emailValidator.isValid(INVALID_VALUE_3, constraintValidatorContext));
@@ -43,7 +43,7 @@ class EmailValidatorTest {
     }
 
     @Test
-    void isValid_Null_NotOk() {
+    void isValid_null_notOk() {
         assertFalse(emailValidator.isValid(null, constraintValidatorContext));
     }
 }

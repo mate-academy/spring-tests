@@ -41,7 +41,7 @@ class RoleServiceTest {
     }
 
     @Test
-    public void save_Exception_NotOk() {
+    public void save_exception_NotOk() {
         Role userRole = new Role(Role.RoleName.valueOf(USER_ROLE_NAME));
         Mockito.when(roleDao.save(userRole)).thenThrow(DataProcessingException.class);
         assertThrows(DataProcessingException.class, () -> roleService.save(userRole));
@@ -66,9 +66,8 @@ class RoleServiceTest {
     }
 
     @Test
-    void getRoleByName_NotExists_NotOk() {
+    void getRoleByName_notExists_notOk() {
         Mockito.when(roleDao.getRoleByName(NONEXIST_ROLE_NAME)).thenReturn(Optional.empty());
         assertThrows(NoSuchElementException.class, () -> roleService.getRoleByName(NONEXIST_ROLE_NAME));
     }
-    
 }

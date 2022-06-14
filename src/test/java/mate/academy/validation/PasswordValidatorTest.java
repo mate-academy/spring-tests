@@ -31,7 +31,7 @@ class PasswordValidatorTest {
     }
 
     @Test
-    void isValid_Null_NotOk() {
+    void isValid_null_notOk() {
         UserRegistrationDto registrationDto = new UserRegistrationDto();
         registrationDto.setPassword(PASS_NULL);
         registrationDto.setRepeatPassword(PASS_REGULAR);
@@ -45,7 +45,7 @@ class PasswordValidatorTest {
     }
 
     @Test
-    void isValid_Diff_NotOk() {
+    void isValid_diff_notOk() {
         UserRegistrationDto registrationDto = new UserRegistrationDto();
         registrationDto.setPassword(PASS_REGULAR);
         registrationDto.setRepeatPassword(PASS_DIFF);
