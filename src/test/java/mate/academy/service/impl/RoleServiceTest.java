@@ -43,11 +43,6 @@ class RoleServiceTest {
     @Test
     public void save_Exception_NotOk() {
         Role userRole = new Role(Role.RoleName.valueOf(USER_ROLE_NAME));
-        Role savedUserRole = new Role(Role.RoleName.valueOf(USER_ROLE_NAME));
-        savedUserRole.setId(1L);
-        Role adminRole = new Role(Role.RoleName.valueOf(ADMIN_ROLE_NAME));
-        Role savedAdminRole = new Role(Role.RoleName.valueOf(ADMIN_ROLE_NAME));
-        savedAdminRole.setId(2L);
         Mockito.when(roleDao.save(userRole)).thenThrow(DataProcessingException.class);
         assertThrows(DataProcessingException.class, () -> roleService.save(userRole));
     }
