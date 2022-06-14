@@ -77,9 +77,10 @@ public class JwtTokenProviderTest {
     void validateToken_notOk() throws NoSuchFieldException, IllegalAccessException {
         String login = "bob@i.ua";
         List<String> roles = List.of("USER", "ADMIN");
+        String invalidToken = "Any string";
         initValidityInMilliseconds(1);
         String expiredToken = jwtTokenProvider.createToken(login, roles);
-        assertThrows(RuntimeException.class, () -> jwtTokenProvider.validateToken("Any string"),
+        assertThrows(RuntimeException.class, () -> jwtTokenProvider.validateToken(invalidToken),
                 "Invalid token");
         assertThrows(RuntimeException.class, () -> jwtTokenProvider.validateToken(expiredToken),
                 "Expired token");
