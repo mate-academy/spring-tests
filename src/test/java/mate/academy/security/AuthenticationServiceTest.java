@@ -1,5 +1,6 @@
 package mate.academy.security;
 
+import mate.academy.exception.AuthenticationException;
 import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import mate.academy.model.User;
@@ -11,6 +12,7 @@ import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -30,6 +32,8 @@ class AuthenticationServiceTest {
     @BeforeEach
     void setUp() {
         Mockito.when(passwordEncoder.encode(anyString())).thenAnswer(i -> i.getArgument(0));
+        Mockito.when(passwordEncoder.matches(anyString(), anyString()))
+                .thenAnswer(i -> i.getArgument(0).equals(i.getArgument(1)));
     }
 
     @Test
@@ -73,6 +77,41 @@ class AuthenticationServiceTest {
     }
 
     @Test
-    void login() {
+    void login_Ok() throws AuthenticationException {
+        Mockito.when(userService.findByEmail(USER_EMAIL))
+                .thenReturn(Optional.of(mockFindByEmail(USER_EMAIL, USER_PASSWORD)));
+        User actual = authenticationService.login(USER_EMAIL, USER_PASSWORD);
+        assertNotNull(actual);
+        assertEquals(USER_EMAIL, actual.getEmail());
+        assertEquals(USER_PASSWORD, actual.getPassword());
+
+        Mockito.when(userService.findByEmail(ADMIN_EMAIL))
+                .thenReturn(Optional.of(mockFindByEmail(ADMIN_EMAIL, ADMIN_PASSWORD)));
+        actual = authenticationService.login(ADMIN_EMAIL, ADMIN_PASSWORD);
+        assertNotNull(actual);
+        assertEquals(ADMIN_EMAIL, actual.getEmail());
+        assertEquals(ADMIN_PASSWORD, actual.getPassword());
+    }
+
+    @Test
+    void login_userNotFound_notOk(){
+        Mockito.when(userService.findByEmail(USER_EMAIL)).thenReturn(Optional.empty());
+        assertThrows(AuthenticationException.class,
+                () -> authenticationService.login(USER_EMAIL, USER_PASSWORD));
+    }
+
+    @Test
+    void login_passNotMatch_notOk(){
+        Mockito.when(userService.findByEmail(USER_EMAIL))
+                .thenReturn(Optional.of(mockFindByEmail(USER_EMAIL, USER_PASSWORD)));
+        assertThrows(AuthenticationException.class,
+                () -> authenticationService.login(USER_EMAIL, ADMIN_PASSWORD));
+    }
+
+    private User mockFindByEmail(String email, String password) {
+        User user = new User();
+        user.setEmail(email);
+        user.setPassword(password);
+        return user;
     }
 }
