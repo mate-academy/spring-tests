@@ -50,7 +50,7 @@ class CustomUserDetailsServiceTest {
         expectedUser.setRoles(Set.of(new Role(Role.RoleName.USER)));
         Mockito.when(userService.findByEmail(notExistingEmail)).thenReturn(Optional.empty());
 
-        Exception exception = assertThrows(NumberFormatException.class, () -> {
+        Exception exception = assertThrows(UsernameNotFoundException.class, () -> {
             customUserDetailsService.loadUserByUsername(notExistingEmail);
         });
         assertEquals("User not found.", exception.getMessage());
