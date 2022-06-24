@@ -5,30 +5,25 @@ import mate.academy.dao.impl.RoleDaoImpl;
 import mate.academy.model.Role;
 import mate.academy.service.impl.RoleServiceImpl;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 class RoleServiceTest {
-    private RoleService roleService;
-    private RoleDao roleDao;
-    private String correctRoleName;
-    private String incorrectRoleName;
-    private Long identifier;
+    private static RoleService roleService;
+    private static RoleDao roleDao;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void beforeAll() {
         roleDao = Mockito.mock(RoleDaoImpl.class);
         roleService = new RoleServiceImpl(roleDao);
-        correctRoleName = Role.RoleName.USER.name();
-        incorrectRoleName = "SASHA";
-        identifier = 1L;
     }
 
     @Test
     void save_Ok() {
+        Long identifier = 1L;
         Role role = new Role(Role.RoleName.USER);
         role.setId(identifier);
         Mockito.when(roleDao.save(role)).thenReturn(role);
@@ -39,6 +34,8 @@ class RoleServiceTest {
 
     @Test
     void getRoleByName_Ok() {
+        Long identifier = 1L;
+        String correctRoleName = Role.RoleName.USER.name();
         Role role = new Role(Role.RoleName.USER);
         role.setId(identifier);
         Mockito.when(roleDao.getRoleByName(correctRoleName)).thenReturn(Optional.of(role));
@@ -47,7 +44,9 @@ class RoleServiceTest {
     }
 
     @Test
-    void getRoleByName_NotOk() {
+    void getRoleByName_nonExistentRole_NotOk() {
+        Long identifier = 1L;
+        String incorrectRoleName = "SASHA";
         Role role = new Role(Role.RoleName.USER);
         role.setId(identifier);
         Mockito.when(roleDao.getRoleByName(incorrectRoleName)).thenReturn(Optional.empty());

@@ -5,7 +5,7 @@ import mate.academy.model.Role;
 import mate.academy.model.User;
 import mate.academy.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,36 +14,29 @@ import java.util.Optional;
 import java.util.Set;
 
 class UserServiceTest {
-    private UserService userService;
-    private UserDao userDao;
-    private PasswordEncoder passwordEncoder;
-    private String correctEmail;
-    private String incorrectEmail;
-    private String password;
-    private Set<Role> roles;
-    private Long identifier;
-    private Long incorrectIdentifier;
+    private static UserService userService;
+    private static UserDao userDao;
+    private static PasswordEncoder passwordEncoder;
+    private static User user;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void beforeAll() {
         userDao = Mockito.mock(UserDao.class);
         passwordEncoder = new BCryptPasswordEncoder();
         userService = new UserServiceImpl(userDao,passwordEncoder);
-        correctEmail = "bchupika@mate.academy";
-        incorrectEmail = "safasffsa@asfsfa";
-        password = "12345678";
-        roles = Set.of(new Role(Role.RoleName.USER));
-        identifier = 1L;
-        incorrectIdentifier = 2L;
+        String correctEmail = "bchupika@mate.academy";
+        String password = "12345678";
+        Set<Role> roles = Set.of(new Role(Role.RoleName.USER));
+        Long identifier = 1L;
+        user = new User();
+        user.setRoles(roles);
+        user.setPassword(password);
+        user.setEmail(correctEmail);
+        user.setId(identifier);
     }
 
     @Test
     void save_Ok() {
-        User user = new User();
-        user.setId(identifier);
-        user.setRoles(roles);
-        user.setPassword(password);
-        user.setEmail(correctEmail);
         Mockito.when(userDao.save(user)).thenReturn(user);
         User actual = userService.save(user);
         Assertions.assertNotNull(actual, "User must not be null for: " + user);
@@ -51,23 +44,15 @@ class UserServiceTest {
 
     @Test
     void findById_Ok() {
-        User user = new User();
-        user.setId(identifier);
-        user.setRoles(roles);
-        user.setPassword(password);
-        user.setEmail(correctEmail);
+        Long identifier = 1L;;
         Mockito.when(userDao.findById(identifier)).thenReturn(Optional.of(user));
         Optional<User> actual = userService.findById(identifier);
         Assertions.assertTrue(actual.isPresent(), "true is expected for identifier: " + identifier);
     }
 
     @Test
-    void findById_NotOk() {
-        User user = new User();
-        user.setId(identifier);
-        user.setRoles(roles);
-        user.setPassword(password);
-        user.setEmail(correctEmail);
+    void findById_nonExistentUser_NotOk() {
+        Long incorrectIdentifier = 2L;
         Mockito.when(userDao.findById(incorrectIdentifier)).thenReturn(Optional.empty());
         Optional<User> actual = userService.findById(incorrectIdentifier);
         Assertions.assertTrue(actual.isEmpty(), "true is expected for identifier: " + incorrectIdentifier);
@@ -75,23 +60,15 @@ class UserServiceTest {
 
     @Test
     void findByEmail_Ok() {
-        User user = new User();
-        user.setId(identifier);
-        user.setRoles(roles);
-        user.setPassword(password);
-        user.setEmail(correctEmail);
+        String correctEmail = "bchupika@mate.academy";
         Mockito.when(userDao.findByEmail(correctEmail)).thenReturn(Optional.of(user));
         Optional<User> actual = userService.findByEmail(correctEmail);
         Assertions.assertTrue(actual.isPresent(), "true expected for email: " + correctEmail);
     }
 
     @Test
-    void findByEmail_NotOk() {
-        User user = new User();
-        user.setId(identifier);
-        user.setRoles(roles);
-        user.setPassword(password);
-        user.setEmail(correctEmail);
+    void findByEmail_nonExistentEmail_NotOk() {
+        String incorrectEmail = "safasffsa@asfsfa";
         Mockito.when(userDao.findByEmail(incorrectEmail)).thenReturn(Optional.empty());
         Optional<User> actual = userService.findByEmail(incorrectEmail);
         Assertions.assertTrue(actual.isEmpty(), "true expected for email: " + incorrectEmail);

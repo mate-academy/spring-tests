@@ -10,9 +10,6 @@ import java.util.Optional;
 
 class RoleDaoTest extends AbstractTest {
     private RoleDao roleDao;
-    private String correctRoleName;
-    private String incorrectRoleName;
-    private Long identifier;
 
     @Override
     protected Class<?>[] entities() {
@@ -20,15 +17,13 @@ class RoleDaoTest extends AbstractTest {
     }
 
     @BeforeEach
-    void setUp() {
+    void beforeEach() {
         roleDao = new RoleDaoImpl(getSessionFactory());
-        correctRoleName = Role.RoleName.USER.name();
-        incorrectRoleName = "SASHA";
-        identifier = 1L;
     }
 
     @Test
     void save_Ok() {
+        Long identifier = 1L;
         Role role = new Role(Role.RoleName.USER);
         Role actual = roleDao.save(role);
         Assertions.assertNotNull(actual, "Role must not be null for input role: " + role);
@@ -38,6 +33,7 @@ class RoleDaoTest extends AbstractTest {
 
     @Test
     void getRoleByName_Ok() {
+        String correctRoleName = Role.RoleName.USER.name();
         Role role = new Role(Role.RoleName.USER);
         roleDao.save(role);
         Optional<Role> actual = roleDao.getRoleByName(correctRoleName);
@@ -47,7 +43,8 @@ class RoleDaoTest extends AbstractTest {
     }
 
     @Test
-    void getRoleByName_NotOk() {
+    void getRoleByName_nonExistentRole_NotOk() {
+        String incorrectRoleName = "SASHA";
         Role role = new Role(Role.RoleName.USER);
         roleDao.save(role);
         Assertions.assertThrows(DataProcessingException.class,

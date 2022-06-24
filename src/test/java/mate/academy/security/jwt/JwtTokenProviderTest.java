@@ -2,7 +2,7 @@ package mate.academy.security.jwt;
 
 import mate.academy.model.Role;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.core.Authentication;
@@ -14,37 +14,31 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 class JwtTokenProviderTest {
-    private JwtTokenProvider jwtTokenProvider;
-    private String login;
-    private List<String> roles;
-    private UserDetailsService userDetailsService;
-    private String validToken;
-    private String password;
-    private String bearerToken;
-    private String invalidToken;
+    private static JwtTokenProvider jwtTokenProvider;
+    private static UserDetailsService userDetailsService;
 
-    @BeforeEach
-    void setUp() {
-        login = "bchupika@mate.academy";
-        password = "12345678";
-        roles = List.of(Role.RoleName.USER.name());
+    @BeforeAll
+    static void beforeAll() {
         userDetailsService = Mockito.mock(UserDetailsService.class);
         jwtTokenProvider = new JwtTokenProvider(userDetailsService);
         ReflectionTestUtils.setField(jwtTokenProvider, "secretKey", "secret");
         ReflectionTestUtils.setField(jwtTokenProvider, "validityInMilliseconds", 3600000);
-        validToken = jwtTokenProvider.createToken(login, roles);
-        bearerToken = "Bearer " + validToken;
-        invalidToken = validToken + "bobobob";
     }
 
     @Test
     void createToken_OK() {
+        String login = "bchupika@mate.academy";
+        List<String> roles = List.of(Role.RoleName.USER.name());
         String actual = jwtTokenProvider.createToken(login, roles);
         Assertions.assertNotNull(actual,"Token must not be null for login: " + login + " roles: " + roles);
     }
 
     @Test
     void getAuthentication_Ok() {
+        String login = "bchupika@mate.academy";
+        String password = "12345678";
+        List<String> roles = List.of(Role.RoleName.USER.name());
+        String validToken = jwtTokenProvider.createToken(login, roles);
         User.UserBuilder builder = User.withUsername(login);
         builder.password(password);
         builder.authorities("USER");
@@ -58,6 +52,9 @@ class JwtTokenProviderTest {
 
     @Test
     void getUsername_Ok() {
+        String login = "bchupika@mate.academy";
+        List<String> roles = List.of(Role.RoleName.USER.name());
+        String validToken = jwtTokenProvider.createToken(login, roles);
         String actual = jwtTokenProvider.getUsername(validToken);
         Assertions.assertNotNull(actual, "Username must not be null for token: " + validToken);
         Assertions.assertEquals(login, actual, "Username must be: " + login + " but was: " + actual);
@@ -65,6 +62,10 @@ class JwtTokenProviderTest {
 
     @Test
     void resolveToken_Ok() {
+        String login = "bchupika@mate.academy";
+        List<String> roles = List.of(Role.RoleName.USER.name());
+        String validToken = jwtTokenProvider.createToken(login, roles);
+        String bearerToken = "Bearer " + validToken;
         HttpServletRequest httpServletRequest = Mockito.mock(HttpServletRequest.class);
         Mockito.when(httpServletRequest.getHeader(Mockito.any())).thenReturn(bearerToken);
         String actual = jwtTokenProvider.resolveToken(httpServletRequest);
@@ -74,12 +75,19 @@ class JwtTokenProviderTest {
 
     @Test
     void validateToken_Ok() {
+        String login = "bchupika@mate.academy";
+        List<String> roles = List.of(Role.RoleName.USER.name());
+        String validToken = jwtTokenProvider.createToken(login, roles);
         boolean actual = jwtTokenProvider.validateToken(validToken);
         Assertions.assertTrue(actual,"Token must be valid for token: " + validToken);
     }
 
     @Test
-    void validateToken_NotOk() {
+    void validateToken_invalidToken_NotOk() {
+        String login = "bchupika@mate.academy";
+        List<String> roles = List.of(Role.RoleName.USER.name());
+        String validToken = jwtTokenProvider.createToken(login, roles);
+        String invalidToken = validToken + "bobobob";
         Assertions.assertThrows(RuntimeException.class,() -> {jwtTokenProvider.validateToken(invalidToken);},
                 "RuntimeException was expected");
     }
