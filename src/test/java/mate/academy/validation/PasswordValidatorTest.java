@@ -6,9 +6,7 @@ import mate.academy.model.dto.UserRegistrationDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mockito;
-
 
 class PasswordValidatorTest {
     private ConstraintValidator<Password, UserRegistrationDto> validator;

@@ -12,12 +12,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.util.ReflectionTestUtils;
 
 class JwtTokenProviderTest {
-    private final static String SECRET_KEY = "secret";
-    private final static int VALIDITY_IN_MILLISECONDS = 3600000;
+    private static final String SECRET_KEY = "secret";
+    private static final int VALIDITY_IN_MILLISECONDS = 3600000;
 
-    private final static String LOGIN = "test@mail.ua";
-    private final static String PASSWORD = "123456789";
-    private final static List<String> ROLES = List.of("USER");
+    private static final String LOGIN = "test@mail.ua";
+    private static final String PASSWORD = "123456789";
+    private static final List<String> ROLES = List.of("USER");
     private static String TOKEN;
     private JwtTokenProvider jwtTokenProvider;
     private UserDetailsService userDetailsService;

@@ -1,16 +1,14 @@
 package mate.academy.service.impl;
 
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import mate.academy.dao.RoleDao;
-import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import mate.academy.service.RoleService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 class RoleServiceImplTest {
     private RoleDao roleDao;

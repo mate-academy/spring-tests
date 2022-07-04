@@ -1,5 +1,6 @@
 package mate.academy.security;
 
+import static org.mockito.ArgumentMatchers.any;
 import java.util.Optional;
 import java.util.Set;
 import mate.academy.exception.AuthenticationException;
@@ -13,8 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static org.mockito.ArgumentMatchers.any;
-
 class AuthenticationServiceImplTest {
     private AuthenticationService authenticationService;
     private RoleService roleService;
@@ -26,7 +25,8 @@ class AuthenticationServiceImplTest {
         roleService = Mockito.mock(RoleService.class);
         userService = Mockito.mock(UserService.class);
         passwordEncoder = Mockito.mock(PasswordEncoder.class);
-        authenticationService = new AuthenticationServiceImpl(userService, roleService, passwordEncoder);
+        authenticationService =
+                new AuthenticationServiceImpl(userService, roleService, passwordEncoder);
     }
 
     @Test
@@ -59,7 +59,8 @@ class AuthenticationServiceImplTest {
         Optional<User> optionalUser = Optional.of(user);
 
         Mockito.when(userService.findByEmail(email)).thenReturn(optionalUser);
-        Mockito.when(passwordEncoder.matches(password, optionalUser.get().getPassword())).thenReturn(true);
+        Mockito.when(passwordEncoder.matches(password,
+                optionalUser.get().getPassword())).thenReturn(true);
 
         User actual = authenticationService.login(email, password);
         Assertions.assertNotNull(actual);
@@ -71,7 +72,6 @@ class AuthenticationServiceImplTest {
     void login_wrongPassword_notOk() {
         String email = "testemail@gmail.com";
         String password = "password";
-        String wrongPassword = "1234";
         Role role = new Role(Role.RoleName.USER);
         User user = new User();
         user.setEmail(email);
@@ -80,10 +80,11 @@ class AuthenticationServiceImplTest {
         Optional<User> optionalUser = Optional.of(user);
 
         Mockito.when(userService.findByEmail(email)).thenReturn(optionalUser);
-        Mockito.when(passwordEncoder.matches(wrongPassword, optionalUser.get().getPassword())).thenReturn(false);
+        Mockito.when(passwordEncoder.matches("wrongPassword",
+                optionalUser.get().getPassword())).thenReturn(false);
 
         try {
-            authenticationService.login(email, wrongPassword);
+            authenticationService.login(email, "wrongPassword");
         } catch (AuthenticationException e) {
             Assertions.assertEquals("Incorrect username or password!!!", e.getMessage());
             return;
@@ -129,7 +130,6 @@ class AuthenticationServiceImplTest {
     void login_nullPassword_notOk() {
         String email = "testemail@gmail.com";
         String password = "password";
-        String nullPassword = null;
         Role role = new Role(Role.RoleName.USER);
         User user = new User();
         user.setEmail(email);
@@ -138,10 +138,11 @@ class AuthenticationServiceImplTest {
         Optional<User> optionalUser = Optional.of(user);
 
         Mockito.when(userService.findByEmail(email)).thenReturn(optionalUser);
-        Mockito.when(passwordEncoder.matches(nullPassword, optionalUser.get().getPassword())).thenReturn(false);
+        Mockito.when(passwordEncoder.matches(null,
+                optionalUser.get().getPassword())).thenReturn(false);
 
         try {
-            authenticationService.login(email, nullPassword);
+            authenticationService.login(email, null);
         } catch (AuthenticationException e) {
             Assertions.assertEquals("Incorrect username or password!!!", e.getMessage());
             return;

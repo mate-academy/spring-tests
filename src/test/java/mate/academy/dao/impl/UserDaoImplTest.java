@@ -71,13 +71,12 @@ class UserDaoImplTest extends AbstractTest {
     void findByEmail_wrongEmail_notOk() {
         User user = new User();
         String email = "email@com.ua";
-        String wrongEmail = "qwerw";
         String password = "123456789";
         user.setEmail(email);
         user.setPassword(password);
         user.setRoles(Set.of(roleDao.getRoleByName(Role.RoleName.USER.name()).get()));
         userDao.save(user);
-        Optional<User> actual = userDao.findByEmail(wrongEmail);
+        Optional<User> actual = userDao.findByEmail("qwerw");
         Assertions.assertNotNull(actual);
         Assertions.assertTrue(actual.isEmpty());
     }
@@ -102,12 +101,11 @@ class UserDaoImplTest extends AbstractTest {
         User user = new User();
         String email = "email@com.ua";
         String password = "123456789";
-        Long wrongId = 6L;
         user.setEmail(email);
         user.setPassword(password);
         user.setRoles(Set.of(roleDao.getRoleByName(Role.RoleName.USER.name()).get()));
         userDao.save(user);
-        Optional<User> actual = userDao.findById(wrongId);
+        Optional<User> actual = userDao.findById(2L);
         Assertions.assertNotNull(actual);
         Assertions.assertTrue(actual.isEmpty());
     }

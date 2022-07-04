@@ -1,9 +1,7 @@
 package mate.academy.service.impl;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
-
 import mate.academy.dao.UserDao;
 import mate.academy.model.Role;
 import mate.academy.model.User;
@@ -30,8 +28,8 @@ class UserServiceImplTest {
     void save_ok() {
         String email = "email@meta.ua";
         String password = "123";
-        String encodedPassword = "456";
         Set<Role> roles = Set.of(new Role(Role.RoleName.USER));
+        String encodedPassword = "456";
         User user = new User();
         user.setEmail(email);
         user.setPassword(password);
