@@ -29,11 +29,11 @@ class UserServiceImplTest {
         String email = "email@meta.ua";
         String password = "123";
         Set<Role> roles = Set.of(new Role(Role.RoleName.USER));
-        String encodedPassword = "456";
         User user = new User();
         user.setEmail(email);
         user.setPassword(password);
         user.setRoles(roles);
+        String encodedPassword = "456";
 
         Mockito.when(passwordEncoder.encode(user.getPassword())).thenReturn(encodedPassword);
         Mockito.when(userDao.save(user)).thenReturn(user);
