@@ -7,23 +7,22 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Optional;
 import mate.academy.dao.UserDao;
 import mate.academy.model.User;
-import mate.academy.service.UserService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+@ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
+    @Mock
     private UserDao userDao;
+    @Mock
     private PasswordEncoder passwordEncoder;
-    private UserService userService;
-
-    @BeforeEach
-    void setUp() {
-        this.userDao = Mockito.mock(UserDao.class);
-        this.passwordEncoder = Mockito.mock(PasswordEncoder.class);
-        this.userService = new UserServiceImpl(userDao, passwordEncoder);
-    }
+    @InjectMocks
+    private UserServiceImpl userService;
 
     @Test
     void save_validUser_Ok() {
@@ -41,6 +40,7 @@ class UserServiceImplTest {
         Mockito.when(userDao.save(userWithoutId)).thenReturn(userWithIdAndEncodedPassword);
 
         User actualUser = userService.save(userWithoutId);
+
         assertNotNull(actualUser);
         assertEquals(actualUser, userWithIdAndEncodedPassword);
     }
@@ -55,6 +55,7 @@ class UserServiceImplTest {
         Mockito.when(userDao.findById(id)).thenReturn(Optional.of(expectedUser));
 
         Optional<User> actualUserOptional = userService.findById(id);
+
         assertTrue(actualUserOptional.isPresent());
         User actualUser = actualUserOptional.get();
         assertEquals(actualUser, expectedUser);
@@ -70,6 +71,7 @@ class UserServiceImplTest {
         Mockito.when(userDao.findByEmail(email)).thenReturn(Optional.of(expectedUser));
 
         Optional<User> actualUserOptional = userService.findByEmail(email);
+
         assertTrue(actualUserOptional.isPresent());
         User actualUser = actualUserOptional.get();
         assertEquals(actualUser, expectedUser);

@@ -8,10 +8,11 @@ import java.util.Optional;
 import mate.academy.dao.RoleDao;
 import mate.academy.model.Role;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 class RoleDaoImplTest extends AbstractTest {
-    RoleDao roleDao;
+    private RoleDao roleDao;
 
     @Override
     protected Class<?>[] entities() {
@@ -26,16 +27,21 @@ class RoleDaoImplTest extends AbstractTest {
     @Test
     void save_validRole_Ok() {
         Role expectedRole = new Role(Role.RoleName.USER);
+
         Role actualRole = roleDao.save(expectedRole);
+
         assertNotNull(actualRole);
         assertEquals(expectedRole, actualRole);
     }
 
+    @Tag(value = "asd")
     @Test
     void getRoleByName_validName_Ok() {
         Role expectedRole = new Role(Role.RoleName.USER);
         roleDao.save(expectedRole);
+
         Optional<Role> actualOptionalRole = roleDao.getRoleByName("USER");
+
         assertTrue(actualOptionalRole.isPresent());
         assertEquals(expectedRole, actualOptionalRole.get());
     }

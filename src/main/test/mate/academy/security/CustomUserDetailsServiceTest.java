@@ -1,6 +1,10 @@
 package mate.academy.security;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 import java.util.Set;
@@ -9,19 +13,19 @@ import mate.academy.model.User;
 import mate.academy.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+@ExtendWith(MockitoExtension.class)
 class CustomUserDetailsServiceTest {
+    @Mock
     private UserService userService;
+    @InjectMocks
     private CustomUserDetailsService customUserDetailsService;
-
-    @BeforeEach
-    void setUp() {
-        userService = Mockito.mock(UserService.class);
-        customUserDetailsService = new CustomUserDetailsService(userService);
-    }
 
     @Test
     void loadUserByUsername_validUsername_Ok() {
@@ -31,9 +35,10 @@ class CustomUserDetailsServiceTest {
         expectedUser.setEmail(email);
         expectedUser.setPassword(password);
         expectedUser.setRoles(Set.of(new Role(Role.RoleName.USER)));
-        Mockito.when(userService.findByEmail(email)).thenReturn(Optional.of(expectedUser));
+        when(userService.findByEmail(email)).thenReturn(Optional.of(expectedUser));
 
         UserDetails actualUserDetails = customUserDetailsService.loadUserByUsername(email);
+
         assertNotNull(actualUserDetails);
         assertEquals(email, actualUserDetails.getUsername());
         assertEquals(password, actualUserDetails.getPassword());
@@ -48,11 +53,11 @@ class CustomUserDetailsServiceTest {
         expectedUser.setEmail(notExistingEmail);
         expectedUser.setPassword(password);
         expectedUser.setRoles(Set.of(new Role(Role.RoleName.USER)));
-        Mockito.when(userService.findByEmail(notExistingEmail)).thenReturn(Optional.empty());
+        when(userService.findByEmail(notExistingEmail)).thenReturn(Optional.empty());
 
-        Exception exception = assertThrows(UsernameNotFoundException.class, () -> {
-            customUserDetailsService.loadUserByUsername(notExistingEmail);
-        });
+        Exception exception = assertThrows(UsernameNotFoundException.class,
+                () -> customUserDetailsService.loadUserByUsername(notExistingEmail));
+
         assertEquals("User not found.", exception.getMessage());
     }
 }
