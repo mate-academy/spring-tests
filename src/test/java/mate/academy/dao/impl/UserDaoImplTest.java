@@ -16,15 +16,13 @@ import org.junit.jupiter.api.Test;
 class UserDaoImplTest extends AbstractTest {
     private UserDao userDao;
     private User admin;
-    private RoleDao roleDao;
-    private Role adminRole;
 
     @BeforeEach
     void setUp() {
         userDao = new UserDaoImpl(getSessionFactory());
-        roleDao = new RoleDaoImpl(getSessionFactory());
+        RoleDao roleDao = new RoleDaoImpl(getSessionFactory());
         admin = new User();
-        adminRole = new Role(Role.RoleName.ADMIN);
+        Role adminRole = new Role(Role.RoleName.ADMIN);
         roleDao.save(adminRole);
         admin.setEmail("admin@mail.com");
         admin.setPassword("super1234");
@@ -50,7 +48,7 @@ class UserDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void findByEmail_Not_Ok() {
+    void findByEmail_nonExistentEmail_NotOk() {
         Optional<User> actual = userDao.findByEmail("us@mail.com");
         assertNotNull(actual);
         assertTrue(actual.isEmpty());

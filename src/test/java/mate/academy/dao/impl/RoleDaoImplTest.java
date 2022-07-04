@@ -12,13 +12,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class RoleDaoImplTest extends AbstractTest {
-    private Role roleAdmin;
     private RoleDao roleDao;
 
     @BeforeEach
     void setUp() {
         roleDao = new RoleDaoImpl(getSessionFactory());
-        roleAdmin = new Role(Role.RoleName.ADMIN);
+
     }
 
     @Override
@@ -28,6 +27,7 @@ class RoleDaoImplTest extends AbstractTest {
 
     @Test
     void save_Ok() {
+        Role roleAdmin = new Role(Role.RoleName.ADMIN);
         Role actual = roleDao.save(roleAdmin);
         assertNotNull(actual);
         assertEquals(1L, actual.getId());
@@ -36,12 +36,12 @@ class RoleDaoImplTest extends AbstractTest {
 
     @Test
     void getRoleByName_Ok() {
-        Optional<Role> actual = roleDao.getRoleByName("ADMIN");
+        Optional<Role> actual = roleDao.getRoleByName(Role.RoleName.ADMIN.name());
         assertNotNull(actual);
     }
 
     @Test
-    void getRoleByName_notOk() {
+    void getRoleByName_nonExistentRole_notOk() {
         assertThrows(DataProcessingException.class,
                 () -> roleDao.getRoleByName("non-existent_role"));
     }

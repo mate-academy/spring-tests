@@ -19,12 +19,11 @@ class UserServiceImplTest {
     private static User admin;
     private UserDao userDao;
     private UserService userService;
-    private PasswordEncoder passwordEncoder;
 
     @BeforeEach
     void setUp() {
         userDao = Mockito.mock(UserDao.class);
-        passwordEncoder = Mockito.mock(PasswordEncoder.class);
+        PasswordEncoder passwordEncoder = Mockito.mock(PasswordEncoder.class);
         userService = new UserServiceImpl(userDao, passwordEncoder);
         admin = new User();
         admin.setEmail("admin@mail.com");
@@ -59,7 +58,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findById_Not_Ok() {
+    void findById_nonExistentId_NotOk() {
         Mockito.when(userDao.findById(admin.getId())).thenReturn(Optional.of(admin));
         Optional<User> actual = userDao.findById(5L);
         assertNotNull(actual);
@@ -67,7 +66,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findByEmail_Not_Ok() {
+    void findByEmail_nonExistentEmail_NotOk() {
         Mockito.when(userDao.findByEmail(admin.getEmail())).thenReturn(Optional.of(admin));
         Optional<User> actual = userDao.findByEmail("a@b.com");
         assertNotNull(actual);

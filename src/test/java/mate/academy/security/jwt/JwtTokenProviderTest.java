@@ -19,7 +19,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.util.ReflectionTestUtils;
 
 class JwtTokenProviderTest {
-    private static final String TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIi"
+    private static final String VALID_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIi"
             + "OiJhZG1pbkBtYWlsLm5ldCIsInJvbGVzIjpbIlVTRVIiXSwiaWF0IjoxN"
             + "jU2NjE1MTUxLCJleHAiOjE2NTY5NzUxNTF9.5Y7akQEvQrdaZJGZyAnkm"
             + "BTeARTmRD3GDxi8HK6DofA";
@@ -52,7 +52,7 @@ class JwtTokenProviderTest {
 
     @Test
     void getUsername_ok() {
-        String actual = jwtTokenProvider.getUsername(TOKEN);
+        String actual = jwtTokenProvider.getUsername(VALID_TOKEN);
         assertNotNull(actual);
         assertEquals(admin.getEmail(), actual);
     }
@@ -68,7 +68,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void resolveToken_Not_Ok() {
+    void resolveToken_notValidToken_NotOk() {
         HttpServletRequest httpServletRequest = Mockito.mock(HttpServletRequest.class);
         Mockito.when(httpServletRequest.getHeader("Authorization")).thenReturn("Bearer ");
         String actual = jwtTokenProvider.resolveToken(httpServletRequest);
@@ -92,7 +92,7 @@ class JwtTokenProviderTest {
         UserDetails userDetails = builder.password(admin.getPassword()).roles("ADMIN").build();
         Mockito.when(userDetailsService.loadUserByUsername(Mockito.anyString()))
                 .thenReturn(userDetails);
-        Authentication actual = jwtTokenProvider.getAuthentication(TOKEN);
+        Authentication actual = jwtTokenProvider.getAuthentication(VALID_TOKEN);
         User actualUser = (User) actual.getPrincipal();
         assertNotNull(actual);
         assertEquals(actualUser.getUsername(), admin.getEmail());

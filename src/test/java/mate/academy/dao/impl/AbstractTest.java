@@ -70,8 +70,6 @@ public abstract class AbstractTest {
         Properties properties = new Properties();
         properties.put("hibernate.dialect", getDataSourceProvider().hibernateDialect());
         properties.put("hibernate.hbm2ddl.auto", "create-drop");
-
-        //data source settings
         properties.put("hibernate.connection.datasource", newDataSource());
         return properties;
     }
@@ -99,7 +97,6 @@ public abstract class AbstractTest {
     }
 
     public static class HsqldbDataSourceProvider implements DataSourceProvider {
-
         @Override
         public String hibernateDialect() {
             return "org.hibernate.dialect.HSQLDialect";

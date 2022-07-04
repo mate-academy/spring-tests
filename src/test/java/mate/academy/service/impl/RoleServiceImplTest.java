@@ -44,7 +44,7 @@ class RoleServiceImplTest {
     }
 
     @Test
-    void getRoleByName_Causes_Exception_Not_Ok() {
+    void getRoleByName_nonExistentRole_NotOk() {
         Mockito.when(roleDao.getRoleByName(any())).thenThrow(DataProcessingException.class);
         assertThrows(DataProcessingException.class,
                 () -> roleService.getRoleByName(ROLE_NAME_ADMIN));

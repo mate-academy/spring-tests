@@ -34,7 +34,7 @@ class PasswordValidatorTest {
     }
 
     @Test
-    void is_Not_Valid_Not_Ok() {
+    void isValid_notEqualPasswords_NotOk() {
         userRegistrationDto.setPassword("12345678");
         userRegistrationDto.setRepeatPassword("02345678");
         assertFalse(passwordValidator
@@ -42,7 +42,7 @@ class PasswordValidatorTest {
     }
 
     @Test
-    void password_Is_Null_Not_Ok() {
+    void isValid_nullPassword_NotOk() {
         userRegistrationDto.setPassword(null);
         userRegistrationDto.setRepeatPassword(null);
         assertFalse(passwordValidator
