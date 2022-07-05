@@ -3,13 +3,14 @@ package mate.academy.validation;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import mate.academy.model.dto.UserRegistrationDto;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanWrapperImpl;
 
 public class PasswordValidator implements ConstraintValidator<Password, UserRegistrationDto> {
     private String field;
     private String fieldMatch;
 
-    public void initialize(Password constraintAnnotation) {
+    public void initialize(@NotNull Password constraintAnnotation) {
         this.field = constraintAnnotation.field();
         this.fieldMatch = constraintAnnotation.fieldMatch();
     }
