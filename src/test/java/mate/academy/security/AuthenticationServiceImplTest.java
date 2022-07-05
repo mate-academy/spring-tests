@@ -23,7 +23,7 @@ class AuthenticationServiceImplTest {
     private RoleService roleService;
     private UserService userService;
     private PasswordEncoder passwordEncoder;
-    private static User user;
+    private User user;
 
     @BeforeEach
     void setUp() {

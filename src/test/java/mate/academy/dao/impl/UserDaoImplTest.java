@@ -16,7 +16,7 @@ class UserDaoImplTest extends AbstractTest {
     private static final String PASSWORD = "123456789";
     private UserDao userDao;
     private RoleDao roleDao;
-    private static User user;
+    private User user;
 
     @Override
     protected Class<?>[] entities() {
