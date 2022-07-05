@@ -12,8 +12,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class UserDaoImplTest extends AbstractTest {
+    private static final String EMAIL = "email@com.ua";
+    private static final String PASSWORD = "123456789";
     private UserDao userDao;
     private RoleDao roleDao;
+    private static User user;
 
     @Override
     protected Class<?>[] entities() {
@@ -26,16 +29,14 @@ class UserDaoImplTest extends AbstractTest {
         roleDao = new RoleDaoImpl(getSessionFactory());
         roleDao.save(new Role(Role.RoleName.USER));
         roleDao.save(new Role(Role.RoleName.ADMIN));
+        user = new User();
+        user.setEmail(EMAIL);
+        user.setPassword(PASSWORD);
+        user.setRoles(Set.of(roleDao.getRoleByName(Role.RoleName.USER.name()).get()));
     }
 
     @Test
     void save_ok() {
-        User user = new User();
-        String email = "email@com.ua";
-        String password = "123456789";
-        user.setEmail(email);
-        user.setPassword(password);
-        user.setRoles(Set.of(roleDao.getRoleByName(Role.RoleName.USER.name()).get()));
         User actual = userDao.save(user);
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(1L, actual.getId());
@@ -54,28 +55,15 @@ class UserDaoImplTest extends AbstractTest {
 
     @Test
     void findByEmail_ok() {
-        User user = new User();
-        String email = "email@com.ua";
-        String password = "123456789";
-        user.setEmail(email);
-        user.setPassword(password);
-        user.setRoles(Set.of(roleDao.getRoleByName(Role.RoleName.USER.name()).get()));
         userDao.save(user);
-        Optional<User> actual = userDao.findByEmail(email);
+        Optional<User> actual = userDao.findByEmail(EMAIL);
         Assertions.assertNotNull(actual.get());
-        Assertions.assertEquals(password, actual.get().getPassword());
-        Assertions.assertEquals(email, actual.get().getEmail());
+        Assertions.assertEquals(PASSWORD, actual.get().getPassword());
+        Assertions.assertEquals(EMAIL, actual.get().getEmail());
     }
 
     @Test
     void findByEmail_wrongEmail_notOk() {
-        User user = new User();
-        String email = "email@com.ua";
-        String password = "123456789";
-        user.setEmail(email);
-        user.setPassword(password);
-        user.setRoles(Set.of(roleDao.getRoleByName(Role.RoleName.USER.name()).get()));
-        userDao.save(user);
         Optional<User> actual = userDao.findByEmail("qwerw");
         Assertions.assertNotNull(actual);
         Assertions.assertTrue(actual.isEmpty());
@@ -83,28 +71,15 @@ class UserDaoImplTest extends AbstractTest {
 
     @Test
     void findById_ok() {
-        User user = new User();
-        String email = "email@com.ua";
-        String password = "123456789";
-        user.setEmail(email);
-        user.setPassword(password);
-        user.setRoles(Set.of(roleDao.getRoleByName(Role.RoleName.USER.name()).get()));
         User savedUser = userDao.save(user);
         Optional<User> actual = userDao.findById(savedUser.getId());
         Assertions.assertNotNull(actual.get());
-        Assertions.assertEquals(email, actual.get().getEmail());
-        Assertions.assertEquals(password, actual.get().getPassword());
+        Assertions.assertEquals(EMAIL, actual.get().getEmail());
+        Assertions.assertEquals(PASSWORD, actual.get().getPassword());
     }
 
     @Test
     void findById_wrongId_notOk() {
-        User user = new User();
-        String email = "email@com.ua";
-        String password = "123456789";
-        user.setEmail(email);
-        user.setPassword(password);
-        user.setRoles(Set.of(roleDao.getRoleByName(Role.RoleName.USER.name()).get()));
-        userDao.save(user);
         Optional<User> actual = userDao.findById(2L);
         Assertions.assertNotNull(actual);
         Assertions.assertTrue(actual.isEmpty());

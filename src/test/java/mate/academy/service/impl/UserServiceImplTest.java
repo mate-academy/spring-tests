@@ -13,6 +13,10 @@ import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 class UserServiceImplTest {
+    private static final String EMAIL = "email@meta.ua";
+    private static final String PASSWORD = "123";
+    private static final Set<Role> ROLES = Set.of(new Role(Role.RoleName.USER));
+    private static User user;
     private UserService userService;
     private UserDao userDao;
     private PasswordEncoder passwordEncoder;
@@ -22,17 +26,14 @@ class UserServiceImplTest {
         userDao = Mockito.mock(UserDao.class);
         passwordEncoder = Mockito.mock(PasswordEncoder.class);
         userService = new UserServiceImpl(userDao, passwordEncoder);
+        user = new User();
+        user.setEmail(EMAIL);
+        user.setPassword(PASSWORD);
+        user.setRoles(ROLES);
     }
 
     @Test
     void save_ok() {
-        String email = "email@meta.ua";
-        String password = "123";
-        Set<Role> roles = Set.of(new Role(Role.RoleName.USER));
-        User user = new User();
-        user.setEmail(email);
-        user.setPassword(password);
-        user.setRoles(roles);
         String encodedPassword = "456";
 
         Mockito.when(passwordEncoder.encode(user.getPassword())).thenReturn(encodedPassword);
@@ -40,21 +41,14 @@ class UserServiceImplTest {
 
         User actual = userService.save(user);
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(actual.getEmail(), email);
-        Assertions.assertEquals(actual.getRoles(), roles);
+        Assertions.assertEquals(actual.getEmail(), EMAIL);
+        Assertions.assertEquals(actual.getRoles(), ROLES);
         Assertions.assertEquals(actual.getPassword(), encodedPassword);
     }
 
     @Test
     void findById_ok() {
-        String email = "email@meta.ua";
-        String password = "123";
-        Set<Role> roles = Set.of(new Role(Role.RoleName.USER));
         Long id = 1L;
-        User user = new User();
-        user.setEmail(email);
-        user.setPassword(password);
-        user.setRoles(roles);
         user.setId(id);
         Optional<User> optionalUser = Optional.of(user);
 
@@ -62,31 +56,22 @@ class UserServiceImplTest {
 
         Optional<User> userById = userService.findById(id);
         Assertions.assertNotNull(userById.get());
-        Assertions.assertEquals(userById.get().getEmail(), email);
-        Assertions.assertEquals(userById.get().getRoles(), roles);
-        Assertions.assertEquals(userById.get().getPassword(), password);
+        Assertions.assertEquals(userById.get().getEmail(), EMAIL);
+        Assertions.assertEquals(userById.get().getRoles(), ROLES);
+        Assertions.assertEquals(userById.get().getPassword(), PASSWORD);
     }
 
     @Test
     void findByEmail_ok() {
-        String email = "email@meta.ua";
-        String password = "123";
-        Set<Role> roles = Set.of(new Role(Role.RoleName.USER));
-        Long id = 1L;
-        User user = new User();
-        user.setEmail(email);
-        user.setPassword(password);
-        user.setRoles(roles);
-        user.setId(id);
         Optional<User> optionalUser = Optional.of(user);
 
-        Mockito.when(userDao.findByEmail(email)).thenReturn(optionalUser);
+        Mockito.when(userDao.findByEmail(EMAIL)).thenReturn(optionalUser);
 
-        Optional<User> userById = userService.findByEmail(email);
+        Optional<User> userById = userService.findByEmail(EMAIL);
         Assertions.assertNotNull(userById.get());
-        Assertions.assertEquals(userById.get().getEmail(), email);
-        Assertions.assertEquals(userById.get().getRoles(), roles);
-        Assertions.assertEquals(userById.get().getPassword(), password);
+        Assertions.assertEquals(userById.get().getEmail(), EMAIL);
+        Assertions.assertEquals(userById.get().getRoles(), ROLES);
+        Assertions.assertEquals(userById.get().getPassword(), PASSWORD);
     }
 
     @Test

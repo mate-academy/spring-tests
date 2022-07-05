@@ -52,8 +52,6 @@ class RoleDaoImplTest extends AbstractTest {
     @Test
     void getRoleByName_wrongName_notOk() {
         String wrongName = "USOR";
-        Role role = new Role(Role.RoleName.USER);
-        roleDao.save(role);
         try {
             roleDao.getRoleByName(wrongName);
         } catch (DataProcessingException e) {

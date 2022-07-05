@@ -14,7 +14,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 class JwtTokenProviderTest {
     private static final String SECRET_KEY = "secret";
     private static final int VALIDITY_IN_MILLISECONDS = 3600000;
-
     private static final String LOGIN = "test@mail.ua";
     private static final String PASSWORD = "123456789";
     private static final List<String> ROLES = List.of("USER");
