@@ -1,12 +1,11 @@
 package mate.academy.dao.impl;
 
+import java.util.Optional;
 import mate.academy.dao.RoleDao;
 import mate.academy.model.Role;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.Optional;
 
 class RoleDaoImplTest extends AbstractTest {
     private RoleDao roleDao;
