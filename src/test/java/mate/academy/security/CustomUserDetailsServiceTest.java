@@ -16,38 +16,33 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 class CustomUserDetailsServiceTest {
     private UserDetailsService userDetailsService;
     private UserService userService;
+    private User user;
 
     @BeforeEach
     void setUp() {
         userService = Mockito.mock(UserService.class);
         userDetailsService = new CustomUserDetailsService(userService);
+        user = new User();
+        user.setEmail("bob@i.ua");
+        user.setPassword("1234");
     }
 
     @Test
     void loadUserByUsername_Ok() {
-        String email = "bob@i.ua";
-        User bob = new User();
-        bob.setEmail(email);
-        bob.setPassword("1234");
-        bob.setRoles(Set.of(new Role(Role.RoleName.USER)));
+        user.setRoles(Set.of(new Role(Role.RoleName.USER)));
 
-        Mockito.when(userService.findByEmail(email)).thenReturn(Optional.of(bob));
+        Mockito.when(userService.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
 
-        UserDetails actual = userDetailsService.loadUserByUsername(email);
+        UserDetails actual = userDetailsService.loadUserByUsername(user.getEmail());
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(email, actual.getUsername());
+        Assertions.assertEquals(user.getEmail(), actual.getUsername());
         Assertions.assertEquals("1234", actual.getPassword());
 
     }
 
     @Test
-    void loadUserByUsername_UsernameNotFoundException() {
-        User bob = new User();
-        bob.setEmail("bob@i.ua");
-        bob.setPassword("1234");
-        bob.setRoles(Set.of(new Role(Role.RoleName.USER)));
-
-        Mockito.when(userService.findByEmail(bob.getEmail())).thenReturn(Optional.of(bob));
+    void loadUserByUsername_nonExistentLogin_NotOk() {
+        Mockito.when(userService.findByEmail(user.getEmail())).thenReturn(Optional.empty());
 
         try {
             userDetailsService.loadUserByUsername("alice@i.ua");
