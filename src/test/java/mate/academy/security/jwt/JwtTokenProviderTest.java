@@ -18,6 +18,7 @@ class JwtTokenProviderTest {
     private UserDetailsService userDetailsService;
     private String login;
     private String token;
+    private String password;
 
     @BeforeEach
     void setUp() {
@@ -27,6 +28,7 @@ class JwtTokenProviderTest {
         ReflectionTestUtils.setField(jwtTokenProvider, "validityInMilliseconds", 3600000L);
         jwtTokenProvider.init();
         login = "bob@i.ua";
+        password = "1234";
         token = jwtTokenProvider.createToken(login, List.of(Role.RoleName.USER.name()));
     }
 
@@ -41,15 +43,14 @@ class JwtTokenProviderTest {
 
     @Test
     void getAuthentication_Ok() {
-        User.UserBuilder builder;
-        builder = org.springframework.security.core.userdetails.User.withUsername(login);
-        builder.password(new String("1234"));
-        builder.roles(Role.RoleName.USER.name());
-        UserDetails userDetails = builder.build();
+        UserDetails userDetails = User.withUsername(login).password(password)
+                .roles(Role.RoleName.USER.name()).build();
         Mockito.when(userDetailsService.loadUserByUsername(login)).thenReturn(userDetails);
-
         Authentication actual = jwtTokenProvider.getAuthentication(token);
         Assertions.assertNotNull(actual);
+        User actualUser = (User) actual.getPrincipal();
+        Assertions.assertEquals(login, actual.getName());
+        Assertions.assertEquals(password, actualUser.getPassword());
     }
 
     @Test

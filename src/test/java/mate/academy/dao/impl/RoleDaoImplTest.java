@@ -49,6 +49,7 @@ class RoleDaoImplTest extends AbstractTest {
                     + nonExistentRole, e.getMessage());
             return;
         }
-        Assertions.fail("Expected to receive UsernameNotFoundException");
+        Assertions.fail("Expected to receive UsernameNotFoundException while"
+                + " getting non existent role");
     }
 }

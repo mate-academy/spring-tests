@@ -29,7 +29,6 @@ class AuthenticationServiceImplTest {
         passwordEncoder = Mockito.mock(PasswordEncoder.class);
         authenticationService = new AuthenticationServiceImpl(userService,
                 roleService, passwordEncoder);
-
         bob = new User();
         bob.setEmail("bob@i.ua");
         bob.setPassword("1234");
