@@ -38,6 +38,7 @@ class UserServiceImplTest {
         Long id = 1L;
         Mockito.when(userDao.findById(id)).thenReturn(Optional.of(user));
         Optional<User> actualOptional = userService.findById(id);
+        Assertions.assertTrue(actualOptional.isPresent());
         Assertions.assertEquals(user, actualOptional.get());
     }
 
@@ -45,7 +46,7 @@ class UserServiceImplTest {
     void findByEmail_Ok() {
         Mockito.when(userDao.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
         Optional<User> actual = userService.findByEmail(user.getEmail());
-        Assertions.assertNotNull(actual.get());
+        Assertions.assertTrue(actual.isPresent());
         Assertions.assertEquals(user, actual.get());
     }
 }

@@ -44,7 +44,7 @@ class UserDaoImplTest extends AbstractTest {
         Role actualRole = roleDao.save(useRole);
         User actualUser = userDao.save(user);
         Optional<User> actualOptional = userDao.findByEmail(user.getEmail());
-        Assertions.assertNotNull(actualOptional);
+        Assertions.assertTrue(actualOptional.isPresent());
         Assertions.assertEquals(user.getEmail(), actualOptional.get().getEmail());
     }
 
@@ -54,7 +54,7 @@ class UserDaoImplTest extends AbstractTest {
         Role actualRole = roleDao.save(useRole);
         User actualUser = userDao.save(user);
         Optional<User> actualOptional = userDao.findById(1L);
-        Assertions.assertNotNull(actualOptional.orElse(null));
+        Assertions.assertTrue(actualOptional.isPresent());
         Assertions.assertEquals(user.getId(), actualOptional.get().getId());
         Assertions.assertEquals(user.getEmail(), actualOptional.get().getEmail());
     }
