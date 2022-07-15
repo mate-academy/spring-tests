@@ -5,18 +5,18 @@ import java.util.Optional;
 import mate.academy.dao.RoleDao;
 import mate.academy.model.Role;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 class RoleServiceImplTest {
     private static final long ID = 1L;
-    private RoleServiceImpl roleService;
-    private RoleDao roleDao;
-    private Role role;
+    private static RoleServiceImpl roleService;
+    private static RoleDao roleDao;
+    private static Role role;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void beforeAll() {
         roleDao = Mockito.mock(RoleDao.class);
         roleService = new RoleServiceImpl(roleDao);
         role = new Role(Role.RoleName.USER);

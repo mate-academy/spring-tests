@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class RoleDaoImplTest extends AbstractTest {
-    private static long ID = 1L;
+    private static final Long ID = 1L;
     private RoleDao roleDao;
     private Role role;
 

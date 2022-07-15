@@ -2,16 +2,16 @@ package mate.academy.validation;
 
 import javax.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 class EmailValidatorTest {
-    private EmailValidator emailValidator;
-    private ConstraintValidatorContext constraintValidatorContext;
+    private static EmailValidator emailValidator;
+    private static ConstraintValidatorContext constraintValidatorContext;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void beforeAll() {
         emailValidator = new EmailValidator();
         constraintValidatorContext = Mockito.mock(ConstraintValidatorContext.class);
     }

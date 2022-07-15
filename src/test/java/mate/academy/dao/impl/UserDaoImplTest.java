@@ -12,10 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class UserDaoImplTest extends AbstractTest {
-    private static final String EMAIL = "test@gmail.com";
-    private static final String PASSWORD = "123qwe";
-    private static final long ID = 1L;
-    private static final Role ROLE = new Role(Role.RoleName.USER);
     private UserDao userDao;
     private RoleDao roleDao;
     private User user;
@@ -27,9 +23,9 @@ class UserDaoImplTest extends AbstractTest {
         roleDao.save(new Role(Role.RoleName.USER));
         roleDao.save(new Role(Role.RoleName.ADMIN));
         user = new User();
-        user.setEmail(EMAIL);
-        user.setPassword(PASSWORD);
-        user.setRoles(Set.of(roleDao.getRoleByName(Role.RoleName.USER.name()).get()));
+        user.setEmail("test@gmail.com");
+        user.setPassword("123qwe");
+        user.setRoles(Set.of(new Role(Role.RoleName.USER)));
     }
 
     @Override
@@ -41,7 +37,7 @@ class UserDaoImplTest extends AbstractTest {
     void save_ok() {
         User expected = user;
         User actual = userDao.save(user);
-        Assertions.assertEquals(ID, actual.getId());
+        Assertions.assertEquals(1L, actual.getId());
         Assertions.assertEquals(expected.getEmail(), actual.getEmail());
         Assertions.assertEquals(expected.getPassword(), actual.getPassword());
         Assertions.assertEquals(expected.getRoles(), actual.getRoles());
@@ -56,12 +52,12 @@ class UserDaoImplTest extends AbstractTest {
     @Test
     void findByEmail_ok() {
         userDao.save(user);
-        Optional<User> actual = userDao.findByEmail(EMAIL);
+        Optional<User> actual = userDao.findByEmail(user.getEmail());
         Assertions.assertNotNull(actual.get());
-        Assertions.assertEquals(ID, actual.get().getId());
-        Assertions.assertEquals(EMAIL, actual.get().getEmail());
-        Assertions.assertEquals(PASSWORD, actual.get().getPassword());
-        Assertions.assertEquals(Set.of(ROLE), actual.get().getRoles());
+        Assertions.assertEquals(1L, actual.get().getId());
+        Assertions.assertEquals(user.getEmail(), actual.get().getEmail());
+        Assertions.assertEquals(user.getPassword(), actual.get().getPassword());
+        Assertions.assertEquals(user.getRoles(), actual.get().getRoles());
     }
 
     @Test
@@ -75,9 +71,9 @@ class UserDaoImplTest extends AbstractTest {
         userDao.save(user);
         Optional<User> actual = userDao.findById(1L);
         Assertions.assertNotNull(actual.get());
-        Assertions.assertEquals(EMAIL, actual.get().getEmail());
-        Assertions.assertEquals(PASSWORD, actual.get().getPassword());
-        Assertions.assertEquals(Set.of(ROLE), actual.get().getRoles());
+        Assertions.assertEquals(user.getEmail(), actual.get().getEmail());
+        Assertions.assertEquals(user.getPassword(), actual.get().getPassword());
+        Assertions.assertEquals(user.getRoles(), actual.get().getRoles());
     }
 
     @Test
