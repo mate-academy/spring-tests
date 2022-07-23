@@ -22,42 +22,40 @@ class UserServiceTest {
         UserDao userDao = Mockito.mock(UserDao.class);
         PasswordEncoder passwordEncoder = Mockito.mock(PasswordEncoder.class);
         userService = new UserServiceImpl(userDao, passwordEncoder);
-        Role userRole = new Role();
-        userRole.setRoleName(Role.RoleName.USER);
-        userRole.setId(2L);
-        User bobWithId = new User();
-        bobWithId.setEmail("bob@i.ua");
-        bobWithId.setPassword("1234");
-        bobWithId.setRoles(Set.of(userRole));
+
+        User bobWithId = getDummyUser();
         bobWithId.setId(1L);
+
+        // for save test
         Mockito.when(userDao.save(ArgumentMatchers.any())).thenReturn(bobWithId);
+        // for null save test
         Mockito.when(userDao.save(null)).thenThrow(DataProcessingException.class);
+        // for findById test
         Mockito.when(userDao.findById(1L)).thenReturn(Optional.of(bobWithId));
+        // for not existing user test
         Mockito.when(userDao.findById(69L)).thenReturn(Optional.empty());
+        // for negative id test
         Mockito.when(userDao.findById(-1L)).thenThrow(DataProcessingException.class);
+        // for null id test
         Mockito.when(userDao.findById(null)).thenThrow(DataProcessingException.class);
-        Mockito.when(userDao.findByEmail("elon.musk@space.x")).thenReturn(Optional.empty());
+        // for findByEmail test
         Mockito.when(userDao.findByEmail("bob@i.ua")).thenReturn(Optional.of(bobWithId));
+        // for no such user by email test
+        Mockito.when(userDao.findByEmail("elon.musk@space.x")).thenReturn(Optional.empty());
+        // for null email test
         Mockito.when(userDao.findByEmail(null)).thenThrow(DataProcessingException.class);
     }
 
     @Test
     public void save_ok() {
-        Role userRole = new Role();
-        userRole.setRoleName(Role.RoleName.USER);
-        userRole.setId(2L);
-        User bob = new User();
-        bob.setEmail("bob@i.ua");
-        bob.setPassword("1234");
-        bob.setRoles(Set.of(userRole));
+        User bob = getDummyUser();
         User actual = userService.save(bob);
         Assertions.assertNotNull(actual.getId());
-        Assertions.assertEquals(actual.getEmail(), "bob@i.ua");
-        Assertions.assertEquals(actual.getPassword(), "1234");
-        Assertions.assertEquals(actual.getRoles().size(), 1);
-        for (Role role : actual.getRoles()) {
-            Assertions.assertEquals(role.getRoleName(), Role.RoleName.USER);
-        }
+        Assertions.assertEquals("bob@i.ua", actual.getEmail());
+        Assertions.assertEquals("1234", actual.getPassword());
+        Assertions.assertEquals(1, actual.getRoles().size());
+        Assertions.assertEquals(actual.getRoles().stream()
+                .findFirst().get().getRoleName(), Role.RoleName.USER);
     }
 
     @Test
@@ -67,15 +65,13 @@ class UserServiceTest {
 
     @Test
     public void findById_ok() {
-        User actual = userService.findById(1L).orElseGet(
-                () -> Assertions.fail("User Optional should not be empty"));
-        Assertions.assertEquals(actual.getId(), 1L);
-        Assertions.assertEquals(actual.getEmail(), "bob@i.ua");
-        Assertions.assertEquals(actual.getPassword(), "1234");
-        Assertions.assertEquals(actual.getRoles().size(), 1);
-        for (Role role : actual.getRoles()) {
-            Assertions.assertEquals(role.getRoleName(), Role.RoleName.USER);
-        }
+        User actual = userService.findById(1L).get();
+        Assertions.assertEquals(1L, actual.getId());
+        Assertions.assertEquals("bob@i.ua", actual.getEmail());
+        Assertions.assertEquals("1234", actual.getPassword());
+        Assertions.assertEquals(1, actual.getRoles().size());
+        Assertions.assertEquals(actual.getRoles().stream()
+                .findFirst().get().getRoleName(), Role.RoleName.USER);
     }
 
     @Test
@@ -97,15 +93,13 @@ class UserServiceTest {
 
     @Test
     public void findByEmail_ok() {
-        User actual = userService.findByEmail("bob@i.ua").orElseGet(
-                () -> Assertions.fail("User Optional should not be empty"));
+        User actual = userService.findByEmail("bob@i.ua").get();
         Assertions.assertEquals(actual.getId(), 1L);
         Assertions.assertEquals(actual.getEmail(), "bob@i.ua");
         Assertions.assertEquals(actual.getPassword(), "1234");
         Assertions.assertEquals(actual.getRoles().size(), 1);
-        for (Role role : actual.getRoles()) {
-            Assertions.assertEquals(role.getRoleName(), Role.RoleName.USER);
-        }
+        Assertions.assertEquals(actual.getRoles().stream()
+                .findFirst().get().getRoleName(), Role.RoleName.USER);
     }
 
     @Test
@@ -117,5 +111,16 @@ class UserServiceTest {
     public void findByEmail_nullInput_notOk() {
         Assertions.assertThrows(DataProcessingException.class,
                 () -> userService.findByEmail(null));
+    }
+
+    private static User getDummyUser() {
+        User bob = new User();
+        Role userRole = new Role();
+        userRole.setRoleName(Role.RoleName.USER);
+        userRole.setId(2L);
+        bob.setEmail("bob@i.ua");
+        bob.setPassword("1234");
+        bob.setRoles(Set.of(userRole));
+        return bob;
     }
 }

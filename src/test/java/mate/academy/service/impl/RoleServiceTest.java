@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
-class RoleServiceImplTest {
+class RoleServiceTest {
     private static RoleDao roleDao;
     private static RoleService roleService;
 
@@ -29,11 +29,9 @@ class RoleServiceImplTest {
 
     @Test
     public void save_ok() {
-        Role userRole = new Role();
-        userRole.setRoleName(Role.RoleName.USER);
-        userRole.setId(2L);
+        Role userRole = getDummyRole();
         Role actual = roleService.save(userRole);
-        Assertions.assertEquals(actual.getRoleName(), Role.RoleName.USER);
+        Assertions.assertEquals(Role.RoleName.USER, actual.getRoleName());
         Assertions.assertNotNull(actual.getId());
     }
 
@@ -45,12 +43,10 @@ class RoleServiceImplTest {
 
     @Test
     public void getRoleByName_ok() {
-        Role userRole = new Role();
-        userRole.setRoleName(Role.RoleName.USER);
-        userRole.setId(2L);
+        Role userRole = getDummyRole();
         Mockito.when(roleDao.getRoleByName("USER")).thenReturn(Optional.of(userRole));
         Role actual = roleService.getRoleByName("USER");
-        Assertions.assertEquals(actual.getRoleName(), Role.RoleName.USER);
+        Assertions.assertEquals(Role.RoleName.USER, actual.getRoleName());
         Assertions.assertNotNull(actual.getId());
     }
 
@@ -65,5 +61,12 @@ class RoleServiceImplTest {
     public void getRoleByName_nullInput_notOk() {
         Assertions.assertThrows(RuntimeException.class,
                 () -> roleService.getRoleByName(null));
+    }
+
+    private Role getDummyRole() {
+        Role userRole = new Role();
+        userRole.setRoleName(Role.RoleName.USER);
+        userRole.setId(2L);
+        return userRole;
     }
 }

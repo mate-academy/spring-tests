@@ -16,109 +16,71 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 class AuthenticationServiceTest {
     private static AuthenticationService authenticationService;
-    private static UserService userService;
-    private static RoleService roleService;
-    private static PasswordEncoder passwordEncoder;
 
     @BeforeAll
     public static void setUp() {
-        userService = Mockito.mock(UserService.class);
-        roleService = Mockito.mock(RoleService.class);
-        passwordEncoder = Mockito.mock(PasswordEncoder.class);
+        // setting up and mocking dependencies
+        UserService userService = Mockito.mock(UserService.class);
+        RoleService roleService = Mockito.mock(RoleService.class);
+        PasswordEncoder passwordEncoder = Mockito.mock(PasswordEncoder.class);
         authenticationService = new AuthenticationServiceImpl(userService, roleService,
                 passwordEncoder);
-        User bob = new User();
-        bob.setEmail("bob@i.ua");
-        bob.setPassword("1234");
+
+        // setting up a single dummy user for testing in order to avoid code repetition
         Role userRole = new Role();
         userRole.setRoleName(Role.RoleName.USER);
         userRole.setId(2L);
+        User bob = new User();
+        bob.setEmail("bob@i.ua");
+        bob.setPassword("1234");
         bob.setRoles(Set.of(userRole));
-        User bobWithId = new User();
-        bobWithId.setEmail("bob@i.ua");
-        bobWithId.setPassword("1234");
-        bobWithId.setRoles(Set.of(userRole));
-        bobWithId.setId(2L);
-        User bobWithDifferentCredentials = new User();
-        bobWithDifferentCredentials.setEmail("bob@mail.ua");
-        bobWithDifferentCredentials.setPassword("12345");
-        bobWithDifferentCredentials.setRoles(Set.of(userRole));
-        bobWithDifferentCredentials.setId(2L);
-        Mockito.when(passwordEncoder.matches(ArgumentMatchers.any(),
-                ArgumentMatchers.eq("1234"))).thenReturn(true);
-        Mockito.when(passwordEncoder.matches(ArgumentMatchers.any(),
-                ArgumentMatchers.eq("12345"))).thenReturn(false);
-        Mockito.when(roleService.getRoleByName("USER")).thenReturn(userRole);
-        Mockito.when(userService.save(ArgumentMatchers.any())).thenReturn(bobWithId);
-        Mockito.when(userService.findByEmail("bob@i.ua")).thenReturn(Optional.of(bobWithId));
-        Mockito.when(userService.findByEmail("bob@mail.ua")).thenReturn(
-                Optional.of(bobWithDifferentCredentials));
+        bob.setId(2L);
+
+        Mockito.when(roleService.getRoleByName("USER"))
+                .thenReturn(userRole); // setting mocked roleService to return USER role
+        Mockito.when(userService.save(ArgumentMatchers.any()))
+                .thenReturn(bob); // for register tests
+        Mockito.when(userService.findByEmail(ArgumentMatchers.any()))
+                .thenReturn(Optional.of(bob)); // for login tests
+        Mockito.when(userService.findByEmail("nosuchemail@gmail.com"))
+                .thenReturn(Optional.empty()); // for not existing email test
+        Mockito.when(passwordEncoder.matches(ArgumentMatchers.eq("1234"),
+                ArgumentMatchers.any())).thenReturn(true); // for valid password tests
+        Mockito.when(passwordEncoder.matches(ArgumentMatchers.eq("12345"),
+                ArgumentMatchers.any())).thenReturn(false); // for invalid password tests
     }
 
     @Test
     public void register_ok() {
-        Role userRole = new Role();
-        userRole.setRoleName(Role.RoleName.USER);
-        userRole.setId(2L);
         User user = authenticationService.register("bob@i.ua", "1234");
-        Assertions.assertEquals(user.getEmail(), "bob@i.ua");
-        Assertions.assertEquals(user.getPassword(), "1234");
-        Assertions.assertEquals(user.getRoles().size(), 1);
-        for (Role role : user.getRoles()) {
-            Assertions.assertEquals(role.getRoleName(), userRole.getRoleName());
-        }
+        Assertions.assertEquals("bob@i.ua", user.getEmail());
+        Assertions.assertEquals("1234", user.getPassword());
+        Assertions.assertEquals(1, user.getRoles().size());
+        Assertions.assertEquals(Role.RoleName.USER, user.getRoles().stream()
+                .findFirst().get().getRoleName());
         Assertions.assertNotNull(user.getId());
     }
 
     @Test
-    public void register_nullInput_ok() {
-        Role userRole = new Role();
-        userRole.setRoleName(Role.RoleName.USER);
-        userRole.setId(2L);
-        User nullUser = new User();
-        nullUser.setId(3L);
-        nullUser.setRoles(Set.of(userRole));
-        Mockito.when(userService.save(ArgumentMatchers.any())).thenReturn(nullUser);
-        User user = authenticationService.register(null, null);
-        Assertions.assertNull(user.getEmail());
-        Assertions.assertNull(user.getPassword());
-        Assertions.assertEquals(user.getRoles().size(), 1);
-        for (Role role : user.getRoles()) {
-            Assertions.assertEquals(role.getRoleName(), userRole.getRoleName());
-        }
-        Assertions.assertNotNull(user.getId());
-    }
-
-    @Test
-    public void login_ok() {
-        Role userRole = new Role();
-        userRole.setRoleName(Role.RoleName.USER);
-        userRole.setId(2L);
-        User user = null;
-        try {
-            user = authenticationService.login("bob@i.ua", "1234");
-        } catch (AuthenticationException e) {
-            Assertions.fail("Should not throw an AuthenticationException");
-        }
+    public void login_ok() throws AuthenticationException {
+        User user = authenticationService.login("bob@i.ua", "1234");
         Assertions.assertEquals(user.getEmail(), "bob@i.ua");
         Assertions.assertEquals(user.getPassword(), "1234");
         Assertions.assertEquals(user.getRoles().size(), 1);
-
-        for (Role role : user.getRoles()) {
-            Assertions.assertEquals(role.getRoleName(), userRole.getRoleName());
-        }
+        Assertions.assertEquals(Role.RoleName.USER, user.getRoles().stream()
+                .findFirst().get().getRoleName());
         Assertions.assertNotNull(user.getId());
     }
 
     @Test
     public void login_incorrectPassword_notOk() {
         Assertions.assertThrows(AuthenticationException.class,
-                () -> authenticationService.login("bob@mail.ua", "1234"));
+                () -> authenticationService.login("bob@i.ua", "12345"));
     }
 
     @Test
-    public void login_nullInput_notOk() {
+    public void login_emptyUser_notOk() {
         Assertions.assertThrows(AuthenticationException.class,
-                () -> authenticationService.login(null, null));
+                () -> authenticationService.login("nosuchemail@gmail.com", "1234"));
     }
 }

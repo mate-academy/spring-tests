@@ -8,9 +8,7 @@ import mate.academy.service.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
@@ -37,19 +35,18 @@ class CustomUserDetailsServiceTest {
         Mockito.when(userService.findByEmail("bob@i.ua")).thenReturn(Optional.of(bob));
 
         UserDetails actual = customUserDetailsService.loadUserByUsername("bob@i.ua");
-        Assertions.assertEquals(actual.getUsername(), "bob@i.ua");
-        Assertions.assertEquals(actual.getPassword(), "1234");
-        Assertions.assertEquals(actual.getAuthorities().size(), 1);
-        for (GrantedAuthority authority : actual.getAuthorities()) {
-            Assertions.assertEquals(authority.getAuthority(), "ROLE_USER");
-        }
+        Assertions.assertEquals("bob@i.ua", actual.getUsername());
+        Assertions.assertEquals("1234", actual.getPassword());
+        Assertions.assertEquals(1, actual.getAuthorities().size());
+        Assertions.assertEquals("ROLE_USER", actual.getAuthorities().stream()
+                .findFirst().get().getAuthority());
     }
 
     @Test
     public void loadUserByUsername_notExistingUser_notOk() {
-        Mockito.when(userService.findByEmail(ArgumentMatchers.any())).thenReturn(Optional.empty());
+        Mockito.when(userService.findByEmail("nosuchemail@i.ua")).thenReturn(Optional.empty());
         Assertions.assertThrows(UsernameNotFoundException.class,
-                () -> customUserDetailsService.loadUserByUsername("bob@i.ua"));
+                () -> customUserDetailsService.loadUserByUsername("nosuchemail@i.ua"));
     }
 
     @Test

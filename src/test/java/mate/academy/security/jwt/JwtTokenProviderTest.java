@@ -16,9 +16,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 class JwtTokenProviderTest {
     private static UserDetailsService userDetailsService;
     private static JwtTokenProvider jwtTokenProvider;
-    private static final String TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib2IiLCJyb2xlcyI6WyJV"
-            + "U0VSIl0sImlhdCI6MTY1ODI2MzcyNSwiZXhwIjoxNjU4MjY3MzI1fQ.9ujNBcbV9d5EE_C35CI1-3ykwmAr"
-            + "sq0pIAwxzAOBpdI";
 
     @BeforeAll
     public static void setUp() {
@@ -34,26 +31,24 @@ class JwtTokenProviderTest {
         List<String> roles = List.of("USER");
         String actual = jwtTokenProvider.createToken(login, roles);
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(3, actual.split("\\.").length);
     }
 
     @Test
     public void createToken_nullInputData_ok() {
         String actual = jwtTokenProvider.createToken(null, null);
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(3, actual.split("\\.").length);
     }
 
     @Test
-    public void createToken_invalidInputData_ok() {
+    public void createToken_emptyInputData_ok() {
         String actual = jwtTokenProvider.createToken("", List.of());
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(3, actual.split("\\.").length);
     }
 
     @Test
     public void getUsername_ok() {
-        String actual = jwtTokenProvider.getUsername(TOKEN);
+        String actual = jwtTokenProvider.getUsername(jwtTokenProvider
+                .createToken("bob", List.of("USER")));
         String expected = "bob";
         Assertions.assertEquals(expected, actual);
     }
@@ -79,7 +74,8 @@ class JwtTokenProviderTest {
         Authentication expected = new UsernamePasswordAuthenticationToken(userDetails, "",
                 userDetails.getAuthorities());
         Mockito.when(userDetailsService.loadUserByUsername("bob")).thenReturn(userDetails);
-        Authentication actual = jwtTokenProvider.getAuthentication(TOKEN);
+        Authentication actual = jwtTokenProvider.getAuthentication(jwtTokenProvider
+                .createToken("bob", List.of("USER")));
         Assertions.assertEquals(expected, actual);
     }
 
@@ -97,10 +93,12 @@ class JwtTokenProviderTest {
 
     @Test
     public void resolveToken_ok() {
+        String token = jwtTokenProvider
+                .createToken("bob", List.of("USER"));
         HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
-        Mockito.when(request.getHeader("Authorization")).thenReturn("Bearer " + TOKEN);
+        Mockito.when(request.getHeader("Authorization")).thenReturn("Bearer " + token);
         String actual = jwtTokenProvider.resolveToken(request);
-        Assertions.assertEquals(TOKEN, actual);
+        Assertions.assertEquals(token, actual);
     }
 
     @Test
@@ -126,7 +124,8 @@ class JwtTokenProviderTest {
 
     @Test
     public void validateToken_ok() {
-        Assertions.assertTrue(jwtTokenProvider.validateToken(TOKEN));
+        Assertions.assertTrue(jwtTokenProvider.validateToken(jwtTokenProvider
+                .createToken("bob", List.of("USER"))));
     }
 
     @Test

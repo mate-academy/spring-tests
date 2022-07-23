@@ -9,7 +9,9 @@ import mate.academy.model.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class UserDaoTest extends AbstractTest {
     private UserDao userDao;
     private RoleDao roleDao;
@@ -30,15 +32,13 @@ class UserDaoTest extends AbstractTest {
         roleDao.save(userRole);
         user.setRoles(Set.of(userRole));
         User expected = userDao.save(user);
-        User actual = userDao.findByEmail(expected.getEmail()).orElseGet(
-                () -> Assertions.fail("User Optional should not be empty"));
+        User actual = userDao.findByEmail(expected.getEmail()).get();
         Assertions.assertEquals(expected.getId(), actual.getId());
         Assertions.assertEquals(expected.getEmail(), actual.getEmail());
         Assertions.assertEquals(expected.getPassword(), actual.getPassword());
-        Assertions.assertEquals(actual.getRoles().size(), 1);
-        for (Role role : actual.getRoles()) {
-            Assertions.assertEquals(role.getRoleName(), Role.RoleName.USER);
-        }
+        Assertions.assertEquals(1, actual.getRoles().size());
+        Assertions.assertEquals(Role.RoleName.USER, user.getRoles().stream()
+                .findFirst().get().getRoleName());
     }
 
     @Test
