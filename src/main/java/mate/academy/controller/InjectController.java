@@ -1,11 +1,15 @@
 package mate.academy.controller;
 
 import mate.academy.model.Role;
+import mate.academy.model.User;
 import mate.academy.security.AuthenticationService;
 import mate.academy.service.RoleService;
+import mate.academy.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Set;
 
 @RestController
 @RequestMapping("/inject")
@@ -13,11 +17,14 @@ public class InjectController {
     private final RoleService roleService;
 
     private final AuthenticationService authenticationService;
+    private final UserService userService;
 
     public InjectController(RoleService roleService,
-                            AuthenticationService authenticationService) {
+                            AuthenticationService authenticationService,
+                            UserService userService) {
         this.roleService = roleService;
         this.authenticationService = authenticationService;
+        this.userService = userService;
     }
 
     @GetMapping
@@ -25,9 +32,14 @@ public class InjectController {
         roleService.save(new Role(Role.RoleName.ADMIN));
         roleService.save(new Role(Role.RoleName.USER));
 
-        authenticationService.register("bob", "1234");
-        // feel free to save some users for testing
-        // hint: you can save users with different roles
+        authenticationService.register("johnny", "1234");
+
+        User angie = new User();
+        angie.setEmail("angie@i.ua");
+        angie.setPassword("1234");
+        angie.setRoles(Set.of(roleService.getRoleByName(Role.RoleName.ADMIN.name())));
+        userService.save(angie);
+
         return "Done!";
     }
 }
