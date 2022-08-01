@@ -71,10 +71,8 @@ class AuthenticationServiceImplTest {
     void login_WrongPassword_NotOk() {
         Optional<User> optionalUser = Optional.of(user);
         Mockito.when(userService.findByEmail(EMAIL)).thenReturn(optionalUser);
-        Mockito.when(passwordEncoder.matches(PASSWORD,
-                optionalUser.get().getPassword())).thenReturn(false);
         assertThrows(AuthenticationException.class,
-                () -> authenticationService.login(EMAIL, PASSWORD));
+                () -> authenticationService.login(EMAIL, "9999"));
     }
 
     @Test

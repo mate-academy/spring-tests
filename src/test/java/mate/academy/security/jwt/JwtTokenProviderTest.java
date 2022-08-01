@@ -1,19 +1,16 @@
 package mate.academy.security.jwt;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
-import mate.academy.security.CustomUserDetailsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.User.UserBuilder;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -30,7 +27,7 @@ class JwtTokenProviderTest {
 
     @BeforeEach
     void setUp() {
-        userDetailsService = Mockito.mock(CustomUserDetailsService.class);
+        userDetailsService = Mockito.mock(UserDetailsService.class);
         jwtTokenProvider = new JwtTokenProvider(userDetailsService);
         ReflectionTestUtils.setField(jwtTokenProvider, "secretKey", SECRET_KEY);
         ReflectionTestUtils.setField(jwtTokenProvider, "validityInMilliseconds",
@@ -55,13 +52,9 @@ class JwtTokenProviderTest {
         Mockito.when(userDetailsService.loadUserByUsername(jwtTokenProvider.getUsername(token)))
                 .thenReturn(builder.build());
         Authentication actual = jwtTokenProvider.getAuthentication(token);
-        List<SimpleGrantedAuthority> expectedAuthorities = ROLES.stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
         assertNotNull(actual);
         assertEquals(LOGIN, actual.getName());
         assertEquals(ROLES.size(), actual.getAuthorities().size());
-        assertTrue(actual.getAuthorities().containsAll(expectedAuthorities));
     }
 
     @Test
@@ -92,6 +85,6 @@ class JwtTokenProviderTest {
     @Test
     void validateToken_InvalidToken_NotOk() {
         String token = "random string";
-        assertFalse(jwtTokenProvider.validateToken(token));
+        assertThrows(RuntimeException.class, () -> jwtTokenProvider.validateToken(token));
     }
 }
