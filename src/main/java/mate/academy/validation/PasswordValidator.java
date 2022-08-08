@@ -1,4 +1,4 @@
-package mate.academy.exception.validation;
+package mate.academy.validation;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

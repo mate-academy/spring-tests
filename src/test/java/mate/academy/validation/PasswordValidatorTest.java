@@ -1,8 +1,6 @@
 package mate.academy.validation;
 
 import javax.validation.ConstraintValidatorContext;
-import mate.academy.exception.validation.Password;
-import mate.academy.exception.validation.PasswordValidator;
 import mate.academy.model.dto.UserRegistrationDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

@@ -3,7 +3,6 @@ package mate.academy.validation;
 import java.util.HashMap;
 import java.util.Map;
 import javax.validation.ConstraintValidatorContext;
-import mate.academy.exception.validation.EmailValidator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

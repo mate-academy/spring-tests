@@ -2,8 +2,8 @@ package mate.academy.model.dto;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import mate.academy.exception.validation.Email;
-import mate.academy.exception.validation.Password;
+import mate.academy.validation.Email;
+import mate.academy.validation.Password;
 
 @Password(field = "password", fieldMatch = "repeatPassword")
 public class UserRegistrationDto {
