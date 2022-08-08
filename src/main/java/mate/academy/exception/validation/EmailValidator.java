@@ -1,4 +1,4 @@
-package mate.academy.validation;
+package mate.academy.exception.validation;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

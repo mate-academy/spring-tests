@@ -1,4 +1,4 @@
-package mate.academy.validation;
+package mate.academy.exception.validation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
