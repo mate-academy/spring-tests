@@ -17,13 +17,13 @@ class EmailValidatorTest {
     }
 
     @Test
-    void isValid_Ok() {
+    void isValid_Email_Ok() {
         boolean valid = emailValidator.isValid(emailValid, null);
         assertTrue(valid);
     }
 
     @Test
-    void isValid_notOk() {
+    void isValid_notPresentEmail_notOk() {
         boolean isNotValid = emailValidator.isValid(emailIsNotValid, null);
         boolean isNotValidEmailNull = emailValidator.isValid(null, null);
         assertFalse(isNotValid);

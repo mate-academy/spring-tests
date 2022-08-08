@@ -41,7 +41,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void createToken_Ok() {
+    void createToken_valid_Ok() {
         String actualToken
                 = jwtTokenProvider.createToken(login, List.of(Role.RoleName.USER.name()));
         assertNotNull(actualToken);
@@ -50,7 +50,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void getAuthentication() {
+    void getAuthentication_valid_Ok() {
         UserDetails userDetails = User.withUsername(login)
                 .password(password)
                 .roles(Role.RoleName.USER.name())
@@ -71,13 +71,13 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void getUsername_Ok() {
+    void getUsername_validUsername_Ok() {
         String actual = jwtTokenProvider.getUsername(token);
         assertEquals(login, actual);
     }
 
     @Test
-    void resolveToken_OK() {
+    void resolveToken_valid_OK() {
         Mockito.when(request.getHeader("Authorization")).thenReturn("Bearer " + token);
         String bearerToken = request.getHeader("Authorization");
         assertTrue(bearerToken.startsWith("Bearer "));
@@ -86,7 +86,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void resolveToken_notOk() {
+    void resolveToken_notPresent_notOk() {
         Mockito.when(request.getHeader("Authorization")).thenReturn("Basic");
         String resolveTokenFalse = jwtTokenProvider.resolveToken(request);
         assertNull(resolveTokenFalse);

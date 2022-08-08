@@ -33,7 +33,7 @@ class UserServiceTest {
     }
 
     @Test
-    void save_Ok() {
+    void save_validUserDao_Ok() {
         Mockito.when(userDao.save(bob)).thenReturn(bob);
         User actual = userService.save(bob);
         assertNotNull(actual);
@@ -43,7 +43,7 @@ class UserServiceTest {
     }
 
     @Test
-    void findById_Ok() {
+    void findById_valid_Ok() {
         long id = 1;
         Mockito.when(userDao.findById(id)).thenReturn(Optional.of(bob));
         Optional<User> actual = userService.findById(id);
@@ -52,7 +52,7 @@ class UserServiceTest {
     }
 
     @Test
-    void findByEmail_Ok() {
+    void findByEmail_valid_Ok() {
         Mockito.when(userDao.findByEmail(bob.getEmail())).thenReturn(Optional.of(bob));
         Optional<User> actualOptionalUserByEmail = userService.findByEmail(bob.getEmail());
         assertTrue(actualOptionalUserByEmail.isPresent());

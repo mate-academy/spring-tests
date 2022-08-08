@@ -23,20 +23,20 @@ class RoleDaoTest extends AbstractTest {
     }
 
     @Test
-    void save_Ok() {
+    void save_validRole_Ok() {
         Role actual = roleDao.save(roleTestAdmin);
         assertEquals(roleTestAdmin.getRoleName(), actual.getRoleName());
     }
 
     @Test
-    void save_notOk() {
+    void save_notPresent_notOk() {
         assertThrows(RuntimeException.class, () -> {
             roleDao.save(new Role(Role.RoleName.valueOf(isNotPresentRole)));
         });
     }
 
     @Test
-    void getRoleByName_Ok() {
+    void getRoleByName_validName_Ok() {
         roleDao.save(roleTestAdmin);
         Role actual = roleDao.getRoleByName(ADMIN).get();
         assertNotNull(actual);
@@ -44,7 +44,7 @@ class RoleDaoTest extends AbstractTest {
     }
 
     @Test
-    void getRoleByName_notOk() {
+    void getRoleByName_notPresent_notOk() {
         assertThrows(RuntimeException.class, () -> {
             roleDao.getRoleByName(isNotPresentRole);
         });

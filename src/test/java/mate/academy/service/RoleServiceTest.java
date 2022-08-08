@@ -27,7 +27,7 @@ class RoleServiceTest {
     }
 
     @Test
-    void save_OK() {
+    void save_validRoleDao_OK() {
         Mockito.when(roleDao.save(any())).thenReturn(adminRole);
         Role actual = roleService.save(adminRole);
         assertNotNull(actual);
@@ -35,7 +35,7 @@ class RoleServiceTest {
     }
 
     @Test
-    void getRoleByName_Ok() {
+    void getRoleByName_validByName_Ok() {
         Mockito.when(roleDao.getRoleByName("ADMIN")).thenReturn(Optional.of(adminRole));
         Role actual = roleService.getRoleByName("ADMIN");
         assertNotNull(actual);

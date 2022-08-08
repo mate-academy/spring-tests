@@ -31,21 +31,21 @@ class UserDaoTest extends AbstractTest {
     }
 
     @Test
-    void save_Ok() {
+    void save_validUser_Ok() {
         User actualUser = userDao.save(bob);
         assertNotNull(actualUser);
         assertEquals(bob, actualUser);
     }
 
     @Test
-    void save_notOk() {
+    void save_notPresent_notOk() {
         assertThrows(RuntimeException.class, () -> {
             userDao.save(null);
         });
     }
 
     @Test
-    void findByEmail_Ok() {
+    void findByEmail_validEmail_Ok() {
         userDao.save(bob);
         User actual = userDao.findByEmail(bob.getEmail()).get();
         assertNotNull(actual);
@@ -53,13 +53,13 @@ class UserDaoTest extends AbstractTest {
     }
 
     @Test
-    void findByEmail_notOk() {
+    void findByEmail_notPresent_notOk() {
         Optional<User> optionalUser = userDao.findByEmail("Asd");
         assertTrue(optionalUser.isEmpty());
     }
 
     @Test
-    void findById_Ok() {
+    void findById_validId_Ok() {
         userDao.save(bob);
         Optional<User> actualOptionalUser = userDao.findById(1L);
         assertTrue(actualOptionalUser.isPresent());
@@ -67,7 +67,7 @@ class UserDaoTest extends AbstractTest {
     }
 
     @Test
-    void findById_notOk() {
+    void findById_notPresent_notOk() {
         Optional<User> optionalUser = userDao.findById(-1L);
         assertTrue(optionalUser.isEmpty());
     }

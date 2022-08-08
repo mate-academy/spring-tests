@@ -24,7 +24,7 @@ class PasswordValidatorTest {
     }
 
     @Test
-    void isValid_Ok() {
+    void isValid_Password_Ok() {
         Mockito.when(constraintAnnotation.field()).thenReturn("password");
         Mockito.when(constraintAnnotation.fieldMatch()).thenReturn("repeatPassword");
         passwordValidator.initialize(constraintAnnotation);
@@ -32,7 +32,7 @@ class PasswordValidatorTest {
     }
 
     @Test
-    void isValid_notOk() {
+    void isValid_notPresentPassword_notOk() {
         Mockito.when(constraintAnnotation.field()).thenReturn("password");
         Mockito.when(constraintAnnotation.fieldMatch()).thenReturn("repeatPassword");
         passwordValidator.initialize(constraintAnnotation);
