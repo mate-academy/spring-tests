@@ -38,14 +38,14 @@ class RoleServiceImplTest {
     }
 
     @Test
-    public void findRoleByName_ok() {
+    public void getRoleByName_ok() {
         Role role = roleService.getRoleByName("USER");
         Assertions.assertEquals("USER", role.getRoleName().name());
         Assertions.assertEquals(1L, role.getId());
     }
 
     @Test
-    public void findByRole_wrongRole_notOk() {
+    public void getRoleByName_wrongRole_notOk() {
         Assertions.assertThrows(NoSuchElementException.class, () ->
                 roleService.getRoleByName("WRONG_ROLE"));
     }
