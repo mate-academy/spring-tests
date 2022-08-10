@@ -19,24 +19,23 @@ class UserServiceImplTest {
     private static final Role USER_ROLE = new Role(Role.RoleName.USER);
     private UserService userService;
     private UserDao userDao;
-    private PasswordEncoder passwordEncoder;
     private User user;
 
     @BeforeEach
     void setUp() {
-        userDao = Mockito.mock(UserDao.class);
-        passwordEncoder = Mockito.mock(PasswordEncoder.class);
-        userService = new UserServiceImpl(userDao, passwordEncoder);
         user = new User();
         user.setId(ID_1);
         user.setEmail(USER_EMAIL);
         user.setPassword(USER_PASSWORD);
         user.setRoles(Set.of(USER_ROLE));
+        userDao = Mockito.mock(UserDao.class);
+        PasswordEncoder passwordEncoder = Mockito.mock(PasswordEncoder.class);
+        Mockito.when(passwordEncoder.encode(user.getPassword())).thenReturn(USER_PASSWORD);
+        userService = new UserServiceImpl(userDao, passwordEncoder);
     }
 
     @Test
     void save_validData_ok() {
-        Mockito.when(passwordEncoder.encode(user.getPassword())).thenReturn(USER_PASSWORD);
         Mockito.when(userDao.save(user)).thenReturn(user);
         User actual = userService.save(user);
         Assertions.assertNotNull(actual);

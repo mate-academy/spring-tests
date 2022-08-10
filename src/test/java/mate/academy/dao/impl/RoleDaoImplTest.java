@@ -10,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class RoleDaoImplTest extends AbstractTest {
-    private static final Role ROLE_USER = new Role(Role.RoleName.USER);
     private static final Long ID_1 = 1L;
     private RoleDao roleDao;
     private Role role;
@@ -19,7 +18,7 @@ class RoleDaoImplTest extends AbstractTest {
     void setUp() {
         roleDao = new RoleDaoImpl(getSessionFactory());
         role = new Role();
-        role.setRoleName(ROLE_USER.getRoleName());
+        role.setRoleName(new Role(Role.RoleName.USER).getRoleName());
     }
 
     @Override
@@ -58,7 +57,7 @@ class RoleDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void getRoleByName_nullRoleName_ok() {
+    void getRoleByName_nullRoleName_notOk() {
         Assertions.assertThrows(DataProcessingException.class,
                 () -> roleDao.getRoleByName(null));
     }

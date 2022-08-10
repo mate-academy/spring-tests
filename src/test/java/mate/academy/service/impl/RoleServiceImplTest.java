@@ -12,20 +12,21 @@ import org.mockito.Mockito;
 class RoleServiceImplTest {
     private static final Long ID_1 = 1L;
     private RoleService roleService;
-    private RoleDao roleDao;
     private Role role;
 
     @BeforeEach
     void setUp() {
-        roleDao = Mockito.mock(RoleDao.class);
+        RoleDao roleDao = Mockito.mock(RoleDao.class);
         roleService = new RoleServiceImpl(roleDao);
         role = new Role(Role.RoleName.USER);
         role.setId(ID_1);
+        Mockito.when(roleDao.save(role)).thenReturn(role);
+        Mockito.when(roleDao.getRoleByName(role.getRoleName().name()))
+                .thenReturn(Optional.of(role));
     }
 
     @Test
     void save_validData_ok() {
-        Mockito.when(roleDao.save(role)).thenReturn(role);
         Role actual = roleService.save(role);
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(1L, actual.getId());
@@ -34,8 +35,6 @@ class RoleServiceImplTest {
 
     @Test
     void getRoleByName_validData_ok() {
-        Mockito.when(roleDao.getRoleByName(role.getRoleName().name()))
-                .thenReturn(Optional.of(role));
         Role actual = roleService.getRoleByName(role.getRoleName().name());
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(role.getId(), actual.getId());
