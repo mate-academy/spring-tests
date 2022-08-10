@@ -3,8 +3,11 @@ package mate.academy.service;
 import static mate.academy.model.Role.RoleName.USER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 import mate.academy.dao.UserDao;
@@ -12,24 +15,24 @@ import mate.academy.dao.impl.UserDaoImpl;
 import mate.academy.model.Role;
 import mate.academy.model.User;
 import mate.academy.service.impl.UserServiceImpl;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 class UserServiceTest {
-    private UserDao userDao;
-    private PasswordEncoder passwordEncoder;
-    private UserService userService;
-    private User bob;
+    private static UserDao userDao;
+    private static PasswordEncoder passwordEncoder;
+    private static UserService userService;
+    private static User bob;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void beforeAll() {
         userDao = Mockito.mock(UserDaoImpl.class);
         passwordEncoder = Mockito.mock(PasswordEncoder.class);
         userService = new UserServiceImpl(userDao,passwordEncoder);
         Role role = new Role(USER);
-        bob = getUser("bob@gmail.com", "qwEds!23", Set.of(role));
+        bob = getTestUser("bob@gmail.com", "qwEds!23", Set.of(role));
     }
 
     @Test
@@ -43,12 +46,25 @@ class UserServiceTest {
     }
 
     @Test
+    void save_nonExisting_notOk() {
+        assertThrows(Exception.class,
+                () -> userService.save(any()));
+    }
+
+    @Test
     void findById_valid_Ok() {
         long id = 1;
         Mockito.when(userDao.findById(id)).thenReturn(Optional.of(bob));
         Optional<User> actual = userService.findById(id);
         assertTrue(actual.isPresent());
         assertEquals(actual.get(), bob);
+    }
+
+    @Test
+    void findById_nonExistingId_notOk() {
+        Mockito.when(userDao.findById(any())).thenReturn(Optional.empty());
+        assertThrows(NoSuchElementException.class,
+                () -> userService.findById(-1L).get());
     }
 
     @Test
@@ -59,7 +75,13 @@ class UserServiceTest {
         assertEquals(actualOptionalUserByEmail.get().getEmail(), bob.getEmail());
     }
 
-    private User getUser(String email, String password, Set<Role> roles) {
+    @Test
+    void findByEmail_nonExistingId_notOk() {
+        assertThrows(NoSuchElementException.class,
+                () -> userService.findByEmail("asd@i.ua").get());
+    }
+
+    private static User getTestUser(String email, String password, Set<Role> roles) {
         User user = new User();
         user.setEmail(email);
         user.setPassword(password);

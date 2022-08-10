@@ -4,20 +4,20 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import mate.academy.model.dto.UserRegistrationDto;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 class PasswordValidatorTest {
-    private PasswordValidator passwordValidator;
-    private Password constraintAnnotation;
-    private UserRegistrationDto registrationDto;
-    private String email = "denys@gmail.com";
-    private String password = "Qaz2@34dff";
+    private static PasswordValidator passwordValidator;
+    private static Password constraintAnnotation;
+    private static UserRegistrationDto registrationDto;
+    private static String email = "denys@gmail.com";
+    private static String password = "Qaz2@34dff";
     private String passwordFail = "120";
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void beforeAll() {
         passwordValidator = new PasswordValidator();
         registrationDto = getRegistrationDto(email, password, password);
         constraintAnnotation = Mockito.mock(Password.class);
@@ -40,8 +40,9 @@ class PasswordValidatorTest {
         assertFalse(passwordValidator.isValid(registrationDto, null));
     }
 
-    private UserRegistrationDto getRegistrationDto(String email,
-                                                   String password, String repeatpassword) {
+    private static UserRegistrationDto getRegistrationDto(String email,
+                                                          String password,
+                                                          String repeatpassword) {
         UserRegistrationDto registrationDto = new UserRegistrationDto();
         registrationDto.setEmail(email);
         registrationDto.setPassword(password);

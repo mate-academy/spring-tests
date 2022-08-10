@@ -2,7 +2,7 @@ package mate.academy.security;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 
 import java.util.Optional;
@@ -10,27 +10,26 @@ import java.util.Set;
 import mate.academy.model.Role;
 import mate.academy.model.User;
 import mate.academy.service.UserService;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 class CustomUserDetailsServiceTest {
-    private UserDetailsService userDetailsService;
-    private UserService userService;
-    private User bob;
-    private String email;
-    private String password;
+    private static UserService userService;
+    private UserDetailsService userDetailsService
+            = new CustomUserDetailsService(userService);
+    private static User bob;
+    private static String email;
+    private static String password;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+     static void beforeAll() {
         userService = Mockito.mock(UserService.class);
-        userDetailsService = new CustomUserDetailsService(userService);
         email = "bob@gmail.com";
         password = "1234";
-        bob = getUser(email, password, Set.of(new Role(Role.RoleName.ADMIN)));
+        bob = getTestUser(email, password, Set.of(new Role(Role.RoleName.ADMIN)));
     }
 
     @Test
@@ -43,18 +42,11 @@ class CustomUserDetailsServiceTest {
     }
 
     @Test
-    void loadUserByUsername_notOk() {
-        Mockito.when(userService.findByEmail(email)).thenReturn(Optional.of(bob));
-        try {
-            userDetailsService.loadUserByUsername("alica@gmail.com");
-        } catch (UsernameNotFoundException e) {
-            assertEquals("User not found.", e.getMessage());
-            return;
-        }
-        fail("Expected to receive UsernameNotFoundException");
+    void loadUserByUsername_nonExistentEmail_notOk() {
+        assertThrows(Exception.class, () -> userDetailsService.loadUserByUsername(any()));
     }
 
-    private User getUser(String email, String password, Set<Role> roles) {
+    private static User getTestUser(String email, String password, Set<Role> roles) {
         mate.academy.model.User user = new mate.academy.model.User();
         user.setEmail(email);
         user.setPassword(password);

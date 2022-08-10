@@ -13,22 +13,22 @@ import mate.academy.model.Role;
 import mate.academy.model.User;
 import mate.academy.service.RoleService;
 import mate.academy.service.UserService;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 class AuthenticationServiceTest {
-    private UserService userService;
-    private RoleService roleService;
-    private AuthenticationService authenticationService;
-    private PasswordEncoder passwordEncoder;
-    private User bob;
-    private String email;
-    private String password;
+    private static UserService userService;
+    private static RoleService roleService;
+    private static AuthenticationService authenticationService;
+    private static PasswordEncoder passwordEncoder;
+    private static User bob;
+    private static String email;
+    private static String password;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void beforeAll() {
         roleService = Mockito.mock(RoleService.class);
         userService = Mockito.mock(UserService.class);
         passwordEncoder = Mockito.mock(PasswordEncoder.class);
@@ -36,7 +36,7 @@ class AuthenticationServiceTest {
                 = new AuthenticationServiceImpl(userService, roleService, passwordEncoder);
         email = "bob@gmail.com";
         password = "Qwerty!234";
-        bob = getUser(email, password, Set.of(new Role(Role.RoleName.ADMIN)));
+        bob = getTestUser(email, password, Set.of(new Role(Role.RoleName.ADMIN)));
     }
 
     @Test
@@ -62,7 +62,7 @@ class AuthenticationServiceTest {
     }
 
     @Test
-    void login_email_notOk() throws AuthenticationException {
+    void login_nonExistentEmail_notOk() {
         Mockito.when(userService.findByEmail(bob.getEmail())).thenReturn(Optional.empty());
         Mockito.when(passwordEncoder.matches(password, bob.getPassword())).thenReturn(true);
         try {
@@ -71,11 +71,11 @@ class AuthenticationServiceTest {
             assertEquals("Incorrect username or password!!!", e.getMessage());
             return;
         }
-        fail("Expected to receive AuthenticationException");
+        fail("Expected to receive an AuthenticationException for incorrect username.");
     }
 
     @Test
-    void login_password_notOk() throws AuthenticationException {
+    void login_password_notOk() {
         Mockito.when(userService.findByEmail(email)).thenReturn(Optional.of(bob));
         Mockito.when(passwordEncoder.matches(password, bob.getPassword())).thenReturn(false);
         try {
@@ -84,7 +84,7 @@ class AuthenticationServiceTest {
             assertEquals("Incorrect username or password!!!", e.getMessage());
             return;
         }
-        fail("Expected to receive AuthenticationException");
+        fail("Expected to receive an AuthenticationException for incorrect password.");
     }
 
     @Test
@@ -94,7 +94,7 @@ class AuthenticationServiceTest {
         });
     }
 
-    private User getUser(String email, String password, Set<Role> roles) {
+    private static User getTestUser(String email, String password, Set<Role> roles) {
         mate.academy.model.User user = new mate.academy.model.User();
         user.setEmail(email);
         user.setPassword(password);
