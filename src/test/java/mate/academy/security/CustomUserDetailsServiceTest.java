@@ -18,11 +18,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 class CustomUserDetailsServiceTest {
     private static UserService userService;
-    private UserDetailsService userDetailsService
-            = new CustomUserDetailsService(userService);
     private static User bob;
     private static String email;
     private static String password;
+    private UserDetailsService userDetailsService
+            = new CustomUserDetailsService(userService);
 
     @BeforeAll
      static void beforeAll() {

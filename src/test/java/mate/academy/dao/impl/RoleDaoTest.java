@@ -13,7 +13,7 @@ class RoleDaoTest extends AbstractTest {
     private static final String ADMIN = Role.RoleName.ADMIN.name();
     private static final String NotPresentRole = "USR";
     private RoleDao roleDao;
-    private static Role adminRole;
+    private Role adminRole;
 
     @BeforeEach
     void setUp() {
