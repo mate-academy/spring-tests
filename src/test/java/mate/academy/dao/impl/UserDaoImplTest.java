@@ -14,20 +14,23 @@ import org.junit.jupiter.api.Test;
 class UserDaoImplTest extends AbstractTest {
     private static final String EMAIL = "email@com.ua";
     private static final String PASSWORD = "password";
+    private User user;
     private UserDao userDao;
-    private RoleDao roleDao;
 
     @BeforeEach
     public void setUp() {
         userDao = new UserDaoImpl(getSessionFactory());
-        roleDao = new RoleDaoImpl(getSessionFactory());
+        RoleDao roleDao = new RoleDaoImpl(getSessionFactory());
+        Role role = new Role(Role.RoleName.USER);
+        role = roleDao.save(role);
+        user = new User();
+        user.setEmail(EMAIL);
+        user.setPassword(PASSWORD);
+        user.setRoles(Set.of(role));
     }
 
     @Test
     public void save_correctUser_ok() {
-        User user = new User();
-        user.setEmail(EMAIL);
-        user.setPassword(PASSWORD);
         User actual = userDao.save(user);
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(1L, actual.getId());
@@ -40,12 +43,6 @@ class UserDaoImplTest extends AbstractTest {
 
     @Test
     public void findByEmail_Ok() {
-        Role role = new Role(Role.RoleName.USER);
-        role = roleDao.save(role);
-        User user = new User();
-        user.setEmail(EMAIL);
-        user.setPassword(PASSWORD);
-        user.setRoles(Set.of(role));
         userDao.save(user);
         User actual = userDao.findByEmail(EMAIL).get();
         Assertions.assertEquals(EMAIL, actual.getEmail());
@@ -59,12 +56,6 @@ class UserDaoImplTest extends AbstractTest {
 
     @Test
     public void findByEmail_wrongEmail_notOk() {
-        Role role = new Role(Role.RoleName.USER);
-        role = roleDao.save(role);
-        User user = new User();
-        user.setEmail(EMAIL);
-        user.setPassword(PASSWORD);
-        user.setRoles(Set.of(role));
         userDao.save(user);
         Assertions.assertEquals(Optional.empty(), userDao.findByEmail("wrongEmail@com.ua"));
 
