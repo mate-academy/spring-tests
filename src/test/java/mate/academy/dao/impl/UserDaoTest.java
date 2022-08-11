@@ -18,16 +18,14 @@ class UserDaoTest extends AbstractTest {
     private UserDao userDao;
     private RoleDao roleDao;
     private User bob;
-    private Role adminRole;
 
     @BeforeEach
     void setUp() {
-        adminRole = new Role(Role.RoleName.ADMIN);
         userDao = new UserDaoImpl(getSessionFactory());
         roleDao = new RoleDaoImpl(getSessionFactory());
+        Role adminRole = new Role(Role.RoleName.ADMIN);
         roleDao.save(adminRole);
-        Set<Role> roles = Set.of(adminRole);
-        bob = getTestUser("Bob@gmail.com", "Qwerty!234", roles);
+        bob = getTestUser("Bob@gmail.com", "Qwerty!234", Set.of(adminRole));
     }
 
     @Test
@@ -53,7 +51,7 @@ class UserDaoTest extends AbstractTest {
     }
 
     @Test
-    void findByEmail_notPresent_notOk() {
+    void findByEmail_notPresent_Ok() {
         Optional<User> optionalUser = userDao.findByEmail("Asd");
         assertTrue(optionalUser.isEmpty());
     }

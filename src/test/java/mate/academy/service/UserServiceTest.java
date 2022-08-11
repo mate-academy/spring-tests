@@ -16,6 +16,7 @@ import mate.academy.model.Role;
 import mate.academy.model.User;
 import mate.academy.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,15 +25,18 @@ class UserServiceTest {
     private static UserDao userDao;
     private static PasswordEncoder passwordEncoder;
     private static UserService userService;
-    private static User bob;
+    private User bob;
 
     @BeforeAll
     static void beforeAll() {
         userDao = Mockito.mock(UserDaoImpl.class);
         passwordEncoder = Mockito.mock(PasswordEncoder.class);
         userService = new UserServiceImpl(userDao,passwordEncoder);
-        Role role = new Role(USER);
-        bob = getTestUser("bob@gmail.com", "qwEds!23", Set.of(role));
+    }
+
+    @BeforeEach
+    void setUp() {
+        bob = getTestUser("bob@gmail.com", "qwEds!23", Set.of(new Role(USER)));
     }
 
     @Test
@@ -81,7 +85,7 @@ class UserServiceTest {
                 () -> userService.findByEmail("asd@i.ua").get());
     }
 
-    private static User getTestUser(String email, String password, Set<Role> roles) {
+    private User getTestUser(String email, String password, Set<Role> roles) {
         User user = new User();
         user.setEmail(email);
         user.setPassword(password);

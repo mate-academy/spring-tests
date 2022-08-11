@@ -12,8 +12,8 @@ import org.junit.jupiter.api.Test;
 class RoleDaoTest extends AbstractTest {
     private static final String ADMIN = Role.RoleName.ADMIN.name();
     private static final String NotPresentRole = "USR";
-    private RoleDao roleDao;
     private Role adminRole;
+    private RoleDao roleDao;
 
     @BeforeEach
     void setUp() {

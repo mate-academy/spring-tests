@@ -5,10 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import mate.academy.dao.RoleDao;
 import mate.academy.dao.impl.RoleDaoImpl;
+import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import mate.academy.service.impl.RoleServiceImpl;
 import org.junit.jupiter.api.BeforeAll;
@@ -19,12 +19,11 @@ class RoleServiceTest {
     private static final String NonExistentRole = "USR";
     private static RoleDao roleDao;
     private static RoleService roleService;
-    private static Role adminRole;
+    private Role adminRole = new Role(ADMIN);
 
     @BeforeAll
     static void beforeAll() {
         roleDao = Mockito.mock(RoleDaoImpl.class);
-        adminRole = new Role(ADMIN);
         roleService = new RoleServiceImpl(roleDao);
     }
 
@@ -37,12 +36,6 @@ class RoleServiceTest {
     }
 
     @Test
-    void save_nonExistent_notOK() {
-        assertThrows(NoSuchElementException.class,
-                () -> roleService.getRoleByName(null));
-    }
-
-    @Test
     void getRoleByName_validByName_Ok() {
         Mockito.when(roleDao.getRoleByName("ADMIN")).thenReturn(Optional.of(adminRole));
         Role actual = roleService.getRoleByName("ADMIN");
@@ -52,7 +45,9 @@ class RoleServiceTest {
 
     @Test
     void getRoleByName_nonExistent_notOk() {
-        assertThrows(NoSuchElementException.class,
+        Mockito.when(roleDao.getRoleByName(NonExistentRole))
+                .thenThrow(DataProcessingException.class);
+        assertThrows(DataProcessingException.class,
                 () -> roleService.getRoleByName(NonExistentRole));
     }
 }

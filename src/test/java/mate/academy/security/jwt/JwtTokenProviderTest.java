@@ -11,6 +11,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import mate.academy.model.Role;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.core.Authentication;
@@ -22,10 +23,10 @@ import org.springframework.test.util.ReflectionTestUtils;
 class JwtTokenProviderTest {
     private static UserDetailsService userDetailsService;
     private static JwtTokenProvider jwtTokenProvider;
-    private static String login;
-    private static String password;
-    private static String token;
     private static HttpServletRequest request;
+    private String login;
+    private String password;
+    private String token;
 
     @BeforeAll
     static void beforeAll() {
@@ -35,6 +36,10 @@ class JwtTokenProviderTest {
         ReflectionTestUtils.setField(jwtTokenProvider, "secretKey", "den.shl");
         ReflectionTestUtils.setField(jwtTokenProvider, "validityInMilliseconds", 3600000);
         jwtTokenProvider.init();
+    }
+
+    @BeforeEach
+    void setUp() {
         login = "denys@gmail.com";
         password = "qaz!23";
         token = jwtTokenProvider.createToken(login, List.of(Role.RoleName.USER.name()));

@@ -5,22 +5,25 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import mate.academy.model.dto.UserRegistrationDto;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 class PasswordValidatorTest {
+    private static final String PASSWORDFAIL = "120";
     private static PasswordValidator passwordValidator;
     private static Password constraintAnnotation;
-    private static UserRegistrationDto registrationDto;
-    private static String email = "denys@gmail.com";
-    private static String password = "Qaz2@34dff";
-    private String passwordFail = "120";
+    private UserRegistrationDto registrationDto;
 
     @BeforeAll
     static void beforeAll() {
-        passwordValidator = new PasswordValidator();
-        registrationDto = getRegistrationDto(email, password, password);
         constraintAnnotation = Mockito.mock(Password.class);
+        passwordValidator = new PasswordValidator();
+    }
+
+    @BeforeEach
+    void setUp() {
+        registrationDto = getRegistrationDto("alisa@gmail.com", "Qaz2@34dff", "Qaz2@34dff");
     }
 
     @Test
@@ -36,11 +39,11 @@ class PasswordValidatorTest {
         Mockito.when(constraintAnnotation.field()).thenReturn("password");
         Mockito.when(constraintAnnotation.fieldMatch()).thenReturn("repeatPassword");
         passwordValidator.initialize(constraintAnnotation);
-        registrationDto.setRepeatPassword(passwordFail);
+        registrationDto.setRepeatPassword(PASSWORDFAIL);
         assertFalse(passwordValidator.isValid(registrationDto, null));
     }
 
-    private static UserRegistrationDto getRegistrationDto(String email,
+    private UserRegistrationDto getRegistrationDto(String email,
                                                           String password,
                                                           String repeatpassword) {
         UserRegistrationDto registrationDto = new UserRegistrationDto();

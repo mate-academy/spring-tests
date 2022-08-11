@@ -14,6 +14,7 @@ import mate.academy.model.User;
 import mate.academy.service.RoleService;
 import mate.academy.service.UserService;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,9 +24,7 @@ class AuthenticationServiceTest {
     private static RoleService roleService;
     private static AuthenticationService authenticationService;
     private static PasswordEncoder passwordEncoder;
-    private static User bob;
-    private static String email;
-    private static String password;
+    private User bob;
 
     @BeforeAll
     static void beforeAll() {
@@ -34,9 +33,11 @@ class AuthenticationServiceTest {
         passwordEncoder = Mockito.mock(PasswordEncoder.class);
         authenticationService
                 = new AuthenticationServiceImpl(userService, roleService, passwordEncoder);
-        email = "bob@gmail.com";
-        password = "Qwerty!234";
-        bob = getTestUser(email, password, Set.of(new Role(Role.RoleName.ADMIN)));
+    }
+
+    @BeforeEach
+    void setUp() {
+        bob = getTestUser("bob@gmail.com", "Qwerty!234", Set.of(new Role(Role.RoleName.ADMIN)));
     }
 
     @Test
@@ -52,21 +53,25 @@ class AuthenticationServiceTest {
 
     @Test
     void login_valid_Ok() throws AuthenticationException {
-        Mockito.when(userService.findByEmail(email)).thenReturn(Optional.of(bob));
-        Mockito.when(passwordEncoder.matches(password, bob.getPassword())).thenReturn(true);
-        User actual = authenticationService.login(email, password);
+        Mockito.when(userService.findByEmail(bob.getEmail()))
+                .thenReturn(Optional.of(bob));
+        Mockito.when(passwordEncoder.matches(bob.getPassword(), bob.getPassword()))
+                .thenReturn(true);
+        User actual = authenticationService.login(bob.getEmail(), bob.getPassword());
         assertNotNull(actual);
-        assertEquals(email, actual.getEmail());
-        assertEquals(password, actual.getPassword());
+        assertEquals(bob.getEmail(), actual.getEmail());
+        assertEquals(bob.getPassword(), actual.getPassword());
         assertEquals(actual, bob);
     }
 
     @Test
     void login_nonExistentEmail_notOk() {
-        Mockito.when(userService.findByEmail(bob.getEmail())).thenReturn(Optional.empty());
-        Mockito.when(passwordEncoder.matches(password, bob.getPassword())).thenReturn(true);
+        Mockito.when(userService.findByEmail(bob.getEmail()))
+                .thenReturn(Optional.empty());
+        Mockito.when(passwordEncoder.matches(bob.getPassword(), bob.getPassword()))
+                .thenReturn(true);
         try {
-            authenticationService.login("com", password);
+            authenticationService.login("com", bob.getPassword());
         } catch (AuthenticationException e) {
             assertEquals("Incorrect username or password!!!", e.getMessage());
             return;
@@ -76,10 +81,12 @@ class AuthenticationServiceTest {
 
     @Test
     void login_password_notOk() {
-        Mockito.when(userService.findByEmail(email)).thenReturn(Optional.of(bob));
-        Mockito.when(passwordEncoder.matches(password, bob.getPassword())).thenReturn(false);
+        Mockito.when(userService.findByEmail(bob.getEmail()))
+                .thenReturn(Optional.of(bob));
+        Mockito.when(passwordEncoder.matches(bob.getPassword(), bob.getPassword()))
+                .thenReturn(false);
         try {
-            authenticationService.login(email, "asdf");
+            authenticationService.login(bob.getEmail(), "asdf");
         } catch (AuthenticationException e) {
             assertEquals("Incorrect username or password!!!", e.getMessage());
             return;
@@ -94,7 +101,7 @@ class AuthenticationServiceTest {
         });
     }
 
-    private static User getTestUser(String email, String password, Set<Role> roles) {
+    private User getTestUser(String email, String password, Set<Role> roles) {
         mate.academy.model.User user = new mate.academy.model.User();
         user.setEmail(email);
         user.setPassword(password);
