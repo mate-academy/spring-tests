@@ -59,7 +59,7 @@ class AuthenticationServiceImplTest {
         try {
             actual = authenticationService.login(user.getEmail(), user.getPassword());
         } catch (AuthenticationException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Incorrect username or password!!!", e);
         }
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(user.getId(), actual.getId().longValue());
@@ -85,6 +85,24 @@ class AuthenticationServiceImplTest {
         Mockito.when(userService.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
         Mockito.when(passwordEncoder.matches(user.getPassword(), user.getPassword()))
                 .thenReturn(false);
+        Assertions.assertNotNull(user);
+        Throwable exception = Assertions.assertThrows(AuthenticationException.class, () -> {
+            authenticationService.login(user.getEmail(), user.getPassword());
+        }, "AuthenticationException was expected");
+        Assertions.assertEquals("Incorrect username or password!!!",
+                exception.getLocalizedMessage());
+    }
+
+    @Test
+    void login_loginDoesNotExist_notOk() {
+        User user = new User();
+        user.setEmail("user@mail.com");
+        user.setPassword("12345678");
+        user.setId(1L);
+        user.setRoles(Set.of(new Role(Role.RoleName.USER)));
+        Mockito.when(userService.findByEmail(user.getEmail())).thenReturn(Optional.empty());
+        Mockito.when(passwordEncoder.matches(user.getPassword(), user.getPassword()))
+                .thenReturn(true);
         Assertions.assertNotNull(user);
         Throwable exception = Assertions.assertThrows(AuthenticationException.class, () -> {
             authenticationService.login(user.getEmail(), user.getPassword());

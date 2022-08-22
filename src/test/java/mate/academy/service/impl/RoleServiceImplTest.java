@@ -2,6 +2,7 @@ package mate.academy.service.impl;
 
 import static mate.academy.model.Role.RoleName.USER;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import mate.academy.dao.RoleDao;
 import mate.academy.model.Role;
@@ -16,7 +17,7 @@ class RoleServiceImplTest {
     private RoleDao roleDao;
 
     @BeforeEach
-     void setUp() {
+    void setUp() {
         roleDao = Mockito.mock(RoleDao.class);
         roleService = new RoleServiceImpl(roleDao);
     }
@@ -42,5 +43,14 @@ class RoleServiceImplTest {
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(role.getId(), actual.getId().longValue());
         Assertions.assertEquals(role.getRoleName(), actual.getRoleName());
+    }
+
+    @Test
+    void getRoleByName_roleNameDoesNotExist_notOk() {
+        Mockito.when(roleDao.getRoleByName("USER")).thenReturn(Optional.empty());
+        Throwable exception = Assertions.assertThrows(NoSuchElementException.class, () -> {
+            roleService.getRoleByName("USER");
+        }, "NoSuchElementException was expected");
+        Assertions.assertEquals("No value present", exception.getLocalizedMessage());
     }
 }

@@ -1,9 +1,5 @@
 package mate.academy.service.impl;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.Optional;
 import mate.academy.dao.UserDao;
 import mate.academy.model.User;
@@ -47,11 +43,22 @@ class UserServiceImplTest {
         user.setId(1L);
         Mockito.when(userDao.findById(user.getId())).thenReturn(Optional.of(user));
         Optional<User> userOptional = userService.findById(user.getId());
-        assertTrue(userOptional.isPresent());
+        Assertions.assertTrue(userOptional.isPresent());
         User actual = userOptional.get();
-        assertNotNull(actual);
-        assertEquals(user.getEmail(), actual.getEmail());
-        assertEquals(user.getPassword(), actual.getPassword());
+        Assertions.assertNotNull(actual);
+        Assertions.assertEquals(user.getEmail(), actual.getEmail());
+        Assertions.assertEquals(user.getPassword(), actual.getPassword());
+    }
+
+    @Test
+    void findById_idDoesNotExist_notOk() {
+        User user = new User();
+        user.setEmail("user@mail.com");
+        user.setPassword("11111111");
+        user.setId(1L);
+        Mockito.when(userDao.findById(1L)).thenReturn(Optional.empty());
+        Optional<User> userOptional = userService.findById(1L);
+        Assertions.assertFalse(userOptional.isPresent());
     }
 
     @Test
@@ -66,5 +73,12 @@ class UserServiceImplTest {
         User actual = userOptional.get();
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(user.getId(), actual.getId());
+    }
+
+    @Test
+    void findByEmail_emailDoesNotExist_notOk() {
+        Mockito.when(userDao.findByEmail("user@mail.com")).thenReturn(Optional.empty());
+        Optional<User> userOptional = userService.findByEmail("user@mail.com");
+        Assertions.assertFalse(userOptional.isPresent());
     }
 }
