@@ -91,7 +91,7 @@ public class UserDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void findById_wrongId_NotOk() {
+    void findById_wrongId_Ok() {
         Optional<User> actual = userDao.findById(2L);
         assertTrue(actual.isEmpty(), "You should return empty Optional "
                 + "if there is no user with such id");

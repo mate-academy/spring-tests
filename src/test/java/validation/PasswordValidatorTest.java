@@ -8,7 +8,6 @@ import mate.academy.model.dto.UserRegistrationDto;
 import mate.academy.validation.Password;
 import mate.academy.validation.PasswordValidator;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -21,11 +20,9 @@ public class PasswordValidatorTest {
     static void beforeAll() {
         validatorContext = Mockito.mock(ConstraintValidatorContext.class);
         constraintAnnotation = Mockito.mock(Password.class);
-    }
-
-    @BeforeEach
-    void setUp() {
         passwordValidator = new PasswordValidator();
+        Mockito.when(constraintAnnotation.field()).thenReturn("password");
+        Mockito.when(constraintAnnotation.fieldMatch()).thenReturn("repeatPassword");
     }
 
     @Test
@@ -33,25 +30,21 @@ public class PasswordValidatorTest {
         UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
         userRegistrationDto.setPassword("password");
         userRegistrationDto.setRepeatPassword("password");
-        Mockito.when(constraintAnnotation.field()).thenReturn("password");
-        Mockito.when(constraintAnnotation.fieldMatch()).thenReturn("repeatPassword");
         passwordValidator.initialize(constraintAnnotation);
         assertTrue(passwordValidator.isValid(userRegistrationDto, validatorContext));
     }
 
     @Test
-    void isValid_wrongRepeatPassword_NotOk() {
+    void isValid_wrongRepeatPassword_Ok() {
         UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
         userRegistrationDto.setPassword("password");
         userRegistrationDto.setRepeatPassword("password1234");
-        Mockito.when(constraintAnnotation.field()).thenReturn("password");
-        Mockito.when(constraintAnnotation.fieldMatch()).thenReturn("repeatPassword");
         passwordValidator.initialize(constraintAnnotation);
         assertFalse(passwordValidator.isValid(userRegistrationDto, validatorContext));
     }
 
     @Test
-    void isValid_nullPassword_NotOk() {
+    void isValid_nullPassword_Ok() {
         UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
         userRegistrationDto.setPassword(null);
         userRegistrationDto.setRepeatPassword(null);

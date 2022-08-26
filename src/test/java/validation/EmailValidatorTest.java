@@ -30,7 +30,7 @@ public class EmailValidatorTest {
     }
 
     @Test
-    void isValid_NotOk() {
+    void isValid_emailIsNotValid_Ok() {
         String firstEmail = "19d@@2@mail.com";
         String secondEmail = "bob+cinema.ua";
         String thirdEmail = "alice@media";
@@ -40,7 +40,7 @@ public class EmailValidatorTest {
     }
 
     @Test
-    void isValid_nullCredentials_NotOk() {
+    void isValid_nullCredentials_Ok() {
         assertFalse(emailValidator.isValid(null, validatorContext));
     }
 }

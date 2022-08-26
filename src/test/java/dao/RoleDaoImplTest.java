@@ -57,4 +57,10 @@ public class RoleDaoImplTest extends AbstractTest {
         assertThrows(DataProcessingException.class, () -> roleDao.getRoleByName(null),
                 "You should throw DataProcessingException if roleName is null");
     }
+
+    @Test
+    void getRoleByName_roleNameNotExists_NotOk() {
+        assertThrows(DataProcessingException.class, () -> roleDao.getRoleByName("ROLE"),
+                "You should throw DataProcessingException if roleName is not exists");
+    }
 }

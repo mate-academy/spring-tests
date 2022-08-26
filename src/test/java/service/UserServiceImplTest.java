@@ -2,11 +2,12 @@ package service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Optional;
 import mate.academy.dao.UserDao;
+import mate.academy.exception.DataProcessingException;
 import mate.academy.model.User;
 import mate.academy.service.UserService;
 import mate.academy.service.impl.UserServiceImpl;
@@ -44,10 +45,8 @@ public class UserServiceImplTest {
     @Test
     void save_emptyUser_NotOk() {
         User expected = new User();
-        Mockito.when(passwordEncoder.encode(expected.getPassword()))
-                .thenReturn(expected.getPassword());
-        Mockito.when(userDao.save(expected)).thenReturn(expected);
-        assertNull(userService.save(expected).getId());
+        Mockito.when(userDao.save(expected)).thenThrow(DataProcessingException.class);
+        assertThrows(DataProcessingException.class, () -> userService.save(expected));
     }
 
     @Test
@@ -61,7 +60,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void findById_idNotExists_NotOk() {
+    void findById_idNotExists_Ok() {
         Mockito.when(userDao.findById(1L)).thenReturn(Optional.empty());
         assertTrue(userService.findById(1L).isEmpty());
     }
@@ -76,7 +75,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void findByEmail_emailNotExists_NotOk() {
+    void findByEmail_emailNotExists_Ok() {
         String email = "alice@mail.com";
         Mockito.when(userDao.findByEmail(email)).thenReturn(Optional.empty());
         Optional<User> actual = userService.findByEmail(email);

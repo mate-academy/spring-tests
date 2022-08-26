@@ -3,7 +3,6 @@ package security;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.ArgumentMatchers.any;
 
 import java.util.Optional;
 import java.util.Set;
@@ -50,7 +49,7 @@ public class AuthenticationServiceImplTest {
     void register_Ok() {
         Mockito.when(roleService.getRoleByName("USER"))
                 .thenReturn(new Role(Role.RoleName.USER));
-        Mockito.when(userService.save(any(User.class))).thenReturn(expectedUser);
+        Mockito.when(userService.save(expectedUser)).thenReturn(expectedUser);
         User actualUser = authenticationService.register(EMAIL, PASSWORD);
         assertEquals(expectedUser.getEmail(), actualUser.getEmail());
         assertEquals(expectedUser.getPassword(), actualUser.getPassword());

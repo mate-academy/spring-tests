@@ -61,4 +61,11 @@ public class CustomUserDetailsServiceTest {
                 detailsService.loadUserByUsername(USER_EMAIL),
                 "Method should throw UsernameNotFoundException if user was not found");
     }
+
+    @Test
+    void loadUserByUsername_userIsNull_NotOk() {
+        assertThrows(UsernameNotFoundException.class, () ->
+                        detailsService.loadUserByUsername(null),
+                "Method should throw UsernameNotFoundException if user is null");
+    }
 }

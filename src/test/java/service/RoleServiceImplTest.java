@@ -1,12 +1,12 @@
 package service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import mate.academy.dao.RoleDao;
+import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import mate.academy.service.RoleService;
 import mate.academy.service.impl.RoleServiceImpl;
@@ -34,8 +34,8 @@ public class RoleServiceImplTest {
 
     @Test
     void save_roleIsNull_NotOk() {
-        Mockito.when(roleDao.save(null)).thenReturn(null);
-        assertNull(roleService.save(null));
+        Mockito.when(roleDao.save(null)).thenThrow(DataProcessingException.class);
+        assertThrows(DataProcessingException.class, () -> roleService.save(null));
     }
 
     @Test
