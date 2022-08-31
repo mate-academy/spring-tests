@@ -16,6 +16,8 @@ import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 class AuthenticationServiceImplTest {
+    private static final String USER_EMAIL = "bob@i.ua";
+    private static final String USER_PASSWORD = "1234";
     private AuthenticationService authenticationService;
     private UserService userService;
     private RoleService roleService;
@@ -30,8 +32,8 @@ class AuthenticationServiceImplTest {
         authenticationService = new AuthenticationServiceImpl(userService,
                 roleService, passwordEncoder);
         bob = new User();
-        bob.setEmail("bob@i.ua");
-        bob.setPassword("1234");
+        bob.setEmail(USER_EMAIL);
+        bob.setPassword(USER_PASSWORD);
         bob.setRoles(Set.of(new Role(Role.RoleName.USER)));
     }
 

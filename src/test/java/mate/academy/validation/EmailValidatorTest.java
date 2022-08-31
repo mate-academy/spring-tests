@@ -5,6 +5,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class EmailValidatorTest {
+    private static final String USER_EMAIL_VALID = "bob@i.ua";
+    private static final String USER_EMAIL_INVALID = "bob$$i$$ua";
     private EmailValidator emailValidator;
 
     @BeforeEach
@@ -14,13 +16,13 @@ class EmailValidatorTest {
 
     @Test
     public void isValid_ok() {
-        String validEmail = "bob@i.ua";
+        String validEmail = USER_EMAIL_VALID;
         Assertions.assertTrue(emailValidator.isValid(validEmail, null));
     }
 
     @Test
     public void isValid_notOk() {
-        String invalidEmail = "bob$$i$$ua";
+        String invalidEmail = USER_EMAIL_INVALID;
         Assertions.assertFalse(emailValidator.isValid(invalidEmail, null));
     }
 }
