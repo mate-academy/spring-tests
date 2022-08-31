@@ -22,7 +22,7 @@ class RoleServiceImplTest {
     }
 
     @Test
-    public void save_Ok() {
+    public void save_ok() {
         Mockito.when(roleDao.save(role)).thenReturn(role);
         Role actual = roleService.save(role);
         Assertions.assertNotNull(actual);
@@ -30,7 +30,7 @@ class RoleServiceImplTest {
     }
 
     @Test
-    public void getRoleByName_Ok() {
+    public void getRoleByName_ok() {
         String actualRoleName = role.getRoleName().name();
         Mockito.when(roleDao.getRoleByName(actualRoleName)).thenReturn(Optional.of(role));
         Assertions.assertEquals(actualRoleName, role.getRoleName().name());

@@ -13,13 +13,13 @@ class EmailValidatorTest {
     }
 
     @Test
-    public void isValid_Ok() {
+    public void isValid_ok() {
         String validEmail = "bob@i.ua";
         Assertions.assertTrue(emailValidator.isValid(validEmail, null));
     }
 
     @Test
-    public void isValid_NotOk() {
+    public void isValid_notOk() {
         String invalidEmail = "bob$$i$$ua";
         Assertions.assertFalse(emailValidator.isValid(invalidEmail, null));
     }

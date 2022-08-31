@@ -27,14 +27,14 @@ class UserServiceImplTest {
     }
 
     @Test
-    public void save_Ok() {
+    public void save_ok() {
         Mockito.when(userDao.save(user)).thenReturn(user);
         User actual = userService.save(user);
         Assertions.assertNotNull(actual);
     }
 
     @Test
-    public void findById_Ok() {
+    public void findById_ok() {
         Long id = 1L;
         Mockito.when(userDao.findById(id)).thenReturn(Optional.of(user));
         Optional<User> actualUser = userService.findById(id);
@@ -43,7 +43,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    public void findByEmail_Ok() {
+    public void findByEmail_ok() {
         Mockito.when(userDao.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
         Optional<User> actualUser = userService.findByEmail(user.getEmail());
         Assertions.assertTrue(actualUser.isPresent());
