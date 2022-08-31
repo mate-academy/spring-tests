@@ -8,18 +8,18 @@ class EmailValidatorTest {
     private EmailValidator emailValidator;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         emailValidator = new EmailValidator();
     }
 
     @Test
-    void isValid_Ok() {
+    public void isValid_Ok() {
         String validEmail = "bob@i.ua";
         Assertions.assertTrue(emailValidator.isValid(validEmail, null));
     }
 
     @Test
-    void isValid_NotOk() {
+    public void isValid_NotOk() {
         String invalidEmail = "bob$$i$$ua";
         Assertions.assertFalse(emailValidator.isValid(invalidEmail, null));
     }

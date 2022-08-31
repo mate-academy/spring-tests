@@ -23,7 +23,7 @@ class AuthenticationServiceImplTest {
     private User bob;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         userService = Mockito.mock(UserService.class);
         roleService = Mockito.mock(RoleService.class);
         passwordEncoder = Mockito.mock(PasswordEncoder.class);
@@ -36,7 +36,7 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    void register_Ok() {
+    public void register_ok() {
         Mockito.when(roleService.getRoleByName(Role.RoleName.USER.name()))
                 .thenReturn(new Role(Role.RoleName.USER));
         Mockito.when(userService.save(any())).thenReturn(bob);
@@ -47,7 +47,7 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    void login_validLogin_Ok() throws AuthenticationException {
+    public void login_validLogin_ok() throws AuthenticationException {
         Mockito.when(userService.findByEmail(bob.getEmail()))
                 .thenReturn(Optional.of(bob));
         Mockito.when(passwordEncoder.matches(bob.getPassword(),
@@ -60,7 +60,7 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    void login_invalidLogin_NotOk() {
+    public void login_invalidLogin_notOk() {
         Mockito.when(userService.findByEmail(bob.getEmail()))
                 .thenReturn(Optional.empty());
         Mockito.when(passwordEncoder.matches(bob.getPassword(),
@@ -75,7 +75,7 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    void login_invalidPassword_NotOk() {
+    public void login_invalidPassword_notOk() {
         Mockito.when(userService.findByEmail(bob.getEmail()))
                 .thenReturn(Optional.empty());
         Mockito.when(passwordEncoder.matches(bob.getPassword(),

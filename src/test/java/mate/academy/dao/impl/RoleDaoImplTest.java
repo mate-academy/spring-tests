@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class RoleDaoImplTest extends AbstractTest {
+    private static final String ROLE = "STUDENT";
     private RoleDao roleDao;
     private Role userRole;
     private String nonExistentRole;
@@ -19,21 +20,21 @@ class RoleDaoImplTest extends AbstractTest {
     }
 
     @BeforeEach
-    void setUp() {
+   public void setUp() {
         roleDao = new RoleDaoImpl(getSessionFactory());
         userRole = new Role(Role.RoleName.USER);
-        nonExistentRole = "STUDENT";
+        nonExistentRole = ROLE;
     }
 
     @Test
-    void save_Ok() {
+    public void save_Ok() {
         Role actual = roleDao.save(userRole);
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(userRole, actual);
+        Assertions.assertEquals(userRole.getRoleName(), actual.getRoleName());
     }
 
     @Test
-    void getRoleByName_Ok() {
+    public void getRoleByName_ok() {
         Role saveRole = roleDao.save(userRole);
         Optional<Role> actualOptional = roleDao.getRoleByName(userRole.getRoleName().name());
         Assertions.assertNotNull(actualOptional.get());
@@ -41,7 +42,7 @@ class RoleDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void getRoleByName_nonExistentRole_NotOk() {
+    public void getRoleByName_nonExistentRole_notOk() {
         try {
             roleDao.getRoleByName(nonExistentRole);
         } catch (DataProcessingException e) {

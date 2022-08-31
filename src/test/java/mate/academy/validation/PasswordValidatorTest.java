@@ -12,7 +12,7 @@ class PasswordValidatorTest {
     private Password constraintAnnotation;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         passwordValidator = new PasswordValidator();
         userRegistrationDto = new UserRegistrationDto();
         userRegistrationDto.setEmail("bob@i.ua");
@@ -22,7 +22,7 @@ class PasswordValidatorTest {
     }
 
     @Test
-    void isValid_Ok() {
+    public void isValid_Ok() {
         Mockito.when(constraintAnnotation.field()).thenReturn("password");
         Mockito.when(constraintAnnotation.fieldMatch()).thenReturn("repeatPassword");
         passwordValidator.initialize(constraintAnnotation);

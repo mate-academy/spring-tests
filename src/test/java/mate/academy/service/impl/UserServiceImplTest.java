@@ -17,7 +17,7 @@ class UserServiceImplTest {
     private User user;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         userDao = Mockito.mock(UserDao.class);
         passwordEncoder = Mockito.mock(PasswordEncoder.class);
         userService = new UserServiceImpl(userDao, passwordEncoder);
@@ -27,14 +27,14 @@ class UserServiceImplTest {
     }
 
     @Test
-    void save_Ok() {
+    public void save_Ok() {
         Mockito.when(userDao.save(user)).thenReturn(user);
         User actual = userService.save(user);
         Assertions.assertNotNull(actual);
     }
 
     @Test
-    void findById_Ok() {
+    public void findById_Ok() {
         Long id = 1L;
         Mockito.when(userDao.findById(id)).thenReturn(Optional.of(user));
         Optional<User> actualUser = userService.findById(id);
@@ -43,7 +43,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findByEmail_Ok() {
+    public void findByEmail_Ok() {
         Mockito.when(userDao.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
         Optional<User> actualUser = userService.findByEmail(user.getEmail());
         Assertions.assertTrue(actualUser.isPresent());

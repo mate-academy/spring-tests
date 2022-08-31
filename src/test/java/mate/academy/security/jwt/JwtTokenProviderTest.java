@@ -14,6 +14,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.util.ReflectionTestUtils;
 
 class JwtTokenProviderTest {
+    private static final String SECRET_KEY = "secret";
+    private static final Long VALIDITY_IN_MILLISECONDS = 3600000L;
+    private static final String USER_LOGIN_TEST = "bob@i.ua";
+    private static final String USER_PASSWORD_TEST = "1234";
+    private static final int ACTUAL_SIZE = 3;
     private JwtTokenProvider jwtTokenProvider;
     private UserDetailsService userDetailsService;
     private String login;
@@ -21,28 +26,29 @@ class JwtTokenProviderTest {
     private String password;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         userDetailsService = Mockito.mock(UserDetailsService.class);
         jwtTokenProvider = new JwtTokenProvider(userDetailsService);
-        ReflectionTestUtils.setField(jwtTokenProvider, "secretKey", "secret");
-        ReflectionTestUtils.setField(jwtTokenProvider, "validityInMilliseconds", 3600000L);
+        ReflectionTestUtils.setField(jwtTokenProvider, "secretKey", SECRET_KEY);
+        ReflectionTestUtils.setField(jwtTokenProvider, "validityInMilliseconds",
+                VALIDITY_IN_MILLISECONDS);
         jwtTokenProvider.init();
-        login = "bob@i.ua";
-        password = "1234";
+        login = USER_LOGIN_TEST;
+        password = USER_PASSWORD_TEST;
         token = jwtTokenProvider.createToken(login, List.of(Role.RoleName.USER.name()));
     }
 
     @Test
-    void createToken_Ok() {
+    public void createToken_ok() {
         String actualToken = jwtTokenProvider.createToken(login,
                 List.of(Role.RoleName.USER.name()));
         Assertions.assertNotNull(actualToken);
         String[] split = actualToken.split("[.]");
-        Assertions.assertTrue(split.length == 3);
+        Assertions.assertTrue(split.length == ACTUAL_SIZE);
     }
 
     @Test
-    void getAuthentication_Ok() {
+    public void getAuthentication_ok() {
         UserDetails userDetails = User.withUsername(login).password(password)
                 .roles(Role.RoleName.USER.name()).build();
         Mockito.when(userDetailsService.loadUserByUsername(login)).thenReturn(userDetails);
@@ -54,13 +60,13 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void getUserName_Ok() {
+    public void getUserName_ok() {
         String actual = jwtTokenProvider.getUsername(token);
         Assertions.assertEquals(login, actual);
     }
 
     @Test
-    void resolveToken_Ok() {
+    public void resolveToken_ok() {
         HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
         Mockito.when(request.getHeader("Authorization")).thenReturn("Bearer " + token);
         String actual = jwtTokenProvider.resolveToken(request);
@@ -68,7 +74,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void validateToken_Ok() {
+    public void validateToken_ok() {
         boolean actual = jwtTokenProvider.validateToken(token);
         Assertions.assertTrue(actual);
     }

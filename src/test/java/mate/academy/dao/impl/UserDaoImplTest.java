@@ -22,7 +22,7 @@ class UserDaoImplTest extends AbstractTest {
     }
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         userDao = new UserDaoImpl(getSessionFactory());
         roleDao = new RoleDaoImpl(getSessionFactory());
         userRole = new Role(Role.RoleName.USER);
@@ -32,14 +32,15 @@ class UserDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void save_Ok() {
+    public void save_ok() {
         User actual = userDao.save(user);
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(user, actual);
+        Assertions.assertEquals(user.getEmail(), actual.getEmail());
+        Assertions.assertEquals(user.getPassword(), actual.getPassword());
     }
 
     @Test
-    void findByEmail_Ok() {
+    public void findByEmail_ok() {
         user.setRoles(Set.of(userRole));
         Role actualRole = roleDao.save(userRole);
         User actualUser = userDao.save(user);
@@ -49,7 +50,7 @@ class UserDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void findById_Ok() {
+    public void findById_ok() {
         user.setRoles(Set.of(userRole));
         Role actualRole = roleDao.save(userRole);
         User actualUser = userDao.save(user);
