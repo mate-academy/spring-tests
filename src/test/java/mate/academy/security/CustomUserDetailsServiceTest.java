@@ -43,12 +43,6 @@ class CustomUserDetailsServiceTest {
     @Test
     public void loadUserByUserName_nonExistentLogin_notOk() {
         Mockito.when(userService.findByEmail(user.getEmail())).thenReturn(Optional.empty());
-        try {
-            userDetailsService.loadUserByUsername(ALICE_USER_EMAIL);
-        } catch (UsernameNotFoundException e) {
-            Assertions.assertEquals("User not found.", e.getMessage());
-            return;
-        }
         Assertions.assertThrows(UsernameNotFoundException.class,
                 () -> userDetailsService.loadUserByUsername(ALICE_USER_EMAIL));
     }
