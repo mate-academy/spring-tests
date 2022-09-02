@@ -67,13 +67,8 @@ class AuthenticationServiceImplTest {
                 .thenReturn(Optional.empty());
         Mockito.when(passwordEncoder.matches(bob.getPassword(),
                 bob.getPassword())).thenReturn(true);
-        try {
-            authenticationService.login(bob.getEmail(), bob.getPassword());
-        } catch (AuthenticationException e) {
-            Assertions.assertEquals("Incorrect username or password!!!", e.getMessage());
-            return;
-        }
-        Assertions.fail("Expected to receive AuthenticationException");
+        Assertions.assertThrows(AuthenticationException.class,
+                () -> authenticationService.login(bob.getEmail(), bob.getPassword()));
     }
 
     @Test
@@ -82,12 +77,7 @@ class AuthenticationServiceImplTest {
                 .thenReturn(Optional.empty());
         Mockito.when(passwordEncoder.matches(bob.getPassword(),
                 bob.getPassword())).thenReturn(false);
-        try {
-            authenticationService.login(bob.getEmail(), bob.getPassword());
-        } catch (AuthenticationException e) {
-            Assertions.assertEquals("Incorrect username or password!!!", e.getMessage());
-            return;
-        }
-        Assertions.fail("Expected to receive AuthenticationException");
+        Assertions.assertThrows(AuthenticationException.class,
+                () -> authenticationService.login(bob.getEmail(), bob.getPassword()));
     }
 }
