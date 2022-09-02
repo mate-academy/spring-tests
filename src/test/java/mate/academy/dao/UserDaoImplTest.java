@@ -1,6 +1,7 @@
 package mate.academy.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -17,10 +18,13 @@ import org.junit.jupiter.api.Test;
 
 class UserDaoImplTest extends AbstractTest {
     private UserDao userDao;
+    private RoleDao roleDao;
 
     @BeforeEach
     void setUp() {
         userDao = new UserDaoImpl(getSessionFactory());
+        roleDao = new RoleDaoImpl(getSessionFactory());
+        roleDao.save(new Role(Role.RoleName.USER));
     }
 
     @Override
@@ -33,10 +37,12 @@ class UserDaoImplTest extends AbstractTest {
         User expected = new User();
         expected.setEmail("harrington@.ua");
         expected.setPassword("1234");
+        expected.setRoles(Set.of(roleDao.getRoleByName("USER").get()));
         User actual = userDao.save(expected);
         assertEquals(expected.getEmail(), actual.getEmail());
         assertEquals(expected.getPassword(), actual.getPassword());
         assertEquals(expected.getId(), actual.getId());
+        assertFalse(expected.getRoles().isEmpty());
     }
 
     @Test
@@ -56,11 +62,13 @@ class UserDaoImplTest extends AbstractTest {
         User expected = new User();
         expected.setEmail("harrington@.ua");
         expected.setPassword("1234");
+        expected.setRoles(Set.of(roleDao.getRoleByName("USER").get()));
         userDao.save(expected);
         Optional<User> actual = userDao.findById(expected.getId());
         assertTrue(actual.isPresent());
         assertEquals(expected.getEmail(), actual.get().getEmail());
         assertEquals(expected.getPassword(), actual.get().getPassword());
+        assertFalse(expected.getRoles().isEmpty());
     }
 
     @Test
@@ -77,8 +85,6 @@ class UserDaoImplTest extends AbstractTest {
 
     @Test
     void findByEmail_ok() {
-        RoleDao roleDao = new RoleDaoImpl(getSessionFactory());
-        Role userRole = roleDao.save(new Role(Role.RoleName.USER));
         User expected = new User();
         expected.setEmail("harrington@.ua");
         expected.setPassword("1234");
@@ -88,6 +94,7 @@ class UserDaoImplTest extends AbstractTest {
         assertTrue(actual.isPresent());
         assertEquals(expected.getEmail(), actual.get().getEmail());
         assertEquals(expected.getPassword(), actual.get().getPassword());
+        assertFalse(expected.getRoles().isEmpty());
     }
 
     @Test
