@@ -43,14 +43,7 @@ class RoleDaoImplTest extends AbstractTest {
 
     @Test
     public void getRoleByName_nonExistentRole_notOk() {
-        try {
-            roleDao.getRoleByName(nonExistentRole);
-        } catch (DataProcessingException e) {
-            Assertions.assertEquals("Couldn't get role by role name: "
-                    + nonExistentRole, e.getMessage());
-            return;
-        }
-        Assertions.fail("Expected to receive UsernameNotFoundException while"
-                + " getting non existent role");
+        Assertions.assertThrows(DataProcessingException.class,
+                () -> roleDao.getRoleByName(nonExistentRole));
     }
 }
