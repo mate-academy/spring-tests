@@ -16,10 +16,6 @@ import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 class UserServiceImplTest {
-    private static final String EMAIL = "bob@i.ua";
-    private static final String PASSWORD = "1234";
-    private static final String ENCODED_PASSWORD = "%1234@";
-    private static final Role ADMIN = new Role(Role.RoleName.ADMIN);
     private UserService userService;
     private UserDao userDao;
     private PasswordEncoder passwordEncoder;
@@ -31,16 +27,15 @@ class UserServiceImplTest {
         passwordEncoder = Mockito.mock(PasswordEncoder.class);
         userService = new UserServiceImpl(userDao, passwordEncoder);
         user = new User();
-        user.setEmail(EMAIL);
-        user.setPassword(PASSWORD);
-        user.setRoles(Set.of(ADMIN));
+        user.setEmail("bob@i.ua");
+        user.setPassword("1234");
+        user.setRoles(Set.of(new Role(Role.RoleName.ADMIN)));
     }
 
     @Test
     void save_user_OK() {
-        Mockito.when(passwordEncoder.encode(any())).thenReturn(ENCODED_PASSWORD);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Mockito.when(userDao.save(any())).thenReturn(user);
+        Mockito.when(passwordEncoder.encode(user.getPassword())).thenReturn("%1234@");
+        Mockito.when(userDao.save(any(User.class))).thenReturn(user);
         User actual = userService.save(user);
         assertNotNull(actual);
         assertEquals("bob@i.ua", actual.getEmail());
@@ -54,7 +49,7 @@ class UserServiceImplTest {
 
     @Test
     void findById() {
-        Mockito.when(userDao.findById(any())).thenReturn(Optional.of(user));
+        Mockito.when(userDao.findById(any(Long.class))).thenReturn(Optional.of(user));
         User actual = userService.findById(1L).orElseThrow(
                 () -> new RuntimeException("Couldn't find user by id"));
         assertNotNull(actual);
@@ -69,8 +64,8 @@ class UserServiceImplTest {
 
     @Test
     void findByEmail() {
-        Mockito.when(userDao.findByEmail(any())).thenReturn(Optional.of(user));
-        User actual = userService.findByEmail(EMAIL).orElseThrow(
+        Mockito.when(userDao.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        User actual = userService.findByEmail(user.getEmail()).orElseThrow(
                 () -> new RuntimeException("Couldn't find user by email"));
         assertNotNull(actual);
         assertEquals("bob@i.ua", actual.getEmail());

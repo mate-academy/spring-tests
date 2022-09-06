@@ -9,9 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 
 import io.jsonwebtoken.MalformedJwtException;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import mate.academy.model.Role;
 import mate.academy.model.User;
@@ -41,10 +40,7 @@ class JwtTokenProviderTest {
         user = new User();
         user.setEmail("bob@i.ua");
         user.setPassword("1234");
-        List<Role> roles = new ArrayList<>();
-        roles.add(new Role(Role.RoleName.ADMIN));
-        roles.add(new Role(Role.RoleName.USER));
-        user.setRoles(new HashSet<>(roles));
+        user.setRoles(Set.of(new Role(Role.RoleName.ADMIN), new Role(Role.RoleName.USER)));
         token = jwtTokenProvider.createToken(user.getEmail(), List.of("ADMIN", "USER"));
     }
 
@@ -64,7 +60,8 @@ class JwtTokenProviderTest {
                 .stream()
                 .map(x -> x.getRoleName().name())
                 .toArray(String[]::new));
-        Mockito.when(userDetailsService.loadUserByUsername(any())).thenReturn(builder.build());
+        Mockito.when(userDetailsService.loadUserByUsername(user.getEmail()))
+                .thenReturn(builder.build());
         Authentication actual = jwtTokenProvider.getAuthentication(token);
         assertNotNull(actual);
         assertEquals("bob@i.ua", actual.getName());
@@ -99,7 +96,7 @@ class JwtTokenProviderTest {
 
     @Test
     void resolveToken_notOK() {
-        Mockito.when(request.getHeader(any())).thenReturn(token);
+        Mockito.when(request.getHeader("Authorization")).thenReturn(null);
         String actual = jwtTokenProvider.resolveToken(request);
         assertNull(actual);
     }

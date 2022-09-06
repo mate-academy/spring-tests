@@ -3,10 +3,8 @@ package mate.academy.security;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import mate.academy.model.Role;
 import mate.academy.model.User;
 import mate.academy.service.UserService;
@@ -30,10 +28,7 @@ class CustomUserDetailsServiceTest {
         user = new User();
         user.setEmail("bob@i.ua");
         user.setPassword("1234");
-        List<Role> roles = new ArrayList<>();
-        roles.add(new Role(Role.RoleName.ADMIN));
-        roles.add(new Role(Role.RoleName.USER));
-        user.setRoles(new HashSet<>(roles));
+        user.setRoles(Set.of(new Role(Role.RoleName.USER)));
     }
 
     @Test

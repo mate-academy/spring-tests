@@ -4,9 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import mate.academy.exception.AuthenticationException;
@@ -26,7 +23,6 @@ class AuthenticationServiceImplTest {
     private RoleService roleService;
     private PasswordEncoder passwordEncoder;
     private User user;
-    private List<Role> roles;
 
     @BeforeEach
     void setUp() {
@@ -38,16 +34,13 @@ class AuthenticationServiceImplTest {
         user = new User();
         user.setEmail("bob@i.ua");
         user.setPassword("1234");
-        roles = new ArrayList<>();
-        roles.add(new Role(Role.RoleName.ADMIN));
-        roles.add(new Role(Role.RoleName.USER));
+        user.setRoles(Set.of(new Role(Role.RoleName.USER)));
     }
 
     @Test
     void register_OK() {
-        Mockito.when(roleService.getRoleByName(any())).thenReturn(roles.get(1));
-        user.setRoles(Set.of(roles.get(1)));
-        Mockito.when(userService.save(any())).thenReturn(user);
+        Mockito.when(roleService.getRoleByName("USER")).thenReturn(new Role(Role.RoleName.USER));
+        Mockito.when(userService.save(any(User.class))).thenReturn(user);
         User actual = authenticationService.register(user.getEmail(), user.getPassword());
         assertNotNull(actual);
         assertNotNull(actual.getEmail());
@@ -66,9 +59,8 @@ class AuthenticationServiceImplTest {
 
     @Test
     void login_OK() {
-        user.setRoles(new HashSet<>(roles));
         Mockito.when(userService.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
-        Mockito.when(passwordEncoder.matches(any(), any())).thenReturn(true);
+        Mockito.when(passwordEncoder.matches("1234", user.getPassword())).thenReturn(true);
         User actual = null;
         try {
             actual = authenticationService.login(user.getEmail(), user.getPassword());
@@ -81,16 +73,10 @@ class AuthenticationServiceImplTest {
         assertNotNull(actual.getRoles());
         assertEquals("bob@i.ua", actual.getEmail());
         assertEquals("1234", actual.getPassword());
-        assertEquals(2, actual.getRoles().size());
+        assertEquals(1, actual.getRoles().size());
         assertEquals("USER", actual.getRoles().stream()
                 .map(r -> r.getRoleName().name())
                 .filter(n -> n.equals("USER"))
-                .findFirst()
-                .orElseThrow(
-                        () -> new RuntimeException("Couldn't find expected role name")));
-        assertEquals("ADMIN", actual.getRoles().stream()
-                .map(r -> r.getRoleName().name())
-                .filter(n -> n.equals("ADMIN"))
                 .findFirst()
                 .orElseThrow(
                         () -> new RuntimeException("Couldn't find expected role name")));
@@ -99,7 +85,7 @@ class AuthenticationServiceImplTest {
     @Test
     void login_emptyUser_notOK() {
         Mockito.when(userService.findByEmail(user.getEmail())).thenReturn(Optional.empty());
-        Mockito.when(passwordEncoder.matches(any(), any())).thenReturn(true);
+        Mockito.when(passwordEncoder.matches("1234", user.getPassword())).thenReturn(true);
         try {
             User actual = authenticationService.login(user.getEmail(), user.getPassword());
         } catch (AuthenticationException e) {
@@ -112,7 +98,7 @@ class AuthenticationServiceImplTest {
     @Test
     void login_passwordNotMatch_notOK() {
         Mockito.when(userService.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
-        Mockito.when(passwordEncoder.matches(any(), any())).thenReturn(false);
+        Mockito.when(passwordEncoder.matches("1234", user.getPassword())).thenReturn(false);
         try {
             User actual = authenticationService.login(user.getEmail(), user.getPassword());
         } catch (AuthenticationException e) {
