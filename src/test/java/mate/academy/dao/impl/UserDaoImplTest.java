@@ -3,7 +3,6 @@ package mate.academy.dao.impl;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import mate.academy.dao.RoleDao;
@@ -31,9 +30,7 @@ class UserDaoImplTest extends AbstractTest {
         user.setEmail("bob@i.ua");
         user.setPassword("1234");
         RoleDao roleDao = new RoleDaoImpl(getSessionFactory());
-        Set<Role> roles = Set.of(roleDao.save(new Role(Role.RoleName.ADMIN)),
-                roleDao.save(new Role(Role.RoleName.USER)));
-        user.setRoles(new HashSet<>(roles));
+        user.setRoles(Set.of(roleDao.save(new Role(Role.RoleName.USER))));
     }
 
     @Test
@@ -42,18 +39,12 @@ class UserDaoImplTest extends AbstractTest {
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(1L, actual.getId());
         Assertions.assertEquals("bob@i.ua", actual.getEmail());
-        assertEquals(2, actual.getRoles().size());
+        assertEquals(1, actual.getRoles().size());
     }
 
     @Test
     void save_nullUser_notOK() {
-        try {
-            userDao.save(null);
-        } catch (DataProcessingException e) {
-            Assertions.assertEquals("Can't create entity: null", e.getMessage());
-            return;
-        }
-        Assertions.fail("Expected to receive DataProcessingException");
+        Assertions.assertThrows(DataProcessingException.class, () -> userDao.save(null));
     }
 
     @Test
@@ -64,7 +55,7 @@ class UserDaoImplTest extends AbstractTest {
         assertEquals(1L, actual.getId());
         assertEquals("bob@i.ua", actual.getEmail());
         assertEquals("1234", actual.getPassword());
-        assertEquals(2, actual.getRoles().size());
+        assertEquals(1, actual.getRoles().size());
         assertEquals("USER", actual.getRoles().stream()
                 .map(r -> r.getRoleName().name())
                 .filter(n -> n.equals("USER"))
@@ -75,13 +66,8 @@ class UserDaoImplTest extends AbstractTest {
 
     @Test
     void findByEmail_nullEmail_notOK() {
-        try {
-            userDao.findByEmail(null).get();
-        } catch (NoSuchElementException e) {
-            Assertions.assertEquals("No value present", e.getMessage());
-            return;
-        }
-        Assertions.fail("Expected to receive NoSuchElementException");
+        Assertions.assertThrows(NoSuchElementException.class,
+                () -> userDao.findByEmail(null).get());
     }
 
     @Test
@@ -95,12 +81,6 @@ class UserDaoImplTest extends AbstractTest {
 
     @Test
     void findById_nullId_notOK() {
-        try {
-            userDao.findById(null);
-        } catch (DataProcessingException e) {
-            Assertions.assertEquals("Can't get entity: User by id null", e.getMessage());
-            return;
-        }
-        Assertions.fail("Expected to receive DataProcessingException");
+        Assertions.assertThrows(DataProcessingException.class, () -> userDao.findById(null));
     }
 }

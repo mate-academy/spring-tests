@@ -5,16 +5,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 class EmailValidatorTest {
-    private ConstraintValidator<Email, String> constraintValidator;
-    private ConstraintValidatorContext constraintValidatorContext;
+    private static ConstraintValidator<Email, String> constraintValidator;
+    private static ConstraintValidatorContext constraintValidatorContext;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void beforeAll() {
         constraintValidator = new EmailValidator();
         constraintValidatorContext = Mockito.mock(ConstraintValidatorContext.class); {
         }

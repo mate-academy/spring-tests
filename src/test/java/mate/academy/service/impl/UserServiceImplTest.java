@@ -10,19 +10,19 @@ import mate.academy.dao.UserDao;
 import mate.academy.model.Role;
 import mate.academy.model.User;
 import mate.academy.service.UserService;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 class UserServiceImplTest {
-    private UserService userService;
-    private UserDao userDao;
-    private PasswordEncoder passwordEncoder;
-    private User user;
+    private static UserService userService;
+    private static UserDao userDao;
+    private static PasswordEncoder passwordEncoder;
+    private static User user;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void beforeAll() {
         userDao = Mockito.mock(UserDao.class);
         passwordEncoder = Mockito.mock(PasswordEncoder.class);
         userService = new UserServiceImpl(userDao, passwordEncoder);

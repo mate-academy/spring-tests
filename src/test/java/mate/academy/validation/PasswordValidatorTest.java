@@ -6,17 +6,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import mate.academy.model.dto.UserRegistrationDto;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 class PasswordValidatorTest {
-    private ConstraintValidator<Password, UserRegistrationDto> constraintValidator;
-    private UserRegistrationDto userRegistrationDto;
-    private ConstraintValidatorContext constraintValidatorContext;
+    private static ConstraintValidator<Password, UserRegistrationDto> constraintValidator;
+    private static UserRegistrationDto userRegistrationDto;
+    private static ConstraintValidatorContext constraintValidatorContext;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void beforeAll() {
         constraintValidator = new PasswordValidator();
         userRegistrationDto = new UserRegistrationDto();
         userRegistrationDto.setEmail("bob@i.ua");

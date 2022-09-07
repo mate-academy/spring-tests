@@ -30,13 +30,7 @@ class RoleDaoImplTest extends AbstractTest {
 
     @Test
     void save_nullRole_notOK() {
-        try {
-            roleDao.save(null);
-        } catch (DataProcessingException e) {
-            Assertions.assertEquals("Can't create entity: null", e.getMessage());
-            return;
-        }
-        Assertions.fail("Expected to receive DataProcessingException");
+        Assertions.assertThrows(DataProcessingException.class, () -> roleDao.save(null));
     }
 
     @Test
@@ -50,12 +44,6 @@ class RoleDaoImplTest extends AbstractTest {
 
     @Test
     void getRoleByName_nullRole_notOK() {
-        try {
-            roleDao.getRoleByName(null);
-        } catch (DataProcessingException e) {
-            Assertions.assertEquals("Couldn't get role by role name: null", e.getMessage());
-            return;
-        }
-        Assertions.fail("Expected to receive DataProcessingException");
+        Assertions.assertThrows(DataProcessingException.class, () -> roleDao.getRoleByName(null));
     }
 }

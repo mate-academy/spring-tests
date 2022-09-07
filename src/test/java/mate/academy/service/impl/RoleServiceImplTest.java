@@ -2,27 +2,33 @@ package mate.academy.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 
 import java.util.Optional;
 import mate.academy.dao.RoleDao;
 import mate.academy.model.Role;
 import mate.academy.service.RoleService;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 class RoleServiceImplTest {
-    private RoleService roleService;
-    private RoleDao roleDao;
-    private Role role;
+    private static RoleService roleService;
+    private static RoleDao roleDao;
+    private static Role role;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void beforeAll() {
         roleDao = Mockito.mock(RoleDao.class);
         roleService = new RoleServiceImpl(roleDao);
         role = new Role(Role.RoleName.USER);
+    }
+
+    @BeforeEach
+    void setUp() {
+        role.setRoleName(Role.RoleName.USER);
     }
 
     @Test
@@ -38,7 +44,7 @@ class RoleServiceImplTest {
         role.setRoleName(null);
         Mockito.when(roleDao.getRoleByName("USER"))
                 .thenReturn(Optional.of(role));
-        assertThrows(RuntimeException.class,
+        Assertions.assertThrows(RuntimeException.class,
                 () -> roleService.getRoleByName(role.getRoleName().name()));
     }
 

@@ -12,20 +12,20 @@ import mate.academy.model.User;
 import mate.academy.service.RoleService;
 import mate.academy.service.UserService;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 class AuthenticationServiceImplTest {
-    private AuthenticationService authenticationService;
-    private UserService userService;
-    private RoleService roleService;
-    private PasswordEncoder passwordEncoder;
-    private User user;
+    private static AuthenticationService authenticationService;
+    private static UserService userService;
+    private static RoleService roleService;
+    private static PasswordEncoder passwordEncoder;
+    private static User user;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void beforeAll() {
         userService = Mockito.mock(UserService.class);
         roleService = Mockito.mock(RoleService.class);
         passwordEncoder = Mockito.mock(PasswordEncoder.class);
@@ -86,25 +86,15 @@ class AuthenticationServiceImplTest {
     void login_emptyUser_notOK() {
         Mockito.when(userService.findByEmail(user.getEmail())).thenReturn(Optional.empty());
         Mockito.when(passwordEncoder.matches("1234", user.getPassword())).thenReturn(true);
-        try {
-            User actual = authenticationService.login(user.getEmail(), user.getPassword());
-        } catch (AuthenticationException e) {
-            Assertions.assertEquals("Incorrect username or password!!!", e.getMessage());
-            return;
-        }
-        Assertions.fail("Expected to receive AuthenticationException");
+        Assertions.assertThrows(AuthenticationException.class,
+                () -> authenticationService.login(user.getEmail(), user.getPassword()));
     }
 
     @Test
     void login_passwordNotMatch_notOK() {
         Mockito.when(userService.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
         Mockito.when(passwordEncoder.matches("1234", user.getPassword())).thenReturn(false);
-        try {
-            User actual = authenticationService.login(user.getEmail(), user.getPassword());
-        } catch (AuthenticationException e) {
-            Assertions.assertEquals("Incorrect username or password!!!", e.getMessage());
-            return;
-        }
-        Assertions.fail("Expected to receive AuthenticationException");
+        Assertions.assertThrows(AuthenticationException.class,
+                () -> authenticationService.login(user.getEmail(), user.getPassword()));
     }
 }

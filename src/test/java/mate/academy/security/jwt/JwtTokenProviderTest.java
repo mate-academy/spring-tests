@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 
@@ -15,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import mate.academy.model.Role;
 import mate.academy.model.User;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.core.Authentication;
@@ -24,14 +23,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.util.ReflectionTestUtils;
 
 class JwtTokenProviderTest {
-    private JwtTokenProvider jwtTokenProvider;
-    private UserDetailsService userDetailsService;
-    private HttpServletRequest request;
-    private User user;
-    private String token;
+    private static JwtTokenProvider jwtTokenProvider;
+    private static UserDetailsService userDetailsService;
+    private static HttpServletRequest request;
+    private static User user;
+    private static String token;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void beforeAll() {
         userDetailsService = Mockito.mock(UserDetailsService.class);
         request = Mockito.mock(HttpServletRequest.class);
         jwtTokenProvider = new JwtTokenProvider(userDetailsService);
@@ -77,12 +76,14 @@ class JwtTokenProviderTest {
 
     @Test
     void getUsername_nullToken_notOK() {
-        assertThrows(IllegalArgumentException.class,() -> jwtTokenProvider.getUsername(null));
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> jwtTokenProvider.getUsername(null));
     }
 
     @Test
     void getUsername_badToken_notOK() {
-        assertThrows(MalformedJwtException.class,() -> jwtTokenProvider.getUsername("123"));
+        Assertions.assertThrows(MalformedJwtException.class,
+                () -> jwtTokenProvider.getUsername("123"));
     }
 
     @Test
@@ -108,12 +109,7 @@ class JwtTokenProviderTest {
 
     @Test
     void validateToken_notOK() {
-        try {
-            jwtTokenProvider.validateToken("token.token.token");
-        } catch (RuntimeException e) {
-            Assertions.assertEquals("Expired or invalid JWT token", e.getMessage());
-            return;
-        }
-        Assertions.fail("Expected to receive Runtime Exception");
+        Assertions.assertThrows(RuntimeException.class,
+                () -> jwtTokenProvider.validateToken("token.token.token"));
     }
 }
