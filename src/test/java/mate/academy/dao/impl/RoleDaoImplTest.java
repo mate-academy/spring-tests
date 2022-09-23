@@ -10,20 +10,17 @@ import org.junit.jupiter.api.Test;
 
 class RoleDaoImplTest extends AbstractTest {
     private RoleDao roleDao;
-    private Role adminRole;
-    private Role userRole;
+    private Role adminRole = new Role(Role.RoleName.ADMIN);
+    private Role userRole = new Role(Role.RoleName.USER);
 
     @Override
     protected Class<?>[] entities() {
-
         return new Class[] {Role.class};
     }
 
     @BeforeEach
     void setUp() {
         roleDao = new RoleDaoImpl(getSessionFactory());
-        adminRole = new Role(Role.RoleName.ADMIN);
-        userRole = new Role(Role.RoleName.USER);
     }
 
     @Test
