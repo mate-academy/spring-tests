@@ -36,7 +36,7 @@ public class PasswordValidatorTest {
     }
 
     @Test
-    void isValid_NotOk() {
+    void isValid_wrongRepeatPassword_NotOk() {
         UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
         userRegistrationDto.setEmail("modernboy349gmail.com");
         userRegistrationDto.setPassword("Hello123");
