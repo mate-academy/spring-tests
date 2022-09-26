@@ -1,23 +1,20 @@
 package mate.academy.security;
 
-import mate.academy.dao.AbstractTest;
-import mate.academy.dao.RoleDao;
-import mate.academy.dao.impl.RoleDaoImpl;
+import java.util.Set;
+
+import mate.academy.exception.AuthenticationException;
 import mate.academy.model.Role;
 import mate.academy.model.User;
 import mate.academy.service.RoleService;
 import mate.academy.service.UserService;
-import mate.academy.service.impl.RoleServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.HashSet;
-import java.util.Set;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 
 public class AuthenticationServiceImplTest {
@@ -41,22 +38,24 @@ public class AuthenticationServiceImplTest {
         user.setEmail("modernboy349@gmail.com");
         user.setPassword("Hello123");
         user.setRoles(Set.of(new Role(Role.RoleName.ADMIN)));
-        Mockito.when(userService.save(user)).thenReturn(user);
         Mockito.when(roleService.getRoleByName(any()))
                 .thenReturn(new Role(Role.RoleName.USER));
+        Mockito.when(userService.save(any())).thenReturn(user);
         User actual = authenticationService.register(user.getEmail(), user.getPassword());
-
         Assertions.assertEquals(user, actual);
     }
 
     @Test
-    void login_Ok() {
+    void login_Ok() throws AuthenticationException {
         User user = new User();
         user.setEmail("modernboy349@gmail.com");
         user.setPassword("Hello123");
-//        Mockito.when(userService.lo(user)).thenReturn(user);
-        User actual = userService.save(user);
-
-        Assertions.assertEquals(actual, user);
+        user.setRoles(Set.of(new Role(Role.RoleName.ADMIN)));
+        Mockito.when(roleService.getRoleByName(any()))
+                .thenReturn(new Role(Role.RoleName.USER));
+        Mockito.when(userService.save(any())).thenReturn(user);
+        userService.save(user);
+        User actual = authenticationService.login(user.getEmail(), user.getPassword());
+        Assertions.assertEquals(user, actual);
     }
 }
