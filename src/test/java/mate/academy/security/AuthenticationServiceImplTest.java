@@ -1,5 +1,6 @@
 package mate.academy.security;
 
+import java.util.Optional;
 import java.util.Set;
 
 import mate.academy.exception.AuthenticationException;
@@ -50,11 +51,10 @@ public class AuthenticationServiceImplTest {
         User user = new User();
         user.setEmail("modernboy349@gmail.com");
         user.setPassword("Hello123");
-        user.setRoles(Set.of(new Role(Role.RoleName.ADMIN)));
-        Mockito.when(roleService.getRoleByName(any()))
-                .thenReturn(new Role(Role.RoleName.USER));
-        Mockito.when(userService.save(any())).thenReturn(user);
-        userService.save(user);
+        Mockito.when(userService.findByEmail("modernboy349@gmail.com"))
+                .thenReturn(Optional.of(user));
+        Mockito.when(passwordEncoder.matches(user.getPassword(), "Hello123"))
+                .thenReturn(true);
         User actual = authenticationService.login(user.getEmail(), user.getPassword());
         Assertions.assertEquals(user, actual);
     }
