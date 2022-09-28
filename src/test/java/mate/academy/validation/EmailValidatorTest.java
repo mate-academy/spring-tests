@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 public class EmailValidatorTest {
+    public static final String EMAIL = "modernboy349@gmail.com";
     private EmailValidator emailValidator;
     private ConstraintValidatorContext constraintValidatorContext;
 
@@ -18,8 +19,7 @@ public class EmailValidatorTest {
 
     @Test
     void isValid_Ok() {
-        String email = "modernboy349@gmail.com";
-        boolean actual = emailValidator.isValid(email, constraintValidatorContext);
+        boolean actual = emailValidator.isValid(EMAIL, constraintValidatorContext);
         Assertions.assertTrue(actual);
     }
 

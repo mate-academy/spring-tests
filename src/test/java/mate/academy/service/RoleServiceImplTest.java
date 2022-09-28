@@ -1,6 +1,5 @@
 package mate.academy.service;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import mate.academy.dao.RoleDao;
 import mate.academy.exception.DataProcessingException;
@@ -42,13 +41,13 @@ public class RoleServiceImplTest {
 
     @Test
     void getRoleByName_WrongRoleName_NotOk() {
-        String WrongRoleName = "WRONG_ROLE";
-        Mockito.when(roleDao.getRoleByName(WrongRoleName)).thenThrow(
-                new DataProcessingException("Couldn't get role by role name: " + WrongRoleName));
+        String wrongRoleName = "WRONG_ROLE";
+        Mockito.when(roleDao.getRoleByName(wrongRoleName)).thenThrow(
+                new DataProcessingException("Couldn't get role by role name: " + wrongRoleName));
         Throwable exception = Assertions.assertThrows(DataProcessingException.class, () -> {
-            roleService.getRoleByName(WrongRoleName);},
+            roleService.getRoleByName(wrongRoleName); },
                 "NoSuchElementException was expected");
-        Assertions.assertEquals("Couldn't get role by role name: " + WrongRoleName,
+        Assertions.assertEquals("Couldn't get role by role name: " + wrongRoleName,
                 exception.getLocalizedMessage());
     }
 }

@@ -1,25 +1,23 @@
 package mate.academy.service;
 
+import java.util.Optional;
+import java.util.Set;
 import mate.academy.dao.UserDao;
 import mate.academy.model.Role;
 import mate.academy.model.User;
 import mate.academy.service.impl.UserServiceImpl;
-import mate.academy.validation.Password;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.Optional;
-import java.util.Set;
-
 public class UserServiceImplTest {
+    private static final String EMAIL = "modernboy349@gmail.com";
+    private static final String PASSWORD = "Hello123";
     private UserService userService;
     private UserDao userDao;
     private PasswordEncoder passwordEncoder;
-    private static final String EMAIL = "modernboy349@gmail.com";
-    private static final String PASSWORD = "Hello123";
 
     @BeforeEach
     void setUp() {

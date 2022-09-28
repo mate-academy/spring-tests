@@ -1,6 +1,7 @@
 package mate.academy.dao;
 
 import mate.academy.dao.impl.RoleDaoImpl;
+import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,6 +36,19 @@ public class RoleDaoTest extends AbstractTest {
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(1L, actual.getId());
         Assertions.assertEquals(Role.RoleName.ADMIN, actual.getRoleName());
+    }
+
+    @Test
+    void getRoleByName_WrongName_NotOk() {
+        Role role = new Role();
+        role.setRoleName(Role.RoleName.ADMIN);
+        roleDao.save(role);
+        Throwable exception = Assertions.assertThrows(DataProcessingException.class,
+                () -> {
+                roleDao.getRoleByName("PEASANT").get(); },
+                "Couldn't get role by role name: PEASANT");
+        Assertions.assertEquals("Couldn't get role by role name: PEASANT",
+                exception.getLocalizedMessage());
     }
 
     @Override

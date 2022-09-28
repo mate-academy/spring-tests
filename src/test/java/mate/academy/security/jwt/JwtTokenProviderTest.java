@@ -1,7 +1,7 @@
 package mate.academy.security.jwt;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import mate.academy.model.Role;
 import org.junit.jupiter.api.Assertions;
@@ -17,12 +17,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.util.ReflectionTestUtils;
 
 public class JwtTokenProviderTest {
-    private UserDetailsService userDetailsService;
-    private JwtTokenProvider jwtTokenProvider;
     private static final String SECRET_KEY = "secret";
     private static final String EMAIL = "modernboy349@gmail.com";
     private static final String PASSWORD = "Hello123";
     private static final Long VALIDITY_IN_MILLISECONDS = 3600000L;
+    private UserDetailsService userDetailsService;
+    private JwtTokenProvider jwtTokenProvider;
 
     @BeforeEach
     void setUp() {
