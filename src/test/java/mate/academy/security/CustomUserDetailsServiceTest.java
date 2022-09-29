@@ -18,19 +18,19 @@ public class CustomUserDetailsServiceTest {
     private static final String PASSWORD = "Hello123";
     private UserService userService;
     private UserDetailsService userDetailsService;
+    private User user = new User();
 
     @BeforeEach
     void setUp() {
         userService = Mockito.mock(UserService.class);
         userDetailsService = new CustomUserDetailsService(userService);
+        user.setEmail(EMAIL);
+        user.setPassword(PASSWORD);
+        user.setRoles(Set.of(new Role(Role.RoleName.ADMIN)));
     }
 
     @Test
     void loadUserByUsername_Ok() {
-        User user = new User();
-        user.setEmail(EMAIL);
-        user.setPassword(PASSWORD);
-        user.setRoles(Set.of(new Role(Role.RoleName.ADMIN)));
         Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
         UserDetails actual = userDetailsService.loadUserByUsername(EMAIL);
         Assertions.assertNotNull(actual);
@@ -40,10 +40,6 @@ public class CustomUserDetailsServiceTest {
 
     @Test
     void loadUserByUsername_WringUsername_NotOk() {
-        User user = new User();
-        user.setEmail(EMAIL);
-        user.setPassword(PASSWORD);
-        user.setRoles(Set.of(new Role(Role.RoleName.ADMIN)));
         Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
         Throwable exception = Assertions.assertThrows(UsernameNotFoundException.class,
                 () -> {

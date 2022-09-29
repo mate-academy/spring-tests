@@ -18,20 +18,21 @@ public class UserServiceImplTest {
     private UserService userService;
     private UserDao userDao;
     private PasswordEncoder passwordEncoder;
+    private User user = new User();
 
     @BeforeEach
     void setUp() {
         userDao = Mockito.mock(UserDao.class);
         passwordEncoder = Mockito.mock(PasswordEncoder.class);
         userService = new UserServiceImpl(userDao, passwordEncoder);
+        user.setId(1L);
+        user.setEmail(EMAIL);
+        user.setPassword(PASSWORD);
+        user.setRoles(Set.of(new Role(Role.RoleName.ADMIN)));
     }
 
     @Test
     void save_Ok() {
-        User user = new User();
-        user.setEmail(EMAIL);
-        user.setPassword(PASSWORD);
-        user.setRoles(Set.of(new Role(Role.RoleName.ADMIN)));
         Mockito.when(userDao.save(user)).thenReturn(user);
         User actual = userService.save(user);
         Assertions.assertEquals(user, actual);
@@ -39,11 +40,6 @@ public class UserServiceImplTest {
 
     @Test
     void findById_Ok() {
-        User user = new User();
-        user.setId(1L);
-        user.setEmail(EMAIL);
-        user.setPassword(PASSWORD);
-        user.setRoles(Set.of(new Role(Role.RoleName.ADMIN)));
         Mockito.when(userDao.findById(user.getId())).thenReturn(Optional.of(user));
         User actual = userService.findById(user.getId()).get();
         Assertions.assertEquals(user, actual);
@@ -51,10 +47,6 @@ public class UserServiceImplTest {
 
     @Test
     void findByEmail_Ok() {
-        User user = new User();
-        user.setEmail(EMAIL);
-        user.setPassword(PASSWORD);
-        user.setRoles(Set.of(new Role(Role.RoleName.ADMIN)));
         Mockito.when(userDao.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
         User actual = userService.findByEmail(user.getEmail()).get();
         Assertions.assertEquals(user, actual);

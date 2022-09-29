@@ -7,20 +7,19 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class RoleDaoTest extends AbstractTest {
+public class RoleDaoImplTest extends AbstractTest {
     private RoleDao roleDao;
+    private Role role = new Role();
 
     @BeforeEach
     void setUp() {
         roleDao = new RoleDaoImpl(getSessionFactory());
+        role.setRoleName(Role.RoleName.ADMIN);
     }
 
     @Test
     void save_Ok() {
-        Role role = new Role();
-        role.setRoleName(Role.RoleName.ADMIN);
         Role actual = roleDao.save(role);
-
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(1L, actual.getId());
         Assertions.assertEquals(Role.RoleName.ADMIN, actual.getRoleName());
@@ -28,8 +27,6 @@ public class RoleDaoTest extends AbstractTest {
 
     @Test
     void getRoleByName_Ok() {
-        Role role = new Role();
-        role.setRoleName(Role.RoleName.ADMIN);
         roleDao.save(role);
         Role actual = roleDao.getRoleByName("ADMIN").get();
 
@@ -40,8 +37,6 @@ public class RoleDaoTest extends AbstractTest {
 
     @Test
     void getRoleByName_WrongName_NotOk() {
-        Role role = new Role();
-        role.setRoleName(Role.RoleName.ADMIN);
         roleDao.save(role);
         Throwable exception = Assertions.assertThrows(DataProcessingException.class,
                 () -> {
