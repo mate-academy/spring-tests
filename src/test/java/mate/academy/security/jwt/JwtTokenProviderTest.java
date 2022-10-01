@@ -11,8 +11,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.test.util.ReflectionTestUtils;
 
 class JwtTokenProviderTest {
+    private static final String SECRET_KEY = "secret";
+    private static final Long VALIDITY_IN_MILLISECONDS = 3600000L;
     private static final String USER_LOGIN = "bchupika@mate.academy";
     private static final String USER_PASSWORD = "12345678";
     private static final String NOT_VALID_TOKEN = "Bearer token";
@@ -28,6 +31,9 @@ class JwtTokenProviderTest {
     void setUp() {
         userDetailsService = Mockito.mock(UserDetailsService.class);
         jwtTokenProvider = new JwtTokenProvider(userDetailsService);
+        ReflectionTestUtils.setField(jwtTokenProvider, "secretKey", SECRET_KEY);
+        ReflectionTestUtils.setField(jwtTokenProvider, "validityInMilliseconds",
+                VALIDITY_IN_MILLISECONDS);
     }
 
     @Test
