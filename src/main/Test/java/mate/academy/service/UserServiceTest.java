@@ -17,10 +17,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 class UserServiceTest {
     private static final String EMAIL ="bchupika@mate.academy";
-    private static final String UNVALID_EMAIL ="bchupikamate.academy";
+    private static final String INVALID_EMAIL ="bchupikamate.academy";
     private static final String PASSWORD ="1234";
     private static final Long USER_ID = 1L;
-    private static final Long UNVALID_USER_ID = 2L;
+    private static final Long INVALID_USER_ID = 2L;
     private UserDao userDao;
     private PasswordEncoder passwordEncoder;
     private UserService userService;
@@ -55,9 +55,9 @@ class UserServiceTest {
     }
 
     @Test
-    void findById_notOk() {
+    void findById_wrongUserId_notOk() {
         Mockito.when(userDao.findById(user.getId())).thenReturn(Optional.ofNullable(user));
-        Optional<User> actual = userService.findById(UNVALID_USER_ID);
+        Optional<User> actual = userService.findById(INVALID_USER_ID);
         Assertions.assertTrue(actual.isEmpty());
     }
 
@@ -70,9 +70,11 @@ class UserServiceTest {
     }
 
     @Test
-    void findByEmail_notOk() {
+    void findByEmail_wrongEmail_notOk() {
         Mockito.when(userDao.findByEmail(EMAIL)).thenReturn(Optional.ofNullable(user));
-        Optional<User> actual = userService.findByEmail(UNVALID_EMAIL);
+        Optional<User> actual = userService.findByEmail(INVALID_EMAIL);
+        Assertions.assertTrue(actual.isEmpty());
+        actual = userService.findByEmail(null);
         Assertions.assertTrue(actual.isEmpty());
     }
 }

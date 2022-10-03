@@ -22,7 +22,7 @@ class JwtTokenProviderTest {
     private static final String TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJiY2h1cGlrYUBtYXR"
             + "lLmFjYWRlbXkiLCJyb2xlcyI6WyJVU0VSIl0sImlhdCI6MTY2NDc0NTE2NywiZXhwIjoxNjY1M"
             + "TA1MTY3fQ.pNkjYYvNDbLf1sSyPT3bPPnsCg9beOK8xkEQ4zAwUcg";
-    private static final String FALSE_TOKEN = "XXXXXGciOiJIUzI1NiJ9.eyJzdWIiOiJiY2h1cGlrYUBtYX"
+    private static final String INVALID_TOKEN = "XXXXXGciOiJIUzI1NiJ9.eyJzdWIiOiJiY2h1cGlrYUBtYX"
             + "YWRlbXkiLCJyb2xlcyI6WyJVU0VSIl0sImlhdCI6MTY2NDcyNDY0NCwiZXhwIjoxNjY0NzI4MjQ0fQ."
             + "ikQ2ItFB3qjEeHdY7ctLpKsnhP49vPFq9Zrm78";
     private static final int TOKEN_SIZE = 175;
@@ -79,9 +79,9 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void validateToken_notOk() {
+    void validateToken_wrongToken_notOk() {
         RuntimeException thrown = Assertions.assertThrows(RuntimeException.class,
-                () -> jwtTokenProvider.validateToken(FALSE_TOKEN));
+                () -> jwtTokenProvider.validateToken(INVALID_TOKEN));
         Assertions.assertEquals("Expired or invalid JWT token", thrown.getMessage());
     }
 

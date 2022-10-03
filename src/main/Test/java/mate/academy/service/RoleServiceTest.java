@@ -12,7 +12,7 @@ import org.mockito.Mockito;
 
 class RoleServiceTest {
     private static final String ROLE ="USER";
-    private static final String UNVALID_ROLE ="GUEST";
+    private static final String INVALID_ROLE ="GUEST";
     private RoleDao roleDao;
     private RoleService roleService;
     private Role role;
@@ -40,8 +40,8 @@ class RoleServiceTest {
     }
 
     @Test
-    void getRoleByName_NotOk() {
+    void getRoleByName_roleNameIsNotExsist_notOk() {
         Assertions.assertThrows(NoSuchElementException.class,
-                () -> roleService.getRoleByName(UNVALID_ROLE));
+                () -> roleService.getRoleByName(INVALID_ROLE));
     }
 }

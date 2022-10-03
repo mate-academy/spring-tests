@@ -5,11 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class PasswordValidatorTest {
     private final static String EMAIL = "bchupika@mate.academy";
@@ -40,7 +36,7 @@ class PasswordValidatorTest {
     }
 
     @Test
-    void isValid_notOk() {
+    void isValid_wrongRepeatPassword_notOk() {
         userRegistrationDto.setRepeatPassword("4321");
         Assertions.assertFalse(passwordValidator.isValid(userRegistrationDto,
                 constraintValidatorContext));

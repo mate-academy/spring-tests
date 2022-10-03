@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 class RoleDaoTest extends AbstractTest {
     public static final String ROLE_USER = "USER";
-    public static final String UNVALID_ROLE = "GUEST";
+    public static final String INVALID_ROLE = "GUEST";
     private RoleDao roleDao;
     private Role roleUser;
 
@@ -41,9 +41,11 @@ class RoleDaoTest extends AbstractTest {
     }
 
     @Test
-    void getRoleByName_notOk() {
+    void getRoleByName_roleNameIsNotExsist_notOk() {
         roleDao.save(roleUser);
         Assertions.assertThrows(DataProcessingException.class,
-                () -> roleDao.getRoleByName(UNVALID_ROLE));
+                () -> roleDao.getRoleByName(INVALID_ROLE));
+        Assertions.assertThrows(DataProcessingException.class,
+                () -> roleDao.getRoleByName(null));
     }
 }

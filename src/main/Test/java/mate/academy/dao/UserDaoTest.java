@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 class UserDaoTest extends AbstractTest {
     public static final String EMAIL = "bob@i.ua";
-    public static final String UNVALID_EMAIL = "falseuser@i.ua";
+    public static final String INVALID_EMAIL = "falseuser@i.ua";
     public static final String PASSWORD = "1234";
     private UserDao userDao;
     private User user;
@@ -43,7 +43,7 @@ class UserDaoTest extends AbstractTest {
     }
 
     @Test
-    void getRoleByName_Ok() {
+    void findByEmail_Ok() {
         userDao.save(user);
         Optional<User> actual = userDao.findByEmail(EMAIL);
         Assertions.assertTrue(actual.isPresent());
@@ -52,9 +52,9 @@ class UserDaoTest extends AbstractTest {
     }
 
     @Test
-    void getRoleByName_notOk() {
+    void findByEmail_emailNotExsist_notOk() {
         userDao.save(user);
-        Optional<User> actual = userDao.findByEmail(UNVALID_EMAIL);
+        Optional<User> actual = userDao.findByEmail(INVALID_EMAIL);
         Assertions.assertTrue(actual.isEmpty());
     }
 }

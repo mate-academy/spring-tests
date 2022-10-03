@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 class AuthenticationServiceTest {
     private static final String EMAIL = "user@mate.academy";
+    private static final String INVALID_EMAIL = "user123@mate.academy";
     private static final String PASSWORD = "12345678";
     private static final String INVALID_PASSWORD = "FAILPASSWORD";
     private UserService userService;
@@ -57,9 +57,21 @@ class AuthenticationServiceTest {
     }
 
     @Test
-    void login_notOk() {
+    void login_wrongPassword_notOk() {
         Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.ofNullable(user));
         Mockito.when(passwordEncoder.matches(INVALID_PASSWORD,
+                user.getPassword())).thenReturn(true);
+        AuthenticationException thrown = Assertions
+                .assertThrows(AuthenticationException.class,
+                        () -> authenticationService.login(EMAIL, PASSWORD),
+                        "Excepted to receive AuthenticationException");
+        Assertions.assertEquals("Incorrect username or password!!!", thrown.getMessage());
+    }
+
+    @Test
+    void login_wrongLogin_notOk() {
+        Mockito.when(userService.findByEmail(INVALID_EMAIL)).thenReturn(Optional.ofNullable(user));
+        Mockito.when(passwordEncoder.matches(PASSWORD,
                 user.getPassword())).thenReturn(true);
         AuthenticationException thrown = Assertions
                 .assertThrows(AuthenticationException.class,
