@@ -25,6 +25,9 @@ class JwtTokenProviderTest {
     private static final String INVALID_TOKEN = "XXXXXGciOiJIUzI1NiJ9.eyJzdWIiOiJiY2h1cGlrYUBtYX"
             + "YWRlbXkiLCJyb2xlcyI6WyJVU0VSIl0sImlhdCI6MTY2NDcyNDY0NCwiZXhwIjoxNjY0NzI4MjQ0fQ."
             + "ikQ2ItFB3qjEeHdY7ctLpKsnhP49vPFq9Zrm78";
+    private static final String EXPIRED_TOKEN = "yJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJiY2h1cGlrYUBtYXR"
+            + "lLmFjYWRlbXkiLCJyb2xlcyI6WyJVU0VSIl0sImlhdCI6MTY2NDgyODU5OSwiZXhwIjoxNjY0ODI4NTk5"
+            + "fQ.6yFpkJUC4UQm1ICHMB46FqIYY1dnjFoDizk8NqehvY8";
     private static final int TOKEN_SIZE = 175;
     private JwtTokenProvider jwtTokenProvider;
     private UserDetailsService userDetailsService;
@@ -79,9 +82,19 @@ class JwtTokenProviderTest {
     }
 
     @Test
+    void validateToken_expiredToken_notOk() {
+        RuntimeException thrown = Assertions.assertThrows(RuntimeException.class,
+                () -> jwtTokenProvider.validateToken(EXPIRED_TOKEN));
+        Assertions.assertEquals("Expired or invalid JWT token", thrown.getMessage());
+    }
+
+    @Test
     void validateToken_wrongToken_notOk() {
         RuntimeException thrown = Assertions.assertThrows(RuntimeException.class,
                 () -> jwtTokenProvider.validateToken(INVALID_TOKEN));
+        Assertions.assertEquals("Expired or invalid JWT token", thrown.getMessage());
+        thrown = Assertions.assertThrows(RuntimeException.class,
+                () -> jwtTokenProvider.validateToken(null));
         Assertions.assertEquals("Expired or invalid JWT token", thrown.getMessage());
     }
 
