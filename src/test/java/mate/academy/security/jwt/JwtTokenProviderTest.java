@@ -42,7 +42,6 @@ public class JwtTokenProviderTest {
     public void createToken_Ok() {
         List<String> roles = List.of(Role.RoleName.USER.name());
         String token = jwtTokenProvider.createToken(LOGIN, roles);
-        System.out.println(token);
         assertNotNull(token);
         assertEquals(168, token.length());
     }
