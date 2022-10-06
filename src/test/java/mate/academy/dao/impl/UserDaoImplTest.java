@@ -45,8 +45,8 @@ public class UserDaoImplTest extends AbstractTest {
 
     @Test
     public void findById_Ok() {
-        userDao.save(user);
-        Optional<User> actual = userDao.findById(1L);
+        User savedUser = userDao.save(user);
+        Optional<User> actual = userDao.findById(savedUser.getId());
         Assertions.assertTrue(actual.isPresent());
         Assertions.assertEquals(EMAIL, actual.get().getEmail());
     }
