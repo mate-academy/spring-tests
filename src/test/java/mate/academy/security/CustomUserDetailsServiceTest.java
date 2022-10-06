@@ -1,7 +1,5 @@
 package mate.academy.security;
 
-import mate.academy.security.CustomUserDetailsService;
-import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

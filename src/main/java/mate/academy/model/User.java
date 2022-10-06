@@ -1,5 +1,6 @@
 package mate.academy.model;
 
+import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -63,5 +64,29 @@ public class User {
                 + ", email='" + email + '\''
                 + ", roles=" + roles
                 + '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof User)) {
+            return false;
+        }
+        User user = (User) o;
+        return Objects.equals(this.id, user.id)
+                && Objects.equals(this.email, user.email)
+                && Objects.equals(this.roles, user.roles)
+                && Objects.equals(this.password, user.password);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (roles != null ? roles.hashCode() : 0);
+        return result;
     }
 }

@@ -1,7 +1,8 @@
 package mate.academy.validation;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import javax.validation.ConstraintValidatorContext;
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -9,7 +10,6 @@ import org.mockito.Mockito;
 class EmailValidatorTest {
     private EmailValidator emailValidator;
     private ConstraintValidatorContext constraintValidatorContext;
-
 
     @BeforeEach
     void setUp() {

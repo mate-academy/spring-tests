@@ -10,7 +10,7 @@ import org.mockito.Mockito;
 
 class PasswordValidatorTest {
     private PasswordValidator passwordValidator;
-    private UserRegistrationDto  userRegistrationDto;
+    private UserRegistrationDto userRegistrationDto;
     private ConstraintValidatorContext constraintValidatorContext;
     private Password constraintAnnotation;
 
@@ -53,18 +53,7 @@ class PasswordValidatorTest {
     void isValid_wrongRepeatPassword_notOk() {
         boolean expected = false;
 
-        userRegistrationDto.setRepeatPassword("12345");
-        boolean actual = passwordValidator.isValid(userRegistrationDto, constraintValidatorContext);
-
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    void isValid_passwordToShort_notOk() {
-        boolean expected = false;
-
-        userRegistrationDto.setPassword("12345");
-        userRegistrationDto.setRepeatPassword("12345");
+        userRegistrationDto.setRepeatPassword("12345679");
         boolean actual = passwordValidator.isValid(userRegistrationDto, constraintValidatorContext);
 
         assertEquals(expected, actual);

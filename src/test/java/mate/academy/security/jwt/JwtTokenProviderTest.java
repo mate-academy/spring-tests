@@ -1,18 +1,15 @@
 package mate.academy.security.jwt;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.util.List;
-import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import mate.academy.model.Role;
 import mate.academy.model.Role.RoleName;
 import mate.academy.security.CustomUserDetailsService;
-import mate.academy.security.jwt.JwtTokenProvider;
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mockito;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,13 +19,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.util.ReflectionTestUtils;
 
 class JwtTokenProviderTest {
-    private static final String TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhY3R1YWxAbWFpbC51YSIsInJvb"
-            + "GVzIjpbIkFETUlOIl0sImlhdCI6MTY2NDc5OTE4MiwiZXhwIjoxNjY0ODAyNzgyfQ.xVXWPnDS2RrSS9BF36"
-            + "Tm13OV0RaQ3KWTe0XLR0iGNaU";
     private static final String LOGIN = "actual@mail.ua";
     private static final String PASSWORD = "1234";
     private JwtTokenProvider jwtTokenProvider;
     private UserDetailsService userDetailsService;
+    private String token;
+    private List<String> roles;
 
     @BeforeEach
     void setUp() {
@@ -38,17 +34,18 @@ class JwtTokenProviderTest {
                 "secretKey", "secret", String.class);
         ReflectionTestUtils.setField(jwtTokenProvider,
                 "validityInMilliseconds", 3600000L, long.class);
+        roles = List.of(RoleName.ADMIN.name());
+        token = jwtTokenProvider.createToken(LOGIN, roles);
     }
 
     @Test
     void createToken_ok() {
-        int expected = TOKEN.length();
+        int expected = token.length();
 
-        List<String> roles = List.of(RoleName.ADMIN.name());
         String actual = jwtTokenProvider.createToken(LOGIN, roles);
 
         System.out.println(actual);
-        System.out.println(TOKEN);
+        System.out.println(token);
 
         assertEquals(expected, actual.length());
     }
@@ -63,14 +60,14 @@ class JwtTokenProviderTest {
         Authentication expected = new UsernamePasswordAuthenticationToken(userDetails, "",
                 userDetails.getAuthorities());
 
-        Authentication actual = jwtTokenProvider.getAuthentication(TOKEN);
+        Authentication actual = jwtTokenProvider.getAuthentication(token);
 
         assertEquals(expected, actual);
     }
 
     @Test
     void getUsername_ok() {
-        String actual = jwtTokenProvider.getUsername(TOKEN);
+        String actual = jwtTokenProvider.getUsername(token);
 
         assertEquals(LOGIN, actual);
     }
@@ -79,7 +76,7 @@ class JwtTokenProviderTest {
     void validateToken_ok() {
         boolean expected = true;
 
-        boolean actual = jwtTokenProvider.validateToken(TOKEN);
+        boolean actual = jwtTokenProvider.validateToken(token);
 
         assertEquals(expected, actual);
     }
@@ -94,9 +91,9 @@ class JwtTokenProviderTest {
     void resolveToken_ok() {
         HttpServletRequest httpServletRequest = Mockito.mock(HttpServletRequest.class);
         Mockito.when(httpServletRequest.getHeader("Authorization"))
-                .thenReturn("Bearer " + TOKEN);
+                .thenReturn("Bearer " + token);
         String actual = jwtTokenProvider.resolveToken(httpServletRequest);
 
-        assertEquals(TOKEN, actual);
+        assertEquals(token, actual);
     }
 }
