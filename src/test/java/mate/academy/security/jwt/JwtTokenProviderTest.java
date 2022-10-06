@@ -20,9 +20,9 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 public class JwtTokenProviderTest {
     private static final String TOKEN = "eyJhbGciOiJIUzI1NiJ9."
-            + "eyJzdWIiOiJsb2dpbkBkb21haW4uY29tIiwicm9sZXMiOlsiVV"
-            + "NFUiJdLCJpYXQiOjE2NjI4MjU3NTYsImV4cCI6MTY2MjgyOTM1Nn0."
-            + "bDT69C53iK9vlTVlRTefeh6nQyPJV8771XS1wE0_WhE";
+            + "eyJzdWIiOiJsb2dpbkBkb21haW4uY29tIiwicm9sZXMiOlt7ImlkIjox"
+            + "LCJyb2xlTmFtZSI6IlVTRVIifV0sImlhdCI6MTY2NTA2NjYxNywiZXhwIjoxNjY1MDcwMjE3fQ."
+            + "_qTxN-bXd3lkiPnoblVC31Cv3gdEe8v3klzfsTMoRnI";
     private static final String LOGIN = "login@domain.com";
     private static final String PASSWORD = "12345678";
     private JwtTokenProvider jwtTokenProvider;
@@ -42,6 +42,7 @@ public class JwtTokenProviderTest {
     public void createToken_Ok() {
         List<String> roles = List.of(Role.RoleName.USER.name());
         String token = jwtTokenProvider.createToken(LOGIN, roles);
+        System.out.println(token);
         assertNotNull(token);
         assertEquals(168, token.length());
     }
