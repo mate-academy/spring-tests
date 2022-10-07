@@ -64,8 +64,8 @@ public class Role {
 
         Role role = (Role) o;
 
-        return Objects.equals(this.id, ((Role) o).id)
-                && Objects.equals(this.roleName, ((Role) o).roleName);
+        return Objects.equals(this.id, role.id)
+                && Objects.equals(this.roleName, role.roleName);
     }
 
     @Override
