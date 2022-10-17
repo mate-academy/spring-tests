@@ -8,24 +8,24 @@ import org.mockito.Mockito;
 
 class EmailValidatorTest {
     private EmailValidator emailValidator;
-    private ConstraintValidatorContext context;
+    private ConstraintValidatorContext validatorContext;
 
     @BeforeEach
     void setUp() {
         emailValidator = new EmailValidator();
-        context = Mockito.mock(ConstraintValidatorContext.class);
+        validatorContext = Mockito.mock(ConstraintValidatorContext.class);
     }
 
     @Test
     void isValid_Ok() {
-        Assertions.assertTrue(emailValidator.isValid("bob@i.ua", context));
-        Assertions.assertTrue(emailValidator.isValid("bob.123@gmail.com", context));
+        Assertions.assertTrue(emailValidator.isValid("bob@i.ua", validatorContext));
+        Assertions.assertTrue(emailValidator.isValid("bob.123@gmail.com", validatorContext));
     }
 
     @Test
     void isValid_NotOk() {
-        Assertions.assertFalse(emailValidator.isValid("@i.ua.bob", context));
-        Assertions.assertFalse(emailValidator.isValid("bob.123", context));
-        Assertions.assertFalse(emailValidator.isValid("1234@gmail", context));
+        Assertions.assertFalse(emailValidator.isValid("@i.ua.bob", validatorContext));
+        Assertions.assertFalse(emailValidator.isValid("bob.123", validatorContext));
+        Assertions.assertFalse(emailValidator.isValid("1234@gmail", validatorContext));
     }
 }
