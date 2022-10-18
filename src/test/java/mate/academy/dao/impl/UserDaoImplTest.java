@@ -57,10 +57,24 @@ class UserDaoImplTest extends AbstractTest {
     }
 
     @Test
+    void findByEmail_DataProcessingException_NotOk() {
+        userDao = new UserDaoImpl(null);
+        Assertions.assertThrows(DataProcessingException.class,
+                () -> userDao.findByEmail(USER_EMAIL));
+    }
+
+    @Test
     void findById_Ok() {
         userDao.save(bob);
         Optional<User> actual = userDao.findById(1L);
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(bob.getEmail(), actual.get().getEmail());
+    }
+
+    @Test
+    void findById_DataProcessingException_NotOk() {
+        userDao = new UserDaoImpl(null);
+        Assertions.assertThrows(DataProcessingException.class,
+                () -> userDao.findById(1L));
     }
 }
