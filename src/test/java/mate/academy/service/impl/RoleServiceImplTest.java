@@ -35,7 +35,7 @@ class RoleServiceImplTest {
     }
 
     @Test
-    public void getRoleByName_ExistentRole_Ok() {
+    public void getRoleByName_ExistentRoleName_Ok() {
         Role.RoleName roleName = Role.RoleName.USER;
         Mockito.when(roleDao.getRoleByName(roleName.name()))
                 .thenReturn(Optional.of(new Role(roleName)));
@@ -45,7 +45,7 @@ class RoleServiceImplTest {
     }
 
     @Test
-    public void getRoleByName_NullRole_NotOk() {
+    public void getRoleByName_NullRoleName_NotOk() {
         Role.RoleName roleName = Role.RoleName.USER;
         Mockito.when(roleDao.getRoleByName(roleName.name()))
                 .thenReturn(Optional.of(new Role(roleName)));
@@ -54,7 +54,7 @@ class RoleServiceImplTest {
     }
 
     @Test
-    public void getRoleByName_NonExistentRole_NotOk() {
+    public void getRoleByName_NonExistentRoleName_NotOk() {
         Role.RoleName roleName = Role.RoleName.USER;
         Mockito.when(roleDao.getRoleByName(roleName.name()))
                 .thenReturn(Optional.of(new Role(roleName)));
