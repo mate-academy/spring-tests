@@ -19,13 +19,13 @@ class EmailValidatorTest {
     }
 
     @Test
-    public void isValid_RealEmail_Ok() {
+    public void isValid_ValidEmail_Ok() {
         boolean valid = emailValidator.isValid(VALID_EMAIL, constraintValidatorContext);
         Assertions.assertTrue(valid, "Inputted email is not valid!");
     }
 
     @Test
-    public void isValid_NonRealEmail_NotOk() {
+    public void isValid_NotValidEmail_NotOk() {
         boolean valid = emailValidator.isValid(INVALID_EMAIL, constraintValidatorContext);
         Assertions.assertFalse(valid,"Inputted email valid! But must be invalid!" );
     }
