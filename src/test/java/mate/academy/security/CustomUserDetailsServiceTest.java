@@ -53,6 +53,5 @@ class CustomUserDetailsServiceTest {
             return;
         }
         Assertions.fail("Expect to receive UserNotFoundException");
-
     }
 }

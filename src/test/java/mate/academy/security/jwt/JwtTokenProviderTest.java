@@ -41,7 +41,6 @@ class JwtTokenProviderTest {
                 .setExpiration(validity)
                 .signWith(SignatureAlgorithm.HS256,secretKey)
                 .compact();
-
     }
 
     @Test
@@ -56,7 +55,6 @@ class JwtTokenProviderTest {
 
     @Test
     void getUsername_OK() {
-
         String actual = jwtTokenProvider.getUsername(jwt);
         Assertions.assertEquals(login,actual);
     }
@@ -67,11 +65,54 @@ class JwtTokenProviderTest {
         Mockito.when(request.getHeader("Authorization")).thenReturn("Bearer " + jwt);
         String actual = jwtTokenProvider.resolveToken(request);
         Assertions.assertEquals(actual,jwt);
+    }
 
+    @Test
+    void resolveToken_notOK() {
+        HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
+        Mockito.when(request.getHeader("Authorization")).thenReturn("not vlid JWT ");
+        String actual = jwtTokenProvider.resolveToken(request);
+        Assertions.assertNull(actual);
     }
 
     @Test
     void validateToken_OK() {
         Assertions.assertTrue(jwtTokenProvider.validateToken(jwt));
+    }
+
+    @Test
+    void validateToken_Expired_Exception() {
+        Claims claims = Jwts.claims().setSubject(login);
+        Date now = new Date();
+        Date validity = new Date(now.getTime() - 1000);
+        jwt = Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(validity)
+                .signWith(SignatureAlgorithm.HS256,secretKey)
+                .compact();
+        Exception exception = Assertions.assertThrows(
+                Exception.class,
+                () -> jwtTokenProvider.validateToken(jwt),
+                "Expired or invalid JWT token");
+
+    }
+
+    @Test
+    void validateToken_secretKey_Exception() {
+        Claims claims = Jwts.claims().setSubject(login);
+        Date now = new Date();
+        Date validity = new Date(now.getTime() - 1000);
+        jwt = Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(validity)
+                .signWith(SignatureAlgorithm.HS256,"0000")
+                .compact();
+        Exception exception = Assertions.assertThrows(
+                Exception.class,
+                () -> jwtTokenProvider.validateToken(jwt),
+                "Expired or invalid JWT token");
+
     }
 }

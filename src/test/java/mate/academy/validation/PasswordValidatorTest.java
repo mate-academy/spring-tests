@@ -49,7 +49,6 @@ class PasswordValidatorTest {
 
     @Test
     void isValid_passwordsNull_False() {
-
         UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
         userRegistrationDto.setEmail("bob@i.ua");
         userRegistrationDto.setPassword(null);

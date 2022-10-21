@@ -36,7 +36,6 @@ class RoleServiceImplTest {
 
     @Test
     void getRoleByName_roleUser_OK() {
-
         Mockito.when(roleDao.getRoleByName("USER")).thenReturn(Optional.of(roleOut));
         Role actual = roleService.getRoleByName("USER");
         Assertions.assertEquals(actual,roleOut);

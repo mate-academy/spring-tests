@@ -37,7 +37,6 @@ class UserServiceImplTest {
         userOut.setEmail(email);
         userOut.setPassword(password);
         userOut.setRoles(Set.of(new Role(Role.RoleName.USER)));
-
     }
 
     @Test
