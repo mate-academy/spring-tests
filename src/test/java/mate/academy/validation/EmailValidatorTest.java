@@ -18,16 +18,16 @@ class EmailValidatorTest {
 
     @Test
     void email_isValid_True() {
-        Assertions.assertTrue(emailValidator.isValid("bob@i.ua",constraintValidatorContext));
+        Assertions.assertTrue(emailValidator.isValid("bob@i.ua", constraintValidatorContext));
     }
 
     @Test
     void email_notValid_False() {
-        Assertions.assertFalse(emailValidator.isValid("bob_i.ua",constraintValidatorContext));
+        Assertions.assertFalse(emailValidator.isValid("bob_i.ua", constraintValidatorContext));
     }
 
     @Test
     void email_isNull_False() {
-        Assertions.assertFalse(emailValidator.isValid(null,constraintValidatorContext));
+        Assertions.assertFalse(emailValidator.isValid(null, constraintValidatorContext));
     }
 }

@@ -33,8 +33,8 @@ class CustomUserDetailsServiceTest {
         Mockito.when(userService.findByEmail(email)).thenReturn(Optional.of(bob));
         UserDetails actual = customUserDetailsService.loadUserByUsername(email);
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(email,actual.getUsername());
-        Assertions.assertEquals("1234",actual.getPassword());
+        Assertions.assertEquals(email, actual.getUsername());
+        Assertions.assertEquals("1234", actual.getPassword());
     }
 
     @Test

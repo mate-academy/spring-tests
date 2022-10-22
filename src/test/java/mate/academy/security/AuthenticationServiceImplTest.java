@@ -71,8 +71,7 @@ class AuthenticationServiceImplTest {
     @Test
     void login_incorrect_Exception() {
         Mockito.when(userService.findByEmail(email)).thenReturn(Optional.of(userOut));
-        AuthenticationException exception = Assertions.assertThrows(
-                AuthenticationException.class,
+        Assertions.assertThrows(AuthenticationException.class,
                 () -> authenticationService.login(email, ""),
                 "Incorrect username or password!!!");
     }

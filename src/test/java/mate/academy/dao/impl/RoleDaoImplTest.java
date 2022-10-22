@@ -24,15 +24,14 @@ class RoleDaoImplTest extends AbstractTest {
     @Test
     void save_Role_OK() {
         Role role = roleDao.save(new Role(Role.RoleName.USER));
-        Assertions.assertEquals(1L,role.getId());
-        Assertions.assertEquals("USER",role.getRoleName().toString());
+        Assertions.assertEquals(1L, role.getId());
+        Assertions.assertEquals("USER", role.getRoleName().toString());
     }
 
     @Test
     void save_Null_Exception() {
         //DataProcessingException("Can't create entity: " + entity, e);
-        DataProcessingException exception = Assertions.assertThrows(
-                DataProcessingException.class,
+        Assertions.assertThrows(DataProcessingException.class,
                 () -> roleDao.save(null),
                 "Can't create entity: null");
     }
@@ -42,15 +41,14 @@ class RoleDaoImplTest extends AbstractTest {
         Role role = roleDao.save(new Role(Role.RoleName.USER));
         Optional<Role> actual = roleDao.getRoleByName("USER");
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(true,actual.isPresent());
-        Assertions.assertEquals("USER",actual.get().getRoleName().name());
+        Assertions.assertEquals(true, actual.isPresent());
+        Assertions.assertEquals("USER", actual.get().getRoleName().name());
     }
 
     @Test
     void getRoleByName_Exception() {
         Role role = roleDao.save(new Role(Role.RoleName.USER));
-        DataProcessingException exception = Assertions.assertThrows(
-                DataProcessingException.class,
+        Assertions.assertThrows(DataProcessingException.class,
                 () -> roleDao.getRoleByName("RESU"),
                 "Couldn't get role by role name: RESU");
     }

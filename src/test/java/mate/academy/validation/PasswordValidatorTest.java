@@ -29,7 +29,7 @@ class PasswordValidatorTest {
         Mockito.when(constraintAnnotation.field()).thenReturn("password");
         Mockito.when(constraintAnnotation.fieldMatch()).thenReturn("repeatPassword");
         passwordValidator.initialize(constraintAnnotation);
-        boolean actual = passwordValidator.isValid(userRegistrationDto,constraintValidatorContext);
+        boolean actual = passwordValidator.isValid(userRegistrationDto, constraintValidatorContext);
         Assertions.assertTrue(actual);
     }
 
@@ -43,7 +43,7 @@ class PasswordValidatorTest {
         Mockito.when(constraintAnnotation.field()).thenReturn("password");
         Mockito.when(constraintAnnotation.fieldMatch()).thenReturn("repeatPassword");
         passwordValidator.initialize(constraintAnnotation);
-        boolean actual = passwordValidator.isValid(userRegistrationDto,constraintValidatorContext);
+        boolean actual = passwordValidator.isValid(userRegistrationDto, constraintValidatorContext);
         Assertions.assertFalse(actual);
     }
 
@@ -56,7 +56,7 @@ class PasswordValidatorTest {
         Mockito.when(constraintAnnotation.field()).thenReturn("password");
         Mockito.when(constraintAnnotation.fieldMatch()).thenReturn("repeatPassword");
         passwordValidator.initialize(constraintAnnotation);
-        boolean actual = passwordValidator.isValid(userRegistrationDto,constraintValidatorContext);
+        boolean actual = passwordValidator.isValid(userRegistrationDto, constraintValidatorContext);
         Assertions.assertFalse(actual);
     }
 }

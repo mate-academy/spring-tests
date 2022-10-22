@@ -36,7 +36,7 @@ class UserDaoImplTest extends AbstractTest {
         User actual = userDao.save(bob);
         actual = userDao.save(bob);
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(1L,actual.getId());
+        Assertions.assertEquals(1L, actual.getId());
     }
 
     @Test
@@ -48,17 +48,15 @@ class UserDaoImplTest extends AbstractTest {
         bob.setRoles(Set.of(role));
         User actual = userDao.save(bob);
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(1L,actual.getId());
-        DataProcessingException exception = Assertions.assertThrows(
-                DataProcessingException.class,
+        Assertions.assertEquals(1L, actual.getId());
+        Assertions.assertThrows(DataProcessingException.class,
                 () -> userDao.save(bob),
                 "Can't create entity: " + bob);
     }
 
     @Test
     void save_Null_Exception() {
-        DataProcessingException exception = Assertions.assertThrows(
-                DataProcessingException.class,
+        Assertions.assertThrows(DataProcessingException.class,
                 () -> userDao.save(null),
                 "Can't create entity: null");
     }
@@ -74,7 +72,7 @@ class UserDaoImplTest extends AbstractTest {
 
         Optional<User> actual = userDao.findById(bobSaved.getId());
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(true,actual.isPresent());
+        Assertions.assertEquals(true, actual.isPresent());
         Assertions.assertTrue(bobSaved.getId().equals(actual.get().getId()));
         Assertions.assertTrue(bobSaved.getEmail().equals(actual.get().getEmail()));
     }
@@ -91,7 +89,7 @@ class UserDaoImplTest extends AbstractTest {
         User bobSaved = userDao.save(bob);
         Optional<User> actual = userDao.findById(bobSaved.getId() + 1);
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(true,actual.isEmpty());
+        Assertions.assertEquals(true, actual.isEmpty());
     }
 
     @Test
@@ -107,7 +105,7 @@ class UserDaoImplTest extends AbstractTest {
         User bobSaved = userDao.save(bob);
         Optional<User> actual = userDao.findByEmail(bobSaved.getEmail());
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(true,actual.isPresent());
+        Assertions.assertEquals(true, actual.isPresent());
         Assertions.assertTrue(bobSaved.getId().equals(actual.get().getId()));
         Assertions.assertTrue(bobSaved.getEmail().equals(actual.get().getEmail()));
     }
@@ -125,7 +123,7 @@ class UserDaoImplTest extends AbstractTest {
         User bobSaved = userDao.save(bob);
         Optional<User> actual = userDao.findByEmail(findEmail);
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(true,actual.isEmpty());
+        Assertions.assertEquals(true, actual.isEmpty());
     }
 
 }

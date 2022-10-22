@@ -25,7 +25,7 @@ class UserServiceImplTest {
     void setUp() {
         userDao = Mockito.mock(UserDao.class);
         passwordEncoder = new BCryptPasswordEncoder();
-        userService = new UserServiceImpl(userDao,passwordEncoder);
+        userService = new UserServiceImpl(userDao, passwordEncoder);
         String email = "bob@i.ua";
         String password = "1q@w#edfr4";
         userIn = new User();

@@ -31,13 +31,13 @@ class RoleServiceImplTest {
     void save_roleUser_OK() {
         Mockito.when(roleDao.save(roleIn)).thenReturn(roleOut);
         Role actual = roleService.save(roleIn);
-        Assertions.assertEquals(actual,roleOut);
+        Assertions.assertEquals(actual, roleOut);
     }
 
     @Test
     void getRoleByName_roleUser_OK() {
         Mockito.when(roleDao.getRoleByName("USER")).thenReturn(Optional.of(roleOut));
         Role actual = roleService.getRoleByName("USER");
-        Assertions.assertEquals(actual,roleOut);
+        Assertions.assertEquals(actual, roleOut);
     }
 }
