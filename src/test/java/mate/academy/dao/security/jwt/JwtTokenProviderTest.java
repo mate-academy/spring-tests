@@ -1,5 +1,8 @@
 package mate.academy.dao.security.jwt;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import mate.academy.model.Role;
@@ -15,8 +18,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.util.ReflectionTestUtils;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class JwtTokenProviderTest {
     private static final String USER_LOGIN = "bob@gmail.com";
