@@ -15,7 +15,6 @@ import java.util.Optional;
 
 class AuthenticationServiceImplTest {
     private static final String NOT_EXISTENT_EMAIL = "Invalid";
-    private static final String NOT_EXISTENT_PASSWORD = "Password";
     private static AuthenticationService authenticationService;
     private static UserService userService;
     private static RoleService roleService;

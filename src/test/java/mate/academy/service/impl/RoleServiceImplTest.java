@@ -2,7 +2,6 @@ package mate.academy.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-
 import mate.academy.dao.RoleDao;
 import mate.academy.model.Role;
 import mate.academy.service.RoleService;
@@ -54,7 +53,7 @@ class RoleServiceImplTest {
     }
 
     @Test
-    public void getRoleByName_NonExistentRoleName_NotOk() {
+    public void getRoleByName_NotExistentRoleName_NotOk() {
         Role.RoleName roleName = Role.RoleName.USER;
         Mockito.when(roleDao.getRoleByName(roleName.name()))
                 .thenReturn(Optional.of(new Role(roleName)));

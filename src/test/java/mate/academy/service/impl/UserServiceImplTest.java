@@ -52,7 +52,8 @@ class UserServiceImplTest {
                 .thenReturn(Optional.of(user));
         Optional<User> retrievedUserById = userService.findById(user.getId());
         Assertions.assertNotNull(retrievedUserById);
-        Assertions.assertTrue(retrievedUserById.isPresent(), "User with inputted id doesn't present");
+        Assertions.assertTrue(retrievedUserById.isPresent(),
+                "User with inputted id doesn't present");
         Assertions.assertEquals(user, retrievedUserById.get());
     }
 
@@ -61,7 +62,8 @@ class UserServiceImplTest {
         Mockito.when(userDao.findById(user.getId()))
                 .thenReturn(Optional.of(user));
         Optional<User> retrievedUserById = userService.findById(INVALID_ID);
-        Assertions.assertFalse(retrievedUserById.isPresent(), "User with inputted id doesn't present");
+        Assertions.assertFalse(retrievedUserById.isPresent(),
+                "User with inputted id doesn't present");
     }
 
     @Test

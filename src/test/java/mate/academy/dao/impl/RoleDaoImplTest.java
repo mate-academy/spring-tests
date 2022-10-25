@@ -47,7 +47,8 @@ class RoleDaoImplTest extends AbstractTest {
 
     @Test
     public void getRoleByName_NotExistentRoleName_NotOk() {
-        assertThrows(DataProcessingException.class, () -> roleDao.getRoleByName(INVALID_ROLE_NAME),
+        assertThrows(DataProcessingException.class,
+                () -> roleDao.getRoleByName(INVALID_ROLE_NAME),
                 "DataProcessingException to be thrown, but nothing was thrown");
     }
 }

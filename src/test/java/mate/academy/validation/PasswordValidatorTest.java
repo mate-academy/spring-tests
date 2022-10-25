@@ -25,7 +25,7 @@ class PasswordValidatorTest {
     }
 
     @Test
-    public void isValid_EqualedPassword_Ok() {
+    public void isValid_EqualedPasswords_Ok() {
         userRegistrationDto.setEmail("user@email.com");
         userRegistrationDto.setPassword("user1234");
         userRegistrationDto.setRepeatPassword("user1234");
@@ -37,7 +37,7 @@ class PasswordValidatorTest {
     }
 
     @Test
-    public void isValid_UnequaledPassword_NotOk() {
+    public void isValid_UnequaledPasswords_NotOk() {
         userRegistrationDto.setEmail("user@email.com");
         userRegistrationDto.setPassword("user1234");
         userRegistrationDto.setRepeatPassword("user12345678");
