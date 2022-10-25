@@ -1,6 +1,8 @@
 package mate.academy.security;
 
 import static org.mockito.ArgumentMatchers.any;
+
+import java.util.Optional;
 import mate.academy.exception.AuthenticationException;
 import mate.academy.model.Role;
 import mate.academy.model.User;
@@ -11,7 +13,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import java.util.Optional;
 
 class AuthenticationServiceImplTest {
     private static final String NOT_EXISTENT_EMAIL = "Invalid";
@@ -48,7 +49,8 @@ class AuthenticationServiceImplTest {
     @Test
     public void login_ExistentEmail_Ok() throws AuthenticationException {
         Mockito.when(userService.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
-        Mockito.when(passwordEncoder.matches(any(String.class), any(String.class))).thenReturn(true);
+        Mockito.when(passwordEncoder.matches(any(String.class),
+                any(String.class))).thenReturn(true);
         User loggedUser = authenticationService.login(user.getEmail(), user.getPassword());
         Assertions.assertNotNull(loggedUser);
         Assertions.assertEquals(user, loggedUser,

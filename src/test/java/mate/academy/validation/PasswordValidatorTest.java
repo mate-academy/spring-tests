@@ -1,12 +1,11 @@
 package mate.academy.validation;
 
+import javax.validation.ConstraintValidatorContext;
 import mate.academy.model.dto.UserRegistrationDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import javax.validation.ConstraintValidatorContext;
-
 
 class PasswordValidatorTest {
     private static final String PASSWORD_FIELD_NAME = "password";

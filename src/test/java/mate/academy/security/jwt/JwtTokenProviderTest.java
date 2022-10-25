@@ -1,6 +1,8 @@
 package mate.academy.security.jwt;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -11,7 +13,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.util.ReflectionTestUtils;
-import java.util.List;
 
 class JwtTokenProviderTest {
     private static final String VALID_EMAIL = "user@email.com";

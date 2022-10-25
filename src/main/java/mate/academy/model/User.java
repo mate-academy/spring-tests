@@ -58,14 +58,18 @@ public class User {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(id, user.id)
-                && Objects.equals(email, user.email)
-                && Objects.equals(password, user.password)
-                && Objects.equals(roles, user.roles);
+    public boolean equals(Object user) {
+        if (this == user) {
+            return true;
+        }
+        if (user == null || getClass() != user.getClass()) {
+            return false;
+        }
+        User current = (User) user;
+        return Objects.equals(id, current.id)
+                && Objects.equals(email, current.email)
+                && Objects.equals(password, current.password)
+                && Objects.equals(roles, current.roles);
     }
 
     @Override

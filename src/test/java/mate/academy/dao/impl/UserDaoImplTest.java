@@ -1,5 +1,7 @@
 package mate.academy.dao.impl;
 
+import java.util.Optional;
+import java.util.Set;
 import mate.academy.dao.RoleDao;
 import mate.academy.dao.UserDao;
 import mate.academy.model.Role;
@@ -10,14 +12,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import java.util.Optional;
-import java.util.Set;
 
 class UserDaoImplTest extends AbstractTest {
     private static final String INVALID_EMAIL = "Invalid";
     private static final Long INVALID_ID = 0L;
-    private UserDao userDao;
     private static PasswordEncoder passwordEncoder;
+    private UserDao userDao;
     private User user;
 
     @Override
@@ -45,7 +45,7 @@ class UserDaoImplTest extends AbstractTest {
     }
 
     @Test
-    public void saveUser_Ok(){
+    public void saveUser_Ok() {
         User savedUser = userDao.save(user);
         Assertions.assertNotNull(savedUser);
         Assertions.assertEquals(user, savedUser);
@@ -56,7 +56,8 @@ class UserDaoImplTest extends AbstractTest {
         userDao.save(user);
         Optional<User> retrievedUser = userDao.findByEmail(user.getEmail());
         Assertions.assertNotNull(retrievedUser);
-        Assertions.assertTrue(retrievedUser.isPresent(), "User with inputted email doesn't present");
+        Assertions.assertTrue(retrievedUser.isPresent(),
+                "User with inputted email doesn't present");
         Assertions.assertEquals(user.getEmail(), retrievedUser.get().getEmail());
     }
 
@@ -64,7 +65,8 @@ class UserDaoImplTest extends AbstractTest {
     public void findByEmail_NotExistentEmail_NotOk() {
         userDao.save(user);
         Optional<User> retrievedUserByEmail = userDao.findByEmail(INVALID_EMAIL);
-        Assertions.assertFalse(retrievedUserByEmail.isPresent(), "User with inputted email doesn't present");
+        Assertions.assertFalse(retrievedUserByEmail.isPresent(),
+                "User with inputted email doesn't present");
     }
 
     @Test
@@ -72,7 +74,8 @@ class UserDaoImplTest extends AbstractTest {
         userDao.save(user);
         Optional<User> retrievedUserById = userDao.findById(user.getId());
         Assertions.assertNotNull(retrievedUserById);
-        Assertions.assertTrue(retrievedUserById.isPresent(), "User with inputted id doesn't present");
+        Assertions.assertTrue(retrievedUserById.isPresent(),
+                "User with inputted id doesn't present");
         Assertions.assertEquals(user.getId(), retrievedUserById.get().getId());
     }
 
@@ -80,6 +83,7 @@ class UserDaoImplTest extends AbstractTest {
     public void findById_NotExistentId_NotOk() {
         userDao.save(user);
         Optional<User> retrievedUserById = userDao.findById(INVALID_ID);
-        Assertions.assertFalse(retrievedUserById.isPresent(), "User with inputted id doesn't present");
+        Assertions.assertFalse(retrievedUserById.isPresent(),
+                "User with inputted id doesn't present");
     }
 }

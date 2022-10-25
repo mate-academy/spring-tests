@@ -1,10 +1,10 @@
 package mate.academy.validation;
 
+import javax.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import javax.validation.ConstraintValidatorContext;
 
 class EmailValidatorTest {
     private static final String VALID_EMAIL = "valid@email.com";
@@ -27,7 +27,7 @@ class EmailValidatorTest {
     @Test
     public void isValid_NotValidEmail_NotOk() {
         boolean valid = emailValidator.isValid(INVALID_EMAIL, constraintValidatorContext);
-        Assertions.assertFalse(valid,"Inputted email valid! But must be invalid!" );
+        Assertions.assertFalse(valid,"Inputted email valid! But must be invalid!");
     }
 
     @Test

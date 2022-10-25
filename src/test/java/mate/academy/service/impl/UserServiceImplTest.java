@@ -2,6 +2,8 @@ package mate.academy.service.impl;
 
 import static org.mockito.ArgumentMatchers.any;
 
+import java.util.Optional;
+import java.util.Set;
 import mate.academy.dao.UserDao;
 import mate.academy.model.Role;
 import mate.academy.model.User;
@@ -12,8 +14,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import java.util.Optional;
-import java.util.Set;
 
 class UserServiceImplTest {
     private static final Long INVALID_ID = 0L;

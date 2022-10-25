@@ -1,6 +1,9 @@
 package mate.academy.security;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.util.Optional;
+import java.util.Set;
 import mate.academy.model.Role;
 import mate.academy.model.User;
 import mate.academy.service.UserService;
@@ -10,8 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import java.util.Optional;
-import java.util.Set;
 
 class CustomUserDetailsServiceTest {
     private static final String VALID_EMAIL = "user@email.com";

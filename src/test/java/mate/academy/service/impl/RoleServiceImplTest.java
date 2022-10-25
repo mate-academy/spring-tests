@@ -2,6 +2,9 @@ package mate.academy.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import mate.academy.dao.RoleDao;
 import mate.academy.model.Role;
 import mate.academy.service.RoleService;
@@ -9,8 +12,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 class RoleServiceImplTest {
     private static final String INVALID_ROLE_NAME = "Invalid";
@@ -57,7 +58,8 @@ class RoleServiceImplTest {
         Role.RoleName roleName = Role.RoleName.USER;
         Mockito.when(roleDao.getRoleByName(roleName.name()))
                 .thenReturn(Optional.of(new Role(roleName)));
-        assertThrows(NoSuchElementException.class, () -> roleService.getRoleByName(INVALID_ROLE_NAME),
+        assertThrows(NoSuchElementException.class,
+                () -> roleService.getRoleByName(INVALID_ROLE_NAME),
                 "NoSuchElementException to be thrown, but nothing was thrown");
     }
 }
