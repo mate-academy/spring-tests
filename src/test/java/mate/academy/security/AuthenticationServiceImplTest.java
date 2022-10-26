@@ -16,8 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 class AuthenticationServiceImplTest {
     private AuthenticationService authenticationService;
     private RoleService roleService;
-    private UserService userService;
     private PasswordEncoder passwordEncoder;
+    private UserService userService;
 
     @BeforeEach
     void setUp() {
@@ -40,8 +40,8 @@ class AuthenticationServiceImplTest {
         bob.setPassword(password);
         bob.setRoles(Set.of(new Role(Role.RoleName.USER)));
 
-        Mockito.when(roleService.getRoleByName("USER")).thenReturn(new Role(Role.RoleName.USER));
-
+        Mockito.when(roleService.getRoleByName("USER"))
+                .thenReturn(new Role(Role.RoleName.USER));
         Mockito.when(userService.save(Mockito.any(User.class))).thenReturn(bob);
 
         User actual = authenticationService.register(email, password);
@@ -66,8 +66,7 @@ class AuthenticationServiceImplTest {
 
         Mockito.when(userService.findByEmail(email)).thenReturn(Optional.of(bob));
         Mockito.when(passwordEncoder.matches(Mockito.anyString(), Mockito.anyString()))
-               .thenReturn(true);
-
+                .thenReturn(true);
         User actual = null;
         try {
             actual = authenticationService.login(email, password);
@@ -93,8 +92,7 @@ class AuthenticationServiceImplTest {
 
         Mockito.when(userService.findByEmail(email)).thenReturn(Optional.of(bob));
         Mockito.when(passwordEncoder.matches(Mockito.anyString(), Mockito.anyString()))
-               .thenReturn(false);
-
+                .thenReturn(false);
         try {
             authenticationService.login(email, password);
         } catch (AuthenticationException e) {
@@ -111,8 +109,7 @@ class AuthenticationServiceImplTest {
 
         Mockito.when(userService.findByEmail(email)).thenReturn(Optional.of(new User()));
         Mockito.when(passwordEncoder.matches(Mockito.anyString(), Mockito.anyString()))
-               .thenReturn(true);
-
+                .thenReturn(true);
         try {
             authenticationService.login(email, password);
         } catch (AuthenticationException e) {
