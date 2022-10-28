@@ -25,7 +25,7 @@ public class RoleDaoImplTest extends AbstractTest {
     @BeforeEach
     void setUp() {
         roleDao = new RoleDaoImpl(getSessionFactory());
-        role = new Role(Role.RoleName.ADMIN);
+        role = new Role(Role.RoleName.USER);
     }
 
     @Test
@@ -38,15 +38,15 @@ public class RoleDaoImplTest extends AbstractTest {
     @Test
     public void getRoleByName_Ok() {
         roleDao.save(role);
-        Optional<Role> actual = roleDao.getRoleByName(Role.RoleName.ADMIN.name());
+        Optional<Role> actual = roleDao.getRoleByName(Role.RoleName.USER.name());
         assertTrue(actual.isPresent());
-        assertEquals(Role.RoleName.ADMIN, actual.get().getRoleName());
+        assertEquals(Role.RoleName.USER, actual.get().getRoleName());
     }
 
     @Test
     public void getRoleByName_NotOk() {
         DataProcessingException exception = assertThrows(DataProcessingException.class,
-                () -> roleDao.getRoleByName("ROLE"));
-        assertEquals("Couldn't get role by role name: ROLE", exception.getMessage());
+                () -> roleDao.getRoleByName("MODERATOR"));
+        assertEquals("Couldn't get role by role name: MODERATOR", exception.getMessage());
     }
 }
