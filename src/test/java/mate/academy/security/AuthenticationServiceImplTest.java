@@ -1,5 +1,9 @@
 package mate.academy.security;
 
+import static org.mockito.ArgumentMatchers.any;
+
+import java.util.Optional;
+import java.util.Set;
 import mate.academy.exception.AuthenticationException;
 import mate.academy.model.Role;
 import mate.academy.model.User;
@@ -7,16 +11,11 @@ import mate.academy.service.RoleService;
 import mate.academy.service.UserService;
 import mate.academy.service.impl.RoleServiceImpl;
 import mate.academy.service.impl.UserServiceImpl;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.Optional;
-import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 
 public class AuthenticationServiceImplTest {
     private static final String EMAIL = "test@email.com";
@@ -49,8 +48,8 @@ public class AuthenticationServiceImplTest {
         Mockito.when(roleService.getRoleByName(any())).thenReturn(new Role(Role.RoleName.USER));
         Mockito.when(userService.save(any())).thenReturn(user);
         User actual = authenticationService.register(EMAIL, PASSWORD);
-        assertNotNull(actual);
-        assertEquals(user, actual);
+        Assertions.assertNotNull(actual);
+        Assertions.assertEquals(user, actual);
     }
 
     @Test
@@ -58,15 +57,15 @@ public class AuthenticationServiceImplTest {
         Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
         Mockito.when(passwordEncoder.matches(any(), any())).thenReturn(true);
         User actual = authenticationService.login(EMAIL, PASSWORD);
-        assertNotNull(actual);
-        assertEquals(user, actual);
+        Assertions.assertNotNull(actual);
+        Assertions.assertEquals(user, actual);
     }
 
     @Test
     public void login_NotOk() {
         Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.empty());
-        AuthenticationException exception = assertThrows(AuthenticationException.class,
+        AuthenticationException exception = Assertions.assertThrows(AuthenticationException.class,
                 () -> authenticationService.login(EMAIL, PASSWORD));
-        assertEquals("Incorrect username or password!!!", exception.getMessage());
+        Assertions.assertEquals("Incorrect username or password!!!", exception.getMessage());
     }
 }

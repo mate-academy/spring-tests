@@ -1,18 +1,14 @@
 package mate.academy.service.impl;
 
-
+import java.util.Optional;
 import mate.academy.dao.RoleDao;
 import mate.academy.dao.impl.RoleDaoImpl;
 import mate.academy.model.Role;
 import mate.academy.service.RoleService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class RoleServiceImplTest {
     private static final String ROLE_ADMIN = "ADMIN";
@@ -33,15 +29,15 @@ class RoleServiceImplTest {
         Role newRole = new Role(Role.RoleName.ADMIN);
         Mockito.when(roleDao.save(newRole)).thenReturn(role);
         Role actual = roleService.save(newRole);
-        assertNotNull(actual);
-        assertEquals(actual, role);
+        Assertions.assertNotNull(actual);
+        Assertions.assertEquals(actual, role);
     }
 
     @Test
     public void getRoleByName_Ok() {
         Mockito.when(roleDao.getRoleByName(ROLE_ADMIN)).thenReturn(Optional.ofNullable(role));
         Role actual = roleService.getRoleByName(ROLE_ADMIN);
-        assertNotNull(actual);
-        assertEquals(actual, role);
+        Assertions.assertNotNull(actual);
+        Assertions.assertEquals(actual, role);
     }
 }
