@@ -1,11 +1,9 @@
-package dao;
+package mate.academy.dao.impl;
 
 import java.util.Optional;
 import java.util.Set;
 import mate.academy.dao.RoleDao;
 import mate.academy.dao.UserDao;
-import mate.academy.dao.impl.RoleDaoImpl;
-import mate.academy.dao.impl.UserDaoImpl;
 import mate.academy.model.Role;
 import mate.academy.model.User;
 import org.junit.jupiter.api.Assertions;

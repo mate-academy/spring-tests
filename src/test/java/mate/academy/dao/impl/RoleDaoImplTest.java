@@ -1,17 +1,17 @@
-package dao;
+package mate.academy.dao.impl;
+
+import mate.academy.dao.RoleDao;
+import mate.academy.exception.DataProcessingException;
+import mate.academy.model.Role;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import java.util.Optional;
-import mate.academy.dao.RoleDao;
-import mate.academy.dao.impl.RoleDaoImpl;
-import mate.academy.exception.DataProcessingException;
-import mate.academy.model.Role;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 public class RoleDaoImplTest extends AbstractTest {
     private RoleDao roleDao;
