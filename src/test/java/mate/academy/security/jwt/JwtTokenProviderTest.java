@@ -22,10 +22,10 @@ class JwtTokenProviderTest {
     void setUp() throws Exception {
         userDetailsService = Mockito.mock(UserDetailsService.class);
         jwtTokenProvider = new JwtTokenProvider(userDetailsService);
-        ReflectionTestUtils.setField(jwtTokenProvider, "secretKey","secret",
-                JwtTokenProviderTest.class);
-        ReflectionTestUtils.setField(jwtTokenProvider, "validityInMilliseconds", 3600000,
-                JwtTokenProviderTest.class);
+        ReflectionTestUtils.setField(jwtTokenProvider,
+                "secretKey","secret", String.class);
+        ReflectionTestUtils.setField(jwtTokenProvider,
+                "validityInMilliseconds", 3600000, long.class);
         token = jwtTokenProvider.createToken(LOGIN, List.of(ROLE));
     }
 
