@@ -1,27 +1,35 @@
 package mate.academy.dao;
 
-import java.lang.reflect.Constructor;
 import java.util.Set;
 import mate.academy.dao.impl.RoleDaoImpl;
 import mate.academy.dao.impl.UserDaoImpl;
 import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import mate.academy.model.User;
-import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class UserDaoTest extends AbstractTest {
     private UserDao userDao;
-    private RoleDao roleDao;
     private User user;
     private User admin;
 
     @BeforeEach
     void setUp() {
-        injectRolesToDb();
-        injectUsersToDb();
+        RoleDao roleDao = new RoleDaoImpl(getSessionFactory());
+        roleDao.save(new Role(Role.RoleName.USER));
+        roleDao.save(new Role(Role.RoleName.ADMIN));
+
+        userDao = new UserDaoImpl(getSessionFactory());
+        user = new User();
+        user.setPassword("1234");
+        user.setEmail("user@i.ua");
+        user.setRoles(Set.of(roleDao.getRoleByName("USER").get()));
+        admin = new User();
+        admin.setPassword("1234");
+        admin.setEmail("admin@i.ua");
+        admin.setRoles(Set.of(roleDao.getRoleByName("ADMIN").get()));
     }
 
     @Test
@@ -112,37 +120,5 @@ class UserDaoTest extends AbstractTest {
     @Override
     protected Class<?>[] entities() {
         return new Class[]{User.class, Role.class};
-    }
-
-    private void injectRolesToDb() {
-        Constructor<RoleDaoImpl> constructor;
-        try {
-            constructor = RoleDaoImpl.class.getDeclaredConstructor(SessionFactory.class);
-            constructor.setAccessible(true);
-            roleDao = constructor.newInstance(getSessionFactory());
-        } catch (ReflectiveOperationException e) {
-            throw new RuntimeException("Can't create RoleDao instance", e);
-        }
-        roleDao.save(new Role(Role.RoleName.USER));
-        roleDao.save(new Role(Role.RoleName.ADMIN));
-    }
-
-    private void injectUsersToDb() {
-        Constructor<UserDaoImpl> constructor;
-        try {
-            constructor = UserDaoImpl.class.getDeclaredConstructor(SessionFactory.class);
-            constructor.setAccessible(true);
-            userDao = constructor.newInstance(getSessionFactory());
-        } catch (ReflectiveOperationException e) {
-            throw new RuntimeException("Can't create UserDao instance", e);
-        }
-        user = new User();
-        user.setPassword("1234");
-        user.setEmail("user@i.ua");
-        user.setRoles(Set.of(roleDao.getRoleByName("USER").get()));
-        admin = new User();
-        admin.setPassword("1234");
-        admin.setEmail("admin@i.ua");
-        admin.setRoles(Set.of(roleDao.getRoleByName("ADMIN").get()));
     }
 }

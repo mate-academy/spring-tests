@@ -1,10 +1,8 @@
 package mate.academy.dao;
 
-import java.lang.reflect.Constructor;
 import mate.academy.dao.impl.RoleDaoImpl;
 import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
-import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,14 +14,7 @@ class RoleDaoTest extends AbstractTest {
 
     @BeforeEach
     void setUp() {
-        Constructor<RoleDaoImpl> constructor;
-        try {
-            constructor = RoleDaoImpl.class.getDeclaredConstructor(SessionFactory.class);
-            constructor.setAccessible(true);
-            roleDao = constructor.newInstance(getSessionFactory());
-        } catch (ReflectiveOperationException e) {
-            throw new RuntimeException("Can't create RoleDao instance", e);
-        }
+        roleDao = new RoleDaoImpl(getSessionFactory());
         roleUser = new Role();
         roleUser.setRoleName(Role.RoleName.USER);
         roleAdmin = new Role();
