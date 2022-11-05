@@ -31,10 +31,34 @@ class RoleDaoTest extends AbstractTest {
     }
 
     @Test
+    void saveNull_NotOk_DataProcessingException() {
+        Role role = null;
+        try {
+            roleDao.save(role);
+        } catch (Exception e) {
+            Assertions.assertEquals("Can't create entity: " + role, e.getMessage());
+            return;
+        }
+        Assertions.fail();
+    }
+
+    @Test
     void getRoleByName_Ok() {
         roleDao.save(role);
         Optional<Role> actual = roleDao.getRoleByName(Role.RoleName.USER.name());
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(role.getRoleName(), actual.get().getRoleName());
+    }
+
+    @Test
+    void getRoleByName_NotOk_DataProcessingException() {
+        String roleName = "DEMO";
+        try {
+            roleDao.getRoleByName(roleName);
+        } catch (Exception e) {
+            Assertions.assertEquals("Couldn't get role by role name: " + roleName, e.getMessage());
+            return;
+        }
+        Assertions.fail();
     }
 }

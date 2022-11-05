@@ -45,11 +45,29 @@ class UserDaoTest extends AbstractTest {
     }
 
     @Test
+    void save_NotOk_DataProcessingException() {
+        User bob = null;
+        try {
+            userDao.save(bob);
+        } catch (Exception e) {
+            Assertions.assertEquals("Can't create entity: " + bob, e.getMessage());
+            return;
+        }
+        Assertions.fail();
+    }
+
+    @Test
     void findByEmail_Ok() {
         userDao.save(user);
         Optional<User> actual = userDao.findByEmail(EMAIl);
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(EMAIl, actual.get().getEmail());
+    }
+
+    @Test
+    void findByEmail_EmptyUser() {
+        Optional<User> actual = userDao.findByEmail("bob@");
+        Assertions.assertEquals(Optional.empty(), actual);
     }
 
     @Test

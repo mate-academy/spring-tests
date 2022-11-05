@@ -1,5 +1,6 @@
 package mate.academy.security.jwt;
 
+import io.jsonwebtoken.MalformedJwtException;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import mate.academy.model.Role;
@@ -39,6 +40,14 @@ class JwtTokenProviderTest {
     }
 
     @Test
+    void getUserName_notOk() {
+        String invalidToken = new StringBuilder(jwtTokenProvider
+                .createToken(EMAIL, List.of(Role.RoleName.USER.name()))).reverse().toString();
+        Assertions.assertThrows(MalformedJwtException.class, ()
+                -> jwtTokenProvider.getUsername(invalidToken));
+    }
+
+    @Test
     void resolveToken_Ok() {
         HttpServletRequest req = Mockito.mock(HttpServletRequest.class);
         Mockito.when(req.getHeader("Authorization")).thenReturn("token");
@@ -50,5 +59,16 @@ class JwtTokenProviderTest {
     void validateToken_Ok() {
         String actual = jwtTokenProvider.createToken(EMAIL, List.of(Role.RoleName.USER.name()));
         Assertions.assertTrue(jwtTokenProvider.validateToken(actual));
+    }
+
+    @Test
+    void validateToken_notOk() {
+        String invalidToken = new StringBuilder(jwtTokenProvider
+                .createToken(EMAIL, List.of(Role.RoleName.USER.name()))).reverse().toString();
+        try {
+            jwtTokenProvider.validateToken(invalidToken);
+        } catch (Exception e) {
+            Assertions.assertEquals("Expired or invalid JWT token", e.getMessage());
+        }
     }
 }

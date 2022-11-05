@@ -60,4 +60,15 @@ class AuthenticationServiceTest {
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(user, actual);
     }
+
+    @Test
+    void login_notOk() {
+        Mockito.when(userService.findByEmail(user.getEmail()))
+                .thenReturn(Optional.empty());
+        AuthenticationException authenticationException =
+                Assertions.assertThrows(AuthenticationException.class, () ->
+                        authenticationService.login(user.getEmail(), user.getPassword()));
+        Assertions.assertEquals("Incorrect username or password!!!",
+                authenticationException.getMessage());
+    }
 }
