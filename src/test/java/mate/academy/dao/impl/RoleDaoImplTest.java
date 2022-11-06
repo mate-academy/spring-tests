@@ -24,13 +24,13 @@ class RoleDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void saveRole_Ok() {
+    void save_Ok() {
         Role actual = roleDao.save(role);
         Assertions.assertEquals(role.getRoleName(), actual.getRoleName());
     }
 
     @Test
-    void saveWithNullValue_NotOk() {
+    void save_nullValue_notOk() {
         Assertions.assertThrows(DataProcessingException.class,
                 () -> roleDao.save(null));
     }
@@ -44,7 +44,7 @@ class RoleDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void getRoleByNameWrongRoleName_NotOk() {
+    void getRoleByName_invalidValue_notOk() {
         String roleInvalid = "aDMIN";
         DataProcessingException e = Assertions.assertThrows(DataProcessingException.class, () ->
                 roleDao.getRoleByName(roleInvalid));

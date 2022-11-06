@@ -91,7 +91,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void validateToken_NotOk() {
+    void validateToken_invalidToken_notOk() {
         String invalidToken = "xxxx.yyyy.zzzz";
         RuntimeException exception = assertThrows(RuntimeException.class,
                 () -> jwtTokenProvider.validateToken(invalidToken));

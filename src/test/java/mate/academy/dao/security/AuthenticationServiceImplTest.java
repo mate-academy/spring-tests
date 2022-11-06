@@ -65,7 +65,7 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    void login_NotOk() {
+    void login_notExistentValue_notOk() {
         String login = "login";
         String password = "password";
         Mockito.when(userService.findByEmail(login)).thenReturn(Optional.empty());

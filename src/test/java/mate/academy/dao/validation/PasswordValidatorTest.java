@@ -36,7 +36,7 @@ class PasswordValidatorTest {
     }
 
     @Test
-    void isValid_NotOk() {
+    void isValid_invalidRepeatPassword_notOk() {
         UserRegistrationDto registrationDto = new UserRegistrationDto();
         Assertions.assertFalse(passwordValidator.isValid(registrationDto,
                 Mockito.mock(ConstraintValidatorContext.class)));

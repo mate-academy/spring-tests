@@ -27,7 +27,7 @@ class EmailValidatorTest {
     }
 
     @Test
-    void isValid_NotOk() {
+    void isValid_notOk() {
         boolean actual = emailValidator.isValid(NULL_EMAIL,
                 Mockito.mock(ConstraintValidatorContext.class));
         Assertions.assertFalse(actual);
