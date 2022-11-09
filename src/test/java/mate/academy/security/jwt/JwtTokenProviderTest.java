@@ -12,8 +12,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 class JwtTokenProviderTest {
     private static final String VALID_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZW5pa0BnbWFpbC5"
-            + "jb20iLCJyb2xlcyI6WyJVU0VSIl0sImlhdCI6MTY2NzkzMjk2NSwiZXhwIjoxNjY3OTM2NTY1fQ.qTjb"
-            + "N6TSIo-j32F04reaDCXpLzwoBCcZ3KBJJ6IN6PM";
+            + "jb20iLCJyb2xlcyI6WyJVU0VSIl0sImlhdCI6MTY2ODAwNDM2MywiZXhwIjoxNjY4MDA3OTYzfQ.4dbo"
+            + "7XNZu7p2uuhs_x8DqcLaXj22AsmiWbIVsMk_HlQ";
     private static final String LOGIN = "denik@gmail.com";
     private static final String PASSWORD = "password";
     private JwtTokenProvider jwtTokenProvider;
@@ -50,7 +50,8 @@ class JwtTokenProviderTest {
 
     @Test
     void validateToken_validToken_shouldReturnTrue() {
-        Assertions.assertTrue(jwtTokenProvider.validateToken(VALID_TOKEN));
+        String validToken = jwtTokenProvider.createToken("denik@gmail.com", List.of("USER"));
+        Assertions.assertTrue(jwtTokenProvider.validateToken(validToken));
     }
 
     @Test
