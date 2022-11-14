@@ -50,16 +50,46 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findById() {
+    void findById_Ok() {
         Mockito.when(userDao.findById(USER_ID)).thenReturn(Optional.of(user));
-
+        Optional<User> actual = userService.findById(USER_ID);
+        Assertions.assertTrue(actual.isPresent());
+        Assertions.assertEquals(USER_ID, actual.get().getId());
+        Assertions.assertEquals(USER_EMAIL, actual.get().getEmail());
+        Assertions.assertEquals(USER_ENCRYPTED_PASSWORD, actual.get().getPassword());
+        Assertions.assertEquals(USER_ROLE, actual.get().getRoles().stream().findFirst().get());
     }
 
     @Test
-    void findByEmail() {
+    void findById_IdNotFound() {
+        Mockito.when(userDao.findById(2L)).thenReturn(Optional.empty());
+        Optional<User> actual = userService.findById(2L);
+        Assertions.assertTrue(actual.isEmpty());
     }
 
     @Test
-    void update() {
+    void findByEmail_Ok() {
+        Mockito.when(userDao.findByEmail(USER_EMAIL)).thenReturn(Optional.of(user));
+        Optional<User> actual = userService.findByEmail(USER_EMAIL);
+        Assertions.assertTrue(actual.isPresent());
+        Assertions.assertEquals(USER_ID, actual.get().getId());
+        Assertions.assertEquals(USER_EMAIL, actual.get().getEmail());
+        Assertions.assertEquals(USER_ENCRYPTED_PASSWORD, actual.get().getPassword());
+        Assertions.assertEquals(USER_ROLE, actual.get().getRoles().stream().findFirst().get());
+    }
+
+    @Test
+    void findById_EmailNotFound() {
+        Mockito.when(userDao.findByEmail(USER_EMAIL_CHANGED)).thenReturn(Optional.empty());
+        Optional<User> actual = userService.findByEmail(USER_EMAIL_CHANGED);
+        Assertions.assertTrue(actual.isEmpty());
+    }
+
+    @Test
+    void update_Ok() {
+        user.setEmail(USER_EMAIL_CHANGED);
+        Mockito.when(userDao.update(user)).thenReturn(user);
+        Assertions.assertNotNull(user);
+        Assertions.assertEquals(user.getEmail(), USER_EMAIL_CHANGED);
     }
 }
