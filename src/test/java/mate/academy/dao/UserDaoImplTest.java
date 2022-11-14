@@ -2,6 +2,7 @@ package mate.academy.dao;
 
 import java.util.Optional;
 import java.util.Set;
+import mate.academy.dao.impl.RoleDaoImpl;
 import mate.academy.dao.impl.UserDaoImpl;
 import mate.academy.model.Role;
 import mate.academy.model.User;
@@ -15,10 +16,13 @@ class UserDaoImplTest extends AbstractTest {
     private static final String USER_PASSWORD = "password";
     private static final Role USER_ROLE = new Role(Role.RoleName.USER);
     private UserDao userDao;
+    private RoleDao roleDao;
 
     @BeforeEach
     void setUp() {
         userDao = new UserDaoImpl(getSessionFactory());
+        roleDao = new RoleDaoImpl(getSessionFactory());
+        roleDao.save(USER_ROLE);
         User bob = new User();
         bob.setEmail(USER_EMAIL);
         bob.setPassword(USER_PASSWORD);

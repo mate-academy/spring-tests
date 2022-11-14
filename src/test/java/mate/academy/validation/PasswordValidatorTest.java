@@ -38,7 +38,7 @@ class PasswordValidatorTest {
     @Test
     void isValid_WrongPassword_NotOk() {
         ReflectionTestUtils.setField(passwordValidator, "field", USER_PASSWORD);
-        ReflectionTestUtils.setField(passwordValidator, "fieldMatch", USER_WRONG_PASSWORD);
+        ReflectionTestUtils.setField(passwordValidator, "fieldMatch", "repeatPassword");
         registrationDto = new UserRegistrationDto();
         registrationDto.setEmail(USER_EMAIL);
         registrationDto.setPassword(USER_PASSWORD);
