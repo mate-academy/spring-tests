@@ -7,9 +7,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "roles")
+@Getter
+@Setter
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,22 +25,6 @@ public class Role {
     }
 
     public Role(RoleName roleName) {
-        this.roleName = roleName;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public RoleName getRoleName() {
-        return roleName;
-    }
-
-    public void setRoleName(RoleName roleName) {
         this.roleName = roleName;
     }
 
