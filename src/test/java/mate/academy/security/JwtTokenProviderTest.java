@@ -82,7 +82,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void validateToken_ExpiredToken_Exception() {
+    void validateToken_ExpiredToken_NotOk() {
         try {
             jwtTokenProvider.validateToken(TOKEN_EXPIRED_SAMPLE);
         } catch (RuntimeException e) {

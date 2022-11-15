@@ -24,21 +24,21 @@ class RoleDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void getRoleByName_User() {
+    void getRoleByName_User_Ok() {
         Optional<Role> actual = roleDao.getRoleByName(USER_ROLE_NAME);
         Assertions.assertTrue(actual.isPresent());
         Assertions.assertEquals(actual.get().getRoleName(), USER_ROLE.getRoleName());
     }
 
     @Test
-    void getRoleByName_Admin() {
+    void getRoleByName_Admin_Ok() {
         Optional<Role> actual = roleDao.getRoleByName(ADMIN_ROLE_NAME);
         Assertions.assertTrue(actual.isPresent());
         Assertions.assertEquals(actual.get().getRoleName(), ADMIN_ROLE.getRoleName());
     }
 
     @Test
-    void getRoleByName_NotExistRoleName() {
+    void getRoleByName_NotExistRoleName_NotOk() {
         try {
             roleDao.getRoleByName(WRONG_ROLE_NAME);
         } catch (DataProcessingException e) {

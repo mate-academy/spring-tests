@@ -38,7 +38,7 @@ class UserDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void findByEmail_NotFound() {
+    void findByEmail_UserNotFound_NotOk() {
         Optional<User> actual = userDao.findByEmail(NOT_EXIST_USER_EMAIL);
         Assertions.assertTrue(actual.isEmpty());
     }

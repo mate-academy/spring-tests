@@ -61,7 +61,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findById_IdNotFound() {
+    void findById_IdNotFound_NotOk() {
         Mockito.when(userDao.findById(2L)).thenReturn(Optional.empty());
         Optional<User> actual = userService.findById(2L);
         Assertions.assertTrue(actual.isEmpty());
@@ -79,7 +79,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findById_EmailNotFound() {
+    void findById_EmailNotFound_NotOk() {
         Mockito.when(userDao.findByEmail(USER_EMAIL_CHANGED)).thenReturn(Optional.empty());
         Optional<User> actual = userService.findByEmail(USER_EMAIL_CHANGED);
         Assertions.assertTrue(actual.isEmpty());

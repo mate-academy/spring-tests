@@ -66,7 +66,7 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    void login_Login_NotExist() {
+    void login_LoginNotExist_NotOK() {
         User bob = new User();
         bob.setEmail(USER_EMAIL);
         bob.setPassword(USER_PASSWORD);

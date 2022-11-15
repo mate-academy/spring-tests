@@ -23,7 +23,7 @@ class RoleServiceImplTest {
     }
 
     @Test
-    void save() {
+    void save_Ok() {
         Role role = new Role();
         role.setRoleName(Role.RoleName.USER);
         Role test = new Role();
@@ -63,7 +63,7 @@ class RoleServiceImplTest {
     }
 
     @Test
-    void getRoleByName_RoleNameNotExist() {
+    void getRoleByName_RoleNameNotExist_NotOk() {
         try {
             roleService.getRoleByName(WRONG_ROLE_NAME);
         } catch (NoSuchElementException e) {

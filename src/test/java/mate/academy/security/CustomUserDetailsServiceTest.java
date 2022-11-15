@@ -41,7 +41,7 @@ class CustomUserDetailsServiceTest {
     }
 
     @Test
-    void loadUserByUsername_UsernameNotFound() {
+    void loadUserByUsername_UsernameNotFound_NotOk() {
         User bob = new User();
         bob.setEmail(USER_EMAIL);
         bob.setPassword(USER_PASSWORD);

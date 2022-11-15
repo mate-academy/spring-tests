@@ -25,7 +25,7 @@ class PasswordValidatorTest {
     }
 
     @Test
-    void isValid() {
+    void isValid_Ok() {
         ReflectionTestUtils.setField(passwordValidator, "field", USER_PASSWORD);
         ReflectionTestUtils.setField(passwordValidator, "fieldMatch", USER_PASSWORD);
         registrationDto = new UserRegistrationDto();
