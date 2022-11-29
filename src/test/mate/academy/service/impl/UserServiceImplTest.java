@@ -1,6 +1,7 @@
 package mate.academy.service.impl;
 
 import java.util.Optional;
+import java.util.regex.Matcher;
 import mate.academy.dao.UserDao;
 import mate.academy.model.User;
 import mate.academy.service.UserService;
@@ -12,16 +13,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.AdditionalMatchers;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.util.ReflectionTestUtils;
 
 class UserServiceImplTest {
     private static final User USER_RAW_PASS = new User();
-    private static final User USER_ENCODED_PASS = new User();
     private static final User USER_SAVED = new User();
     private static final String VALID_EMAIL = "denis@mail.ru";
     private static final String INVALID_EMAIL = "invalid";
+    private static final String PASSWORD = "password";
     private static final Long VALID_ID = 1L;
     private static final Long INVALID_ID = -1L;
     private UserService userService;
@@ -33,9 +36,8 @@ class UserServiceImplTest {
         userDao = Mockito.mock(UserDao.class);
         encoder = new BCryptPasswordEncoder();
         userService = new UserServiceImpl(userDao, encoder);
-        USER_RAW_PASS.setPassword("password");
-        USER_ENCODED_PASS.setPassword(encoder.encode("password"));
-        USER_SAVED.setPassword(encoder.encode("password"));
+        USER_RAW_PASS.setPassword(PASSWORD);
+        USER_SAVED.setPassword(encoder.encode(PASSWORD));
         USER_SAVED.setId(VALID_ID);
         USER_SAVED.setEmail(VALID_EMAIL);
     }
@@ -43,10 +45,18 @@ class UserServiceImplTest {
     @Test
     void save_ok() throws Exception {
         ReflectionTestUtils.setField(userService, "passwordEncoder", encoder, PasswordEncoder.class);
-        Mockito.when(userDao.save(AdditionalMatchers.not(Mockito.eq(USER_RAW_PASS)))).thenReturn(USER_SAVED);
+        Mockito.when(userDao.save(Mockito.any(User.class))).thenAnswer(new Answer<User>() {
+            @Override
+            public User answer(InvocationOnMock invocation) throws Throwable {
+                User user = invocation.getArgument(0);
+                user.setId(1L);
+                return encoder.matches(PASSWORD, user.getPassword()) ? user : null;
+            }
+        });
         User saved = userService.save(cloneUser(USER_RAW_PASS));
+        assertNotNull(saved);
         assertNotNull(saved.getId());
-        assertNotEquals(USER_RAW_PASS.getPassword(), saved.getPassword());
+        assertTrue(encoder.matches(USER_RAW_PASS.getPassword(), saved.getPassword()));
     }
 
     @Test

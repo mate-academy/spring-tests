@@ -15,22 +15,21 @@ class UserDaoImplTest extends AbstractTest {
     private static final User USER = new User();
     private static final Role ROLE = new Role();
     private static final String EMAIL = "denis@mail.ru";
+    private static final String NONEXISTENT_EMAIL = "nonexistentEmail";
     private UserDao userDao;
-    private SessionFactory factory;
 
     @BeforeEach
     void setUp() {
-        factory = getSessionFactory();
+        SessionFactory factory = getSessionFactory();
         userDao = new UserDaoImpl(factory);
         USER.setEmail(EMAIL);
         ROLE.setRoleName(Role.RoleName.USER);
         try (Session session = factory.openSession()) {
+            session.beginTransaction();
             session.save(ROLE);
-        }
-        try (Session session = factory.openSession()) {
-            Role role = session.get(Role.class, 1L);
-            USER.setRoles(Set.of(role));
+            USER.setRoles(Set.of(ROLE));
             session.save(USER);
+            session.getTransaction().commit();
         }
     }
 
@@ -39,6 +38,14 @@ class UserDaoImplTest extends AbstractTest {
         Optional<User> user = Optional.empty();
         user = userDao.findByEmail(EMAIL);
         assertTrue(user.isPresent());
+        assertEquals(user.get().getEmail(), EMAIL);
+    }
+
+    @Test
+    void findByInvalidEmail_emptyOptional() {
+        Optional<User> user = Optional.empty();
+        user = userDao.findByEmail(NONEXISTENT_EMAIL);
+        assertTrue(user.isEmpty());
     }
 
     @Override

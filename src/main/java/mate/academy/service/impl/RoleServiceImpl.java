@@ -1,6 +1,5 @@
 package mate.academy.service.impl;
 
-import java.util.NoSuchElementException;
 import mate.academy.dao.RoleDao;
 import mate.academy.model.Role;
 import mate.academy.service.RoleService;
