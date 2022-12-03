@@ -3,6 +3,7 @@ package mate.academy.dao.impl;
 import java.util.Optional;
 import java.util.Set;
 import mate.academy.dao.UserDao;
+import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import mate.academy.model.User;
 import org.junit.jupiter.api.Assertions;
@@ -39,6 +40,18 @@ class UserDaoImplTest extends AbstractTest {
         Assertions.assertEquals(FIRST_ID, savedUser.getId());
         Assertions.assertEquals(USERNAME, savedUser.getEmail());
         Assertions.assertEquals(Set.of(role), savedUser.getRoles());
+    }
+
+    @Test
+    void save_notUniqueEmail_notOk() {
+        userDao.save(user);
+        User userNotUniq = new User();
+        userNotUniq.setEmail(USERNAME);
+        DataProcessingException thrown =
+                Assertions.assertThrows(DataProcessingException.class,
+                        () -> userDao.save(userNotUniq),
+                "Expected to receive DataProcessingException");
+        Assertions.assertEquals("Can't create entity: " + userNotUniq, thrown.getMessage());
     }
 
     @Test

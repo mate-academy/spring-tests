@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.Set;
 import mate.academy.dao.UserDao;
 import mate.academy.dao.impl.UserDaoImpl;
+import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import mate.academy.model.User;
 import mate.academy.service.UserService;
@@ -23,7 +24,6 @@ class UserServiceImplTest {
     private PasswordEncoder passwordEncoder;
     private User user;
     private User expectedUser;
-
     private Role roleUser;
 
     @BeforeEach
@@ -46,12 +46,27 @@ class UserServiceImplTest {
     }
 
     @Test
+    void save_notUniq_notOk() {
+        Mockito.when(userDao.save(user)).thenThrow(DataProcessingException.class);
+        DataProcessingException thrown =
+                Assertions.assertThrows(DataProcessingException.class,
+                        () -> userService.save(user),
+                        "Expected to receive DataProcessingException");
+    }
+
+    @Test
     void findById_ok() {
         Mockito.when(userDao.findById(ID)).thenReturn(Optional.of(expectedUser));
         Optional<User> actualOptionalUser = userService.findById(ID);
         Assertions.assertTrue(actualOptionalUser.isPresent());
-        User actualUser = actualOptionalUser.get();
-        assertUsers(expectedUser, actualUser);
+        assertUsers(expectedUser, actualOptionalUser.get());
+    }
+
+    @Test
+    void findById_notFound_notOk() {
+        Mockito.when(userDao.findById(ID)).thenReturn(Optional.empty());
+        Optional<User> actualOptionalUser = userService.findById(ID);
+        Assertions.assertTrue(actualOptionalUser.isEmpty());
     }
 
     @Test
@@ -59,8 +74,7 @@ class UserServiceImplTest {
         Mockito.when(userDao.findByEmail(USERNAME)).thenReturn(Optional.of(expectedUser));
         Optional<User> actualOptionalUser = userService.findByEmail(USERNAME);
         Assertions.assertTrue(actualOptionalUser.isPresent());
-        User actualUser = actualOptionalUser.get();
-        assertUsers(expectedUser, actualUser);
+        assertUsers(expectedUser, actualOptionalUser.get());
     }
 
     void assertUsers(User expectedUser, User actualUser) {

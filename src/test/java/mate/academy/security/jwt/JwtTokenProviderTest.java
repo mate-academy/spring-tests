@@ -68,9 +68,9 @@ class JwtTokenProviderTest {
     @Test
     void resolveToken_ok() {
         HttpServletRequest req = Mockito.mock(HttpServletRequest.class);
-        Mockito.when(req.getHeader("Authorization")).thenReturn("Bearer wright token");
+        Mockito.when(req.getHeader("Authorization")).thenReturn("Bearer valid token");
         String actualToken = jwtTokenProvider.resolveToken(req);
-        Assertions.assertEquals("wright token", actualToken);
+        Assertions.assertEquals("valid token", actualToken);
     }
 
     @Test
@@ -86,7 +86,7 @@ class JwtTokenProviderTest {
         String token = jwtTokenProvider.createToken(userName, List.of(Role.RoleName.USER.name()));
         try {
             Boolean actual = jwtTokenProvider.validateToken(token);
-            Assertions.assertEquals(true, actual);
+            Assertions.assertTrue(actual);
         } catch (RuntimeException e) {
             Assertions.fail("NOT Expected to receive RuntimeException");
         }
@@ -106,7 +106,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void validateToken_notOk() {
+    void validateToken_invalidToken_notOk() {
         try {
             Boolean actual = jwtTokenProvider.validateToken("wrong token");
         } catch (RuntimeException e) {
