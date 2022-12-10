@@ -21,7 +21,7 @@ class UserServiceImplTest {
     private User user;
 
     @BeforeAll
-    static  void beforeAll() {
+    static void beforeAll() {
         userDao = Mockito.mock(UserDao.class);
         passwordEncoder = new BCryptPasswordEncoder();
         userService = new UserServiceImpl(userDao, passwordEncoder);
