@@ -67,7 +67,7 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    void loginUserByEmailAndInvalidPassword_IncorrectUsernameOrPassword() {
+    void loginUserByInvalidPassword_IncorrectUsernameOrPassword() {
         String login = "Max@i.ua";
         String password = "1234";
         String securedPassword = passwordEncoder.encode(password);
@@ -82,6 +82,20 @@ class AuthenticationServiceImplTest {
         Mockito.when(userService.findByEmail(login)).thenReturn(Optional.of(max));
         try {
             authenticationService.login(login, invalidSecuredPassword);
+        } catch (AuthenticationException e) {
+            Assertions.assertEquals("Incorrect username or password!!!", e.getMessage());
+            return;
+        }
+        Assertions.fail("Expected to receive AuthenticationException");
+    }
+
+    @Test
+    void loginUserByNotExistedEmail_IncorrectUsernameOrPassword() {
+        String login = "Max@i.ua";
+        String password = "1234";
+        Mockito.when(userService.findByEmail(login)).thenReturn(Optional.empty());
+        try {
+            authenticationService.login(login, password);
         } catch (AuthenticationException e) {
             Assertions.assertEquals("Incorrect username or password!!!", e.getMessage());
             return;
