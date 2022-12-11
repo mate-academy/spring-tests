@@ -55,8 +55,14 @@ class EmailValidatorTest {
     }
 
     @Test
-    void isValid_checkNoSymboslBeforeAt_noOk() {
+    void isValid_checkNoSymboslBeforeAt_notOk() {
         String email = "@testdomainame.gmail";
+        assertFalse(emailValidator.isValid(email, constraintValidatorContext));
+    }
+
+    @Test
+    void isValid_checkEmailIsNull_notOk() {
+        String email = null;
         assertFalse(emailValidator.isValid(email, constraintValidatorContext));
     }
 }
