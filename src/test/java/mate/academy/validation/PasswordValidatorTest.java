@@ -1,17 +1,17 @@
 package mate.academy.validation;
 
+import java.lang.reflect.Field;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 import mate.academy.model.dto.UserRegistrationDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
-import java.lang.reflect.Field;
 
 class PasswordValidatorTest {
-    ConstraintValidator<Password, UserRegistrationDto> constraintValidator;
-    ConstraintValidatorContext constraintValidatorContext;
+    private ConstraintValidator<Password, UserRegistrationDto> constraintValidator;
+    private ConstraintValidatorContext constraintValidatorContext;
 
     @BeforeEach
     void setUp() {
@@ -24,14 +24,16 @@ class PasswordValidatorTest {
         UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
         userRegistrationDto.setPassword("1234");
         userRegistrationDto.setRepeatPassword("1234");
-        Class<? extends ConstraintValidator> constraintValidatorClass = constraintValidator.getClass();
+        Class<? extends ConstraintValidator> constraintValidatorClass
+                = constraintValidator.getClass();
         Field field = constraintValidatorClass.getDeclaredField("field");
         field.setAccessible(true);
         field.set(constraintValidator, "password");
         Field fieldMatch = constraintValidatorClass.getDeclaredField("fieldMatch");
         fieldMatch.setAccessible(true);
         fieldMatch.set(constraintValidator, "repeatPassword");
-        boolean actual = constraintValidator.isValid(userRegistrationDto, constraintValidatorContext);
+        boolean actual = constraintValidator
+                .isValid(userRegistrationDto, constraintValidatorContext);
         boolean expected = true;
         Assertions.assertEquals(expected, actual);
     }
@@ -41,14 +43,17 @@ class PasswordValidatorTest {
         UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
         userRegistrationDto.setPassword("1234");
         userRegistrationDto.setRepeatPassword("12345");
-        Class<? extends ConstraintValidator> constraintValidatorClass = constraintValidator.getClass();
+        Class<? extends ConstraintValidator> constraintValidatorClass
+                = constraintValidator.getClass();
         Field field = constraintValidatorClass.getDeclaredField("field");
         field.setAccessible(true);
         field.set(constraintValidator, "password");
-        Field fieldMatch = constraintValidatorClass.getDeclaredField("fieldMatch");
+        Field fieldMatch
+                = constraintValidatorClass.getDeclaredField("fieldMatch");
         fieldMatch.setAccessible(true);
         fieldMatch.set(constraintValidator, "repeatPassword");
-        boolean actual = constraintValidator.isValid(userRegistrationDto, constraintValidatorContext);
+        boolean actual = constraintValidator
+                .isValid(userRegistrationDto, constraintValidatorContext);
         boolean expected = false;
         Assertions.assertEquals(expected, actual);
     }

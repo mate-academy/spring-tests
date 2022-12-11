@@ -1,15 +1,15 @@
 package mate.academy.validation;
 
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
 
 class EmailValidatorTest {
-    ConstraintValidator<Email, String> constraintValidator;
-    ConstraintValidatorContext constraintValidatorContext;
+    private ConstraintValidator<Email, String> constraintValidator;
+    private ConstraintValidatorContext constraintValidatorContext;
 
     @BeforeEach
     void setUp() {

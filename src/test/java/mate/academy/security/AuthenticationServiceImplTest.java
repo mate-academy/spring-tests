@@ -1,5 +1,7 @@
 package mate.academy.security;
 
+import java.util.Optional;
+import java.util.Set;
 import mate.academy.exception.AuthenticationException;
 import mate.academy.model.Role;
 import mate.academy.model.User;
@@ -11,8 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import java.util.Optional;
-import java.util.Set;
 
 class AuthenticationServiceImplTest {
     private AuthenticationService authenticationService;
@@ -25,7 +25,8 @@ class AuthenticationServiceImplTest {
         userService = Mockito.mock(UserService.class);
         roleService = Mockito.mock(RoleService.class);
         passwordEncoder = new BCryptPasswordEncoder();
-        authenticationService = new AuthenticationServiceImpl(userService, roleService, passwordEncoder);
+        authenticationService =
+                new AuthenticationServiceImpl(userService, roleService, passwordEncoder);
     }
 
     @Test
