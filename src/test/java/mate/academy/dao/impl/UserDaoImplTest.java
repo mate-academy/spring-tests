@@ -9,6 +9,7 @@ import mate.academy.dao.UserDao;
 import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import mate.academy.model.User;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,22 +31,14 @@ class UserDaoImplTest extends AbstractTest {
         roleDao = new RoleDaoImpl(getSessionFactory());
     }
 
-    private List<User> injectUsers() {
-        Role user = new Role(Role.RoleName.USER);
-        Role admin = new Role(Role.RoleName.ADMIN);
-        roleDao.save(user);
-        roleDao.save(admin);
-        User bob = new User();
-        bob.setEmail("bob@i.ua");
-        bob.setPassword("1234");
-        bob.setRoles(Set.of(user));
-        userAbstractDao.save(bob);
-        User tom = new User();
-        tom.setEmail("tom@i.ua");
-        tom.setPassword("5678");
-        tom.setRoles(Set.of(admin));
-        userAbstractDao.save(tom);
-        return List.of(bob, tom);
+    @AfterEach
+    void tearDown() {
+        if (userAbstractDao.findById(1L).isPresent()) {
+            userAbstractDao.delete(1L);
+        }
+        if (userAbstractDao.findById(2L).isPresent()) {
+            userAbstractDao.delete(2L);
+        }
     }
 
     @Test
@@ -137,5 +130,23 @@ class UserDaoImplTest extends AbstractTest {
         Optional<User> actual = userDao.findByEmail(email);
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(users.get(0), actual.get());
+    }
+
+    private List<User> injectUsers() {
+        Role user = new Role(Role.RoleName.USER);
+        Role admin = new Role(Role.RoleName.ADMIN);
+        roleDao.save(user);
+        roleDao.save(admin);
+        User bob = new User();
+        bob.setEmail("bob@i.ua");
+        bob.setPassword("1234");
+        bob.setRoles(Set.of(user));
+        userAbstractDao.save(bob);
+        User tom = new User();
+        tom.setEmail("tom@i.ua");
+        tom.setPassword("5678");
+        tom.setRoles(Set.of(admin));
+        userAbstractDao.save(tom);
+        return List.of(bob, tom);
     }
 }

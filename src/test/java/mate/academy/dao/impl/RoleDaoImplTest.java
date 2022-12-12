@@ -6,6 +6,7 @@ import java.util.Optional;
 import mate.academy.dao.RoleDao;
 import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +17,7 @@ class RoleDaoImplTest extends AbstractTest {
 
     @Override
     protected Class<?>[] entities() {
-        return new Class[] {Role.class};
+        return new Class[]{Role.class};
     }
 
     @BeforeEach
@@ -25,12 +26,14 @@ class RoleDaoImplTest extends AbstractTest {
         roleDao = new RoleDaoImpl(getSessionFactory());
     }
 
-    private List<Role> injectRoles() {
-        Role user = new Role(Role.RoleName.USER);
-        Role admin = new Role(Role.RoleName.ADMIN);
-        roleDao.save(user);
-        roleDao.save(admin);
-        return List.of(user, admin);
+    @AfterEach
+    void tearDown() {
+        if (roleAbstractDao.findById(1L).isPresent()) {
+            roleAbstractDao.delete(1L);
+        }
+        if (roleAbstractDao.findById(2L).isPresent()) {
+            roleAbstractDao.delete(2L);
+        }
     }
 
     @Test
@@ -51,7 +54,7 @@ class RoleDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void findAllNotExistedRoles_EmptyList() {
+    void findAllNotExistedRoles_EmptyList_Ok() {
         List<Role> expectedRoles = new ArrayList<>();
         List<Role> actualRoles = roleAbstractDao.findAll();
         Assertions.assertNotNull(actualRoles);
@@ -85,7 +88,7 @@ class RoleDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void deleteRoleByNotExistedId_DataProcessingException() {
+    void deleteRoleByNotExistedId_DataProcessingException_notOk() {
         injectRoles();
         Long id = 3L;
         try {
@@ -115,5 +118,13 @@ class RoleDaoImplTest extends AbstractTest {
         Optional<Role> actual = roleDao.getRoleByName(email);
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(2L, actual.get().getId());
+    }
+
+    private List<Role> injectRoles() {
+        Role user = new Role(Role.RoleName.USER);
+        Role admin = new Role(Role.RoleName.ADMIN);
+        roleDao.save(user);
+        roleDao.save(admin);
+        return List.of(user, admin);
     }
 }

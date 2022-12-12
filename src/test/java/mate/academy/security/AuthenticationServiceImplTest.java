@@ -68,7 +68,7 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    void loginUserByInvalidPassword_IncorrectUsernameOrPassword() {
+    void loginUserByInvalidPassword_IncorrectUsernameOrPassword_notOk() {
         String login = "Max@i.ua";
         String password = "1234";
         String securedPassword = passwordEncoder.encode(password);
