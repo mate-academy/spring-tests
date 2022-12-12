@@ -21,13 +21,13 @@ class EmailValidatorTest {
     }
 
     @Test
-    void isValid_invalidEmail_Ok() {
+    void isValid_invalidEmail_notOk() {
         Assertions.assertFalse(emailValidator.isValid("user1@gmail.@com",
                 constraintValidatorContext));
     }
 
     @Test
-    void isValid_nullEmail_Ok() {
+    void isValid_nullEmail_notOk() {
         Assertions.assertFalse(emailValidator.isValid(null, constraintValidatorContext));
     }
 }
