@@ -25,14 +25,10 @@ class UserDaoImplTest extends AbstractTest {
         return new Class[] {User.class, Role.class};
     }
 
-    @BeforeAll
-    static void beforeAll() {
-        userDao = new UserDaoImpl(getSessionFactory());
-        roleDao = new RoleDaoImpl(getSessionFactory());
-    }
-
     @BeforeEach
     void setUp() {
+        userDao = new UserDaoImpl(getSessionFactory());
+        roleDao = new RoleDaoImpl(getSessionFactory());
         role = new Role(Role.RoleName.USER);
         roleDao.save(role);
         user = createRawUser(role);

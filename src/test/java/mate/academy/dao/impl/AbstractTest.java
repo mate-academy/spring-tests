@@ -9,6 +9,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hsqldb.jdbc.JDBCDataSource;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
 public abstract class AbstractTest {
@@ -35,9 +36,9 @@ public abstract class AbstractTest {
         Database database();
     }
 
-    private static SessionFactory factory;
+    private SessionFactory factory;
 
-    @BeforeEach
+    @BeforeAll
     public void init() {
         factory = newSessionFactory();
     }
@@ -93,7 +94,7 @@ public abstract class AbstractTest {
         return new HsqldbDataSourceProvider();
     }
 
-    public static SessionFactory getSessionFactory() {
+    public SessionFactory getSessionFactory() {
         return factory;
     }
 
