@@ -51,6 +51,18 @@ class UserDaoImplTest extends AbstractTest {
     }
 
     @Test
+    void saveUser_nullEmail_notOk() {
+        user.setEmail(null);
+        try {
+            userDao.save(user);
+        } catch (DataProcessingException e) {
+            Assertions.assertEquals("Can't create entity: " + user, e.getMessage());
+            return;
+        }
+        Assertions.fail("Expected to receive DataProcessingException");
+    }
+
+    @Test
     void findByEmail_Ok() {
         userDao.save(user);
         Optional<User> actual = userDao.findByEmail("user1@gmail.com");
@@ -84,13 +96,6 @@ class UserDaoImplTest extends AbstractTest {
     void findById_notExistingId_notOk() {
         userDao.save(user);
         Optional<User> actual = userDao.findById(2L);
-        Assertions.assertTrue(actual.isEmpty());
-    }
-
-    @Test
-    void findById_negativeId_notOk() {
-        userDao.save(user);
-        Optional<User> actual = userDao.findById(-1L);
         Assertions.assertTrue(actual.isEmpty());
     }
 
