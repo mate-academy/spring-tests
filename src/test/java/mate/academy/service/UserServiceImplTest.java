@@ -53,7 +53,6 @@ class UserServiceImplTest {
 
     @Test
     void findById_userIdNotExist_Ok() {
-        Mockito.when(userDao.findById(1L)).thenReturn(Optional.empty());
         Optional<User> userOptional = userService.findById(1L);
         assertTrue(userOptional.isEmpty());
     }
@@ -74,9 +73,7 @@ class UserServiceImplTest {
 
     @Test
     void findByEmail_emailNotExist_Ok() {
-        String email = "bob@i.ua";
-        Mockito.when(userDao.findByEmail(email)).thenReturn(Optional.empty());
-        Optional<User> userOptional = userService.findByEmail(email);
+        Optional<User> userOptional = userService.findByEmail("bob@i.ua");
         assertTrue(userOptional.isEmpty());
     }
 }

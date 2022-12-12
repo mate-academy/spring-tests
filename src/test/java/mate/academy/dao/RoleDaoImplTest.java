@@ -44,8 +44,6 @@ class RoleDaoImplTest extends AbstractTest{
 
     @Test
     void getRoleByName_roleNotExist_Ok() {
-        Role roleUser = new Role(Role.RoleName.USER);
-        roleDao.save(roleUser);
         Optional<Role> actualRole = roleDao.getRoleByName("ADMIN");
         assertTrue(actualRole.isEmpty());
     }

@@ -54,13 +54,12 @@ class RoleServiceImplTest {
 
     @Test
     void getRoleByName_roleNotExist_notOk() {
-        Mockito.when(roleDao.getRoleByName("USER")).thenReturn(Optional.empty());
         try {
             roleService.getRoleByName("USER");
         } catch (NoSuchElementException e) {
             assertEquals("No value present", e.getMessage());
             return;
         }
-        fail("Expected - NoSuchElementException");
+        fail("Expected - NoSuchElementException: No value present");
     }
 }
