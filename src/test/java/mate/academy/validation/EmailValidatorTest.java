@@ -10,7 +10,6 @@ import org.mockito.Mockito;
 
 class EmailValidatorTest {
     private final EmailValidator emailValidator = new EmailValidator();
-    ;
     private ConstraintValidatorContext constraintValidatorContext;
 
     @BeforeEach

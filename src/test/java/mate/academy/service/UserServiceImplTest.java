@@ -19,6 +19,7 @@ class UserServiceImplTest {
     private UserDao userDao;
     private UserService userService;
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
     @BeforeEach
     void setUp() {
         userDao = Mockito.mock(UserDao.class);

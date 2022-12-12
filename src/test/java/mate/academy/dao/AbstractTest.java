@@ -23,10 +23,15 @@ public abstract class AbstractTest {
         }
 
         String hibernateDialect();
+
         DataSource dataSource();
+
         Class<? extends DataSource> dataSourceClassName();
+
         Properties dataSourceProperties();
+
         List<IdentifierStrategy> identifierStrategies();
+
         Database database();
     }
 
@@ -45,7 +50,7 @@ public abstract class AbstractTest {
         }
         String[] packages = packages();
         if (packages != null) {
-            for(String scannedPackage : packages) {
+            for (String scannedPackage : packages) {
                 configuration.addPackage(scannedPackage);
             }
         }
