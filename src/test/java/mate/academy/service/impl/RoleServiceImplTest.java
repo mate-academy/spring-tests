@@ -54,6 +54,4 @@ class RoleServiceImplTest {
         Assertions.assertThrows(NoSuchElementException.class,
                 () -> roleService.getRoleByName(roleName));
     }
-
-
 }
