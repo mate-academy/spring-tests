@@ -1,11 +1,12 @@
-package mate.academy.dao;
+package mate.academy.dao.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Optional;
-import mate.academy.dao.impl.UserDaoImpl;
+import mate.academy.dao.AbstractTest;
+import mate.academy.dao.UserDao;
 import mate.academy.model.Role;
 import mate.academy.model.User;
 import org.junit.jupiter.api.BeforeEach;

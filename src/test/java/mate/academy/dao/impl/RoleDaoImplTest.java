@@ -1,18 +1,17 @@
-package mate.academy.dao;
+package mate.academy.dao.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Optional;
-import mate.academy.dao.impl.RoleDaoImpl;
+import mate.academy.dao.AbstractTest;
+import mate.academy.dao.RoleDao;
 import mate.academy.model.Role;
-import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class RoleDaoImplTest extends AbstractTest {
-
     private RoleDao roleDao;
 
     @Override
@@ -22,7 +21,7 @@ class RoleDaoImplTest extends AbstractTest {
 
     @BeforeEach
     void setUp() {
-        roleDao = new RoleDaoImplWrappper(getSessionFactory());
+        roleDao = new RoleDaoImpl(getSessionFactory());
     }
 
     @Test
@@ -46,11 +45,5 @@ class RoleDaoImplTest extends AbstractTest {
     void getRoleByName_roleNotExist_Ok() {
         Optional<Role> actualRole = roleDao.getRoleByName("ADMIN");
         assertTrue(actualRole.isEmpty());
-    }
-
-    class RoleDaoImplWrappper extends RoleDaoImpl {
-        RoleDaoImplWrappper(SessionFactory sessionFactory) {
-            super(sessionFactory);
-        }
     }
 }
