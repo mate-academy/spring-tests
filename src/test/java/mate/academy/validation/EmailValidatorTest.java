@@ -1,9 +1,9 @@
 package mate.academy.validation;
 
+import javax.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import javax.validation.ConstraintValidatorContext;
 
 class EmailValidatorTest {
     private static ConstraintValidatorContext constraintValidatorContext;

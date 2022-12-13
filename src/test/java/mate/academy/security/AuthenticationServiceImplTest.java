@@ -1,5 +1,7 @@
 package mate.academy.security;
 
+import static org.mockito.ArgumentMatchers.any;
+
 import java.util.Optional;
 import java.util.Set;
 import mate.academy.exception.AuthenticationException;
@@ -14,7 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import static org.mockito.ArgumentMatchers.any;
 
 class AuthenticationServiceImplTest {
     private static UserService userService;
@@ -57,14 +58,14 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    void login_invalidEmail_notOk(){
+    void login_invalidEmail_notOk() {
         Mockito.when(userService.findByEmail("user1@gmail.com")).thenReturn(Optional.empty());
         Assertions.assertThrows(AuthenticationException.class,
                 () -> authenticationService.login("user1@gmail.com", "12345678"));
     }
 
     @Test
-    void login_invalidPassword_notOk(){
+    void login_invalidPassword_notOk() {
         Mockito.when(userService.findByEmail("user1@gmail.com")).thenReturn(Optional.of(user));
         Assertions.assertThrows(AuthenticationException.class,
                 () -> authenticationService.login("user1@gmail.com", "87654321"));

@@ -2,10 +2,10 @@ package mate.academy.service.impl;
 
 import java.util.Optional;
 import java.util.Set;
-import mate.academy.service.UserService;
 import mate.academy.dao.UserDao;
 import mate.academy.model.Role;
 import mate.academy.model.User;
+import mate.academy.service.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;

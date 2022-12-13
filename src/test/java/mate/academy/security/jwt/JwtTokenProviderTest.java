@@ -1,6 +1,9 @@
 package mate.academy.security.jwt;
 
+import static org.mockito.ArgumentMatchers.any;
+
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import mate.academy.exception.InvalidJwtAuthenticationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -12,8 +15,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.util.ReflectionTestUtils;
-import javax.servlet.http.HttpServletRequest;
-import static org.mockito.ArgumentMatchers.any;
 
 class JwtTokenProviderTest {
     private static UserDetailsService userDetailsService;

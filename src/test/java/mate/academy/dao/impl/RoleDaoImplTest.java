@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 class RoleDaoImplTest extends AbstractTest {
     private static RoleDao roleDao;
     private Role role;
+
     @Override
     protected Class<?>[] entities() {
         return new Class[] {User.class, Role.class};

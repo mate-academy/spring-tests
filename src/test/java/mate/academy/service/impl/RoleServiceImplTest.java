@@ -1,7 +1,7 @@
 package mate.academy.service.impl;
 
-import java.util.Optional;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import mate.academy.dao.RoleDao;
 import mate.academy.model.Role;
 import mate.academy.service.RoleService;
@@ -13,7 +13,7 @@ import org.mockito.Mockito;
 
 class RoleServiceImplTest {
     private static RoleDao roleDao;
-    private  static RoleService roleService;
+    private static RoleService roleService;
     private Role role;
 
     @BeforeAll

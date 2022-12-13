@@ -18,7 +18,9 @@ public class InjectController {
 
     private final AuthenticationService authenticationService;
 
-    public InjectController(RoleService roleService, UserService userService, AuthenticationService authenticationService) {
+    public InjectController(RoleService roleService,
+                            UserService userService,
+                            AuthenticationService authenticationService) {
         this.roleService = roleService;
         this.userService = userService;
         this.authenticationService = authenticationService;
