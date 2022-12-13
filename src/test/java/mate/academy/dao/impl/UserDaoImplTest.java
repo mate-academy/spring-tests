@@ -64,7 +64,7 @@ class UserDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void findAllNotExistedUsers_EmptyList() {
+    void findAllNotExistedUsers_EmptyList_Ok() {
         List<User> expectedUsers = new ArrayList<>();
         List<User> actualUsers = userAbstractDao.findAll();
         Assertions.assertNotNull(actualUsers);
@@ -98,7 +98,7 @@ class UserDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void deleteUserByNotExistedId_DataProcessingException() {
+    void deleteUserByNotExistedId_DataProcessingException_notOk() {
         injectUsers();
         Long id = 3L;
         try {

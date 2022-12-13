@@ -91,7 +91,7 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    void loginUserByNotExistedEmail_IncorrectUsernameOrPassword() {
+    void loginUserByNotExistedEmail_IncorrectUsernameOrPassword_notOk() {
         String login = "Max@i.ua";
         String password = "1234";
         Mockito.when(userService.findByEmail(login)).thenReturn(Optional.empty());

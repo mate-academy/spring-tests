@@ -26,7 +26,7 @@ class EmailValidatorTest {
     }
 
     @Test
-    void checkInvalidEmail_NotOk() {
+    void checkInvalidEmail_notOk() {
         String inValidEmail = "max";
         boolean actual = constraintValidator.isValid(inValidEmail, constraintValidatorContext);
         boolean expected = false;

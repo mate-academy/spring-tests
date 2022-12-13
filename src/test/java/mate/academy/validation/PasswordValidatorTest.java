@@ -39,7 +39,7 @@ class PasswordValidatorTest {
     }
 
     @Test
-    void checkNotValidPasswords_NotOk() throws NoSuchFieldException, IllegalAccessException {
+    void checkNotValidPasswords_notOk() throws NoSuchFieldException, IllegalAccessException {
         UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
         userRegistrationDto.setPassword("1234");
         userRegistrationDto.setRepeatPassword("12345");

@@ -60,7 +60,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findUserByNotExistedIdViaService_Null() {
+    void findUserByNotExistedIdViaService_Null_notOk() {
         Long notExistedId = 2L;
         Mockito.when(userDao.findById(notExistedId)).thenReturn(Optional.ofNullable(null));
         Optional<User> actual = userService.findById(notExistedId);
@@ -83,7 +83,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findUserByInvalidEmailViaService_Null() {
+    void findUserByInvalidEmailViaService_Null_notOk() {
         String notExistedEmail = "Max@i.ua";
         Mockito.when(userDao.findByEmail(notExistedEmail)).thenReturn(Optional.ofNullable(null));
         Optional<User> actual = userService.findByEmail(notExistedEmail);

@@ -38,7 +38,7 @@ class CustomUserDetailsServiceTest {
     }
 
     @Test
-    void loadUserByUsername_UsernameNotFound() {
+    void loadUserByUsername_UsernameNotFound_notOk() {
         String email = "bob@i.ua";
         User bob = new User();
         bob.setEmail(email);

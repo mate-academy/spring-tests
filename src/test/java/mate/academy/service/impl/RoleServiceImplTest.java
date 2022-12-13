@@ -67,7 +67,7 @@ class RoleServiceImplTest {
     }
 
     @Test
-    void getRoleByInvalidRoleName_NoSuchElementException() {
+    void getRoleByInvalidRoleName_NoSuchElementException_notOk() {
         String invalidRoleName = "CLIENT";
         Mockito.when(roleDao.getRoleByName(invalidRoleName)).thenReturn(Optional.ofNullable(null));
         try {
