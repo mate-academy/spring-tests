@@ -1,4 +1,4 @@
-package mate.academy.dao.impl;
+package mate.academy.impl;
 
 import java.util.Optional;
 import mate.academy.dao.UserDao;
@@ -19,7 +19,7 @@ public class UserDaoImpl extends AbstractDao<User, Long> implements UserDao {
     public Optional<User> findByEmail(String email) {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery(
-                            "from User u join fetch u.roles where u.email = :email", User.class)
+                    "from User u join fetch u.roles where u.email = :email", User.class)
                     .setParameter("email", email)
                     .uniqueResultOptional();
         }
