@@ -54,27 +54,32 @@ class JwtTokenProviderTest {
     void createToken_Ok() {
         String actual = jwtTokenProvider.createToken(EMAIL, List.of(ROLE.name()));
         String[] splitActual = actual.split("\\.");
-        Assertions.assertEquals(JWT_CORRECT_KEY_HEADER, splitActual[0]);
-        Assertions.assertTrue(actual.matches(JWT_CORRECT_REGEX));
+        Assertions.assertEquals(JWT_CORRECT_KEY_HEADER, splitActual[0],
+                "Expected " + JWT_CORRECT_KEY_HEADER + ", but was " + splitActual[0]);
+        Assertions.assertTrue(actual.matches(JWT_CORRECT_REGEX),
+                "Expected true value, but was false");
     }
 
     @Test
     void getUsername_Ok() {
         String actual = jwtTokenProvider.getUsername(jwtTokenProvider
                 .createToken(EMAIL, List.of(ROLE.name())));
-        Assertions.assertEquals(EMAIL, actual);
+        Assertions.assertEquals(EMAIL, actual,
+                "Expected " + EMAIL + ", but was " + actual);
     }
 
     @Test
     void validateToken_Ok() {
         Assertions.assertTrue(jwtTokenProvider.validateToken(jwtTokenProvider
-                        .createToken(EMAIL, List.of(ROLE.name()))));
+                        .createToken(EMAIL, List.of(ROLE.name()))),
+                "Expected true, but was false");
     }
 
     @Test
     void validateToken_NotOk() {
         Assertions.assertThrows(RuntimeException.class, () ->
                         jwtTokenProvider.validateToken(jwtTokenProvider
-                                .createToken(EMAIL, List.of(ROLE.name())) + 1));
+                                .createToken(EMAIL, List.of(ROLE.name())) + 1),
+                "Expected throws RuntimeException, but nothing was throws");
     }
 }

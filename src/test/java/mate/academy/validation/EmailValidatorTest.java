@@ -26,25 +26,27 @@ class EmailValidatorTest {
 
     @Test
     void isValid_Ok() {
+        String message = "Expected true, but was false, email ";
         Assertions.assertTrue(emailValidator.isValid(FIRST_VALID_EMAIL,
-                constraintValidatorContext));
+                constraintValidatorContext), message + FIRST_VALID_EMAIL);
         Assertions.assertTrue(emailValidator.isValid(SECOND_VALID_EMAIL,
-                constraintValidatorContext));
+                constraintValidatorContext), message + SECOND_VALID_EMAIL);
         Assertions.assertTrue(emailValidator.isValid(THIRD_VALID_EMAIL,
-                constraintValidatorContext));
+                constraintValidatorContext), message + THIRD_VALID_EMAIL);
         Assertions.assertTrue(emailValidator.isValid(FOURTH_VALID_EMAIL,
-                constraintValidatorContext));
+                constraintValidatorContext), message + FOURTH_VALID_EMAIL);
     }
 
     @Test
     void isValid_NotOk() {
+        String message = "Expected false, but was true, email ";
         Assertions.assertFalse(emailValidator.isValid(FIRST_INVALID_EMAIL,
-                constraintValidatorContext));
+                constraintValidatorContext), message + FIRST_INVALID_EMAIL);
         Assertions.assertFalse(emailValidator.isValid(SECOND_INVALID_EMAIL,
-                constraintValidatorContext));
+                constraintValidatorContext), message + SECOND_INVALID_EMAIL);
         Assertions.assertFalse(emailValidator.isValid(THIRD_INVALID_EMAIL,
-                constraintValidatorContext));
+                constraintValidatorContext), message + THIRD_INVALID_EMAIL);
         Assertions.assertFalse(emailValidator.isValid(FOURTH_INVALID_EMAIL,
-                constraintValidatorContext));
+                constraintValidatorContext), message + FOURTH_INVALID_EMAIL);
     }
 }

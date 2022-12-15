@@ -43,9 +43,11 @@ class CustomUserDetailsServiceTest {
     void loadUserByUsername_Ok() {
         Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
         UserDetails actual = userDetailsService.loadUserByUsername(EMAIL);
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(EMAIL, actual.getUsername());
-        Assertions.assertEquals(PASSWORD, actual.getPassword());
+        Assertions.assertNotNull(actual, "Method must return UserDetails object");
+        Assertions.assertEquals(EMAIL, actual.getUsername(),
+                "Expected " + EMAIL + ", but was " + actual.getUsername());
+        Assertions.assertEquals(PASSWORD, actual.getPassword(),
+                "Expected " + PASSWORD + ", but was " + actual.getPassword());
     }
 
     @Test

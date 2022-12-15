@@ -34,9 +34,11 @@ class RoleServiceTest {
         Mockito.when(roleDao.save(role)).thenReturn(role);
 
         Role actual = roleService.save(role);
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(role, actual);
-        Assertions.assertEquals(role.getRoleName(), actual.getRoleName());
+        Assertions.assertNotNull(actual, "Method must return Role object");
+        Assertions.assertEquals(role, actual,
+                "Expected " + role + ", but was " + actual);
+        Assertions.assertEquals(role.getRoleName(), actual.getRoleName(),
+                "Expected " + role.getRoleName() + ", but was " + actual.getRoleName());
     }
 
     @Test
@@ -45,14 +47,17 @@ class RoleServiceTest {
                 .thenReturn(Optional.of(role));
 
         Role actual = roleService.getRoleByName(role.getRoleName().name());
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(role, actual);
-        Assertions.assertEquals(role.getRoleName(), actual.getRoleName());
+        Assertions.assertNotNull(actual, "Method must return Role object");
+        Assertions.assertEquals(role, actual,
+                "Expected " + role + ", but was " + actual);
+        Assertions.assertEquals(role.getRoleName(), actual.getRoleName(),
+                "Expected " + role.getRoleName() + ", but was " + actual.getRoleName());
     }
 
     @Test
     void getRoleByName_NoSuchElement() {
         Assertions.assertThrows(NoSuchElementException.class, () ->
-                roleService.getRoleByName("INVALID_ROLE"));
+                roleService.getRoleByName("INVALID_ROLE"),
+                "Expected throws NoSuchElementException, but nothing was throws");
     }
 }

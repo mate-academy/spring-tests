@@ -35,34 +35,43 @@ class UserDaoTest extends AbstractTest {
 
     @Test
     void save_Ok() {
-        Long expectedId = 1L;
-
+        Long id = 1L;
         User actual = userDao.save(user);
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(expectedId, actual.getId());
+        Assertions.assertNotNull(actual, "Method must return User object");
+        Assertions.assertEquals(id, actual.getId(),
+                "Expected object with id " + id + ", but was " + actual.getId());
     }
 
     @Test
     void findByEmail_Ok() {
-        User expected = userDao.save(user);
-        Assertions.assertEquals(expected.getEmail(), userDao.findByEmail(EMAIL).get().getEmail());
+        String expected = userDao.save(user).getEmail();
+        String actual = userDao.findByEmail(EMAIL).get().getEmail();
+        Assertions.assertEquals(expected, actual,
+                "Expected " + expected + ", but was " + actual);
     }
 
     @Test
     void findByEmail_NotOk() {
-        Assertions.assertEquals(Optional.empty(), userDao.findByEmail(EMAIL));
+        Optional<User> actual = userDao.findByEmail(EMAIL);
+        Assertions.assertEquals(Optional.empty(), actual,
+                "Expected null value, but was " + actual);
     }
 
     @Test
     void findById_Ok() {
-        User expected = userDao.save(user);
+        userDao.save(user);
         Long id = 1L;
-        Assertions.assertEquals(id, userDao.findById(id).get().getId());
+        Long actual = userDao.findById(id).get().getId();
+        Assertions.assertEquals(id, actual,
+                "Expected object with id " + id + ", but was " + actual);
     }
 
     @Test
     void findById_NotOk() {
-        Assertions.assertEquals(Optional.empty(), userDao.findById(1L));
+        Long id = 1L;
+        Optional<User> actual = userDao.findById(id);
+        Assertions.assertEquals(Optional.empty(), actual,
+                "Expected null value, but was " + actual);
     }
 
     @Override

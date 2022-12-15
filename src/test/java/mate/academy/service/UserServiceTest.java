@@ -46,8 +46,9 @@ class UserServiceTest {
         Mockito.when(userDao.save(user)).thenReturn(user);
 
         User actual = userService.save(user);
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(user, actual);
+        Assertions.assertNotNull(actual, "Method must return User object");
+        Assertions.assertEquals(user, actual,
+                "Expected " + user + ", but was " + actual);
     }
 
     @Test
@@ -57,9 +58,11 @@ class UserServiceTest {
         Mockito.when(userDao.findById(id)).thenReturn(Optional.of(user));
 
         User actual = userService.findById(id).get();
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(user, actual);
-        Assertions.assertEquals(user.getId(), actual.getId());
+        Assertions.assertNotNull(actual, "Method must return User object");
+        Assertions.assertEquals(user, actual,
+                "Expected " + user + ", but was " + actual);
+        Assertions.assertEquals(user.getId(), actual.getId(),
+                "Expected " + user.getId() + ", but was " + actual.getId());
     }
 
     @Test
@@ -68,7 +71,7 @@ class UserServiceTest {
         Mockito.when(userDao.findById(id)).thenReturn(null);
 
         Optional<User> actual = userService.findById(id);
-        Assertions.assertNull(actual);
+        Assertions.assertNull(actual, "Expected null value, but was " + actual);
     }
 
     @Test
@@ -76,9 +79,11 @@ class UserServiceTest {
         Mockito.when(userDao.findByEmail(EMAIL)).thenReturn(Optional.of(user));
 
         User actual = userService.findByEmail(EMAIL).get();
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(user, actual);
-        Assertions.assertEquals(user.getEmail(), actual.getEmail());
+        Assertions.assertNotNull(actual, "Method must return User object");
+        Assertions.assertEquals(user, actual,
+                "Expected " + user + ", but was " + actual);
+        Assertions.assertEquals(user.getEmail(), actual.getEmail(),
+                "Expected " + user.getEmail() + ", but was " + actual.getEmail());
     }
 
     @Test
@@ -86,6 +91,6 @@ class UserServiceTest {
         Mockito.when(userDao.findByEmail(EMAIL)).thenReturn(null);
 
         Optional<User> actual = userService.findByEmail(EMAIL);
-        Assertions.assertNull(actual);
+        Assertions.assertNull(actual, "Expected null value, but was " + actual);
     }
 }

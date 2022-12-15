@@ -29,7 +29,8 @@ class PasswordValidatorTest {
         userRegistrationDto.setPassword("password");
         userRegistrationDto.setRepeatPassword("password");
         Assertions.assertTrue(passwordValidator.isValid(userRegistrationDto,
-                constraintValidatorContext));
+                constraintValidatorContext),
+                "Expected true, but was false");
     }
 
     @Test
@@ -38,6 +39,7 @@ class PasswordValidatorTest {
         userRegistrationDto.setPassword("password");
         userRegistrationDto.setRepeatPassword("another");
         Assertions.assertFalse(passwordValidator.isValid(userRegistrationDto,
-                constraintValidatorContext));
+                constraintValidatorContext),
+                "Expected false, but was true");
     }
 }

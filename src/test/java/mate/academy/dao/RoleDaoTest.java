@@ -21,23 +21,26 @@ class RoleDaoTest extends AbstractTest {
 
     @Test
     void save_Ok() {
-        Long expectedId = 1L;
-
+        Long id = 1L;
         Role actual = roleDao.save(role);
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(expectedId, actual.getId());
+        Assertions.assertNotNull(actual, "Method must return Role object");
+        Assertions.assertEquals(id, actual.getId(),
+                "Expected object with id " + id + ", but was " + actual.getId());
     }
 
     @Test
     void getRoleByName_Ok() {
-        Role expected = roleDao.save(role);
-        Assertions.assertEquals(expected.getRoleName(),
-                roleDao.getRoleByName(expected.getRoleName().name()).get().getRoleName());
+        Role.RoleName expected = roleDao.save(role).getRoleName();
+        Role.RoleName actual = roleDao.getRoleByName(expected.name()).get().getRoleName();
+        Assertions.assertEquals(expected, actual,
+                "Expected " + expected.name() + ", but was " + actual.name());
     }
 
     @Test
     void getRoleByName_NotOk() {
-        Assertions.assertEquals(Optional.empty(), roleDao.getRoleByName(ROLE.name()));
+        Optional<Role> actual = roleDao.getRoleByName(ROLE.name());
+        Assertions.assertEquals(Optional.empty(), actual,
+                "Expected null value, but was " + actual);
     }
 
     @Override

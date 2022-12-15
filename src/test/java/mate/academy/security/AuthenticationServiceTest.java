@@ -52,9 +52,11 @@ class AuthenticationServiceTest {
         Mockito.when(roleService.getRoleByName(ROLE.name())).thenReturn(role);
 
         User actual = authenticationService.register(EMAIL, PASSWORD);
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(EMAIL, actual.getEmail());
-        Assertions.assertEquals(PASSWORD, actual.getPassword());
+        Assertions.assertNotNull(actual, "Method must return User object");
+        Assertions.assertEquals(EMAIL, actual.getEmail(),
+                "Expected " + EMAIL + ", but was " + actual.getEmail());
+        Assertions.assertEquals(PASSWORD, actual.getPassword(),
+                "Expected " + PASSWORD + ", but was " + actual.getPassword());
     }
 
     @Test
@@ -62,7 +64,9 @@ class AuthenticationServiceTest {
         Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
         Mockito.when(passwordEncoder.matches(user.getPassword(), PASSWORD))
                 .thenReturn(true);
-        Assertions.assertEquals(user, authenticationService.login(EMAIL, PASSWORD));
+        User actual = authenticationService.login(EMAIL, PASSWORD);
+        Assertions.assertEquals(user, actual,
+                "Expected " + user + ", but was " + actual);
     }
 
     @Test
@@ -70,7 +74,8 @@ class AuthenticationServiceTest {
         Mockito.when(userService.findByEmail("anotheremail@gmail.com"))
                 .thenReturn(Optional.of(user));
         Assertions.assertThrows(AuthenticationException.class, () ->
-                authenticationService.login(EMAIL, PASSWORD));
+                authenticationService.login(EMAIL, PASSWORD),
+                "Expected throws AuthenticationException, but nothing was throws");
     }
 
     @Test
@@ -78,6 +83,7 @@ class AuthenticationServiceTest {
         Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
         Assertions.assertThrows(AuthenticationException.class, () ->
                 authenticationService.login("anotheremail@gmail.com",
-                        PASSWORD));
+                        PASSWORD),
+                "Expected throws AuthenticationException, but nothing was throws");
     }
 }
