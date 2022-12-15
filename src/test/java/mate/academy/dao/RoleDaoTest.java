@@ -9,42 +9,55 @@ import java.util.Optional;
 import mate.academy.dao.impl.RoleDaoImpl;
 import mate.academy.model.Role;
 import org.hibernate.SessionFactory;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 public class RoleDaoTest extends AbstractTest {
-    private RoleDao roleDao;
-    private Role userRole;
-    private Role adminRole;
+    private static final long NONE_ID = 0L;
+    private static final long VALID_FIRST_ID = 1L;
+    private static final long VALID_SECOND_ID = 2L;
+    private static RoleDao roleDao;
+    private static Role userRole;
+    private static Role adminRole;
 
     @Override
     protected Class<?>[] entities() {
         return new Class[] {Role.class};
     }
 
+    @BeforeAll
+    static void setUp() {
+        userRole = new Role();
+        adminRole = new Role();
+
+    }
+
     @BeforeEach
     void beforeEach() {
-        userRole = new Role();
-        userRole.setRoleName(Role.RoleName.USER);
-        adminRole = new Role();
-        adminRole.setRoleName(Role.RoleName.ADMIN);
         roleDao = reflectiveInitializeProtectedConstructor();
+        userRole.setRoleName(Role.RoleName.USER);
+        userRole.setId(NONE_ID);
+        adminRole.setRoleName(Role.RoleName.ADMIN);
+        userRole.setId(NONE_ID);
     }
 
     @Test
     void saveOneRole_Ok() {
         Role actual = roleDao.save(userRole);
         assertNotNull(actual, "You must return Role object");
-        assertEquals(1L, actual.getId(), "In you Role object you need to add Id");
+        assertEquals(VALID_FIRST_ID, actual.getId(), "In you Role object you need to add Id");
     }
 
     @Test
     void saveTwoRoles_Ok() {
         Role firstRole = roleDao.save(userRole);
         Role secondRole = roleDao.save(adminRole);
-        assertEquals(1L, firstRole.getId(), "First role in saving query must have id 1");
-        assertEquals(2L, secondRole.getId(), "Second role in saving query must have id 2");
+        assertEquals(VALID_FIRST_ID, firstRole.getId(),
+                "First role in saving query must have id 1");
+        assertEquals(VALID_SECOND_ID, secondRole.getId(),
+                "Second role in saving query must have id 2");
     }
 
     @Test

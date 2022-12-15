@@ -17,12 +17,11 @@ import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class AuthenticationServiceTest {
-    private static String BOB_VALID_EMAIL = "bob@mail.com";
-    private static String BOB_INVALID_EMAIL = "bb@mail.com";
-    private static String SIMPLE_NUMBER_PASSWORD = "1234";
-    private static String SIMPLE_LETTER_PASSWORD = "qwerty";
+    private static final String BOB_VALID_EMAIL = "bob@mail.com";
+    private static final String BOB_INVALID_EMAIL = "bb@mail.com";
+    private static final String SIMPLE_NUMBER_PASSWORD = "1234";
+    private static final String SIMPLE_LETTER_PASSWORD = "qwerty";
     private static Role userRole;
-
     private static UserService userService;
     private static RoleService roleService;
     private static PasswordEncoder passwordEncoder;
@@ -39,7 +38,6 @@ public class AuthenticationServiceTest {
                 roleService, passwordEncoder);
         userRole = new Role();
         userRole.setRoleName(Role.RoleName.USER);
-
         bob = new User();
         bob.setEmail(BOB_VALID_EMAIL);
         bob.setPassword(SIMPLE_NUMBER_PASSWORD);
@@ -49,7 +47,6 @@ public class AuthenticationServiceTest {
     void register_Ok() {
         Mockito.when(userService.save(any())).thenReturn(bob);
         Mockito.when(roleService.getRoleByName("USER")).thenReturn(userRole);
-
         User actual = authenticationService.register(BOB_VALID_EMAIL, SIMPLE_NUMBER_PASSWORD);
         Assertions.assertNotNull(actual, "Return value must be not null");
         assertEquals(BOB_VALID_EMAIL, actual.getEmail(), "Email must be equal given value");
@@ -59,11 +56,9 @@ public class AuthenticationServiceTest {
 
     @Test
     void login_Ok() {
-
         Mockito.when(userService.findByEmail(BOB_VALID_EMAIL)).thenReturn(Optional.of(bob));
         Mockito.when(passwordEncoder.matches(bob.getPassword(), SIMPLE_NUMBER_PASSWORD))
                 .thenReturn(true);
-
         try {
             assertEquals(bob, authenticationService.login(BOB_VALID_EMAIL, SIMPLE_NUMBER_PASSWORD),
                     "You must return user object for valid user password and email");
@@ -75,7 +70,6 @@ public class AuthenticationServiceTest {
     @Test
     void login_notOkPassword() {
         Mockito.when(userService.findByEmail(BOB_VALID_EMAIL)).thenReturn(Optional.of(bob));
-
         assertThrows(AuthenticationException.class, () ->
                 authenticationService.login(BOB_VALID_EMAIL, SIMPLE_LETTER_PASSWORD));
     }

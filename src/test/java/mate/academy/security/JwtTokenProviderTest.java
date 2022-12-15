@@ -13,14 +13,12 @@ import org.mockito.Mockito;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public class JwtTokenProviderTest {
-    private static String BOB_VALID_EMAIL = "bob@mail.com";
-    private static String BOB_INVALID_EMAIL = "bb@mail.com";
-    private static String SIMPLE_NUMBER_PASSWORD = "1234";
-    private static String SIMPLE_LETTER_PASSWORD = "qwerty";
-    private static String USER_ROLE_STRING = "USER";
-    private static String SECRET_KEY = "secret";
-    private static String JWT_CORRECT_KEY_HEADER = "eyJhbGciOiJIUzI1NiJ9";
-    private static String JWT_CORRECT_REGEX = "(^[\\w-]*\\.[\\w-]*\\.[\\w-]*$)";
+    private static final String BOB_VALID_EMAIL = "bob@mail.com";
+    private static final String SIMPLE_NUMBER_PASSWORD = "1234";
+    private static final String USER_ROLE_STRING = "USER";
+    private static final String SECRET_KEY = "secret";
+    private static final String JWT_CORRECT_KEY_HEADER = "eyJhbGciOiJIUzI1NiJ9";
+    private static final String JWT_CORRECT_REGEX = "(^[\\w-]*\\.[\\w-]*\\.[\\w-]*$)";
     private static User bob;
     private static Role userRole;
     private static JwtTokenProvider jwtTokenProvider;
@@ -40,7 +38,7 @@ public class JwtTokenProviderTest {
         try {
             Field secretKey = jwtTokenProvider.getClass().getDeclaredField("secretKey");
             secretKey.setAccessible(true);
-            secretKey.set(jwtTokenProvider, "secret");
+            secretKey.set(jwtTokenProvider, SECRET_KEY);
             Field validityTime = jwtTokenProvider.getClass()
                     .getDeclaredField("validityInMilliseconds");
             validityTime.setAccessible(true);

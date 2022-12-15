@@ -17,23 +17,25 @@ public class UserServiceTest {
     private static final String BOB_MAIL = "bob@mail.com";
     private static final String SIMPLE_PASSWORD = "1234";
     private static final long BOB_ID = 1L;
+    private static final long NONE_ID = 0L;
     private static UserService userService;
     private static UserDao userDao;
     private static PasswordEncoder passwordEncoder;
-    private User bob;
+    private static User bob;
 
     @BeforeAll
     static void setUp() {
         userDao = Mockito.mock(UserDao.class);
         passwordEncoder = Mockito.mock(PasswordEncoder.class);
         userService = new UserServiceImpl(userDao, passwordEncoder);
+        bob = new User();
     }
 
     @BeforeEach
     void beforeEach() {
-        bob = new User();
         bob.setEmail(BOB_MAIL);
         bob.setPassword(SIMPLE_PASSWORD);
+        bob.setId(NONE_ID);
 
         Mockito.when(userDao.save(bob)).thenReturn(bob);
         Mockito.when(userDao.findById(BOB_ID)).thenReturn(Optional.of(bob));

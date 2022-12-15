@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 public class RoleServiceTest {
+    private static final long NONE_ID = 0L;
     private static RoleService roleService;
     private static RoleDao roleDao;
     private static Role userRole;
@@ -22,12 +23,13 @@ public class RoleServiceTest {
     static void setUp() {
         roleDao = Mockito.mock(RoleDao.class);
         roleService = new RoleServiceImpl(roleDao);
+        userRole = new Role();
     }
 
     @BeforeEach
     void beforeEach() {
-        userRole = new Role();
         userRole.setRoleName(Role.RoleName.USER);
+        userRole.setId(NONE_ID);
         Mockito.when(roleDao.save(userRole)).thenReturn(userRole);
         Mockito.when(roleDao.getRoleByName(userRole.getRoleName().name()))
                 .thenReturn(Optional.of(userRole));

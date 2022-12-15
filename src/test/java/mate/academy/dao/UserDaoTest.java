@@ -9,6 +9,7 @@ import mate.academy.dao.impl.UserDaoImpl;
 import mate.academy.model.Role;
 import mate.academy.model.User;
 import org.hibernate.Session;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,29 +17,38 @@ public class UserDaoTest extends AbstractTest {
     private static final String BOB_MAIL = "bob@mail.com";
     private static final String ALICE_EMAIl = "alice@mail.com";
     private static final String SIMPLE_PASSWORD = "1234";
+    private static final long NONE_ID = 0L;
+    private static final long VALID_FIRST_ID = 1L;
+    private static final long VALID_SECOND_ID = 2L;
+    private static final long NOT_MATH_ID = 100L;
     private static UserDao userDao;
-    private User bob;
-    private Role role = new Role();
+    private static User bob;
 
     @Override
     protected Class<?>[] entities() {
         return new Class[] {User.class, Role.class};
     }
 
+    @BeforeAll
+    static void setUp() {
+        bob = new User();
+    }
+
     @BeforeEach
     void beforeEach() {
         userDao = new UserDaoImpl(getSessionFactory());
-
-        bob = new User();
         bob.setEmail(BOB_MAIL);
         bob.setPassword(SIMPLE_PASSWORD);
+        bob.setId(NONE_ID);
     }
 
     @Test
     void saveOneUser_Ok() {
         User actualBob = userDao.save(bob);
-        assertNotNull(actualBob, "After saving you must return object of User");
-        assertEquals(1L, actualBob.getId(), "After saving you must add id to User object");
+        assertNotNull(actualBob,
+                "After saving you must return object of User");
+        assertEquals(VALID_FIRST_ID, actualBob.getId(),
+                "After saving you must add id to User object");
     }
 
     @Test
@@ -49,8 +59,10 @@ public class UserDaoTest extends AbstractTest {
 
         User actualBob = userDao.save(bob);
         User actualAlice = userDao.save(alice);
-        assertEquals(1L, actualBob.getId(), "First saving user in query must have id 1");
-        assertEquals(2L, actualAlice.getId(), "Second saving user in query must have id 2");
+        assertEquals(VALID_FIRST_ID, actualBob.getId(),
+                "First saving user in query must have id 1");
+        assertEquals(VALID_SECOND_ID, actualAlice.getId(),
+                "Second saving user in query must have id 2");
     }
 
     @Test
@@ -63,7 +75,7 @@ public class UserDaoTest extends AbstractTest {
 
     @Test
     void findById_NotOk() {
-        assertEquals(userDao.findById(100L), Optional.empty(),
+        assertEquals(userDao.findById(NOT_MATH_ID), Optional.empty(),
                 "When you take wrong id, you must return empty Optional");
     }
 
