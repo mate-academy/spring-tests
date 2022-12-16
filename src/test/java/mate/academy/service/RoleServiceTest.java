@@ -55,7 +55,7 @@ class RoleServiceTest {
     }
 
     @Test
-    void getRoleByName_NoSuchElement() {
+    void getRoleByName_NotOk() {
         Assertions.assertThrows(NoSuchElementException.class, () ->
                 roleService.getRoleByName("INVALID_ROLE"),
                 "Expected throws NoSuchElementException, but nothing was throws");

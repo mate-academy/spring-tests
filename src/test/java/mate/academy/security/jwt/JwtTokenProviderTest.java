@@ -35,8 +35,8 @@ class JwtTokenProviderTest {
                     .getDeclaredField("validityInMilliseconds");
             validityTime.setAccessible(true);
             validityTime.set(jwtTokenProvider, 3600000L);
-        } catch (IllegalAccessException | NoSuchFieldException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException("Can`t create secret key", e);
         }
         user = new User();
         role = new Role();
