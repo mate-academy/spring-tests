@@ -68,14 +68,14 @@ public class AuthenticationServiceTest {
     }
 
     @Test
-    void login_notOkPassword() {
+    void login_notOkWrongPassword() {
         Mockito.when(userService.findByEmail(BOB_VALID_EMAIL)).thenReturn(Optional.of(bob));
         assertThrows(AuthenticationException.class, () ->
                 authenticationService.login(BOB_VALID_EMAIL, SIMPLE_LETTER_PASSWORD));
     }
 
     @Test
-    void login_notOkLogin() {
+    void login_notOkWrongEmail() {
         Mockito.when(userService.findByEmail(BOB_VALID_EMAIL)).thenReturn(Optional.of(bob));
         assertThrows(AuthenticationException.class, () ->
                 authenticationService.login(BOB_INVALID_EMAIL,

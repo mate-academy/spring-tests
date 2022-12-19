@@ -29,6 +29,20 @@ public class PasswordValidatorTest {
         incorrectUserDtoList = fillIncorrectUserRegistrationDto();
     }
 
+    @Test
+    void isValid_NotOk() {
+        String message = "When passwords are not the same, you must return false";
+        incorrectUserDtoList.forEach(dto ->
+                assertFalse(passwordValidator.isValid(dto, constraintValidatorContext), message));
+    }
+
+    @Test
+    void isValid_Ok() {
+        String message = "When passwords are the same you must return true";
+        correctUserDtoList.forEach(dto ->
+                assertTrue(passwordValidator.isValid(dto, constraintValidatorContext), message));
+    }
+
     private static List<UserRegistrationDto> fillIncorrectUserRegistrationDto() {
         List<UserRegistrationDto> userDtoList = new ArrayList<>();
         List<String> passwordsList = List.of("1234", "fgsfdgs52345", "JKHG*&YOI$KFgsfg", "123abc");
@@ -53,19 +67,5 @@ public class PasswordValidatorTest {
         userRegistrationDto.setPassword(password);
         userRegistrationDto.setRepeatPassword(repeatPassword);
         return userRegistrationDto;
-    }
-
-    @Test
-    void isValid_NotOk() {
-        String message = "When passwords are not the same, you must return false";
-        incorrectUserDtoList.forEach(dto ->
-                assertFalse(passwordValidator.isValid(dto, constraintValidatorContext), message));
-    }
-
-    @Test
-    void isValid_Ok() {
-        String message = "When passwords are the same you must return true";
-        correctUserDtoList.forEach(dto ->
-                assertTrue(passwordValidator.isValid(dto, constraintValidatorContext), message));
     }
 }

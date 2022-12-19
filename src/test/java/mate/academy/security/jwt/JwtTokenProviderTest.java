@@ -1,11 +1,10 @@
-package mate.academy.security;
+package mate.academy.security.jwt;
 
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Set;
 import mate.academy.model.Role;
 import mate.academy.model.User;
-import mate.academy.security.jwt.JwtTokenProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -74,7 +73,7 @@ public class JwtTokenProviderTest {
     }
 
     @Test
-    void validateToken_Exception() {
+    void validateToken_NotOk() {
         Assertions.assertThrows(RuntimeException.class, () ->
                         jwtTokenProvider.validateToken(jwtTokenProvider
                                 .createToken(BOB_VALID_EMAIL, List.of(USER_ROLE_STRING)) + 1),

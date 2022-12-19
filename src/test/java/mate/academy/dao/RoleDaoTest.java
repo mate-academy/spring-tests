@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 import mate.academy.dao.impl.RoleDaoImpl;
 import mate.academy.model.Role;
@@ -82,9 +81,8 @@ public class RoleDaoTest extends AbstractTest {
             superclass = tempDao.getClass().getConstructor(SessionFactory.class);
             superclass.setAccessible(true);
             initializedDao = superclass.newInstance(getSessionFactory());
-        } catch (NoSuchMethodException | InvocationTargetException
-                 | InstantiationException | IllegalAccessException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException("Can't initialize constructor of RoleDaoImpl class ", e);
         }
         return initializedDao;
     }
