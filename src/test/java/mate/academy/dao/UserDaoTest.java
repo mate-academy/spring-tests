@@ -56,7 +56,7 @@ public class UserDaoTest extends AbstractTest {
     }
 
     @Test
-    @DisplayName("Save two names " + ALICE_EMAIl + ", " + BOB_MAIL)
+    @DisplayName("Save two users with email " + ALICE_EMAIl + "and " + BOB_MAIL)
     void saveTwoUser_Ok() {
         User alice = new User();
         alice.setEmail(ALICE_EMAIl);
@@ -95,9 +95,9 @@ public class UserDaoTest extends AbstractTest {
         Session session = getSessionFactory().openSession();
         session.save(role);
         session.close();
-        User expected = userDao.save(bob);
-        Optional<User> actual = userDao.findByEmail(expected.getEmail());
-        assertEquals(expected.getEmail(), actual.get().getEmail(),
+        userDao.save(bob);
+        Optional<User> actual = userDao.findByEmail(bob.getEmail());
+        assertEquals(bob.getEmail(), actual.get().getEmail(),
                 "You need to return object with the same email");
     }
 
