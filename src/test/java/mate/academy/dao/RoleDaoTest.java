@@ -3,15 +3,12 @@ package mate.academy.dao;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.lang.reflect.Constructor;
 import java.util.Optional;
 import mate.academy.dao.impl.RoleDaoImpl;
 import mate.academy.model.Role;
-import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 public class RoleDaoTest extends AbstractTest {
     private static final long NONE_ID = 0L;
@@ -28,17 +25,14 @@ public class RoleDaoTest extends AbstractTest {
 
     @BeforeAll
     static void setUp() {
-        userRole = new Role();
-        adminRole = new Role();
-
+        userRole = new Role(Role.RoleName.USER);
+        adminRole = new Role(Role.RoleName.ADMIN);
     }
 
     @BeforeEach
     void beforeEach() {
-        roleDao = reflectiveInitializeProtectedConstructor();
-        userRole.setRoleName(Role.RoleName.USER);
+        roleDao = new RoleDaoImpl(getSessionFactory());
         userRole.setId(NONE_ID);
-        adminRole.setRoleName(Role.RoleName.ADMIN);
         userRole.setId(NONE_ID);
     }
 
@@ -71,19 +65,5 @@ public class RoleDaoTest extends AbstractTest {
     void getRoleByName_NotOk() {
         assertEquals(Optional.empty(), roleDao.getRoleByName(userRole.getRoleName().name()),
                 "You must return empty Optional when can't find name");
-    }
-
-    private RoleDao reflectiveInitializeProtectedConstructor() {
-        RoleDao tempDao = Mockito.mock(RoleDaoImpl.class, Mockito.CALLS_REAL_METHODS);
-        Constructor<? extends RoleDao> superclass;
-        RoleDao initializedDao;
-        try {
-            superclass = tempDao.getClass().getConstructor(SessionFactory.class);
-            superclass.setAccessible(true);
-            initializedDao = superclass.newInstance(getSessionFactory());
-        } catch (Exception e) {
-            throw new RuntimeException("Can't initialize constructor of RoleDaoImpl class ", e);
-        }
-        return initializedDao;
     }
 }

@@ -11,6 +11,7 @@ import mate.academy.model.User;
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class UserDaoTest extends AbstractTest {
@@ -43,15 +44,19 @@ public class UserDaoTest extends AbstractTest {
     }
 
     @Test
+    @DisplayName("Save user " + BOB_MAIL)
     void saveOneUser_Ok() {
         User actualBob = userDao.save(bob);
         assertNotNull(actualBob,
                 "After saving you must return object of User");
         assertEquals(VALID_FIRST_ID, actualBob.getId(),
                 "After saving you must add id to User object");
+        assertEquals(BOB_MAIL, actualBob.getEmail(),
+                "After saving you must return User with the same email");
     }
 
     @Test
+    @DisplayName("Save two names " + ALICE_EMAIl + ", " + BOB_MAIL)
     void saveTwoUser_Ok() {
         User alice = new User();
         alice.setEmail(ALICE_EMAIl);
@@ -67,9 +72,11 @@ public class UserDaoTest extends AbstractTest {
 
     @Test
     void findById_Ok() {
-        User expected = userDao.save(bob);
-        Optional<User> actual = userDao.findById(expected.getId());
-        assertEquals(expected.getEmail(), actual.get().getEmail(),
+        long expectedId = 1L;
+        userDao.save(bob);
+        bob.setId(expectedId);
+        Optional<User> actual = userDao.findById(expectedId);
+        assertEquals(bob.getEmail(), actual.get().getEmail(),
                 "You need to return object with the same id");
     }
 
@@ -80,6 +87,7 @@ public class UserDaoTest extends AbstractTest {
     }
 
     @Test
+    @DisplayName("find by Email " + BOB_MAIL)
     void findByEmail_Ok() {
         Role role = new Role();
         role.setRoleName(Role.RoleName.USER);

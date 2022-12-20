@@ -43,7 +43,7 @@ public class JwtTokenProviderTest {
             validityTime.setAccessible(true);
             validityTime.set(jwtTokenProvider, 3600000L);
         } catch (IllegalAccessException | NoSuchFieldException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Can't mock jwtTokenProvider", e);
         }
     }
 
