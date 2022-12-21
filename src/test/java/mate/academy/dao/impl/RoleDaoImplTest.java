@@ -7,22 +7,22 @@ import mate.academy.model.Role;
 import mate.academy.service.RoleService;
 import mate.academy.service.impl.RoleServiceImpl;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 class RoleDaoImplTest extends AbstractTest {
-    private RoleService roleService;
-    private RoleDao roleDao;
-    private Role role;
+    private static RoleService roleService;
+    private static RoleDao roleDao;
+    private static Role role;
 
     @Override
     protected Class<?>[] entities() {
         return new Class[0];
     }
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void setUp() {
         roleDao = Mockito.mock(RoleDaoImpl.class);
         roleService = new RoleServiceImpl(roleDao);
         role = new Role();

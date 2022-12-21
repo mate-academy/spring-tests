@@ -9,7 +9,7 @@ import mate.academy.model.User;
 import mate.academy.service.UserService;
 import mate.academy.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,15 +17,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 class UserDaoImplTest extends AbstractTest {
     private static final String PASSWORD = "123";
     private static final String LOGIN = "rex@mail.com";
-    private UserService userService;
-    private UserDao userDao;
-    private PasswordEncoder passwordEncoder;
-    private User user;
+    private static UserService userService;
+    private static UserDao userDao;
+    private static User user;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void setUp() {
         userDao = Mockito.mock(UserDaoImpl.class);
-        passwordEncoder = Mockito.mock(PasswordEncoder.class);
+        PasswordEncoder passwordEncoder = Mockito.mock(PasswordEncoder.class);
         userService = new UserServiceImpl(userDao, passwordEncoder);
         user = new User();
         user.setEmail(LOGIN);

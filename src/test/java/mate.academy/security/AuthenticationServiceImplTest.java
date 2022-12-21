@@ -23,7 +23,7 @@ class AuthenticationServiceImplTest {
     private static RoleService roleService;
     private static PasswordEncoder passwordEncoder;
     private static User user;
-    private static User non_existing_user;
+    private static User nonExistingUser;
 
     @BeforeAll
     static void setUp() {
@@ -34,9 +34,9 @@ class AuthenticationServiceImplTest {
         user = new User();
         user.setPassword(PASSWORD);
         user.setEmail(EMAIL);
-        non_existing_user = new User();
-        non_existing_user.setPassword(NON_EXISTING_PASSWORD);
-        non_existing_user.setEmail(NON_EXISTING_EMAIL);
+        nonExistingUser = new User();
+        nonExistingUser.setPassword(NON_EXISTING_PASSWORD);
+        nonExistingUser.setEmail(NON_EXISTING_EMAIL);
     }
 
     @Test
@@ -64,7 +64,7 @@ class AuthenticationServiceImplTest {
 
     @Test
     void login_NotOk() {
-        Mockito.when(userService.findByEmail(NON_EXISTING_EMAIL)).thenReturn(Optional.of(non_existing_user));
+        Mockito.when(userService.findByEmail(NON_EXISTING_EMAIL)).thenReturn(Optional.of(nonExistingUser));
         Mockito.when(passwordEncoder.matches(Mockito.any(), Mockito.any())).thenReturn(false);
         Assertions.assertThrows(AuthenticationException.class, () ->
                 authenticationService.login(NON_EXISTING_EMAIL, NON_EXISTING_PASSWORD)

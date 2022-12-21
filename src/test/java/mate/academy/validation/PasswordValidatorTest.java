@@ -3,18 +3,18 @@ package mate.academy.validation;
 import javax.validation.ConstraintValidatorContext;
 import mate.academy.model.dto.UserRegistrationDto;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 class PasswordValidatorTest {
     private static final String PASSWORD = "12345";
-    private UserRegistrationDto userDto;
-    private PasswordValidator passwordValidator;
-    private ConstraintValidatorContext constraintValidatorContext;
+    private static UserRegistrationDto userDto;
+    private static PasswordValidator passwordValidator;
+    private static ConstraintValidatorContext constraintValidatorContext;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void setUp() {
         Password constraintAnnotation = Mockito.mock(Password.class);
         constraintValidatorContext = Mockito.mock(ConstraintValidatorContext.class);
         Mockito.when(constraintAnnotation.field()).thenReturn("password");

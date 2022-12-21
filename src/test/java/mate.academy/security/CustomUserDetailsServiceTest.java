@@ -19,7 +19,7 @@ class CustomUserDetailsServiceTest {
     private static User user;
     private static CustomUserDetailsService customUserDetailsService;
     private static UserService userService;
-    private static User non_existing_user;
+    private static User nonExistingUser;
 
     @BeforeAll
     static void setUp() {
@@ -29,9 +29,9 @@ class CustomUserDetailsServiceTest {
         user.setEmail(EMAIL);
         user.setPassword(PASSWORD);
         user.setRoles(Set.of(new Role(Role.RoleName.USER)));
-        non_existing_user = new User();
-        non_existing_user.setPassword(NON_EXISTING_PASSWORD);
-        non_existing_user.setEmail(NON_EXISTING_EMAIL);
+        nonExistingUser = new User();
+        nonExistingUser.setPassword(NON_EXISTING_PASSWORD);
+        nonExistingUser.setEmail(NON_EXISTING_EMAIL);
     }
 
     @Test
@@ -44,7 +44,7 @@ class CustomUserDetailsServiceTest {
 
     @Test
     void loadByUserName_NotOk() {
-        Mockito.when(userService.findByEmail(NON_EXISTING_EMAIL)).thenReturn(Optional.of(non_existing_user));
+        Mockito.when(userService.findByEmail(NON_EXISTING_EMAIL)).thenReturn(Optional.of(nonExistingUser));
         Assertions.assertThrows(Exception.class, () ->
                 customUserDetailsService.loadUserByUsername(NON_EXISTING_EMAIL)
         );
