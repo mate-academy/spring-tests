@@ -80,6 +80,6 @@ class JwtTokenProviderTest {
         Assertions.assertThrows(RuntimeException.class, () ->
                         jwtTokenProvider.validateToken(jwtTokenProvider
                                 .createToken(EMAIL, List.of(ROLE.name())) + 1),
-                "Expected throws RuntimeException, but nothing was throws");
+                "Expected throws RuntimeException, but nothing was thrown");
     }
 }

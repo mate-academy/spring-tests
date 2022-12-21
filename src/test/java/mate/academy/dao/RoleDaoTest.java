@@ -1,5 +1,7 @@
 package mate.academy.dao;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.Optional;
 import mate.academy.dao.impl.RoleDaoImpl;
 import mate.academy.model.Role;
@@ -21,11 +23,12 @@ class RoleDaoTest extends AbstractTest {
 
     @Test
     void save_Ok() {
-        Long id = 1L;
+        Long expectedRoleId = 1L;
+        assertThat(roleDao.getRoleByName(ROLE.name())).isEmpty();
         Role actual = roleDao.save(role);
         Assertions.assertNotNull(actual, "Method must return Role object");
-        Assertions.assertEquals(id, actual.getId(),
-                "Expected object with id " + id + ", but was " + actual.getId());
+        Assertions.assertEquals(expectedRoleId, actual.getId(),
+                "Expected object with id " + expectedRoleId + ", but was " + actual.getId());
     }
 
     @Test
@@ -39,8 +42,7 @@ class RoleDaoTest extends AbstractTest {
     @Test
     void getRoleByName_NotOk() {
         Optional<Role> actual = roleDao.getRoleByName(ROLE.name());
-        Assertions.assertEquals(Optional.empty(), actual,
-                "Expected null value, but was " + actual);
+        assertThat(actual).isEmpty();
     }
 
     @Override

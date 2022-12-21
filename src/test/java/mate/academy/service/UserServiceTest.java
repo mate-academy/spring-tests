@@ -42,22 +42,12 @@ class UserServiceTest {
     }
 
     @Test
-    void save_Ok() {
-        Mockito.when(userDao.save(user)).thenReturn(user);
-
-        User actual = userService.save(user);
-        Assertions.assertNotNull(actual, "Method must return User object");
-        Assertions.assertEquals(user, actual,
-                "Expected " + user + ", but was " + actual);
-    }
-
-    @Test
     void findById_Ok() {
-        Long id = 1L;
-        user.setId(id);
-        Mockito.when(userDao.findById(id)).thenReturn(Optional.of(user));
+        Long expectedId = 1L;
+        user.setId(expectedId);
+        Mockito.when(userDao.findById(expectedId)).thenReturn(Optional.of(user));
 
-        User actual = userService.findById(id).get();
+        User actual = userService.findById(expectedId).get();
         Assertions.assertNotNull(actual, "Method must return User object");
         Assertions.assertEquals(user, actual,
                 "Expected " + user + ", but was " + actual);

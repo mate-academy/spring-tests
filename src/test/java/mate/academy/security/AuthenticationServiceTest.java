@@ -75,7 +75,7 @@ class AuthenticationServiceTest {
                 .thenReturn(Optional.of(user));
         Assertions.assertThrows(AuthenticationException.class, () ->
                 authenticationService.login(EMAIL, PASSWORD),
-                "Expected throws AuthenticationException, but nothing was throws");
+                "Expected throws AuthenticationException, but nothing was thrown");
     }
 
     @Test
@@ -84,6 +84,6 @@ class AuthenticationServiceTest {
         Assertions.assertThrows(AuthenticationException.class, () ->
                 authenticationService.login("anotheremail@gmail.com",
                         PASSWORD),
-                "Expected throws AuthenticationException, but nothing was throws");
+                "Expected throws AuthenticationException, but nothing was thrown");
     }
 }
