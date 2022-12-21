@@ -1,7 +1,7 @@
 package mate.academy.security;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import mate.academy.security.jwt.JwtTokenProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -66,7 +66,7 @@ class JwtTokenProviderTest {
     @Test
     void resolveToken_Ok() {
         HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
-        Mockito.when(request.getHeader("Authorization")).thenReturn("Bearer "+ TOKEN);
+        Mockito.when(request.getHeader("Authorization")).thenReturn("Bearer " + TOKEN);
         Assertions.assertEquals(TOKEN, jwtTokenProvider.resolveToken(request));
     }
 
