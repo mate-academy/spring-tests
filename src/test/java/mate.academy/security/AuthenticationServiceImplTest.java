@@ -15,9 +15,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 class AuthenticationServiceImplTest {
     private static final String EMAIL = "sobaka@mail.ru";
-    private static final String  PASSWORD = "12345";
+    private static final String PASSWORD = "12345";
     private static final String NON_EXISTING_EMAIL = "neo@mail.com";
-    private static final String  NON_EXISTING_PASSWORD = "777";
+    private static final String NON_EXISTING_PASSWORD = "777";
     private static AuthenticationService authenticationService;
     private static UserService userService;
     private static RoleService roleService;
@@ -30,7 +30,8 @@ class AuthenticationServiceImplTest {
         userService = Mockito.mock(UserService.class);
         roleService = Mockito.mock(RoleService.class);
         passwordEncoder = Mockito.mock(PasswordEncoder.class);
-        authenticationService = new AuthenticationServiceImpl(userService, roleService, passwordEncoder);
+        authenticationService = new AuthenticationServiceImpl(
+                userService, roleService, passwordEncoder);
         user = new User();
         user.setPassword(PASSWORD);
         user.setEmail(EMAIL);
@@ -64,10 +65,13 @@ class AuthenticationServiceImplTest {
 
     @Test
     void login_NotOk() {
-        Mockito.when(userService.findByEmail(NON_EXISTING_EMAIL)).thenReturn(Optional.of(nonExistingUser));
-        Mockito.when(passwordEncoder.matches(Mockito.any(), Mockito.any())).thenReturn(false);
+        Mockito.when(userService.findByEmail(NON_EXISTING_EMAIL))
+                .thenReturn(Optional.of(nonExistingUser));
+        Mockito.when(passwordEncoder.matches(Mockito.any(),
+                Mockito.any())).thenReturn(false);
         Assertions.assertThrows(AuthenticationException.class, () ->
-                authenticationService.login(NON_EXISTING_EMAIL, NON_EXISTING_PASSWORD)
+                authenticationService.login(NON_EXISTING_EMAIL,
+                        NON_EXISTING_PASSWORD)
         );
     }
 }

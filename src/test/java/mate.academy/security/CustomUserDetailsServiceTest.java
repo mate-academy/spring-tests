@@ -15,7 +15,7 @@ class CustomUserDetailsServiceTest {
     private static final String EMAIL = "robokop@mail.com";
     private static final String PASSWORD = "12345";
     private static final String NON_EXISTING_EMAIL = "neo@mail.com";
-    private static final String  NON_EXISTING_PASSWORD = "777";
+    private static final String NON_EXISTING_PASSWORD = "777";
     private static User user;
     private static CustomUserDetailsService customUserDetailsService;
     private static UserService userService;
@@ -44,7 +44,8 @@ class CustomUserDetailsServiceTest {
 
     @Test
     void loadByUserName_NotOk() {
-        Mockito.when(userService.findByEmail(NON_EXISTING_EMAIL)).thenReturn(Optional.of(nonExistingUser));
+        Mockito.when(userService.findByEmail(NON_EXISTING_EMAIL))
+                .thenReturn(Optional.of(nonExistingUser));
         Assertions.assertThrows(Exception.class, () ->
                 customUserDetailsService.loadUserByUsername(NON_EXISTING_EMAIL)
         );

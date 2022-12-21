@@ -18,9 +18,9 @@ class JwtTokenProviderTest {
     private static final String LOGIN = "user@mail.com";
     private static final List<String> ROLES = List.of("USER", "ADMIN");
     private static final String PASSWORD = "qwerty";
-    private static final String TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQG1haWwuY29tIiwicm9" +
-            "sZXMiOlsiVVNFUiIsIkFETUlOIl0sImlhdCI6MTYzNDM3NTM4MiwiZXhwIjoxNjM0M" +
-            "zc4OTgyfQ.H9QvQ0o7SVAvCPuo2cM0eLSg3L24IKJar0meheYBARE";
+    private static final String TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQG1haWwuY29tIiwicm9"
+            + "sZXMiOlsiVVNFUiIsIkFETUlOIl0sImlhdCI6MTYzNDM3NTM4MiwiZXhwIjoxNjM0M"
+            + "zc4OTgyfQ.H9QvQ0o7SVAvCPuo2cM0eLSg3L24IKJar0meheYBARE";
     private static JwtTokenProvider jwtTokenProvider;
     private static UserDetailsService userDetailsService;
 
@@ -42,11 +42,12 @@ class JwtTokenProviderTest {
 
     @Test
     void getAuthentication_Ok() {
-        User.UserBuilder builder = org.springframework.security.core.userdetails.User.withUsername("USER");
+        User.UserBuilder builder = User.withUsername("USER");
         builder.password(PASSWORD);
         builder.roles(ROLES.get(0));
         UserDetails userDetails = builder.build();
-        UsernamePasswordAuthenticationToken expected = new UsernamePasswordAuthenticationToken(userDetails, "",
+        UsernamePasswordAuthenticationToken expected = new UsernamePasswordAuthenticationToken(
+                userDetails, "",
                 userDetails.getAuthorities());
         Mockito.when(userDetailsService.loadUserByUsername(Mockito.any())).thenReturn(userDetails);
 
