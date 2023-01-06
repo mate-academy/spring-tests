@@ -25,21 +25,21 @@ class RoleServiceImplTest {
     }
 
     @Test
-    void save_Ok() {
+    void save_correctData_Ok() {
         Mockito.when(roleDao.save(user)).thenReturn(user);
         Role actual = roleService.save(user);
         Assertions.assertEquals(user.getRoleName(), actual.getRoleName());
     }
 
     @Test
-    void getRoleByName_Ok() {
+    void getRoleByName_correctData_Ok() {
         Mockito.when(roleDao.getRoleByName(ROLE_NAME_USER)).thenReturn(Optional.of(user));
         Optional<Role> actual = roleDao.getRoleByName(user.getRoleName().toString());
         Assertions.assertNotNull(actual);
     }
 
     @Test
-    void getRoleByName_incorrectRole_Exception_NotOk() {
+    void getRoleByName_incorrectRole_NoSuchElementException() {
         Mockito.when(roleDao.getRoleByName(INCORRECT_ROLE_NAME)).thenReturn(Optional.empty());
         Assertions.assertThrows(NoSuchElementException.class, () -> {
             roleService.getRoleByName(ROLE_NAME_USER);

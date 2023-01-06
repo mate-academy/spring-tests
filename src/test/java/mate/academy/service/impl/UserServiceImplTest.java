@@ -38,7 +38,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void save_Ok() {
+    void save_correctData_Ok() {
         Mockito.when(userDao.save(any())).thenReturn(savedUser);
         User actualUser = userService.save(user);
         Assertions.assertNotNull(actualUser);
@@ -46,7 +46,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void save_NotUniqueEmail_Exception_NotOk() {
+    void save_NotUniqueEmail_DataProcessingException() {
         Mockito.when(userDao.save(any())).thenThrow(DataProcessingException.class);
         Assertions.assertThrows(DataProcessingException.class, () -> {
             userService.save(user);
@@ -54,7 +54,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findById_Ok() {
+    void findById_correctData_Ok() {
         Mockito.when(userDao.findById(any())).thenReturn(Optional.of(savedUser));
         Optional<User> actual = userService.findById(USER_ID);
         Assertions.assertNotNull(actual);
@@ -72,7 +72,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findByEmail_Ok() {
+    void findByEmail_correctEmail_Ok() {
         Mockito.when(userDao.findByEmail(any())).thenReturn(Optional.of(savedUser));
         Optional<User> actual = userService.findByEmail(EMAIL);
         Assertions.assertNotNull(actual);

@@ -26,21 +26,21 @@ class RoleDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void save_Ok() {
+    void save_correctUser_Ok() {
         Role actual = roleDao.save(user);
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(1L, actual.getId());
     }
 
     @Test
-    void getRoleByName_Ok() {
+    void getRoleByName_correctRoleName_Ok() {
         roleDao.save(user);
         Role actual = roleDao.getRoleByName("USER").get();
         Assertions.assertEquals(user.getRoleName(), actual.getRoleName());
     }
 
     @Test
-    void getRoleByName_invalidRole_Exception_NotOk() {
+    void getRoleByName_invalidRole_DataProcessingException() {
         roleDao.save(user);
         Assertions.assertThrows(DataProcessingException.class, () -> {
             roleDao.getRoleByName("user");

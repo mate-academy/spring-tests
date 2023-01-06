@@ -25,13 +25,13 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void createToken_Ok() {
+    void createToken_correctData_Ok() {
         String actual = jwtTokenProvider.createToken(EMAIL, List.of(Role.RoleName.USER.name()));
         Assertions.assertNotNull(actual);
     }
 
     @Test
-    void getUsername_Ok() {
+    void getUsername_correctData_Ok() {
         String actual = jwtTokenProvider.createToken(EMAIL, List.of(Role.RoleName.USER.name()));
         String actualUsername = jwtTokenProvider.getUsername(actual);
         Assertions.assertNotNull(actualUsername);
@@ -39,7 +39,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void getUsername_NotOk() {
+    void getUsername_correctData_NotOk() {
         String invalidToken = new StringBuilder(jwtTokenProvider
                 .createToken(EMAIL, List.of(Role.RoleName.USER.name()))).reverse().toString();
         Assertions.assertThrows(MalformedJwtException.class, ()
@@ -47,7 +47,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void resolveToken_Ok() {
+    void resolveToken_correctData_Ok() {
         HttpServletRequest req = Mockito.mock(HttpServletRequest.class);
         Mockito.when(req.getHeader("Authorization")).thenReturn("token");
         String actual = jwtTokenProvider.resolveToken(req);
@@ -55,13 +55,13 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void validateToken_Ok() {
+    void validateToken_validToken_Ok() {
         String actual = jwtTokenProvider.createToken(EMAIL, List.of(Role.RoleName.USER.name()));
         Assertions.assertTrue(jwtTokenProvider.validateToken(actual));
     }
 
     @Test
-    void validateToken_invalidToken_Exception_NotOk() {
+    void validateToken_invalidToken_RuntimeException() {
         String invalidToken = new StringBuilder(jwtTokenProvider
                 .createToken(EMAIL, List.of(Role.RoleName.USER.name()))).reverse().toString();
         Assertions.assertThrows(RuntimeException.class, () -> {

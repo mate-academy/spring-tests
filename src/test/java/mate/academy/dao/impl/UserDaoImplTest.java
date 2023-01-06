@@ -35,14 +35,14 @@ class UserDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void save_Ok() {
+    void save_correctData_Ok() {
         User actual = userDao.save(bob);
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(1L, actual.getId());
     }
 
     @Test
-    void findByEmail_Ok() {
+    void findByEmail_correctData_Ok() {
         userDao.save(bob);
         User actual = userDao.findByEmail(EMAIL).get();
         Assertions.assertEquals(bob, actual);
@@ -56,22 +56,22 @@ class UserDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void findById_Ok() {
+    void findById_correctData_Ok() {
         userDao.save(bob);
         User actual = userDao.findById(1L).get();
         Assertions.assertEquals(bob, actual);
     }
 
     @Test
-    void findById_inputNull_Exception_NotOk() {
-        Assertions.assertThrows(DataProcessingException.class, () -> {
-            userDao.findById(null);
-        });
-    }
-
-    @Test
     void findById_incorrectId_NotOk() {
         Optional<User> actual = userDao.findById(10L);
         Assertions.assertTrue(actual.isEmpty());
+    }
+
+    @Test
+    void findById_inputNull_DataProcessingException() {
+        Assertions.assertThrows(DataProcessingException.class, () -> {
+            userDao.findById(null);
+        });
     }
 }
