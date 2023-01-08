@@ -24,6 +24,8 @@ class AuthenticationServiceImplTest {
     private static PasswordEncoder passwordEncoder;
     private static String expectedEmail;
     private static String expectedPassword;
+    private static User user;
+    private static Role defaultRole;
 
     @BeforeAll
     static void setUp() {
@@ -34,15 +36,15 @@ class AuthenticationServiceImplTest {
                 passwordEncoder);
         expectedEmail = "vitaliy@i.ua";
         expectedPassword = "12345678";
+        user = new User();
+        user.setEmail(expectedEmail);
+        user.setPassword(expectedPassword);
+        defaultRole = new Role(Role.RoleName.USER);
+        user.setRoles(Set.of(defaultRole));
     }
 
     @Test
     void register_Ok() {
-        User user = new User();
-        user.setEmail(expectedEmail);
-        user.setPassword(expectedPassword);
-        Role defaultRole = new Role(Role.RoleName.USER);
-        user.setRoles(Set.of(defaultRole));
         Mockito.when(roleService.getRoleByName("USER")).thenReturn(defaultRole);
         Mockito.when(userService.save(any())).thenReturn(user);
         User actual = authenticationService.register(expectedEmail, expectedPassword);
@@ -52,9 +54,6 @@ class AuthenticationServiceImplTest {
 
     @Test
     void login_Ok() {
-        User user = new User();
-        user.setEmail(expectedEmail);
-        user.setPassword(expectedPassword);
         Mockito.when(userService.findByEmail(expectedEmail)).thenReturn(Optional.of(user));
         Mockito.when(passwordEncoder.matches(expectedPassword, user.getPassword()))
                 .thenReturn(true);
@@ -78,9 +77,6 @@ class AuthenticationServiceImplTest {
 
     @Test
     void login_badPasswordMatching() {
-        User user = new User();
-        user.setEmail(expectedEmail);
-        user.setPassword(expectedPassword);
         Mockito.when(userService.findByEmail(expectedEmail)).thenReturn(Optional.of(user));
         Mockito.when(passwordEncoder.matches(any(), any())).thenReturn(false);
         assertThrows(AuthenticationException.class, () ->

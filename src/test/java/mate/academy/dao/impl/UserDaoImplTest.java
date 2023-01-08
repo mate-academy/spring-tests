@@ -70,7 +70,7 @@ class UserDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void findById_tooBigId_notOk() {
+    void findById_invalidId_notOk() {
         Long id = 2L;
         userDao.save(expectedUser);
         Assertions.assertThrows(NoSuchElementException.class, () ->
