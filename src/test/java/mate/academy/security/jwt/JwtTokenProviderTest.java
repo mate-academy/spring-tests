@@ -27,6 +27,7 @@ class JwtTokenProviderTest {
         ReflectionTestUtils.setField(jwtTokenProvider, "secretKey", "secret");
         ReflectionTestUtils.setField(jwtTokenProvider, "validityInMilliseconds", 3600000L);
     }
+
     @Test
     void createToken_Ok() {
         String actual = jwtTokenProvider

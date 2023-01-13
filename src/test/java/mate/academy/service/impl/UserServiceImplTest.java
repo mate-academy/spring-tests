@@ -13,7 +13,6 @@ import org.mockito.Mockito;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-
 class UserServiceImplTest {
     private static final String EMAIL = "ester.ua";
     private static final String PASSWORD = "987654321";

@@ -15,6 +15,7 @@ class EmailValidatorTest {
         emailValidator = new EmailValidator();
         constraintValidatorContext = Mockito.mock(ConstraintValidatorContext.class);
     }
+
     @Test
     void isValid_Ok() {
         String emailOk = "andrij@mail.com";

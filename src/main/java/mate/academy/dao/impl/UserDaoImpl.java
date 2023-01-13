@@ -1,7 +1,6 @@
 package mate.academy.dao.impl;
 
 import java.util.Optional;
-
 import mate.academy.dao.UserDao;
 import mate.academy.exception.DataProcessingException;
 import mate.academy.model.User;

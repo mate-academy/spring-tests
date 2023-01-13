@@ -11,12 +11,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-
-class UserDaoImplTest extends AbstractTest{
+class UserDaoImplTest extends AbstractTest {
     private static final String EMAIL = "ester.ua";
     private static final String PASSWORD = "987654321";
     private UserDao userDao;
     private User user;
+
     @Override
     protected Class<?>[] entities() {
         return new Class[] {Role.class, User.class};

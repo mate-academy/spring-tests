@@ -26,6 +26,7 @@ class PasswordValidatorTest {
         userRegistrationDto.setPassword("987654321");
         userRegistrationDto.setRepeatPassword("987654321");
     }
+
     @Test
     void isValid_Ok() {
         boolean actual = passwordValidator.isValid(userRegistrationDto,
