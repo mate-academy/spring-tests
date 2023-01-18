@@ -8,13 +8,10 @@ import mate.academy.service.UserService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 import java.util.Optional;
 import java.util.Set;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -27,13 +24,11 @@ class AuthenticationServiceImplTest {
     private static final String WRONG_PASSWORD = "123456";
     private static final String USER_ROLE_NAME = "USER";
     private static final Role USER_ROLE = new Role(Role.RoleName.USER);
-    private static final Set<Role> ROLES = Set.of(USER_ROLE);
     private static AuthenticationService authenticationService;
     private static UserService userService;
     private static RoleService roleService;
     private static PasswordEncoder passwordEncoder;
     private User user;
-    private User rawUser;
 
     @BeforeAll
     static void beforeAll() {
@@ -46,17 +41,9 @@ class AuthenticationServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        rawUser = createUser(EMAIL, PASSWORD, ROLES);
-        user = createUser(EMAIL, passwordEncoder.encode(PASSWORD), ROLES);
+        user = createUser();
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setId(ID);
-    }
-
-    private User createUser(String email, String password, Set<Role> roles) {
-        User user = new User();
-        user.setEmail(email);
-        user.setPassword(password);
-        user.setRoles(roles);
-        return user;
     }
 
     @Test
@@ -87,5 +74,13 @@ class AuthenticationServiceImplTest {
         when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
         assertThrows(AuthenticationException.class,
                 () -> authenticationService.login(EMAIL, WRONG_PASSWORD));
+    }
+
+    private User createUser() {
+        User user = new User();
+        user.setEmail(EMAIL);
+        user.setPassword(PASSWORD);
+        user.setRoles(Set.of(USER_ROLE));
+        return user;
     }
 }
