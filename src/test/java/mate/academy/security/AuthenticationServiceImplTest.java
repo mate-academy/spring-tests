@@ -1,21 +1,22 @@
 package mate.academy.security;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.util.Optional;
+import java.util.Set;
 import mate.academy.exception.AuthenticationException;
 import mate.academy.model.Role;
 import mate.academy.model.User;
 import mate.academy.service.RoleService;
 import mate.academy.service.UserService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import java.util.Optional;
-import java.util.Set;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 class AuthenticationServiceImplTest {
     private static final long ID = 1L;
@@ -51,28 +52,28 @@ class AuthenticationServiceImplTest {
         when(roleService.getRoleByName(USER_ROLE_NAME)).thenReturn(USER_ROLE);
         when(userService.save(any())).thenReturn(user);
         User actual = authenticationService.register(EMAIL, PASSWORD);
-        assertNotNull(actual);
-        assertEquals(user, actual);
+        Assertions.assertNotNull(actual);
+        Assertions.assertEquals(user, actual);
     }
 
     @Test
     void login_Ok() throws AuthenticationException {
         when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
         User actual = authenticationService.login(EMAIL, PASSWORD);
-        assertEquals(user, actual);
+        Assertions.assertEquals(user, actual);
     }
 
     @Test
     void login_WrongEmail_NotOk() {
         when(userService.findByEmail(EMAIL)).thenReturn(Optional.empty());
-        assertThrows(AuthenticationException.class,
+        Assertions.assertThrows(AuthenticationException.class,
                 () -> authenticationService.login(EMAIL, PASSWORD));
     }
 
     @Test
     void login_WrongPassword_NotOk() {
         when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
-        assertThrows(AuthenticationException.class,
+        Assertions.assertThrows(AuthenticationException.class,
                 () -> authenticationService.login(EMAIL, WRONG_PASSWORD));
     }
 

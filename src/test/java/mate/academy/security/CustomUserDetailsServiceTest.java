@@ -1,9 +1,13 @@
 package mate.academy.security;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Optional;
+import java.util.Set;
 import mate.academy.model.Role;
 import mate.academy.model.User;
 import mate.academy.service.UserService;
@@ -13,8 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import java.util.Optional;
-import java.util.Set;
 
 class CustomUserDetailsServiceTest {
     private static final Role ADMIN_ROLE = new Role(Role.RoleName.ADMIN);

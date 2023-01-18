@@ -1,5 +1,12 @@
 package mate.academy.dao;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Optional;
+import java.util.Set;
 import mate.academy.dao.impl.RoleDaoImpl;
 import mate.academy.dao.impl.UserDaoImpl;
 import mate.academy.exception.DataProcessingException;
@@ -7,9 +14,6 @@ import mate.academy.model.Role;
 import mate.academy.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.util.Optional;
-import java.util.Set;
-import static org.junit.jupiter.api.Assertions.*;
 
 class UserDaoImplTest extends AbstractTest {
     private static final long ID = 1L;

@@ -1,12 +1,16 @@
 package mate.academy.dao;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Optional;
 import mate.academy.dao.impl.RoleDaoImpl;
 import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.util.Optional;
-import static org.junit.jupiter.api.Assertions.*;
 
 class RoleDaoImplTest extends AbstractTest {
     private static final String ROLE_NAME = Role.RoleName.USER.name();

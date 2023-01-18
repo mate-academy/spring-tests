@@ -1,18 +1,18 @@
 package mate.academy.validation;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import javax.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import javax.validation.ConstraintValidatorContext;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 class EmailValidatorTest {
-    private final static String VALID_EMAIL = "user@gmail.com";
-    private final static String WRONG_EMAIL_NO_AT = "usergmail.com";
-    private final static String WRONG_EMAIL_ENDS_WITH_DOT= "1user@gmail.com.";
-    private final static String WRONG_EMAIL_NO_DOMAIN = "user@";
+    private static final String VALID_EMAIL = "user@gmail.com";
+    private static final String WRONG_EMAIL_NO_AT = "usergmail.com";
+    private static final String WRONG_EMAIL_ENDS_WITH_DOT = "1user@gmail.com.";
+    private static final String WRONG_EMAIL_NO_DOMAIN = "user@";
     private static EmailValidator emailValidator;
     private static ConstraintValidatorContext constraintValidatorContext;
 
