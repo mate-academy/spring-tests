@@ -66,7 +66,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void resolveNullToken_notOk() {
+    void resolveToken_nullToken_notOk() {
         HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
         Mockito.when(request.getHeader("Authorization")).thenReturn(null);
         String actual = jwtTokenProvider.resolveToken(request);
@@ -74,7 +74,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void resolveTokenInvalidToken_notOk() {
+    void resolveToken_invalidToken_notOk() {
         String token = jwtTokenProvider.createToken("bob@i.ua", List.of("USER"));
         HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
         Mockito.when(request.getHeader("Authorization")).thenReturn(token);
@@ -89,7 +89,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void validateNullToken_notOk() {
+    void validateToken_nullToken_notOk() {
         try {
             jwtTokenProvider.validateToken(null);
         } catch (RuntimeException e) {
@@ -99,7 +99,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void validateInvalidToken_notOk() {
+    void validateToken_invalidToken_notOk() {
         String token = jwtTokenProvider.createToken("bob@i.ua", List.of("USER"));
         try {
             jwtTokenProvider.validateToken(token + "k");

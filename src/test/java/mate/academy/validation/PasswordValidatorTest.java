@@ -33,14 +33,14 @@ class PasswordValidatorTest {
     }
 
     @Test
-    void passwordsDoNotMatch_notOk() {
+    void isValid_passwordsDoNotMatch_notOk() {
         registrationDto.setRepeatPassword("12345");
         Assertions.assertFalse(passwordValidator.isValid(registrationDto,
                 constraintValidatorContext));
     }
 
     @Test
-    void nullPasswords_notOk() {
+    void isValid_nullPasswords_notOk() {
         registrationDto.setPassword(null);
         registrationDto.setRepeatPassword(null);
         Assertions.assertFalse(passwordValidator.isValid(registrationDto,

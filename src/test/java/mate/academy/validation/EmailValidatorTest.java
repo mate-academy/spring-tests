@@ -21,31 +21,31 @@ class EmailValidatorTest {
     }
 
     @Test
-    void withSpecialSymbol_ok() {
+    void isValid_withSpecialSymbol_ok() {
         String email = "bob^%#*@i.ua";
         Assertions.assertTrue(emailValidator.isValid(email, constraintValidatorContext));
     }
 
     @Test
-    void withoutDomainName_notOk() {
+    void isValid_withoutDomainName_notOk() {
         String email = "bob@";
         Assertions.assertFalse(emailValidator.isValid(email, constraintValidatorContext));
     }
 
     @Test
-    void nullName_notOk() {
+    void isValid_nullName_notOk() {
         String email = null;
         Assertions.assertFalse(emailValidator.isValid(email, constraintValidatorContext));
     }
 
     @Test
-    void emptyName_notOk() {
+    void isValid_emptyName_notOk() {
         String email = "";
         Assertions.assertFalse(emailValidator.isValid(email, constraintValidatorContext));
     }
 
     @Test
-    void notCorrectDomainName_notOk() {
+    void isValid_notCorrectDomainName_notOk() {
         String email = "bob@gmail";
         Assertions.assertFalse(emailValidator.isValid(email, constraintValidatorContext));
     }

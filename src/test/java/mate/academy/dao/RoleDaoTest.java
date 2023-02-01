@@ -47,7 +47,7 @@ class RoleDaoTest extends AbstractTest {
     }
 
     @Test
-    void getRoleByNotExistedName_notOk() {
+    void getRoleByName_ByNotExistedName_notOk() {
         Role role = new Role();
         role.setRoleName(Role.RoleName.USER);
 
@@ -58,7 +58,7 @@ class RoleDaoTest extends AbstractTest {
     }
 
     @Test
-    void getRoleByNotValidName_notOk() {
+    void getRoleByName_InvalidName_notOk() {
         Role role = new Role();
         role.setRoleName(Role.RoleName.USER);
 

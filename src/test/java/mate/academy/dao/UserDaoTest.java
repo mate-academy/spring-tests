@@ -51,7 +51,7 @@ class UserDaoTest extends AbstractTest {
     }
 
     @Test
-    void findByNonExistedEmail_notOk() {
+    void findByEmail_NonExistentEmail_notOk() {
         User bob = new User();
         bob.setEmail("bob@i.ua");
         bob.setPassword("1234");
@@ -78,7 +78,7 @@ class UserDaoTest extends AbstractTest {
     }
 
     @Test
-    void findByNotExistedId_notOk() {
+    void findById_NotExistentId_notOk() {
         User bob = new User();
         bob.setEmail("bob@i.ua");
         bob.setPassword("1234");

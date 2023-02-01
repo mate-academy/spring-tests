@@ -66,7 +66,7 @@ class AuthenticationServiceTest {
     }
 
     @Test
-    void loginPasswordNotMatches_notOk() {
+    void login_PasswordNotMatches_notOk() {
         String nonCorrectPassword = "12345";
 
         Mockito.when(userService.findByEmail(login)).thenReturn(Optional.of(bob));
@@ -81,7 +81,7 @@ class AuthenticationServiceTest {
     }
 
     @Test
-    void loginNonExist_notOk() {
+    void login_emailNotExist_notOk() {
         Mockito.when(userService.findByEmail(login)).thenReturn(Optional.of(bob));
 
         try {
