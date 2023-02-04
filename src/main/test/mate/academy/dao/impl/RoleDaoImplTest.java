@@ -8,7 +8,10 @@ import mate.academy.model.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class RoleDaoImplTest extends AbstractTest {
     private RoleDao roleDao;
@@ -22,7 +25,7 @@ public class RoleDaoImplTest extends AbstractTest {
     @BeforeEach
     public void setUp() {
         roleDao = new RoleDaoImpl(getSessionFactory());
-        role = roleDao.save(new Role(Role.RoleName.USER));
+        role = new Role(Role.RoleName.USER);
     }
 
     @Test
@@ -35,6 +38,7 @@ public class RoleDaoImplTest extends AbstractTest {
 
     @Test
     public void getRoleByName_Ok() {
+        roleDao.save(role);
         Optional<Role> actualOptional = roleDao.getRoleByName("USER");
         assertNotNull(actualOptional);
         assertFalse(actualOptional.isEmpty());
@@ -44,6 +48,7 @@ public class RoleDaoImplTest extends AbstractTest {
 
     @Test
     public void getRoleByName_NotOk() {
+        roleDao.save(role);
         assertThrows(DataProcessingException.class,
                 () -> roleDao.getRoleByName("CUSTOMER"));
     }

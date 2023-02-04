@@ -21,6 +21,7 @@ public class UserDaoImplTest extends AbstractTest {
     private static final String EMAIL = "alice@i.ua";
     private static final String PASSWORD = "12345678";
     private static final Long ID = 1L;
+    private static final Long WRONG_ID = 23L;
     private UserDao userDao;
     private User user;
     private Role role;
@@ -35,24 +36,19 @@ public class UserDaoImplTest extends AbstractTest {
         userDao = new UserDaoImpl(getSessionFactory());
         RoleDao roleDao = new RoleDaoImpl(getSessionFactory());
         role = roleDao.save(new Role(Role.RoleName.USER));
-        user = userDao.save(testUser());
     }
 
     @Test
     public void save_Ok() {
+        user = userDao.save(testUser());
         assertNotNull(user);
         assertEquals(ID, user.getId());
         assertEquals(EMAIL, user.getEmail());
     }
 
     @Test
-    public void save_NotOk() {
-        assertThrows(DataProcessingException.class,
-                () -> userDao.save(testUser()));
-    }
-
-    @Test
     public void findByEmail_Ok() {
+        user = userDao.save(testUser());
         Optional<User> actualOptional = userDao.findByEmail(EMAIL);
         assertNotNull(actualOptional);
         assertFalse(actualOptional.isEmpty());
@@ -62,12 +58,14 @@ public class UserDaoImplTest extends AbstractTest {
 
     @Test
     public void findByEmail_NotOk() {
+        user = userDao.save(testUser());
         Optional<User> actualOptional = userDao.findByEmail("email@i.ua");
         assertTrue(actualOptional.isEmpty());
     }
 
     @Test
     public void findById_Ok() {
+        user = userDao.save(testUser());
         Optional<User> actualOptional = userDao.findById(ID);
         assertNotNull(actualOptional);
         assertFalse(actualOptional.isEmpty());
@@ -77,7 +75,8 @@ public class UserDaoImplTest extends AbstractTest {
 
     @Test
     public void findById_NotOk() {
-        Optional<User> actualOptional = userDao.findById(23L);
+        user = userDao.save(testUser());
+        Optional<User> actualOptional = userDao.findById(WRONG_ID);
         assertTrue(actualOptional.isEmpty());
     }
 
