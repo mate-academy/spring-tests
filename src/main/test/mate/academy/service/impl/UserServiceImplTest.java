@@ -55,7 +55,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void findById_NoIdInDB_NotOk() {
+    void findById_noIdInDB_NotOk() {
         Mockito.when(userDao.findById(ID))
                 .thenReturn(Optional.empty());
         Optional<User> actual = userService.findById(ID);
@@ -76,7 +76,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void findByEmail_NoEmailInDB_Ok() {
+    void findByEmail_noEmailInDB_Ok() {
         Mockito.when(userDao.findByEmail(EMAIL))
                 .thenReturn(Optional.empty());
         Optional<User> actual = userService.findByEmail(EMAIL);

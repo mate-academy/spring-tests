@@ -58,13 +58,13 @@ public class JwtTokenProviderTest {
     }
 
     @Test
-    public void getEmptyUsername_NotOk() {
+    public void getUsername_empty_notOk() {
         assertThrows(IllegalArgumentException.class,
                 () -> jwtTokenProvider.getUsername(""));
     }
 
     @Test
-    public void getNullUsername_NotOk() {
+    public void getUsername_null_notOk() {
         assertThrows(IllegalArgumentException.class,
                 () -> jwtTokenProvider.getUsername(null));
     }
@@ -92,13 +92,13 @@ public class JwtTokenProviderTest {
     }
 
     @Test
-    void validateEmptyToken_NotOk() {
+    void validateToken_empty_NotOk() {
         assertThrows(RuntimeException.class,
                 () -> jwtTokenProvider.validateToken(""));
     }
 
     @Test
-    void validateNullToken_NotOk() {
+    void validateToken_null_NotOk() {
         assertThrows(RuntimeException.class,
                 () -> jwtTokenProvider.validateToken(null));
     }
