@@ -27,11 +27,11 @@ class CustomUserDetailsServiceTest {
     void loadUserByUsername_existingUsername_ok() {
         String email = "my@i.ua";
         String password = "12345678";
-        User bob = new User();
-        bob.setEmail(email);
-        bob.setPassword(password);
-        bob.setRoles(Set.of(new Role(Role.RoleName.ADMIN)));
-        Mockito.when(userService.findByEmail(email)).thenReturn(Optional.of(bob));
+        User user = new User();
+        user.setEmail(email);
+        user.setPassword(password);
+        user.setRoles(Set.of(new Role(Role.RoleName.ADMIN)));
+        Mockito.when(userService.findByEmail(email)).thenReturn(Optional.of(user));
         UserDetails actual = userDetailsService.loadUserByUsername(email);
         Assertions.assertNotNull(email);
         Assertions.assertEquals(email, actual.getUsername());
@@ -42,11 +42,11 @@ class CustomUserDetailsServiceTest {
     void loadUserByUsername_notExistingUsername_notOk() {
         String email = "my@i.ua";
         String password = "12345678";
-        User bob = new User();
-        bob.setEmail(email);
-        bob.setPassword(password);
-        bob.setRoles(Set.of(new Role(Role.RoleName.ADMIN)));
-        Mockito.when(userService.findByEmail(email)).thenReturn(Optional.of(bob));
+        User user = new User();
+        user.setEmail(email);
+        user.setPassword(password);
+        user.setRoles(Set.of(new Role(Role.RoleName.ADMIN)));
+        Mockito.when(userService.findByEmail(email)).thenReturn(Optional.of(user));
         try {
             userDetailsService.loadUserByUsername("nothing@i.ua");
         } catch (UsernameNotFoundException e) {

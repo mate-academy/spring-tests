@@ -19,7 +19,7 @@ class AuthenticationServiceTest {
     private RoleService roleService;
     private PasswordEncoder passwordEncoder;
     private AuthenticationService authenticationService;
-    private User bob;
+    private User user;
 
     @BeforeEach
     void setUp() {
@@ -28,38 +28,38 @@ class AuthenticationServiceTest {
         passwordEncoder = Mockito.mock(PasswordEncoder.class);
         authenticationService = new AuthenticationServiceImpl(userService, roleService,
                 passwordEncoder);
-        bob = new User();
-        bob.setEmail("my@i.ua");
-        bob.setPassword("12345678");
+        user = new User();
+        user.setEmail("my@i.ua");
+        user.setPassword("12345678");
     }
 
     @Test
     void register_ok() {
         Mockito.when(roleService.getRoleByName("USER"))
                 .thenReturn(new Role(Role.RoleName.USER));
-        Mockito.when(userService.save(any())).thenReturn(bob);
-        User actual = authenticationService.register(bob.getEmail(), bob.getPassword());
+        Mockito.when(userService.save(any())).thenReturn(user);
+        User actual = authenticationService.register(user.getEmail(), user.getPassword());
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(bob.getEmail(), actual.getEmail());
-        Assertions.assertEquals(bob.getPassword(), actual.getPassword());
+        Assertions.assertEquals(user.getEmail(), actual.getEmail());
+        Assertions.assertEquals(user.getPassword(), actual.getPassword());
     }
 
     @Test
     void login_Ok() throws AuthenticationException {
-        Mockito.when(userService.findByEmail(bob.getEmail())).thenReturn(Optional.of(bob));
-        Mockito.when(passwordEncoder.matches(bob.getPassword(), bob.getPassword()))
+        Mockito.when(userService.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        Mockito.when(passwordEncoder.matches(user.getPassword(), user.getPassword()))
                 .thenReturn(true);
-        User actual = authenticationService.login(bob.getEmail(), bob.getPassword());
+        User actual = authenticationService.login(user.getEmail(), user.getPassword());
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(bob.getEmail(), actual.getEmail());
-        Assertions.assertEquals(bob.getPassword(), actual.getPassword());
+        Assertions.assertEquals(user.getEmail(), actual.getEmail());
+        Assertions.assertEquals(user.getPassword(), actual.getPassword());
     }
 
     @Test
     void login_notOk() {
-        Mockito.when(userService.findByEmail(bob.getEmail())).thenReturn(Optional.of(bob));
+        Mockito.when(userService.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
         try {
-            authenticationService.login(bob.getEmail(), bob.getPassword());
+            authenticationService.login(user.getEmail(), user.getPassword());
         } catch (AuthenticationException e) {
             Assertions.assertEquals("Incorrect username or password!!!", e.getMessage());
             return;
