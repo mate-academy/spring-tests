@@ -1,4 +1,4 @@
-package mate.academy.dao;
+package mate.academy;
 
 import java.util.Arrays;
 import java.util.List;

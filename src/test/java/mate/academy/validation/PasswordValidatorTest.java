@@ -31,4 +31,14 @@ class PasswordValidatorTest {
         Assertions.assertTrue(passwordValidator.isValid(userRegistrationDto,
                 constraintValidatorContext));
     }
+
+    @Test
+    void isValid_NotOk() {
+        String password = "123456";
+        UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
+        userRegistrationDto.setPassword(password);
+        userRegistrationDto.setRepeatPassword("12345");
+        Assertions.assertFalse(passwordValidator.isValid(userRegistrationDto,
+                constraintValidatorContext));
+    }
 }

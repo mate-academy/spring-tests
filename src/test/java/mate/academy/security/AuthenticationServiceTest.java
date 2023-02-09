@@ -15,10 +15,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 class AuthenticationServiceTest {
+    private static final String EMAIL = "bob@i.ua";
     private UserService userService;
     private RoleService roleService;
     private PasswordEncoder passwordEncoder;
     private AuthenticationService authenticationService;
+    private User user;
 
     @BeforeEach
     void setUp() {
@@ -27,44 +29,34 @@ class AuthenticationServiceTest {
         passwordEncoder = new BCryptPasswordEncoder();
         authenticationService =
                 new AuthenticationServiceImpl(userService, roleService, passwordEncoder);
+        user = new User();
+        user.setEmail(EMAIL);
+        user.setPassword("123456");
+        user.setRoles(Set.of(new Role(Role.RoleName.USER)));
     }
 
     @Test
     void register_Ok() {
-        User user = new User();
-        user.setEmail("bob@i.ua");
-        user.setPassword("12345");
-        user.setRoles(Set.of(new Role(Role.RoleName.USER)));
-
         Mockito.when(roleService.getRoleByName("USER"))
                 .thenReturn(new Role(Role.RoleName.USER));
         Mockito.when(userService.save(Mockito.any())).thenReturn(user);
-        User actual = authenticationService.register("bob@i.ua", "12345");
-        Assertions.assertEquals("bob@i.ua", actual.getEmail());
-        Assertions.assertEquals("12345", actual.getPassword());
+        User actual = authenticationService.register(EMAIL, "123456");
+        Assertions.assertEquals(EMAIL, actual.getEmail());
+        Assertions.assertEquals("123456", actual.getPassword());
         Assertions.assertEquals(user.getRoles(), actual.getRoles());
     }
 
     @Test
     void login_Ok() throws AuthenticationException {
-        User user = new User();
-        user.setEmail("bob@i.ua");
-        user.setPassword("12345");
-        user.setRoles(Set.of(new Role(Role.RoleName.USER)));
-        user.setPassword(passwordEncoder.encode("12345"));
-        Mockito.when(userService.findByEmail("bob@i.ua")).thenReturn(Optional.of(user));
-        User actual = authenticationService.login("bob@i.ua", "12345");
+        Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
+        User actual = authenticationService.login(EMAIL, "123456");
         Assertions.assertEquals(user,actual);
         Assertions.assertEquals(user.getRoles(), actual.getRoles());
     }
 
     @Test
     void login_NotOk() {
-        User user = new User();
-        user.setEmail("bob@i.ua");
-        user.setPassword("12345");
-        user.setRoles(Set.of(new Role(Role.RoleName.USER)));
-        Mockito.when(userService.findByEmail("bob@i.ua")).thenReturn(Optional.of(user));
+        Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
         Assertions.assertThrows(AuthenticationException.class,
                 () -> authenticationService.login("alice@i.ua", "123456"));
     }

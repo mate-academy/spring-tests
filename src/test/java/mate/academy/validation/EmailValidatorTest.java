@@ -19,4 +19,9 @@ class EmailValidatorTest {
         String email = "bob@i.ua";
         Assertions.assertTrue(emailValidator.isValid(email, constraintValidatorContext));
     }
+
+    @Test
+    void isValid_notOk() {
+        Assertions.assertFalse(emailValidator.isValid("email", constraintValidatorContext));
+    }
 }

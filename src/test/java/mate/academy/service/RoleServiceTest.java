@@ -1,7 +1,6 @@
 package mate.academy.service;
 
 import java.util.Optional;
-import mate.academy.dao.AbstractTest;
 import mate.academy.dao.RoleDao;
 import mate.academy.model.Role;
 import mate.academy.service.impl.RoleServiceImpl;
@@ -10,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-class RoleServiceTest extends AbstractTest {
+class RoleServiceTest {
     private RoleDao roleDao;
     private RoleService roleService;
 
@@ -39,10 +38,5 @@ class RoleServiceTest extends AbstractTest {
         Role actual = roleService.getRoleByName(role.getRoleName().name());
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(Role.RoleName.USER,actual.getRoleName());
-    }
-
-    @Override
-    protected Class<?>[] entities() {
-        return new Class[] {Role.class};
     }
 }

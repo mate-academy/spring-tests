@@ -14,40 +14,33 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 class CustomUserDetailsServiceTest {
+    private static final String EMAIL = "bob1234@i.ua";
     private UserDetailsService userDetailsService;
     private UserService userService;
+    private User user;
 
     @BeforeEach
     void setUp() {
         userService = Mockito.mock(UserService.class);
         userDetailsService = new CustomUserDetailsService(userService);
+        user = new User();
+        user.setEmail(EMAIL);
+        user.setPassword("123456");
+        user.setRoles(Set.of(new Role(Role.RoleName.USER)));
+        Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
     }
 
     @Test
     void loadUserByUsername_Ok() {
-        String email = "bob@i.ua";
-        User bob = new User();
-        bob.setEmail(email);
-        bob.setPassword("1234");
-        bob.setRoles(Set.of(new Role(Role.RoleName.USER)));
-
-        Mockito.when(userService.findByEmail(email)).thenReturn(Optional.of(bob));
-
-        UserDetails actual = userDetailsService.loadUserByUsername(email);
-        Assertions.assertNotNull(email);
-        Assertions.assertEquals(email, actual.getUsername());
-        Assertions.assertEquals("1234", actual.getPassword());
+        UserDetails actual = userDetailsService.loadUserByUsername(EMAIL);
+        Assertions.assertNotNull(actual);
+        Assertions.assertEquals(EMAIL, actual.getUsername());
+        Assertions.assertEquals("123456", actual.getPassword());
     }
 
     @Test
     void loadUserByUsername_userNameNotFoundException() {
-        String email = "bob@i.ua";
-        User bob = new User();
-        bob.setEmail(email);
-        bob.setPassword("1234");
-        bob.setRoles(Set.of(new Role(Role.RoleName.USER)));
-
-        Mockito.when(userService.findByEmail(email)).thenReturn(Optional.of(bob));
+        Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
 
         try {
             userDetailsService.loadUserByUsername("alice@i.ua");
