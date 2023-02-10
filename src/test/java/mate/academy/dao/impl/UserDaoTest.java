@@ -1,8 +1,9 @@
-package mate.academy.dao;
+package mate.academy.dao.impl;
 
 import java.util.Collections;
 import java.util.Optional;
-import mate.academy.dao.impl.UserDaoImpl;
+import mate.academy.dao.AbstractTest;
+import mate.academy.dao.UserDao;
 import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import mate.academy.model.User;
@@ -38,9 +39,8 @@ class UserDaoTest extends AbstractTest {
     }
 
     @Test
-    void save_userWithExistingId_notOk() {
-        userDao.save(user);
-        user.setId(1L);
+    void save_ExistingUser_notOk() {
+        save_notExistingUser_ok();
         try {
             userDao.save(user);
         } catch (DataProcessingException e) {
