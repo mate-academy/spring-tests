@@ -26,7 +26,7 @@ class AuthenticationServiceTest {
     private final String PASSWORD = "1234567890";
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         userService = Mockito.mock(UserService.class);
         roleService = Mockito.mock(RoleService.class);
         passwordEncoder = Mockito.mock(PasswordEncoder.class);
