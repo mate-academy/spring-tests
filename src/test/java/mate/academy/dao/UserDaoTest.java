@@ -38,9 +38,9 @@ class UserDaoTest extends AbstractTest {
 
     @Test
     void findByEmail_Ok() {
-        User userReq = userDao.findByEmail(EMAIL).get();
-        Assertions.assertNotNull(userReq);
-        Assertions.assertTrue(userReq.getEmail().equals(actual.getEmail()));
+        User userFindByEmail = userDao.findByEmail(EMAIL).get();
+        Assertions.assertNotNull(userFindByEmail);
+        Assertions.assertTrue(userFindByEmail.getEmail().equals(actual.getEmail()));
     }
 
     @Test
@@ -65,7 +65,6 @@ class UserDaoTest extends AbstractTest {
         return new Class[] {User.class, Role.class};
     }
 
-    @NotNull
     private User getNewUser() {
         User user = new User();
         user.setEmail(EMAIL);
