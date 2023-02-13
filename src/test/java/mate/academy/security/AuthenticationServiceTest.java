@@ -16,14 +16,13 @@ import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 class AuthenticationServiceTest {
+    private static final String EMAIL = "bobik@g.com";
+    private static final String NAME = "bobik";
+    private static final String PASSWORD = "1234567890";
     private AuthenticationService authenticationService;
     private UserService userService;
     private RoleService roleService;
     private PasswordEncoder passwordEncoder;
-
-    private final String EMAIL = "bobik@g.com";
-    private final String NAME = "bobik";
-    private final String PASSWORD = "1234567890";
 
     @BeforeEach
     public void setUp() {

@@ -1,9 +1,10 @@
 package mate.academy.security;
 
+import java.util.Optional;
+import java.util.Set;
 import mate.academy.model.Role;
 import mate.academy.model.User;
 import mate.academy.service.UserService;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,17 +12,11 @@ import org.mockito.Mockito;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import java.util.Optional;
-import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 class CustomUserDetailsServiceTest {
+    private static final String EMAIL = "bobik@g.com";
+    private static final String PASSWORD = "1234567890";
     private CustomUserDetailsService customUserDetailsService;
     private UserService userService;
-
-    private final String EMAIL = "bobik@g.com";
-    private final String PASSWORD = "1234567890";
 
     @BeforeEach
     void setUp() {
@@ -45,7 +40,7 @@ class CustomUserDetailsServiceTest {
     }
 
     @Test
-    void loadUserByUsername_NullEMAIL_NotOk() {
+    void loadUserByUsername_NullEmail_NotOk() {
         Assertions.assertThrows(UsernameNotFoundException.class,
                 () -> customUserDetailsService.loadUserByUsername(null));
     }

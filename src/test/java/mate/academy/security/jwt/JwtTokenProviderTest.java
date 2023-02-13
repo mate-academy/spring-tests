@@ -1,9 +1,12 @@
 package mate.academy.security.jwt;
 
+import static org.mockito.ArgumentMatchers.any;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import mate.academy.model.Role;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,16 +17,13 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-import javax.servlet.http.HttpServletRequest;
-import static org.mockito.ArgumentMatchers.any;
-
 public class JwtTokenProviderTest {
+    private static final String SECRET_KEY = "secret";
+    private static final long MILLISECONDS = 3600000L;
+    private static final String EMAIL = "bobik@g.com";
+    private static final String PASSWORD = "1234567890";
     private JwtTokenProvider jwtTokenProvider;
     private UserDetailsService userDetailsService;
-    private final String SECRET_KEY = "secret";
-    private final long MILLISECONDS = 3600000L;
-    private final String EMAIL = "bobik@g.com";
-    private final String PASSWORD = "1234567890";
     private List<String> roleList = new ArrayList<>();
 
     private String token;
@@ -54,10 +54,11 @@ public class JwtTokenProviderTest {
         UserDetails bobik = new User(EMAIL, PASSWORD, Collections.emptySet());
         Mockito.when(userDetailsService.loadUserByUsername(any())).thenReturn(bobik);
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                (UsernamePasswordAuthenticationToken) this.jwtTokenProvider.getAuthentication(token);
-                Assertions.assertEquals(EMAIL,
+                (UsernamePasswordAuthenticationToken)
+                        this.jwtTokenProvider.getAuthentication(token);
+        Assertions.assertEquals(EMAIL,
                         ((User)usernamePasswordAuthenticationToken.getPrincipal()).getUsername());
-                Assertions.assertEquals(PASSWORD,
+        Assertions.assertEquals(PASSWORD,
                         ((User)usernamePasswordAuthenticationToken.getPrincipal()).getPassword());
     }
 

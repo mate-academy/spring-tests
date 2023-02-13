@@ -1,15 +1,10 @@
 package mate.academy.dao;
 
 import mate.academy.dao.impl.RoleDaoImpl;
-import mate.academy.dao.impl.UserDaoImpl;
 import mate.academy.model.Role;
-import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class RoleDaoTest extends AbstractTest {
     private RoleDao roleDao;
@@ -32,8 +27,8 @@ class RoleDaoTest extends AbstractTest {
 
     @Test
     void getRoleByName_Ok() {
-        Role admin = new Role(Role.RoleName.ADMIN);
-        Role user = new Role(Role.RoleName.USER);
+        final Role admin = new Role(Role.RoleName.ADMIN);
+        final Role user = new Role(Role.RoleName.USER);
         roleDao.save(new Role(Role.RoleName.ADMIN));
         roleDao.save(new Role(Role.RoleName.USER));
         Assertions.assertTrue(admin.getClass()

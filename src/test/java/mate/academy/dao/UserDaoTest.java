@@ -1,5 +1,6 @@
 package mate.academy.dao;
 
+import java.util.Set;
 import mate.academy.dao.impl.RoleDaoImpl;
 import mate.academy.dao.impl.UserDaoImpl;
 import mate.academy.model.Role;
@@ -8,16 +9,15 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.util.Set;
 
 class UserDaoTest extends AbstractTest {
+    private static final String EMAIL = "bobik@g.com";
+    private static final String PASSWORD = "1234567890";
     private UserDao userDao;
     private RoleDao roleDao;
     private User actual;
     private Role adminRole;
     private Role userRole;
-    private final String EMAIL = "bobik@g.com";
-    private final String PASSWORD = "1234567890";
 
     @BeforeEach
     void setUp() {
