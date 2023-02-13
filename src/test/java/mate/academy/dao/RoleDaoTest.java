@@ -31,8 +31,8 @@ class RoleDaoTest extends AbstractTest {
         final Role user = new Role(Role.RoleName.USER);
         roleDao.save(new Role(Role.RoleName.ADMIN));
         roleDao.save(new Role(Role.RoleName.USER));
-        Assertions.assertEqual(Role.RoleName.ADMIN, 
-                 roleDao.getRoleByName(Role.RoleName.ADMIN.name()).get().getRoleName()));
+        Assertions.assertEquals(Role.RoleName.ADMIN,
+                 roleDao.getRoleByName(Role.RoleName.ADMIN.name()).get().getRoleName());
         Assertions.assertTrue(user.getClass()
                 .equals(roleDao.getRoleByName(Role.RoleName.USER.name()).get().getClass()));
     }
