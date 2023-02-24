@@ -8,52 +8,40 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Optional;
 import java.util.Set;
 
 class CustomUserDetailsServiceTest {
-    private UserDetailsService userDetailsService;
+    private static final String EMAIL = "bobik@g.com";
+    private static final String PASSWORD = "1234567890";
+    private CustomUserDetailsService customUserDetailsService;
     private UserService userService;
-
     @BeforeEach
     void setUp() {
         userService = Mockito.mock(UserService.class);
-        userDetailsService = new CustomUserDetailsService(userService);
+        customUserDetailsService = new CustomUserDetailsService(userService);
     }
 
     @Test
     void loadUserByUsername_Ok() {
-        String email = "bob@i.ua";
-        User bob = new User();
-        bob.setEmail(email);
-        bob.setPassword("1234");
-        bob.setRoles(Set.of(new Role(Role.RoleName.USER)));
-        Mockito.when(userService.findByEmail(email)).thenReturn(Optional.of(bob));
-        UserDetails actual = userDetailsService.loadUserByUsername(email);
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(email, actual.getUsername());
-        Assertions.assertEquals("1234", actual.getPassword());
-
+        User user = new User();
+        user.setEmail(EMAIL);
+        user.setPassword(PASSWORD);
+        user.setRoles(Set.of(new Role(Role.RoleName.USER)));
+        Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(EMAIL);
+        Assertions.assertEquals(userDetails.getClass(),
+                org.springframework.security.core.userdetails.User.class);
+        Assertions.assertTrue(userDetails.isAccountNonExpired());
+        Assertions.assertEquals(userDetails.getUsername(), user.getEmail());
+        Assertions.assertEquals(userDetails.getPassword(), user.getPassword());
     }
 
     @Test
     void loadUserByUsername_UsernameNotFoundException() {
-        String email = "bob@i.ua";
-        User bob = new User();
-        bob.setEmail(email);
-        bob.setPassword("1234");
-        bob.setRoles(Set.of(new Role(Role.RoleName.USER)));
-        Mockito.when(userService.findByEmail(email)).thenReturn(Optional.of(bob));
-
-        try {
-            userDetailsService.loadUserByUsername("asdasf@gmail.com");
-        } catch (UsernameNotFoundException e) {
-            Assertions.assertEquals("User not found.", e.getMessage());
-            return;
-        }
-        Assertions.fail("Expected to receive UserNotFoundException");
+        Assertions.assertThrows(UsernameNotFoundException.class, ()
+                -> customUserDetailsService.loadUserByUsername(null));
     }
 }
