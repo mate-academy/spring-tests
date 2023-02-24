@@ -17,7 +17,7 @@ import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 class AuthenticationServiceImplTest {
-    private static final String EMAIL = "bobik@g.com";
+    private static final String EMAIL = "bob@g.com";
     private static final String PASSWORD = "1234567890";
     private static final String USER_ROLE = "USER";
     private AuthenticationServiceImpl authenticationService;
@@ -40,8 +40,32 @@ class AuthenticationServiceImplTest {
         Mockito.when(roleService.getRoleByName(any())).thenReturn(new Role(Role.RoleName.USER));
         Mockito.when(userService.save(any())).thenReturn(user);
         User register = authenticationService.register(EMAIL, PASSWORD);
-        Assertions.assertEquals(register.getRoles().stream().map(Role::getRoleName)
-                .collect(Collectors.toSet()), Set.of(Role.RoleName.USER));
+        Assertions.assertEquals(user.getEmail(), register.getEmail());
+        Assertions.assertEquals(user.getPassword(), register.getPassword());
+        Assertions.assertEquals(user.getRoles(), register.getRoles());
+
+    }
+
+    @Test
+    public void register_NullRole_NotOk() {
+        Assertions.assertThrows(NullPointerException.class,
+                () -> authenticationService.register(EMAIL, PASSWORD));
+    }
+
+    @Test
+    void login_validData_Ok() throws AuthenticationException {
+        User user = getUser();
+        Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
+        Mockito.when(passwordEncoder.matches(user.getPassword(), PASSWORD)).thenReturn(true);
+        User actualUser = authenticationService.login(EMAIL, PASSWORD);
+        Assertions.assertEquals(user, actualUser);
+
+    }
+
+    @Test
+    void login_NotValidData_NotOk() {
+        Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.empty());
+        Assertions.assertThrows(AuthenticationException.class, () -> authenticationService.login(EMAIL, PASSWORD));
     }
 
     private User getUser() {
