@@ -1,19 +1,16 @@
 package mate.academy.validation;
 
+import javax.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import javax.validation.ConstraintValidatorContext;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 class EmailValidatorTest {
-    private final static String WRITE_EMAIL = "email@gmail.com";
-    private final static String WRONG_EMAIL = "email";
+    private static final String WRITE_EMAIL = "email@gmail.com";
+    private static final String WRONG_EMAIL = "email";
     private ConstraintValidatorContext constraintValidatorContext;
-    EmailValidator emailValidator;
+    private EmailValidator emailValidator;
     
     @BeforeEach
     void setUp() {
@@ -32,7 +29,7 @@ class EmailValidatorTest {
     }
 
     @Test
-    void NullEmail_NotOk() {
+    void nullEmail_NotOk() {
         Assertions.assertFalse(emailValidator.isValid(null, constraintValidatorContext));
     }
 }

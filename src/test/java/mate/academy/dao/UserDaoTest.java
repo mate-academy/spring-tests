@@ -1,5 +1,7 @@
 package mate.academy.dao;
 
+import java.util.Optional;
+import java.util.Set;
 import mate.academy.dao.impl.RoleDaoImpl;
 import mate.academy.dao.impl.UserDaoImpl;
 import mate.academy.model.Role;
@@ -7,8 +9,6 @@ import mate.academy.model.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.util.Optional;
-import java.util.Set;
 
 class UserDaoTest extends AbstractTest {
     private static final String BOB_EMAIL = "bob@i.ua";
@@ -19,6 +19,7 @@ class UserDaoTest extends AbstractTest {
     private UserDao userDao;
     private User bob;
     private User elis;
+
     @BeforeEach
     void setUp() {
         userDao = new UserDaoImpl(getSessionFactory());
@@ -40,7 +41,6 @@ class UserDaoTest extends AbstractTest {
     protected Class<?>[] entities() {
         return new Class[] {User.class, Role.class};
     }
-
 
     @Test
     void saveUser_Ok() {

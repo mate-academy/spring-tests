@@ -1,15 +1,14 @@
 package mate.academy.dao;
 
+import java.util.Optional;
 import mate.academy.dao.impl.RoleDaoImpl;
 import mate.academy.model.Role;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.util.Optional;
-
 
 class RoleDaoTest extends AbstractTest {
-    private final static Long USER_ROLE_ID = 1L;
+    private static final Long USER_ROLE_ID = 1L;
     private Role admin;
     private Role user;
     private RoleDao roleDao;
@@ -19,7 +18,6 @@ class RoleDaoTest extends AbstractTest {
         admin = new Role(Role.RoleName.ADMIN);
         user = new Role(Role.RoleName.USER);
         roleDao = new RoleDaoImpl(getSessionFactory());
-
     }
 
     @Override
@@ -31,7 +29,6 @@ class RoleDaoTest extends AbstractTest {
     void saveRole_Ok() {
         Role roleUser = new Role();
         roleDao.save(roleUser);
-
         Assertions.assertNotNull(roleUser);
         Assertions.assertEquals(USER_ROLE_ID, roleUser.getId());
 
