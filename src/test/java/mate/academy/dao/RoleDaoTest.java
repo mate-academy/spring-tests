@@ -49,7 +49,7 @@ class RoleDaoTest extends AbstractTest {
     }
 
     @Test
-    void getRoleByName_NotValidData_NotOk() {
+    void getRoleByNotValidName_NotOk() {
         roleDao.save(new Role(Role.RoleName.ADMIN));
         roleDao.save(new Role(Role.RoleName.USER));
         Assertions.assertThrows(DataProcessingException.class,
