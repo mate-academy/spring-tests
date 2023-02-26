@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.Set;
 import mate.academy.dao.impl.RoleDaoImpl;
 import mate.academy.dao.impl.UserDaoImpl;
+import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import mate.academy.model.User;
 import org.junit.jupiter.api.Assertions;
@@ -16,6 +17,7 @@ class UserDaoTest extends AbstractTest {
     private static final String ELLIS_EMAIL = "allis@i.ua";
     private static final String ELLIS_PASSWORD = "123";
     private static final Long CHECK_ID = 1L;
+    private static final Long NULL_ID = null;
     private UserDao userDao;
     private User bob;
     private User elis;
@@ -65,5 +67,11 @@ class UserDaoTest extends AbstractTest {
         Optional<User> actual = userDao.findById(CHECK_ID);
         Assertions.assertTrue(actual.isPresent());
         Assertions.assertEquals(CHECK_ID, actual.get().getId());
+    }
+
+    @Test
+    void findByNullId_NotOk() {
+        Assertions.assertThrows(DataProcessingException.class,
+                () -> userDao.findById(NULL_ID));
     }
 }
