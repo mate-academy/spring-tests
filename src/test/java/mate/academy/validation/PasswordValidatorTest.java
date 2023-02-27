@@ -33,7 +33,7 @@ class PasswordValidatorTest {
     }
 
     @Test
-    void isValid_NullPasswords_NotOk() {
+    void isValid_EmptyPasswords_NotOk() {
         registrationDto.setPassword(null);
         registrationDto.setRepeatPassword(null);
         Assertions.assertFalse(passwordValidator.isValid(registrationDto,

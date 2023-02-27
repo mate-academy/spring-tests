@@ -61,7 +61,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void resolveToken_notCorrectToken_isNull() {
+    void resolveToken_notCorrectToken_isOk() {
         Mockito.when(request.getHeader("Authorization")).thenReturn("Undefined " + token);
         String actual = jwtTokenProvider.resolveToken(request);
         Assertions.assertNull(actual);
