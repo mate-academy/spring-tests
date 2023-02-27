@@ -40,7 +40,7 @@ class CustomUserDetailsServiceTest {
     }
 
     @Test
-    void loadUserByUsername_notExistEmail_throwUsernameNotFoundException() {
+    void loadUserByUsername_notExistEmail_throwException() {
         Mockito.when(userService.findByEmail(bob.getEmail())).thenReturn(Optional.of(bob));
         try {
             userDetailsService.loadUserByUsername("alice@i.ua");

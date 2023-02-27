@@ -43,7 +43,7 @@ class RoleDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void getRoleByName_notExistName_throwException() {
+    void getRoleByName_notCorrectRoleName_throwException() {
         String roleName = "CHILD";
         try {
             roleDao.getRoleByName(roleName);
