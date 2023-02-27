@@ -13,8 +13,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.util.ReflectionTestUtils;
 
 class JwtTokenProviderTest {
-    private static String VALIDATE_EMAIL = "bob@gmail.com";
-    private static String VALIDATE_PASSWORD = "bob12345";
     private JwtTokenProvider jwtTokenProvider;
     private UserDetailsService userDetailsService;
     private String token;
@@ -28,7 +26,7 @@ class JwtTokenProviderTest {
         ReflectionTestUtils.setField(jwtTokenProvider, "validityInMilliseconds",
                 3600000L);
         jwtTokenProvider.init();
-        token = jwtTokenProvider.createToken(VALIDATE_EMAIL, List.of("USER"));
+        token = jwtTokenProvider.createToken("bob@gmail.com", List.of("USER"));
         request = Mockito.mock(HttpServletRequest.class);
     }
 
@@ -40,11 +38,11 @@ class JwtTokenProviderTest {
     @Test
     void getAuthentication_validToken_isOk() {
         UserDetails details = User
-                .withUsername(VALIDATE_EMAIL)
-                .password(VALIDATE_PASSWORD)
+                .withUsername("bob@gmail.com")
+                .password("bob12345")
                 .authorities(new String[]{"USER"})
                 .build();
-        Mockito.when(userDetailsService.loadUserByUsername(VALIDATE_EMAIL)).thenReturn(details);
+        Mockito.when(userDetailsService.loadUserByUsername("bob@gmail.com")).thenReturn(details);
         Authentication actual = jwtTokenProvider.getAuthentication(token);
         Assertions.assertNotNull(token);
         Assertions.assertEquals(actual.getName(), details.getUsername());
@@ -52,7 +50,7 @@ class JwtTokenProviderTest {
 
     @Test
     void getUsername_validToken_isOk() {
-        Assertions.assertNotNull(jwtTokenProvider.getUsername(token), VALIDATE_EMAIL);
+        Assertions.assertNotNull(jwtTokenProvider.getUsername(token), "bob@gmail.com");
     }
 
     @Test
@@ -90,7 +88,7 @@ class JwtTokenProviderTest {
     void validateToken_notCorrectDate_throwException() {
         ReflectionTestUtils.setField(jwtTokenProvider, "validityInMilliseconds",
                 0L);
-        token = jwtTokenProvider.createToken(VALIDATE_EMAIL, List.of("USER"));
+        token = jwtTokenProvider.createToken("bob@gmail.com", List.of("USER"));
         try {
 
             jwtTokenProvider.validateToken(token);
