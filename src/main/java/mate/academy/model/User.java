@@ -1,6 +1,7 @@
 package mate.academy.model;
 
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,7 +22,7 @@ public class User {
 
     private String password;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.ALL})
     private Set<Role> roles;
 
     public Set<Role> getRoles() {
