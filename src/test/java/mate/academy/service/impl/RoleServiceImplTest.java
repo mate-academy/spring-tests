@@ -25,7 +25,7 @@ class RoleServiceImplTest {
     }
 
     @Test
-    void save_ok() {
+    void save_correctRole_isOk() {
         Role actual = roleService.save(role);
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(role.getRoleName(), actual.getRoleName());

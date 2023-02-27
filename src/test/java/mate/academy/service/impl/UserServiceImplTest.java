@@ -34,7 +34,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void save_ok() {
+    void save_correctUser_isOk() {
         Mockito.when(userDao.save(bob)).thenReturn(bob);
         User actual = userService.save(bob);
         Assertions.assertNotNull(actual);

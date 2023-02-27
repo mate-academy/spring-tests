@@ -22,7 +22,7 @@ class UserDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void save_ok() {
+    void save_correctUser_isOk() {
         User user = new User();
         user.setPassword("12345");
         user.setEmail("user@gmail.com");

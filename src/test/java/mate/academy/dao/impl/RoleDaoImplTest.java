@@ -22,7 +22,7 @@ class RoleDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void save_ok() {
+    void save_correctRole_isOk() {
         Role role = new Role();
         role.setRoleName(Role.RoleName.USER);
         Role actual = roleDao.save(role);
@@ -32,7 +32,7 @@ class RoleDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void findByName_correctName_isOk() {
+    void getRoleByName_correctName_isOk() {
         Role role = new Role();
         role.setRoleName(Role.RoleName.USER);
         Role saveDRole = roleDao.save(role);
@@ -43,7 +43,7 @@ class RoleDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void findByName_notExistName_throwException() {
+    void getRoleByName_notExistName_throwException() {
         String roleName = "CHILD";
         try {
             roleDao.getRoleByName(roleName);
