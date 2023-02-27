@@ -1,5 +1,10 @@
 package mate.academy.security;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.Optional;
 import java.util.Set;
 import mate.academy.exception.AuthenticationException;
@@ -12,10 +17,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 class AuthenticationServiceImplTest {
     private static final String EMAIL = "bchupika@mate.academy";
@@ -34,7 +35,8 @@ class AuthenticationServiceImplTest {
         userService = mock(UserService.class);
         roleService = mock(RoleService.class);
         passwordEncoder = new BCryptPasswordEncoder();
-        authenticationService = new AuthenticationServiceImpl(userService, roleService, passwordEncoder);
+        authenticationService = new AuthenticationServiceImpl(userService,
+                roleService, passwordEncoder);
         ENCODED_PASSWORD = passwordEncoder.encode(RAW_PASSWORD);
     }
 

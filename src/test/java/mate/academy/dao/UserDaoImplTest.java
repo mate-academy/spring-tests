@@ -1,5 +1,10 @@
 package mate.academy.dao;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -10,10 +15,6 @@ import mate.academy.model.Role;
 import mate.academy.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class UserDaoImplTest extends AbstractTest {
     private RoleDaoImpl roleDaoImpl;
@@ -74,7 +75,7 @@ class UserDaoImplTest extends AbstractTest {
     void findById_correctId_ok() {
         userDaoImpl.save(userMax);
         Optional<User> actualOptional = userDaoImpl.findById(1L);
-        assertNotNull(actualOptional.get());
+        assertNotNull(actualOptional);
         assertEquals(userMax.getEmail(), actualOptional.get().getEmail());
     }
 
@@ -85,7 +86,7 @@ class UserDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void delete_correctId_ok() { //
+    void delete_correctId_ok() {
         userDaoImpl.save(userMax);
         User savedUser = userDaoImpl.save(userMarina);
         userDaoImpl.delete(savedUser.getId());
@@ -131,10 +132,10 @@ class UserDaoImplTest extends AbstractTest {
         userDaoImpl.save(userMax);
         userDaoImpl.save(userMarina);
         Optional<User> userMaxOptional = userDaoImpl.findByEmail(userMax.getEmail());
-        assertNotNull(userMaxOptional.get());
+        assertNotNull(userMaxOptional);
         assertEquals(userMax.getEmail(), userMaxOptional.get().getEmail());
         Optional<User> userMarinaOptional = userDaoImpl.findByEmail(userMarina.getEmail());
-        assertNotNull(userMarinaOptional.get());
+        assertNotNull(userMarinaOptional);
         assertEquals(userMarina.getEmail(), userMarinaOptional.get().getEmail());
     }
 

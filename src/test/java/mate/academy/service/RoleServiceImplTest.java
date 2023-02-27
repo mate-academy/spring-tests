@@ -1,5 +1,9 @@
 package mate.academy.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.mockito.Mockito.when;
+
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import mate.academy.dao.RoleDao;
@@ -8,9 +12,6 @@ import mate.academy.service.impl.RoleServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.mockito.Mockito.when;
 
 class RoleServiceImplTest {
     private RoleServiceImpl roleServiceImpl;

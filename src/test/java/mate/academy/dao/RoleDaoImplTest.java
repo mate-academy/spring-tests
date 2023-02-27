@@ -1,5 +1,9 @@
 package mate.academy.dao;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.util.List;
 import java.util.Optional;
 import mate.academy.dao.impl.RoleDaoImpl;
@@ -7,9 +11,6 @@ import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class RoleDaoImplTest extends AbstractTest {
     private RoleDaoImpl roleDaoImpl;
@@ -110,10 +111,10 @@ class RoleDaoImplTest extends AbstractTest {
         roleDaoImpl.save(roleAdmin);
         roleDaoImpl.save(roleUser);
         Optional<Role> roleUserOptional = roleDaoImpl.getRoleByName("USER");
-        assertNotNull(roleUserOptional.get());
+        assertNotNull(roleUserOptional);
         assertEquals(roleUser.getRoleName(), roleUserOptional.get().getRoleName());
         Optional<Role> roleAdminOptional = roleDaoImpl.getRoleByName("ADMIN");
-        assertNotNull(roleAdminOptional.get());
+        assertNotNull(roleAdminOptional);
         assertEquals(roleAdmin.getRoleName(), roleAdminOptional.get().getRoleName());
     }
 

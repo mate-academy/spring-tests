@@ -1,5 +1,10 @@
 package mate.academy.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
+
 import java.util.Optional;
 import java.util.Set;
 import mate.academy.dao.UserDao;
@@ -11,10 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
 
 class UserServiceImplTest {
     private UserDao userDao;
@@ -57,7 +58,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void save_inCorrectData_ok() {
+    void save_inCorrectData_notOk() {
         assertNotEquals(incorrectUserReturn, userServiceImpl.save(userRegister));
     }
 
