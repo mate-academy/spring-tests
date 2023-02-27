@@ -25,7 +25,7 @@ class CustomUserDetailsServiceTest {
     }
 
     @Test
-    void loadUserByUsername_Ok() {
+    void loadUserByUsername_existentUserEmail_ok() {
         User user = new User();
         user.setEmail(EMAIL);
         user.setPassword(PASSWORD);
@@ -40,7 +40,7 @@ class CustomUserDetailsServiceTest {
     }
 
     @Test
-    void loadUserByUsername_UsernameNotFoundException() {
+    void loadUserByUsername_notExistentUserEmail_usernameNotFoundException() {
         Assertions.assertThrows(UsernameNotFoundException.class, ()
                 -> customUserDetailsService.loadUserByUsername(null));
     }

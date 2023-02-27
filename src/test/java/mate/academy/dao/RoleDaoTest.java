@@ -10,8 +10,6 @@ import org.junit.jupiter.api.Test;
 
 class RoleDaoTest extends AbstractTest {
     private static final Long USER_ROLE_ID = 1L;
-    private static final String USER_ROLE = "USER";
-    private static final String ADMIN_ROLE = "ADMIN";
     private static final String MEMBER_ROLE = "MEMBER";
     private Role admin;
     private Role user;
@@ -30,26 +28,25 @@ class RoleDaoTest extends AbstractTest {
     }
 
     @Test
-    void saveRole_Ok() {
-        Role roleUser = new Role();
-        roleDao.save(roleUser);
-        Assertions.assertNotNull(roleUser);
-        Assertions.assertEquals(USER_ROLE_ID, roleUser.getId());
+    void save_saveRole_ok() {
+        Role userRole = roleDao.save(user);
+        Assertions.assertNotNull(user);
+        Assertions.assertEquals(USER_ROLE_ID, userRole.getId());
 
     }
 
     @Test
-    void getRoleByName_Ok() {
+    void getRoleByName_twoRolesSavedGetRight_ok() {
         roleDao.save(new Role(Role.RoleName.ADMIN));
         roleDao.save(new Role(Role.RoleName.USER));
-        Optional<Role> actualAdmin = roleDao.getRoleByName(ADMIN_ROLE);
-        Optional<Role> actualUser = roleDao.getRoleByName(USER_ROLE);
+        Optional<Role> actualAdmin = roleDao.getRoleByName(Role.RoleName.ADMIN.name());
+        Optional<Role> actualUser = roleDao.getRoleByName(Role.RoleName.USER.name());
         Assertions.assertEquals(admin.getRoleName(), actualAdmin.get().getRoleName());
         Assertions.assertEquals(user.getRoleName(), actualUser.get().getRoleName());
     }
 
     @Test
-    void getRoleByNotValidName_NotOk() {
+    void getRoleByName_NotValidName_notOk() {
         roleDao.save(new Role(Role.RoleName.ADMIN));
         roleDao.save(new Role(Role.RoleName.USER));
         Assertions.assertThrows(DataProcessingException.class,

@@ -40,7 +40,7 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    void register_ValidValue_Ok() {
+    void register_ok() {
         Mockito.when(roleService.getRoleByName(USER_ROLE)).thenReturn(new Role(Role.RoleName.USER));
         Mockito.when(roleService.getRoleByName(any())).thenReturn(new Role(Role.RoleName.USER));
         Mockito.when(userService.save(any())).thenReturn(user);
@@ -52,13 +52,13 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    public void register_NullRole_NotOk() {
+    public void register_nullRole_notOk() {
         Assertions.assertThrows(NullPointerException.class,
                 () -> authenticationService.register(EMAIL, PASSWORD));
     }
 
     @Test
-    void login_validData_Ok() throws AuthenticationException {
+    void login_validData_ok() throws AuthenticationException {
         Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
         Mockito.when(passwordEncoder.matches(user.getPassword(), PASSWORD)).thenReturn(true);
         User actualUser = authenticationService.login(EMAIL, PASSWORD);
@@ -67,7 +67,7 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    void login_NotValidData_NotOk() {
+    void login_notValidData_notOk() {
         Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.empty());
         Assertions.assertThrows(AuthenticationException.class,
                 () -> authenticationService.login(EMAIL, PASSWORD));

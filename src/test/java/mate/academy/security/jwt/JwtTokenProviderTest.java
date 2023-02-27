@@ -22,9 +22,9 @@ public class JwtTokenProviderTest {
     private static final long MILLISECONDS = 3600000L;
     private static final String EMAIL = "bob@i.ua";
     private static final String PASSWORD = "1234567890";
+    private final List<String> roleList = new ArrayList<>();
     private JwtTokenProvider jwtTokenProvider;
     private UserDetailsService userDetailsService;
-    private List<String> roleList = new ArrayList<>();
 
     private String token;
 
@@ -63,7 +63,7 @@ public class JwtTokenProviderTest {
     }
 
     @Test
-    public void getAuthentication_NullToken_NotOk() {
+    public void getAuthentication_nullToken_notOk() {
         Assertions.assertThrows(IllegalArgumentException.class,
                 () -> jwtTokenProvider.getAuthentication(null));
     }
@@ -76,25 +76,25 @@ public class JwtTokenProviderTest {
     }
 
     @Test
-    void getUsername_Ok() {
-        Assertions.assertTrue(EMAIL.equals(jwtTokenProvider.getUsername(token)));
+    void getUsername_ok() {
+        Assertions.assertEquals(EMAIL, jwtTokenProvider.getUsername(token));
     }
 
     @Test
-    void getUsername_NullToken_Ok() {
+    void getUsername_nullToken_ok() {
         Assertions.assertThrows(IllegalArgumentException.class,
                 () -> jwtTokenProvider.getUsername(null));
     }
 
     @Test
-    public void resolveToken_WrongToken_NotOk() {
+    public void resolveToken_wrongToken_notOk() {
         HttpServletRequest mock = Mockito.mock(HttpServletRequest.class);
         Mockito.when(mock.getHeader(any())).thenReturn(EMAIL);
         Assertions.assertNotEquals(EMAIL, jwtTokenProvider.resolveToken(mock));
     }
 
     @Test
-    public void validateToken_NotOK() {
+    public void validateToken_notOK() {
         Assertions.assertThrows(RuntimeException.class,
                 () -> jwtTokenProvider.validateToken("0000.0000.0000"));
     }
