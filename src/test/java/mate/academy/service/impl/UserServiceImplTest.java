@@ -69,7 +69,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findByEmail_NotExistentEmail_throwException() {
+    void findByEmail_NotExistentEmail_notOk() {
         try {
             userService.findByEmail("alice@i.ua").get();
         } catch (NoSuchElementException ex) {

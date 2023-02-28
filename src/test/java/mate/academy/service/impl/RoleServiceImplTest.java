@@ -32,7 +32,7 @@ class RoleServiceImplTest {
     }
 
     @Test
-    void findByName_notExistName_throwException() {
+    void findByName_notExistName_notOk() {
         try {
             roleService.getRoleByName("BOSS");
         } catch (NoSuchElementException ex) {

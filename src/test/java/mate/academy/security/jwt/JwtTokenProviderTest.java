@@ -74,7 +74,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void validateToken_notCorrectToken_throwException() {
+    void validateToken_notCorrectToken_notOk() {
         try {
             jwtTokenProvider.validateToken("token");
         } catch (RuntimeException e) {
@@ -85,7 +85,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void validateToken_notCorrectDate_throwException() {
+    void validateToken_notCorrectDate_notOk() {
         ReflectionTestUtils.setField(jwtTokenProvider, "validityInMilliseconds",
                 0L);
         token = jwtTokenProvider.createToken("bob@gmail.com", List.of("USER"));

@@ -59,7 +59,7 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    void login_notExistPassword_throwException() {
+    void login_notExistPassword_notOk() {
         try {
             authenticationService.login("emma@gmail.com", "bob1234");
         } catch (AuthenticationException ex) {
@@ -70,7 +70,7 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    void login_notExistEmail_throwException() {
+    void login_notExistEmail_notOk() {
         try {
             authenticationService.login("Bob@gmail.com", "emma1234");
         } catch (AuthenticationException ex) {
