@@ -9,6 +9,7 @@ import mate.academy.model.dto.UserLoginDto;
 import mate.academy.model.dto.UserRegistrationDto;
 import mate.academy.security.AuthenticationService;
 import mate.academy.security.jwt.JwtTokenProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
     private final JwtTokenProvider jwtTokenProvider;
 
+    @Autowired
     public AuthenticationController(AuthenticationService authenticationService,
                                     JwtTokenProvider jwtTokenProvider) {
         this.authenticationService = authenticationService;

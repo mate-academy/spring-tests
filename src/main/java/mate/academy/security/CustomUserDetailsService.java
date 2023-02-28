@@ -3,6 +3,7 @@ package mate.academy.security;
 import java.util.Optional;
 import mate.academy.model.User;
 import mate.academy.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User.UserBuilder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 public class CustomUserDetailsService implements UserDetailsService {
     private final UserService userService;
 
+    @Autowired
     public CustomUserDetailsService(UserService userService) {
         this.userService = userService;
     }
@@ -27,7 +29,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             builder.password(userOptional.get().getPassword());
             builder.roles(userOptional.get().getRoles()
                     .stream()
-                    .map(x -> x.getRoleName().name())
+                    .map(r -> r.getRoleName().name())
                     .toArray(String[]::new));
             return builder.build();
         }
