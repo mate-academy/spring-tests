@@ -1,5 +1,6 @@
 package mate.academy.model;
 
+import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -54,6 +55,26 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public boolean equals(Object user) {
+        if (this == user) {
+            return true;
+        }
+        if (user == null || getClass() != user.getClass()) {
+            return false;
+        }
+        User current = (User) user;
+        return Objects.equals(id, current.id)
+                && Objects.equals(email, current.email)
+                && Objects.equals(password, current.password)
+                && Objects.equals(roles, current.roles);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email, password, roles);
     }
 
     @Override
