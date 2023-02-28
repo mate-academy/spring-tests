@@ -2,6 +2,7 @@ package mate.academy.config;
 
 import mate.academy.security.jwt.JwtConfigurer;
 import mate.academy.security.jwt.JwtTokenProvider;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -37,8 +38,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/register", "/login", "/inject")
-                .permitAll()
+                .antMatchers(HttpMethod.GET,"/inject").permitAll()
+                .antMatchers(HttpMethod.POST,"/register", "/login").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
