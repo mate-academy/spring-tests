@@ -19,9 +19,9 @@ public class JwtTokenProviderTest {
     private static final Long MILLISECONDS = 3600000L;
     private static final List<String> ROLES = List.of("USER");
     private static final String LOGIN = "bob";
-    private static final String TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib2IiLCJyb2xlcyI6Wy" +
-            "JVU0VSIl0sImlhdCI6MTY3Nzk1MDQ5MywiZXhwIjoxNjc3OTU0MDkzfQ.P1iC6kMp4vIUz4nT4Vzp4OXqK" +
-            "xOQKsY4OrXakH_zX8E";
+    private static final String TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib2IiLCJyb2xlcyI6Wy"
+            + "JVU0VSIl0sImlhdCI6MTY3Nzk1MDQ5MywiZXhwIjoxNjc3OTU0MDkzfQ.P1iC6kMp4vIUz4nT4Vzp4OXqK"
+            + "xOQKsY4OrXakH_zX8E";
     private UserDetailsService userDetailsService;
     private JwtTokenProvider jwtTokenProvider;
 
