@@ -17,6 +17,9 @@ public class PasswordValidator implements ConstraintValidator<Password, UserRegi
     @Override
     public boolean isValid(UserRegistrationDto registrationDto,
                            ConstraintValidatorContext constraintValidatorContext) {
+        if (registrationDto == null) {
+            throw new RuntimeException("RegistrationDto can't be null");
+        }
         Object fieldValue = new BeanWrapperImpl(registrationDto)
                 .getPropertyValue(field);
         Object fieldMatchValue = new BeanWrapperImpl(registrationDto)

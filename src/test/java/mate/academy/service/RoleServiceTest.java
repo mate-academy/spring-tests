@@ -35,7 +35,8 @@ class RoleServiceTest {
 
     @Test
     void save_RoleIsNull_NotOk() {
-        assertThrows(RuntimeException.class, () -> {roleService.save(null);});
+        assertThrows(RuntimeException.class, () -> {
+            roleService.save(null); });
     }
 
     @Test
@@ -48,6 +49,7 @@ class RoleServiceTest {
 
     @Test
     void getRoleByName_RoleNameIsNull_NotOk() {
-        assertThrows(RuntimeException.class, () -> {roleService.getRoleByName(null);});
+        assertThrows(RuntimeException.class, () -> {
+            roleService.getRoleByName(null); });
     }
 }

@@ -30,10 +30,10 @@ class UserServiceTest {
         userService = new UserServiceImpl(userDaoMock, passwordEncoderMock);
         String email = "user@gmail.com";
         String password = "password";
-        Set<Role> roles = Set.of(new Role(ADMIN));
         user = new User();
         user.setEmail(email);
         user.setPassword(password);
+        Set<Role> roles = Set.of(new Role(ADMIN));
         user.setRoles(roles);
     }
 
@@ -48,7 +48,8 @@ class UserServiceTest {
 
     @Test
     void save_UserIsNull_NotOk() {
-        assertThrows(RuntimeException.class, () -> {userService.save(null);});
+        assertThrows(RuntimeException.class, () -> {
+            userService.save(null); });
     }
 
     @Test
@@ -62,7 +63,8 @@ class UserServiceTest {
 
     @Test
     void findById_IdIsNull_NotOk() {
-        assertThrows(RuntimeException.class, () -> {userService.findById(null);});
+        assertThrows(RuntimeException.class, () -> {
+            userService.findById(null); });
     }
 
     @Test
@@ -75,6 +77,7 @@ class UserServiceTest {
 
     @Test
     void findByEmail_EmailIsNull_NotOk() {
-        assertThrows(RuntimeException.class, () -> {userService.findByEmail(null);});
+        assertThrows(RuntimeException.class, () -> {
+            userService.findByEmail(null); });
     }
 }
