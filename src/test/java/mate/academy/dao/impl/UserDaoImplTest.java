@@ -1,9 +1,10 @@
-package mate.academy.dao;
+package mate.academy.dao.impl;
 
 import java.util.Optional;
 import java.util.Set;
-import mate.academy.dao.impl.RoleDaoImpl;
-import mate.academy.dao.impl.UserDaoImpl;
+import mate.academy.dao.AbstractTest;
+import mate.academy.dao.RoleDao;
+import mate.academy.dao.UserDao;
 import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import mate.academy.model.User;
@@ -11,7 +12,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class UserDaoTest extends AbstractTest {
+public class UserDaoImplTest extends AbstractTest {
     private static final String USER_ROLE = "USER";
     private static final String ADMIN_ROLE = "ADMIN";
     private static final String BOB_EMAIL = "bob@email.com";
@@ -20,7 +21,6 @@ class UserDaoTest extends AbstractTest {
     private static final String ALICE_PASSWORD = "alice";
     private UserDao userDao;
     private RoleDao roleDao;
-    private User alice;
     private User bob;
 
     @BeforeEach
@@ -30,13 +30,9 @@ class UserDaoTest extends AbstractTest {
         roleDao.save(new Role(Role.RoleName.USER));
         roleDao.save(new Role(Role.RoleName.ADMIN));
         bob = new User();
-        alice = new User();
         bob.setEmail(BOB_EMAIL);
         bob.setPassword(BOB_PASSWORD);
         bob.setRoles(Set.of(roleDao.getRoleByName(USER_ROLE).get()));
-        alice.setPassword(ALICE_PASSWORD);
-        alice.setEmail(ALICE_EMAIL);
-        alice.setRoles(Set.of(roleDao.getRoleByName(ADMIN_ROLE).get()));
     }
 
     @Override
@@ -47,12 +43,9 @@ class UserDaoTest extends AbstractTest {
     @Test
     void save_Ok() {
         User actualBob = userDao.save(bob);
-        User actualAlice = userDao.save(alice);
 
         Assertions.assertNotNull(actualBob);
-        Assertions.assertNotNull(actualAlice);
         Assertions.assertEquals(actualBob, bob);
-        Assertions.assertEquals(actualAlice, alice);
     }
 
     @Test

@@ -1,13 +1,14 @@
-package mate.academy.dao;
+package mate.academy.dao.impl;
 
-import mate.academy.dao.impl.RoleDaoImpl;
+import mate.academy.dao.AbstractTest;
+import mate.academy.dao.RoleDao;
 import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class RoleDaoTest extends AbstractTest {
+public class RoleDaoImplTest extends AbstractTest {
     private RoleDao roleDao;
     private Role admin;
     private Role user;
@@ -53,7 +54,7 @@ public class RoleDaoTest extends AbstractTest {
     @Test
     void getByRoleName_WrongRole_NotOk() {
         roleDao.save(user);
-        Assertions.assertThrows(DataProcessingException.class, () -> roleDao
-                .getRoleByName("WRONG_NAME"));
+        Assertions.assertThrows(DataProcessingException.class, () ->
+                roleDao.getRoleByName("WRONG_NAME"));
     }
 }

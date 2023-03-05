@@ -1,4 +1,4 @@
-package mate.academy.security;
+package mate.academy.security.jwt;
 
 import static org.mockito.ArgumentMatchers.any;
 
@@ -6,7 +6,6 @@ import java.lang.reflect.Field;
 import java.util.Base64;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import mate.academy.security.jwt.JwtTokenProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,14 +13,16 @@ import org.mockito.Mockito;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public class JwtTokenProviderTest {
-    private static final String INVALID_TOKEN = "invalidToken";
+    private static final String INCORRECT_TOKEN = "incorrectTocken";
     private static final String SECRET_KEY = "secret";
-    private static final Long MILLISECONDS = 3600000L;
+    private static final String SECRET_KEY_FIELD_NAME = "secretKey";
+    private static final String VALID_IN_MILLISECONDS_FIELD_NAME = "validityInMilliseconds";
+    private static final Long VALIDITY_IN_MILLISECONDS = 3600000L;
     private static final List<String> ROLES = List.of("USER");
     private static final String LOGIN = "bob";
     private static final String TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib2IiLCJyb2xlcyI6Wy"
-            + "JVU0VSIl0sImlhdCI6MTY3Nzk1MDQ5MywiZXhwIjoxNjc3OTU0MDkzfQ.P1iC6kMp4vIUz4nT4Vzp4OXqK"
-            + "xOQKsY4OrXakH_zX8E";
+            + "JVU0VSIl0sImlhdCI6MTY3ODAxMzM2NCwiZXhwIjoxNjc4MDE2OTY0fQ.nyP53FMK6fB9F1HyrVRvIT"
+            + "e_BALazE589KjbNR0peFQ";
     private UserDetailsService userDetailsService;
     private JwtTokenProvider jwtTokenProvider;
 
@@ -30,8 +31,9 @@ public class JwtTokenProviderTest {
         userDetailsService = Mockito.mock(UserDetailsService.class);
         jwtTokenProvider = new JwtTokenProvider(userDetailsService);
         String secretKey = Base64.getEncoder().encodeToString(SECRET_KEY.getBytes());
-        setField(jwtTokenProvider, "secretKey", secretKey, String.class);
-        setField(jwtTokenProvider, "validityInMilliseconds", MILLISECONDS, Long.class);
+        setField(jwtTokenProvider, SECRET_KEY_FIELD_NAME, secretKey, String.class);
+        setField(jwtTokenProvider, VALID_IN_MILLISECONDS_FIELD_NAME,
+                VALIDITY_IN_MILLISECONDS, Long.class);
     }
 
     @Test
@@ -39,6 +41,7 @@ public class JwtTokenProviderTest {
         String token = jwtTokenProvider.createToken(LOGIN, ROLES);
         Assertions.assertNotNull(token);
         Assertions.assertEquals(151, token.length());
+        System.out.println(token);
     }
 
     @Test
@@ -50,7 +53,8 @@ public class JwtTokenProviderTest {
 
     @Test
     void getUserName_NotOk() {
-        Assertions.assertThrows(Exception.class, () -> jwtTokenProvider.getUsername(INVALID_TOKEN));
+        Assertions.assertThrows(Exception.class, () ->
+                jwtTokenProvider.getUsername(INCORRECT_TOKEN));
     }
 
     @Test
@@ -61,7 +65,7 @@ public class JwtTokenProviderTest {
     @Test
     void validateToken_NotOk() {
         Assertions.assertThrows(RuntimeException.class, () -> jwtTokenProvider
-                .validateToken(INVALID_TOKEN));
+                .validateToken(INCORRECT_TOKEN));
     }
 
     @Test
