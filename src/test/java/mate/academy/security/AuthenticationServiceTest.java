@@ -3,6 +3,7 @@ package mate.academy.security;
 import static mate.academy.model.Role.RoleName.USER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 
 import java.util.Optional;
@@ -40,7 +41,7 @@ class AuthenticationServiceTest {
     }
 
     @Test
-    void register_ValidData_Ok() {
+    void register_ValidData_Ok() throws AuthenticationException {
         Mockito.when(roleService.getRoleByName("USER")).thenReturn(new Role(USER));
         Mockito.when(userService.save(user)).thenReturn(user);
         User actual = authenticationService.register(email, password);
@@ -50,20 +51,18 @@ class AuthenticationServiceTest {
 
     @Test
     void register_EmailIsNull_NotOk() {
-        try {
+        AuthenticationException ex = assertThrows(AuthenticationException.class, () -> {
             authenticationService.register(null, password);
-        } catch (RuntimeException e) {
-            assertEquals("Email and password can't be null", e.getMessage());
-        }
+        });
+        assertEquals("Email and password can't be null", ex.getMessage());
     }
 
     @Test
     void register_PasswordIsNull_NotOk() {
-        try {
+        AuthenticationException ex = assertThrows(AuthenticationException.class, () -> {
             authenticationService.register(email, null);
-        } catch (RuntimeException e) {
-            assertEquals("Email and password can't be null", e.getMessage());
-        }
+        });
+        assertEquals("Email and password can't be null", ex.getMessage());
     }
 
     @Test
@@ -77,19 +76,18 @@ class AuthenticationServiceTest {
 
     @Test
     void login_PasswordIsNull_NotOk() throws AuthenticationException {
-        try {
+        AuthenticationException ex = assertThrows(AuthenticationException.class, () -> {
             authenticationService.login(email, null);
-        } catch (RuntimeException e) {
-            assertEquals("Email and password can't be null", e.getMessage());
-        }
+        });
+        assertEquals("Email and password can't be null", ex.getMessage());
+
     }
 
     @Test
     void login_EmailIsNull_NotOk() throws AuthenticationException {
-        try {
+        AuthenticationException ex = assertThrows(AuthenticationException.class, () -> {
             authenticationService.login(null, password);
-        } catch (RuntimeException e) {
-            assertEquals("Email and password can't be null", e.getMessage());
-        }
+        });
+        assertEquals("Email and password can't be null", ex.getMessage());
     }
 }

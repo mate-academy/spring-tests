@@ -9,20 +9,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Optional;
 import java.util.Set;
 import mate.academy.AbstractTest;
+import mate.academy.dao.impl.RoleDaoImpl;
 import mate.academy.dao.impl.UserDaoImpl;
 import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import mate.academy.model.User;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class UserDaoTest extends AbstractTest {
     private UserDao userDao;
-    private Session session;
-    private Transaction transaction;
+    private RoleDao roleDao;
     private User user;
     private String email = "user@gmail.com";
     private String password = "password";
@@ -36,20 +33,13 @@ class UserDaoTest extends AbstractTest {
     @BeforeEach
     void setUp() {
         userDao = new UserDaoImpl(getSessionFactory());
-        session = getSessionFactory().openSession();
-        transaction = session.beginTransaction();
+        roleDao = new RoleDaoImpl(getSessionFactory());
         role = new Role(ADMIN);
-        session.save(role);
-        transaction.commit();
+        roleDao.save(role);
         user = new User();
         user.setEmail(email);
         user.setPassword(password);
         user.setRoles(Set.of(role));
-    }
-
-    @AfterEach
-    void tearDown() {
-        session.close();
     }
 
     @Test
@@ -69,9 +59,7 @@ class UserDaoTest extends AbstractTest {
 
     @Test
     void findByEmail_Ok() {
-        transaction = session.beginTransaction();
-        session.save(user);
-        transaction.commit();
+        userDao.save(user);
         Optional<User> optionalUserByEmail = userDao.findByEmail(email);
         assertTrue(optionalUserByEmail.isPresent());
         assertEquals(user, optionalUserByEmail.get());
@@ -91,9 +79,7 @@ class UserDaoTest extends AbstractTest {
 
     @Test
     void findById_Ok() {
-        transaction = session.beginTransaction();
-        session.save(user);
-        transaction.commit();
+        userDao.save(user);
         Optional<User> optionalUserByEmail = userDao.findById(1L);
         assertTrue(optionalUserByEmail.isPresent());
         assertEquals(user, optionalUserByEmail.get());

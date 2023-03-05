@@ -11,8 +11,6 @@ import mate.academy.AbstractTest;
 import mate.academy.dao.impl.RoleDaoImpl;
 import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -49,15 +47,10 @@ class RoleDaoTest extends AbstractTest {
 
     @Test
     void getRoleByName_Ok() {
-        Role admin = new Role(ADMIN);
-        Session session = getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        session.save(admin);
-        transaction.commit();
-        session.close();
+        roleDao.save(role);
         Optional<Role> optionalRole = roleDao.getRoleByName(ADMIN.name());
         assertTrue(optionalRole.isPresent());
-        assertEquals(admin, optionalRole.get());
+        assertEquals(role, optionalRole.get());
     }
 
     @Test

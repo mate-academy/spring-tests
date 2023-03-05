@@ -31,8 +31,8 @@ class JwtTokenProviderTest {
     private static final long VALIDITY_IN_MILLISECONDS = 3600000L;
     private UserDetailsService userDetailsServiceMock;
     private JwtTokenProvider jwtTokenProvider;
-    private String email;
-    private List<String> roles;
+    private String email = "user@gmail.com";
+    private List<String> roles = List.of("ADMIN");
 
     @BeforeEach
     void setUp() {
@@ -41,8 +41,6 @@ class JwtTokenProviderTest {
         ReflectionTestUtils.setField(jwtTokenProvider, "secretKey", SECRET_KEY);
         ReflectionTestUtils.setField(jwtTokenProvider, "validityInMilliseconds",
                 VALIDITY_IN_MILLISECONDS);
-        email = "user@gmail.com";
-        roles = List.of("ADMIN");
     }
 
     @Test
