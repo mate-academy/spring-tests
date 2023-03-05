@@ -24,7 +24,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public User register(String email, String password) {
+    public User register(String email, String password) throws AuthenticationException {
+        if (email == null || password == null) {
+            throw new AuthenticationException("Email and password can't be null");
+        }
         User user = new User();
         user.setEmail(email);
         user.setPassword(password);
@@ -35,6 +38,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public User login(String login, String password) throws AuthenticationException {
+        if (login == null || password == null) {
+            throw new AuthenticationException("Email and password can't be null");
+        }
         Optional<User> user = userService.findByEmail(login);
         if (user.isEmpty() || !passwordEncoder.matches(password, user.get().getPassword())) {
             throw new AuthenticationException("Incorrect username or password!!!");

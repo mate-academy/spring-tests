@@ -15,11 +15,15 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role save(Role role) {
-        return roleDao.save(role);
+        if (role != null) {
+            return roleDao.save(role);
+        }
+        throw new RuntimeException("Role can't be null");
     }
 
     @Override
     public Role getRoleByName(String roleName) {
-        return roleDao.getRoleByName(roleName).orElseThrow();
+        return roleDao.getRoleByName(roleName).orElseThrow(
+                () -> new RuntimeException("Role name can't be null"));
     }
 }

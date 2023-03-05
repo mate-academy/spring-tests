@@ -19,17 +19,26 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userDao.save(user);
+        if (user != null) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            return userDao.save(user);
+        }
+        throw new RuntimeException("User can't be null");
     }
 
     @Override
     public Optional<User> findById(Long id) {
-        return userDao.findById(id);
+        if (id != null) {
+            return userDao.findById(id);
+        }
+        throw new RuntimeException("Id can't be null");
     }
 
     @Override
     public Optional<User> findByEmail(String email) {
-        return userDao.findByEmail(email);
+        if (email != null) {
+            return userDao.findByEmail(email);
+        }
+        throw new RuntimeException("Email can't be null");
     }
 }

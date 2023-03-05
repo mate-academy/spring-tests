@@ -1,5 +1,6 @@
 package mate.academy.controller;
 
+import mate.academy.exception.AuthenticationException;
 import mate.academy.model.Role;
 import mate.academy.security.AuthenticationService;
 import mate.academy.service.RoleService;
@@ -21,7 +22,7 @@ public class InjectController {
     }
 
     @GetMapping
-    public String injectData() {
+    public String injectData() throws AuthenticationException {
         roleService.save(new Role(Role.RoleName.ADMIN));
         roleService.save(new Role(Role.RoleName.USER));
 
