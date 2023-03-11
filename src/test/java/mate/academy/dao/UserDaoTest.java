@@ -55,32 +55,55 @@ class UserDaoTest extends AbstractTest {
         User savedUser = userDao.save(user);
         assertNotNull(savedUser);
         assertEquals(1L, savedUser.getId(),
-                "");
+                "Method should return user with id '%s'"
+                        .formatted(1L));
     }
 
     @Test
     @Order(2)
     void findByEmail_existingEmail_ok() {
-        userDao.save(user);
+        User savedUser = userDao.save(user);
         Optional<User> optionalUser = userDao.findByEmail(EMAIL);
-        assertTrue(optionalUser.isPresent());
-        assertEquals(EMAIL, optionalUser.get().getEmail());
+        assertTrue(optionalUser.isPresent(),
+                "Method should return optional user '%s' from email '%s'"
+                        .formatted(savedUser, EMAIL));
+        assertEquals(EMAIL, optionalUser.get().getEmail(),
+                "Method should return optional user with email '%s' but returned '%s'"
+                        .formatted(EMAIL, optionalUser.get().getEmail()));
     }
 
     @Test
     @Order(3)
     void findByEmail_notExistingEmail_notOk() {
+        String notExistingEmail = "notExist@i.ua";
         userDao.save(user);
-        Optional<User> optionalUser = userDao.findByEmail("notExist@i.ua");
-        assertFalse(optionalUser.isPresent());
+        Optional<User> optionalUser = userDao.findByEmail(notExistingEmail);
+        assertFalse(optionalUser.isPresent(),
+                "Method should return false from not existing email '%s'"
+                        .formatted(notExistingEmail));
     }
 
     @Test
     @Order(4)
-    void findById() {
+    void findById_validId_ok() {
         User savedUser = userDao.save(user);
         Optional<User> optionalUser = userDao.findById(savedUser.getId());
-        assertTrue(optionalUser.isPresent());
-        assertEquals(EMAIL, optionalUser.get().getEmail());
+        assertTrue(optionalUser.isPresent(),
+                "Method should return optional user '%s' from id '%s'"
+                        .formatted(savedUser, savedUser.getId()));
+        assertEquals(EMAIL, optionalUser.get().getEmail(),
+                "Method should return optional user with email '%s' but returned '%s'"
+                        .formatted(EMAIL, optionalUser.get().getEmail()));
+    }
+
+    @Test
+    @Order(5)
+    void findById_notExistingId_notOk() {
+        long notExistingId = 2L;
+        userDao.save(user);
+        Optional<User> optionalUser = userDao.findById(notExistingId);
+        assertFalse(optionalUser.isPresent(),
+                "Method should return false from id not existing id '%s'"
+                        .formatted(notExistingId));
     }
 }
