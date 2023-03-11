@@ -1,10 +1,8 @@
 package mate.academy.service;
 
 import static mate.academy.model.Role.RoleName.ADMIN;
-import static mate.academy.model.Role.RoleName.USER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
 import java.util.NoSuchElementException;
@@ -40,19 +38,26 @@ class RoleServiceTest {
     void save_validUser_ok() {
         when(roleDao.save(role)).thenReturn(savedRole);
         Role actual = roleService.save(role);
-        assertEquals(actual, savedRole);
+        assertEquals(actual, savedRole,
+                "Method should return saved role '%s'"
+                        .formatted(savedRole));
     }
 
     @Test
     void getRoleByName_existingRole_ok() {
-        when(roleDao.getRoleByName(ADMIN.name())).thenReturn(Optional.of(savedRole));
-        Role actual = roleService.getRoleByName(ADMIN.name());
-        assertEquals(actual, savedRole);
+        when(roleDao.getRoleByName(role.getRoleName().name())).thenReturn(Optional.of(savedRole));
+        Role actual = roleService.getRoleByName(role.getRoleName().name());
+        assertEquals(actual, savedRole,
+                "Method should return role '%s' but returned '%s' for roleName '%s'"
+                        .formatted(savedRole, actual, role.getRoleName().name()));
     }
 
     @Test
     void getRoleByName_notExistingRole_notOk() {
-        lenient().when(roleDao.getRoleByName(ADMIN.name())).thenReturn(Optional.of(savedRole));
-        assertThrows(NoSuchElementException.class, () -> roleService.getRoleByName(USER.name()));
+        String notExistingRole = "ROLE_NOT_EXIST";
+        when(roleDao.getRoleByName(notExistingRole)).thenReturn(Optional.empty());
+        assertThrows(NoSuchElementException.class, () -> roleService.getRoleByName(notExistingRole),
+                "Method should throw '%s' for not existing role name"
+                        .formatted(NoSuchElementException.class));
     }
 }

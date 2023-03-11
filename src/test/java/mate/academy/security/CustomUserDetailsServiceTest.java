@@ -4,6 +4,7 @@ import static mate.academy.model.Role.RoleName.USER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
@@ -40,21 +41,34 @@ class CustomUserDetailsServiceTest {
     }
 
     @Test
-    void loadUserByUsername_validUser_ok() {
+    void loadUserByUsername_validEmail_ok() {
         when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
 
         UserDetails actual = userDetailsService.loadUserByUsername(EMAIL);
         assertNotNull(actual);
-        assertEquals(EMAIL, actual.getUsername());
-        assertEquals(PASSWORD, actual.getPassword());
+        assertEquals(EMAIL, actual.getUsername(),
+                "Method should return userDetails with userName '%s' but returned '%s'"
+                        .formatted(EMAIL, actual.getUsername()));
+        assertEquals(PASSWORD, actual.getPassword(),
+                "Method should return userDetails with password '%s' but returned '%s'"
+                        .formatted(PASSWORD, actual.getPassword()));
+        boolean ifRoleUserExist = actual.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority()
+                        .equals("ROLE_" + USER.name()));
+        assertTrue(ifRoleUserExist,
+                "Method should return userDetails with authority '%s'"
+                        .formatted("ROLE_" + USER.name()));
     }
 
     @Test
     void loadUserByUsername_notExistedEmail_notOk() {
+        String notExistingEmail = "not_exist@i.ua";
         lenient().when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
 
         UsernameNotFoundException exception = assertThrows(UsernameNotFoundException.class,
-                () -> userDetailsService.loadUserByUsername("not_exist@i.ua"));
+                () -> userDetailsService.loadUserByUsername(notExistingEmail),
+                "Method should throw '%s' when not existing email '%s' is passed"
+                        .formatted(UsernameNotFoundException.class, notExistingEmail));
         assertEquals("User not found.", exception.getMessage());
     }
 }

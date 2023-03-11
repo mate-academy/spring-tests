@@ -60,21 +60,26 @@ class JwtTokenProviderTest {
     @Order(1)
     void createToken_validInput_ok() {
         String token = jwtTokenProvider.createToken(LOGIN, ROLES);
-        assertNotNull(token);
+        assertNotNull(token,
+                "Method should return valid token for login '%s' and roles '%s'"
+                        .formatted(LOGIN, ROLES));
 
         String actualLogin = Jwts.parser()
                 .setSigningKey(ENCODED_SECRET_KEY)
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
-        assertEquals(LOGIN, actualLogin);
+        assertEquals(LOGIN, actualLogin,
+                "Method should return token that contains login '%s' but contains '%s'"
+                        .formatted(LOGIN, actualLogin));
     }
 
     @Test
     @Order(2)
     void getAuthentication_validToken_ok() {
+        String token = "token";
         jwtTokenProvider = spy(jwtTokenProvider);
-        doReturn(LOGIN).when(jwtTokenProvider).getUsername("token");
+        doReturn(LOGIN).when(jwtTokenProvider).getUsername(token);
 
         UserDetails userDetails = User.withUsername(LOGIN)
                 .password(PASSWORD)
@@ -82,16 +87,21 @@ class JwtTokenProviderTest {
                 .build();
         when(userDetailsService.loadUserByUsername(LOGIN)).thenReturn(userDetails);
 
-        Authentication authentication = jwtTokenProvider.getAuthentication("token");
-        assertNotNull(authentication);
+        Authentication authentication = jwtTokenProvider.getAuthentication(token);
+        assertNotNull(authentication,
+                "Method should return authentication from passed token");
 
         String actualLogin = authentication.getName();
-        assertEquals(LOGIN, actualLogin);
+        assertEquals(LOGIN, actualLogin,
+                "Method should return authentication with principal name '%s' but returned '%s'"
+                        .formatted(LOGIN, actualLogin));
 
         boolean ifRoleUserExist = authentication.getAuthorities().stream()
                 .anyMatch(grantedAuthority -> grantedAuthority.getAuthority()
                         .equals("ROLE_" + USER.name()));
-        assertTrue(ifRoleUserExist);
+        assertTrue(ifRoleUserExist,
+                "Method should return authentication with authority '%s'"
+                        .formatted("ROLE_" + USER.name()));
     }
 
     @Test
@@ -102,8 +112,12 @@ class JwtTokenProviderTest {
                 .signWith(SignatureAlgorithm.HS256, ENCODED_SECRET_KEY)
                 .compact();
         String actualLogin = jwtTokenProvider.getUsername(token);
-        assertNotNull(actualLogin);
-        assertEquals(LOGIN, actualLogin);
+        assertNotNull(actualLogin,
+                "Method should return username '%s' for token '%s'"
+                        .formatted(LOGIN, token));
+        assertEquals(LOGIN, actualLogin,
+                "Method should return username '%s' but returned '%s'"
+                        .formatted(LOGIN, actualLogin));
     }
 
     @Test
@@ -138,7 +152,10 @@ class JwtTokenProviderTest {
                 .compact();
         setField(jwtTokenProvider, "secretKey", ENCODED_SECRET_KEY);
         boolean validToken = jwtTokenProvider.validateToken(token);
-        assertTrue(validToken);
+        assertTrue(validToken,
+                ("Method should return true for token with login '%s',"
+                        + " roles '%s', created at '%s' and validity '%s'")
+                        .formatted(LOGIN, ROLES, now, validity));
     }
 
     @Test
@@ -153,7 +170,9 @@ class JwtTokenProviderTest {
                 .compact();
         setField(jwtTokenProvider, "secretKey", ENCODED_SECRET_KEY);
         RuntimeException exception = assertThrows(RuntimeException.class,
-                () -> jwtTokenProvider.validateToken(token));
+                () -> jwtTokenProvider.validateToken(token),
+                "Method should throw '%s' for token expired at '%s'"
+                        .formatted(RuntimeException.class, validity));
         assertEquals("Expired or invalid JWT token", exception.getMessage());
     }
 }

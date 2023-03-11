@@ -60,8 +60,12 @@ class AuthenticationServiceTest {
     @Order(1)
     void register_validUser_ok() {
         User actual = registerUser(user);
-        assertNotNull(actual);
-        assertEquals(actual, savedUser);
+        assertNotNull(actual,
+                "Method should return registered user '%s' for email '%s' and password '%s'"
+                        .formatted(savedUser, user.getEmail(), user.getPassword()));
+        assertEquals(actual, savedUser,
+                "Method should return user '%s' but returned '%s'"
+                        .formatted(savedUser, actual));
     }
 
     @Test
@@ -69,7 +73,8 @@ class AuthenticationServiceTest {
     void register_nullEmail_notOk() {
         user.setEmail(null);
         User actual = registerUser(user);
-        assertNull(actual);
+        assertNull(actual,
+                "Method should return null with 'null' email");
     }
 
     @Test
@@ -81,16 +86,22 @@ class AuthenticationServiceTest {
         lenient().when(userService.save(user)).thenReturn(savedUser);
 
         User actual = authenticationService.register(EMAIL, PASSWORD);
-        assertNull(actual);
+        assertNull(actual,
+                "Method should return null with 'null' password");
     }
 
     @Test
     @Order(4)
     void login_validEmail_ok() {
         findByEmailMock();
-        User actual = assertDoesNotThrow(() -> authenticationService.login(EMAIL, PASSWORD));
-        assertNotNull(actual);
-        assertEquals(actual, savedUser);
+        User actual = assertDoesNotThrow(() -> authenticationService.login(EMAIL, PASSWORD),
+                "Method does not throw exception with email '%s' and password '%s'"
+                        .formatted(EMAIL, PASSWORD));
+        assertNotNull(actual,
+                "Method should return user '%s'".formatted(savedUser));
+        assertEquals(actual, savedUser,
+                "Method should return '%s' but returned '%s'"
+                        .formatted(savedUser, actual));
     }
 
     @Test

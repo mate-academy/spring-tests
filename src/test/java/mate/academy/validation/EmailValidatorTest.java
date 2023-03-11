@@ -3,6 +3,8 @@ package mate.academy.validation;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.HashSet;
+import java.util.Set;
 import javax.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
@@ -35,57 +37,29 @@ class EmailValidatorTest {
 
     @Test
     @Order(2)
-    void isValid_noTextBeforeAt_notOk() {
-        String email = "@i.ua";
-        boolean isValid = emailValidator.isValid(email, constraintValidatorContext);
-        assertFalse(isValid);
+    void isValid_noValidEmail_notOk() {
+        Set<String> invalidEmails = new HashSet<>();
+        invalidEmails.add("@i.ua");
+        invalidEmails.add("valid@");
+        invalidEmails.add("valid_i.ua");
+        invalidEmails.add("valid@.ua");
+        invalidEmails.add("valid@i_ua");
+        invalidEmails.add("valid@i.");
+        invalidEmails.forEach(this::emailValidatorHelper);
     }
 
     @Test
     @Order(3)
-    void isValid_noTextAfterAt_notOk() {
-        String email = "valid@";
-        boolean isValid = emailValidator.isValid(email, constraintValidatorContext);
-        assertFalse(isValid);
+    void isValid_nullEmail_notOk() {
+        boolean isValid = emailValidator.isValid(null, constraintValidatorContext);
+        assertFalse(isValid,
+                "Method should return false for null email '%s'");
     }
 
-    @Test
-    @Order(4)
-    void isValid_noAt_notOk() {
-        String email = "valid_i.ua";
-        boolean isValid = emailValidator.isValid(email, constraintValidatorContext);
-        assertFalse(isValid);
-    }
-
-    @Test
-    @Order(5)
-    void isValid_noSymbolBeforeDot_notOk() {
-        String email = "valid@.ua";
-        boolean isValid = emailValidator.isValid(email, constraintValidatorContext);
-        assertFalse(isValid);
-    }
-
-    @Test
-    @Order(6)
-    void isValid_noDot_notOk() {
-        String email = "valid@i_ua";
-        boolean isValid = emailValidator.isValid(email, constraintValidatorContext);
-        assertFalse(isValid);
-    }
-
-    @Test
-    @Order(7)
-    void isValid_noSymbolAfterDot_notOk() {
-        String email = "valid@i.";
-        boolean isValid = emailValidator.isValid(email, constraintValidatorContext);
-        assertFalse(isValid);
-    }
-
-    @Test
-    @Order(8)
-    void isValid_oneSymbolAfterDot_notOk() {
-        String email = "valid@i.u";
-        boolean isValid = emailValidator.isValid(email, constraintValidatorContext);
-        assertFalse(isValid);
+    private void emailValidatorHelper(String email) {
+        boolean actual = emailValidator.isValid(email, constraintValidatorContext);
+        assertFalse(actual,
+                "Method should return false for email '%s'"
+                        .formatted(email));
     }
 }

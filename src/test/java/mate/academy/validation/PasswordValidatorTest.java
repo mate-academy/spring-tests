@@ -31,15 +31,26 @@ class PasswordValidatorTest {
     void isValid_matchedRequest_ok() {
         registrationDto.setPassword("1234");
         registrationDto.setRepeatPassword("1234");
-        boolean valid = passwordValidator.isValid(registrationDto, constraintValidatorContext);
-        assertTrue(valid);
+        boolean actual = passwordValidator.isValid(registrationDto, constraintValidatorContext);
+        assertTrue(actual,
+                "Method should return true if password matches repeat password");
     }
 
     @Test
     void isValid_notMatchedRequest_notOk() {
         registrationDto.setPassword("8765");
         registrationDto.setRepeatPassword("1234");
-        boolean valid = passwordValidator.isValid(registrationDto, constraintValidatorContext);
-        assertFalse(valid);
+        boolean actual = passwordValidator.isValid(registrationDto, constraintValidatorContext);
+        assertFalse(actual,
+                "Method should return false if password do not matches repeat password");
+    }
+
+    @Test
+    void isValid_passwordNull_notOk() {
+        registrationDto.setPassword(null);
+        registrationDto.setRepeatPassword(null);
+        boolean actual = passwordValidator.isValid(registrationDto, constraintValidatorContext);
+        assertFalse(actual,
+                "Method should return false if password is null");
     }
 }

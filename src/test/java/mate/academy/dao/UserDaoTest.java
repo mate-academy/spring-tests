@@ -54,7 +54,8 @@ class UserDaoTest extends AbstractTest {
     void save_validUser_ok() {
         User savedUser = userDao.save(user);
         assertNotNull(savedUser);
-        assertEquals(1L, savedUser.getId());
+        assertEquals(1L, savedUser.getId(),
+                "");
     }
 
     @Test
