@@ -15,19 +15,19 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 class CustomUserDetailsServiceTest {
-    private static final User TEST_USER = new User();
     private static final String TEST_VALID_EMAIL = "bob@i.ua";
     private static final String TEST_INVALID_EMAIL = "alice@i.ua";
     private static final String TEST_PASSWORD = "1234";
-    private static final String EXCEPTION_MESSAGE = "User not found.";
+    private static User testUser;
     private UserDetailsService userDetailsService;
     private UserService userService;
 
     @BeforeAll
     static void beforeAll() {
-        TEST_USER.setEmail(TEST_VALID_EMAIL);
-        TEST_USER.setPassword(TEST_PASSWORD);
-        TEST_USER.setRoles(Set.of(new Role(Role.RoleName.USER)));
+        testUser = new User();
+        testUser.setEmail(TEST_VALID_EMAIL);
+        testUser.setPassword(TEST_PASSWORD);
+        testUser.setRoles(Set.of(new Role(Role.RoleName.USER)));
     }
 
     @BeforeEach
@@ -35,7 +35,7 @@ class CustomUserDetailsServiceTest {
         userService = Mockito.mock(UserService.class);
         userDetailsService = new CustomUserDetailsService(userService);
         Mockito.when(userService.findByEmail(TEST_VALID_EMAIL))
-                .thenReturn(Optional.of(TEST_USER));
+                .thenReturn(Optional.of(testUser));
     }
 
     @Test

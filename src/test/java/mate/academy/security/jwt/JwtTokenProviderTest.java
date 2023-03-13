@@ -2,6 +2,7 @@ package mate.academy.security.jwt;
 
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import mate.academy.model.Role;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,12 +15,12 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 class JwtTokenProviderTest {
     private static final String TEST_EMAIL = "test@test.ua";
-    private static final List TEST_ROLES_LIST = List.of("ADMIN", "USER");
+    private static final List TEST_ROLES_LIST = List.of(Role.RoleName.ADMIN, Role.RoleName.USER);
     private JwtTokenProvider jwtTokenProvider;
     private UserDetailsService userDetailsService;
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
         userDetailsService = Mockito.mock(UserDetailsService.class);
         jwtTokenProvider = new JwtTokenProvider(userDetailsService);
         ReflectionTestUtils.setField(jwtTokenProvider, "secretKey", "secret");

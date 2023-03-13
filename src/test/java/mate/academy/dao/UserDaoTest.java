@@ -12,18 +12,19 @@ import org.junit.jupiter.api.Test;
 
 class UserDaoTest extends AbstractTest {
     private static final String TEST_EMAIL = "test@test.test";
-    private static final Role TEST_ROLE = new Role(Role.RoleName.USER);
+    private Role testRole;
     private User user;
     private UserDao userDao;
     private RoleDao roleDao;
 
     @BeforeEach
     void setUp() {
-        roleDao = new RoleDaoImpl(getSessionFactory());
-        userDao = new UserDaoImpl(getSessionFactory());
+        testRole = new Role(Role.RoleName.USER);
         user = new User();
         user.setEmail(TEST_EMAIL);
         user.setPassword("1234");
+        roleDao = new RoleDaoImpl(getSessionFactory());
+        userDao = new UserDaoImpl(getSessionFactory());
     }
 
     @Test
@@ -36,8 +37,8 @@ class UserDaoTest extends AbstractTest {
 
     @Test
     void findByEmail_Ok() {
-        user.setRoles(Set.of(TEST_ROLE));
-        roleDao.save(TEST_ROLE);
+        user.setRoles(Set.of(testRole));
+        roleDao.save(testRole);
         userDao.save(user);
         Optional<User> actual = userDao.findByEmail(TEST_EMAIL);
         Assertions.assertTrue(actual.isPresent(),
@@ -63,18 +64,18 @@ class UserDaoTest extends AbstractTest {
 
     @Test
     void findById_Ok() {
-        user.setRoles(Set.of(TEST_ROLE));
-        roleDao.save(TEST_ROLE);
+        user.setRoles(Set.of(testRole));
+        roleDao.save(testRole);
         userDao.save(user);
-        Optional<User> actual = userDao.findById(1L);
+        Optional<User> actual = userDao.findById(user.getId());
         Assertions.assertTrue(actual.isPresent(),
-                String.format("Should return user by id: %d, but user was empty", 1L));
-        Assertions.assertEquals(1L, actual.get().getId(),
-                String.format("Should return user by id: %d, but user was empty", 1L));
+                String.format("Should return user by id: %d, but user was empty", user.getId()));
+        Assertions.assertEquals(user.getId(), actual.get().getId(),
+                String.format("Should return user by id: %d, but user was empty", user.getId()));
     }
 
     @Test
-    void findByEmail_userIdIsNotExist_notOk() {
+    void findById_userIdIsNotExist_notOk() {
         Optional<User> actual = userDao.findById(1L);
         Assertions.assertFalse(actual.isPresent(),
                 String.format("Should return empty optional for id: %d, "

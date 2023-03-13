@@ -8,17 +8,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class RoleDaoTest extends AbstractTest {
-    private static final Role TEST_ROLE = new Role(Role.RoleName.USER);
+    private Role testRole;
     private RoleDao roleDao;
 
     @BeforeEach
     void setUp() {
+        testRole = new Role(Role.RoleName.USER);
         roleDao = new RoleDaoImpl(getSessionFactory());
     }
 
     @Test
     void save_Ok() {
-        Role actual = roleDao.save(TEST_ROLE);
+        Role actual = roleDao.save(testRole);
         Assertions.assertNotNull(actual, "Role shouldn't be null");
         Assertions.assertEquals(1L, actual.getId(),
                 String.format("Role id after save should be 1, but was: %d", actual.getId()));
@@ -26,17 +27,17 @@ class RoleDaoTest extends AbstractTest {
 
     @Test
     void getRoleByName_Ok() {
-        roleDao.save(TEST_ROLE);
-        Optional<Role> actual = roleDao.getRoleByName("USER");
+        roleDao.save(testRole);
+        Optional<Role> actual = roleDao.getRoleByName(Role.RoleName.USER.name());
         Assertions.assertNotNull(actual, "Role shouldn't be null");
-        Assertions.assertEquals(TEST_ROLE.getRoleName().name(), actual.get().getRoleName().name(),
+        Assertions.assertEquals(testRole.getRoleName().name(), actual.get().getRoleName().name(),
                 String.format("Should return: %s, but was: %s",
-                        TEST_ROLE.getRoleName().name(), actual.get().getRoleName().name()));
+                        testRole.getRoleName().name(), actual.get().getRoleName().name()));
     }
 
     @Test
     void getRoleByName_roleIsNotExist_notOk() {
-        Optional<Role> actual = roleDao.getRoleByName("USER");
+        Optional<Role> actual = roleDao.getRoleByName(Role.RoleName.USER.name());
         Assertions.assertFalse(actual.isPresent(),
                 String.format("Should return empty optional for role name: USER, "
                         + "but was: %s", actual));

@@ -18,7 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 class AuthenticationServiceImplTest {
     private static final String TEST_EMAIL = "bob@i.ua";
     private static final String TEST_PASSWORD = "1234";
-    private static final User TEST_USER = new User();
+    private static User testUser;
     private AuthenticationService authenticationService;
     private UserService userService;
     private RoleService roleService;
@@ -26,8 +26,9 @@ class AuthenticationServiceImplTest {
 
     @BeforeAll
     static void beforeAll() {
-        TEST_USER.setPassword(TEST_PASSWORD);
-        TEST_USER.setEmail(TEST_EMAIL);
+        testUser = new User();
+        testUser.setPassword(TEST_PASSWORD);
+        testUser.setEmail(TEST_EMAIL);
     }
 
     @BeforeEach
@@ -53,16 +54,16 @@ class AuthenticationServiceImplTest {
 
     @Test
     void login_Ok() throws AuthenticationException {
-        Mockito.when(userService.findByEmail(TEST_EMAIL)).thenReturn(Optional.of(TEST_USER));
+        Mockito.when(userService.findByEmail(TEST_EMAIL)).thenReturn(Optional.of(testUser));
         Mockito.when(passwordEncoder.matches(TEST_PASSWORD, TEST_PASSWORD)).thenReturn(true);
         User actual = authenticationService.login(TEST_EMAIL, TEST_PASSWORD);
-        Assertions.assertEquals(TEST_USER, actual,
+        Assertions.assertEquals(testUser, actual,
                 String.format("Should return: %s, for email: %s, but was: %S",
-                        TEST_USER, TEST_EMAIL, actual));
+                        testUser, TEST_EMAIL, actual));
     }
 
     @Test
-    void login_withIncorrectLogin_noOk() throws AuthenticationException {
+    void login_withIncorrectLogin_noOk() {
         Mockito.when(userService.findByEmail(TEST_EMAIL)).thenReturn(Optional.empty());
         Assertions.assertThrows(AuthenticationException.class, () -> {
             authenticationService.login(TEST_EMAIL, TEST_PASSWORD);
@@ -70,8 +71,8 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    void login_withIncorrectPassword_noOk() throws AuthenticationException {
-        Mockito.when(userService.findByEmail(TEST_EMAIL)).thenReturn(Optional.of(TEST_USER));
+    void login_withIncorrectPassword_noOk() {
+        Mockito.when(userService.findByEmail(TEST_EMAIL)).thenReturn(Optional.of(testUser));
         Mockito.when(passwordEncoder.matches(TEST_PASSWORD, "")).thenReturn(false);
         Assertions.assertThrows(AuthenticationException.class, () -> {
             authenticationService.login(TEST_EMAIL, TEST_PASSWORD);

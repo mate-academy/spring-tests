@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 class RoleServiceTest {
-    private static final Role TEST_ROLE = new Role(Role.RoleName.USER);
+    private static Role TEST_ROLE = new Role(Role.RoleName.USER);
     private RoleService roleService;
     private RoleDao roleDao;
 
@@ -34,7 +34,7 @@ class RoleServiceTest {
     @Test
     void getRoleByName_Ok() {
         Mockito.when(roleDao.getRoleByName(any())).thenReturn(Optional.of(TEST_ROLE));
-        Role actual = roleService.getRoleByName("USER");
+        Role actual = roleService.getRoleByName(Role.RoleName.USER.name());
         Assertions.assertNotNull(actual, "Role shouldn't be null");
         Assertions.assertEquals(actual.getRoleName().name(), "USER",
                 String.format("Should return role: %s, but was: %s", "USER",
@@ -45,7 +45,7 @@ class RoleServiceTest {
     void getRoleByName_roleNameIsIncorrect_notOk() {
         Mockito.when(roleDao.getRoleByName(any())).thenReturn(Optional.empty());
         Assertions.assertThrows(RuntimeException.class, () -> {
-            roleService.getRoleByName("USER");
+            roleService.getRoleByName(Role.RoleName.USER.name());
         });
     }
 
