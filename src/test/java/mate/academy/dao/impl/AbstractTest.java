@@ -1,4 +1,5 @@
 package mate.academy.dao.impl;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -49,7 +50,7 @@ public abstract class AbstractTest {
         }
         String[] packages = packages();
         if (packages != null) {
-            for(String scannedPackage : packages) {
+            for (String scannedPackage : packages) {
                 configuration.addPackage(scannedPackage);
             }
         }

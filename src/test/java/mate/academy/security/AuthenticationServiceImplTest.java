@@ -1,5 +1,8 @@
 package mate.academy.security;
 
+import static org.mockito.ArgumentMatchers.any;
+
+import java.util.Optional;
 import mate.academy.exception.AuthenticationException;
 import mate.academy.model.Role;
 import mate.academy.model.User;
@@ -12,59 +15,43 @@ import org.mockito.Mockito;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.Optional;
-import java.util.Set;
-
-import static org.mockito.ArgumentMatchers.any;
-
 class AuthenticationServiceImplTest {
+    private static final String EMAIL = "bob@i.ua";
+    private static final String PASSWORD = "1234";
+    private static User bob;
+    private AuthenticationService authenticationService;
     private UserService userService;
     private RoleService roleService;
     private PasswordEncoder passwordEncoder;
-    private AuthenticationService authenticationService;
 
     @BeforeEach
     void setUp() {
         userService = Mockito.mock(UserService.class);
         roleService = Mockito.mock(RoleService.class);
         passwordEncoder = new BCryptPasswordEncoder();
-        authenticationService = new AuthenticationServiceImpl(userService, roleService, passwordEncoder);
+        authenticationService
+                = new AuthenticationServiceImpl(userService, roleService, passwordEncoder);
+        bob = new User();
+        bob.setPassword(passwordEncoder.encode(PASSWORD));
+        bob.setEmail(EMAIL);
     }
 
     @Test
     void register_Ok() {
-        String email = "bob@i.ua";
-        String password = "1234";
-        Role role = new Role(Role.RoleName.USER);
-        User bob = new User();
-        bob.setEmail(email);
-        bob.setPassword(passwordEncoder.encode(password));
-        bob.setRoles(Set.of(role));
-        bob.setId(1L);
-        userService.save(bob);
-
-
+        Mockito.when(roleService.getRoleByName("USER"))
+                .thenReturn(new Role(Role.RoleName.USER));
         Mockito.when(userService.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
-        Mockito.when(roleService.getRoleByName("USER")).thenReturn(role);
-
-        User actual = authenticationService.register(email, password);
-        Assertions.assertNotNull(actual.getEmail());
-        Assertions.assertEquals(bob.getEmail(), actual.getEmail());
-
-
+        User actual = authenticationService.register(EMAIL, PASSWORD);
+        Assertions.assertNotNull(actual, "Shouldn't return null");
+        Assertions.assertEquals(EMAIL, actual.getEmail(),
+                String.format("Should return user with email: %s, but was: %S",
+                        EMAIL, actual.getEmail()));
     }
 
     @Test
     void login_Ok() throws AuthenticationException {
-        String email = "bob@i.ua";
-        String password = "1234";
-        User bob = new User();
-        bob.setEmail(email);
-        bob.setPassword(passwordEncoder.encode(password));
-
-        Mockito.when(userService.findByEmail(email)).thenReturn(Optional.of(bob));
-
-        User actual = authenticationService.login(email, password);
+        Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(bob));
+        User actual = authenticationService.login(EMAIL, PASSWORD);
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(bob, actual);
     }
