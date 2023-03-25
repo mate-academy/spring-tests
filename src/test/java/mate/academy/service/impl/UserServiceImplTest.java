@@ -48,13 +48,7 @@ class UserServiceImplTest {
         Mockito.when(userDao.findById(1L)).thenReturn(Optional.ofNullable(bob));
 
         Optional<User> actual = userService.findById(2L);
-
-        try {
-            actual.get();
-        } catch (NoSuchElementException e) {
-            return;
-        }
-        Assertions.fail("Excepted to receive NoSuchElementException");
+        Assertions.assertThrows(RuntimeException.class, actual::get);
     }
 
     @Test
@@ -72,12 +66,7 @@ class UserServiceImplTest {
         Mockito.when(userDao.findByEmail("bob@i.ua")).thenReturn(Optional.ofNullable(bob));
 
         Optional<User> actual = userService.findByEmail("alice@i.ua");
-        try {
-            actual.get();
-        } catch (NoSuchElementException e) {
-            return;
-        }
-        Assertions.fail("Excepted to receive NoSuchElementException");
+        Assertions.assertThrows(RuntimeException.class, actual::get);
     }
 
     @Test

@@ -43,7 +43,7 @@ class AuthenticationServiceImplTest {
         Mockito.when(userService.save(any())).thenReturn(exampleUser);
         Mockito.when(roleService.getRoleByName("USER"))
                 .thenReturn(new Role(Role.RoleName.USER));
-        User actualUser = authenticationService.register(EMAIL, "1234");
+        User actualUser = authenticationService.register(EMAIL, PASSWORD);
         Assertions.assertEquals(exampleUser, actualUser);
     }
 
@@ -53,9 +53,9 @@ class AuthenticationServiceImplTest {
         exampleUser.setEmail(EMAIL);
         exampleUser.setPassword(PASSWORD);
         exampleUser.setRoles(Set.of(new Role(Role.RoleName.USER)));
-        Mockito.when(userService.findByEmail(any())).thenReturn(Optional.of(exampleUser));
+        Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(exampleUser));
         Mockito.when(passwordEncoder
-                .matches(eq("1234"), eq(exampleUser.getPassword()))).thenReturn(true);
+                .matches(eq(PASSWORD), eq(exampleUser.getPassword()))).thenReturn(true);
         User actualUser;
         actualUser = authenticationService.login(EMAIL, PASSWORD);
         Assertions.assertEquals(exampleUser, actualUser);
@@ -69,7 +69,7 @@ class AuthenticationServiceImplTest {
         exampleUser.setRoles(Set.of(new Role(Role.RoleName.USER)));
         Mockito.when(userService.findByEmail(any())).thenReturn(Optional.of(exampleUser));
         Mockito.when(passwordEncoder
-                .matches(eq("1234"), eq(exampleUser.getPassword()))).thenReturn(true);
+                .matches(eq(PASSWORD), eq(exampleUser.getPassword()))).thenReturn(true);
         User actualUser;
         Assertions.assertThrows(AuthenticationException.class, () ->
                 authenticationService.login(EMAIL, "1235"));

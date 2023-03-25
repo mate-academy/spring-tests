@@ -43,14 +43,8 @@ class RoleServiceImplTest {
     }
 
     @Test
-    void getRoleByNonExistName_ok() {
+    void getRoleByNonExistName_notOk() {
         Mockito.when(roleDao.getRoleByName("USER")).thenReturn(Optional.of(role));
-
-        try {
-            roleService.getRoleByName("USEROK");
-        } catch (RuntimeException e) {
-            return;
-        }
-        Assertions.fail("Excepted to receive RuntimeException");
+        Assertions.assertThrows(RuntimeException.class, () -> roleService.getRoleByName("UserOK"));
     }
 }

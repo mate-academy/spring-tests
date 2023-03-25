@@ -1,6 +1,7 @@
 package mate.academy.security.jwt;
 
 import java.util.List;
+import io.jsonwebtoken.Jwts;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,5 +26,23 @@ class JwtTokenProviderTest {
     void createToken_defaultUser_Ok() {
         String token = jwtTokenProvider.createToken("bob@mail.ua", List.of("USER"));
         Assertions.assertNotNull(token);
+    }
+
+    @Test
+    void createToken_emptyUser_Ok() {
+        String token = jwtTokenProvider.createToken("", List.of(""));
+        Assertions.assertNotNull(token);
+    }
+
+    @Test
+    void validateToken_Ok() {
+        String token = jwtTokenProvider.createToken("bob@mail.ua", List.of("USER"));
+        boolean isValidToken = jwtTokenProvider.validateToken(token);
+        Assertions.assertTrue(isValidToken);
+    }
+
+    @Test
+    void validateToken_emptyToken_notOk() {
+        Assertions.assertThrows(RuntimeException.class, () -> jwtTokenProvider.validateToken(""));
     }
 }
