@@ -1,6 +1,5 @@
 package mate.academy.service.impl;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 import mate.academy.dao.UserDao;
