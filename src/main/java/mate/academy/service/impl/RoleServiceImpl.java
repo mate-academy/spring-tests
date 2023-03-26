@@ -1,6 +1,6 @@
 package mate.academy.service.impl;
 
-import mate.academy.dao.RoleDao;
+import mate.academy.RoleDao;
 import mate.academy.model.Role;
 import mate.academy.service.RoleService;
 import org.springframework.stereotype.Service;
