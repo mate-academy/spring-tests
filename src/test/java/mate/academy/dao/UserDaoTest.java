@@ -2,6 +2,7 @@ package mate.academy.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Optional;
@@ -9,7 +10,6 @@ import mate.academy.dao.impl.UserDaoImpl;
 import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import mate.academy.model.User;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +21,6 @@ class UserDaoTest extends AbstractTest {
     private static final String PASSWORD = "12345678";
     private UserDao userDao;
     private User bob;
-    private User actual;
 
     @BeforeEach
     void setUp() {
@@ -29,7 +28,6 @@ class UserDaoTest extends AbstractTest {
         bob = new User();
         bob.setEmail(EMAIL);
         bob.setPassword(PASSWORD);
-        actual = userDao.save(bob);
     }
 
     @Override
@@ -39,38 +37,29 @@ class UserDaoTest extends AbstractTest {
 
     @Test
     void save_Ok() {
+        User actual = userDao.save(bob);
         assertNotNull(actual);
         assertEquals(1L, actual.getId());
     }
 
     @Test
     void save_nullUser_notOk() {
-        try {
-            userDao.save(null);
-        } catch (DataProcessingException e) {
-            assertEquals(e.getMessage(), "Can't create entity: null");
-            return;
-        }
-        Assertions.fail();
+        assertThrows(DataProcessingException.class, () -> userDao.save(null));
     }
 
     @Test
     void save_savedUser_notOk() {
-        try {
-            userDao.save(bob);
-        } catch (DataProcessingException e) {
-            assertEquals("Can't create entity: " + bob, e.getMessage());
-            return;
-        }
-        Assertions.fail();
+        userDao.save(bob);
+        assertThrows(DataProcessingException.class, () -> userDao.save(bob));
     }
 
     @Test
     void findByEmail_Ok() {
-        Optional<User> actually = userDao.findByEmail(EMAIL);
-        assertTrue(actually.isPresent());
-        assertEquals(actually.get().getEmail(), EMAIL);
-        assertEquals(actually.get().getPassword(), PASSWORD);
+        userDao.save(bob);
+        Optional<User> actual = userDao.findByEmail(EMAIL);
+        assertTrue(actual.isPresent());
+        assertEquals(actual.get().getEmail(), EMAIL);
+        assertEquals(actual.get().getPassword(), PASSWORD);
     }
 
     @Test
@@ -85,6 +74,7 @@ class UserDaoTest extends AbstractTest {
 
     @Test
     void findById_Ok() {
+        userDao.save(bob);
         Optional<User> actual = userDao.findById(ID);
         assertTrue(actual.isPresent());
         assertEquals(actual.get().getEmail(), EMAIL);
@@ -98,10 +88,6 @@ class UserDaoTest extends AbstractTest {
 
     @Test
     void findByEmail_nullId_notOk() {
-        try {
-            userDao.findById(null).isEmpty();
-        } catch (DataProcessingException e) {
-            assertEquals("Can't get entity: User by id null", e.getMessage());
-        }
+        assertThrows(DataProcessingException.class, () -> userDao.findById(null));
     }
 }

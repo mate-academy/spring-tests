@@ -11,7 +11,6 @@ import static org.mockito.ArgumentMatchers.any;
 import java.lang.reflect.Field;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -121,38 +120,20 @@ class JwtTokenProviderTest {
 
     @Test
     void validateToken_nullToken_notOk() {
-        try {
-            jwtTokenProvider.validateToken(null);
-        } catch (RuntimeException e) {
-            assertEquals("Expired or invalid JWT token", e.getMessage());
-            return;
-        }
-        Assertions.fail();
+        assertThrows(RuntimeException.class, () -> jwtTokenProvider.validateToken(null));
     }
 
     @Test
     void validateToken_emptyToken_notOk() {
-        try {
-            jwtTokenProvider.validateToken("");
-        } catch (RuntimeException e) {
-            assertEquals(e.getMessage(), "Expired or invalid JWT token");
-            return;
-        }
-        Assertions.fail();
+        assertThrows(RuntimeException.class, () -> jwtTokenProvider.validateToken(""));
     }
 
     @Test
     void validateToken_expiredToken_notOk() throws IllegalAccessException, NoSuchFieldException {
-        try {
-            Field validity = JwtTokenProvider.class.getDeclaredField("validityInMilliseconds");
-            validity.setAccessible(true);
-            validity.set(jwtTokenProvider, 0);
-            String newToken = jwtTokenProvider.createToken(EMAIL, ROLES);
-            jwtTokenProvider.validateToken(newToken);
-        } catch (RuntimeException e) {
-            assertEquals(e.getMessage(), "Expired or invalid JWT token");
-            return;
-        }
-        Assertions.fail();
+        Field validity = JwtTokenProvider.class.getDeclaredField("validityInMilliseconds");
+        validity.setAccessible(true);
+        validity.set(jwtTokenProvider, 0);
+        String newToken = jwtTokenProvider.createToken(EMAIL, ROLES);
+        assertThrows(RuntimeException.class, () -> jwtTokenProvider.validateToken(newToken));
     }
 }

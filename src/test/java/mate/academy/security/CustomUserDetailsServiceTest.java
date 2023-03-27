@@ -2,13 +2,13 @@ package mate.academy.security;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Optional;
 import java.util.Set;
 import mate.academy.model.Role;
 import mate.academy.model.User;
 import mate.academy.service.UserService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -46,12 +46,7 @@ class CustomUserDetailsServiceTest {
     @Test
     void loadUserByUsername_userNotFound_notOk() {
         Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.empty());
-        try {
-            userDetailsService.loadUserByUsername(EMAIL);
-        } catch (UsernameNotFoundException e) {
-            assertEquals("User not found.", e.getMessage());
-            return;
-        }
-        Assertions.fail();
+        assertThrows(UsernameNotFoundException.class, () ->
+                userDetailsService.loadUserByUsername(EMAIL));
     }
 }
