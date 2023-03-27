@@ -1,19 +1,30 @@
 package mate.academy.security.jwt;
 
+import static org.mockito.ArgumentMatchers.any;
+
 import java.util.List;
 import java.util.stream.Stream;
+import javax.servlet.http.HttpServletRequest;
 import mate.academy.model.Role;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.util.ReflectionTestUtils;
 
 class JwtTokenProviderTest {
+    private static final String DEFAULT_USER_EMAIL = "user@gmail.com";
+    private static final int VALIDITY_IN_MILLISECONDS = 3600000;
+    private static final String SECRET_KEY = "secret";
     private static Role adminRole;
     private static Role userRole;
+    private static List<String> roleList;
+    private String token;
     private JwtTokenProvider jwtTokenProvider;
     private UserDetailsService userDetailsService;
 
@@ -25,37 +36,99 @@ class JwtTokenProviderTest {
         adminRole = new Role();
         adminRole.setId(2L);
         adminRole.setRoleName(Role.RoleName.ADMIN);
+        roleList = Stream.of(userRole, adminRole)
+                .map(a -> a.getRoleName().name())
+                .toList();
     }
 
     @BeforeEach
     void setUp() {
         userDetailsService = Mockito.mock(UserDetailsService.class);
         jwtTokenProvider = new JwtTokenProvider(userDetailsService);
-        ReflectionTestUtils.setField(jwtTokenProvider, "secretKey", "secret");
-        ReflectionTestUtils.setField(jwtTokenProvider, "validityInMilliseconds", 3600000L);
+        ReflectionTestUtils.setField(
+                jwtTokenProvider, "secretKey", SECRET_KEY);
+        ReflectionTestUtils.setField(
+                jwtTokenProvider, "validityInMilliseconds", VALIDITY_IN_MILLISECONDS);
+        token = jwtTokenProvider.createToken(DEFAULT_USER_EMAIL, roleList);
     }
 
     @Test
     void createToken_correctValue_ok() {
-        String login = "user@gmail.com";
-        List<String> roleList = Stream.of(userRole, adminRole)
-                .map(a -> a.getRoleName().name())
-                .toList();
-        String token = jwtTokenProvider.createToken(login, roleList);
         Assertions.assertEquals(3, token.split("\\.").length);
     }
 
     @Test
     void getUsername_correctValue_ok() {
-        String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGdtYWlsLmNvbSIsInJvbGVz"
-                 + "IjpbIlVTRVIiLCJBRE1JTiJdLCJpYXQiOjE2Nzk4OTMwNjIsImV4cCI6MTY3O"
-                 + "Tg5MzA2NX0.8vP-HgNOCIBdekJ6lXkOzJ_QD5xnyyj9VJTQkMCv4tU";
         String actual = jwtTokenProvider.getUsername(token);
-        Assertions.assertEquals("user@gmail.com", actual);
+        Assertions.assertEquals(DEFAULT_USER_EMAIL, actual,
+                "Username should be: " + DEFAULT_USER_EMAIL + ", actual: " + actual);
     }
-    //    @Test
-    //    void resolveToken_correctValue_ok() {
-    //        HttpServletRequest httpServletRequest = Mockito.mock(HttpServletRequest.class);
-    //      //  Mockito.when(httpServletRequest.getHeader(any())).thenReturn()
-    //    }
+
+    @Test
+    void resolveToken_correctValue_ok() {
+        HttpServletRequest httpServletRequest = Mockito.mock(HttpServletRequest.class);
+        Mockito.when(httpServletRequest.getHeader("Authorization")).thenReturn("Bearer " + token);
+        Assertions.assertEquals(
+                token, jwtTokenProvider.resolveToken(httpServletRequest), "Must be correct");
+    }
+
+    @Test
+    void resolveToken_nullToken_notOk() {
+        HttpServletRequest httpServletRequest = Mockito.mock(HttpServletRequest.class);
+        Mockito.when(httpServletRequest.getHeader("Authorization")).thenReturn(null);
+        Assertions.assertNull(jwtTokenProvider.resolveToken(httpServletRequest),
+                "Token = null, the test should not working");
+    }
+
+    @Test
+    void resolveToken_incorrectToken_notOk() {
+        HttpServletRequest httpServletRequest = Mockito.mock(HttpServletRequest.class);
+        Mockito.when(httpServletRequest.getHeader("Authorization")).thenReturn("incorrectToken");
+        Assertions.assertNull(jwtTokenProvider.resolveToken(httpServletRequest),
+                "Incorrect token, the test should not working");
+    }
+
+    @Test
+    void validateToken_correctCase_ok() {
+        Assertions.assertTrue(jwtTokenProvider.validateToken(token),
+                "Method should return true for valid token");
+    }
+
+    @Test
+    void validateToken_nullToken_notOk() {
+        Assertions.assertThrows(RuntimeException.class,
+                () -> jwtTokenProvider.validateToken(null),
+                "Should throw RuntimeException when parameter is null");
+    }
+
+    @Test
+    void validateToken_incorrectToken_notOk() {
+        String fakeToken = "random.text.example";
+        Assertions.assertThrows(RuntimeException.class,
+                () -> jwtTokenProvider.validateToken(fakeToken),
+                "Should throw RuntimeException for incorrect token");
+    }
+
+    @Test
+    void getAuthentication_correctCase_ok() {
+        User.UserBuilder builder = User.withUsername(DEFAULT_USER_EMAIL);
+        builder.roles(userRole.getRoleName().name(), adminRole.getRoleName().name());
+        builder.password("123");
+        UserDetails userDetails = builder.build();
+        int expectedSize = userDetails.getAuthorities().size();
+        Mockito.when(userDetailsService.loadUserByUsername(any())).thenReturn(userDetails);
+        Authentication authentication = jwtTokenProvider.getAuthentication(token);
+        Assertions.assertTrue(authentication.isAuthenticated(),
+                "Must be authenticated, but return false");
+        Assertions.assertEquals(expectedSize, authentication.getAuthorities().size(),
+                "Authentication must have" + expectedSize
+                        + "authorities, but is " + authentication.getAuthorities().size());
+    }
+
+    @Test
+    void getAuthentication_nullUserDetailsService_notOk() {
+        Mockito.when(userDetailsService.loadUserByUsername(any())).thenReturn(null);
+        Assertions.assertThrows(NullPointerException.class,
+                () -> jwtTokenProvider.getAuthentication(token));
+    }
 }
