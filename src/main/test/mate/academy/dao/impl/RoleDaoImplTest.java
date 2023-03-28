@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 class RoleDaoImplTest extends AbstractDaoTest {
     private RoleDao roleDao;
     private Role userRole;
-
     private Role expectedRole;
 
     @BeforeEach
