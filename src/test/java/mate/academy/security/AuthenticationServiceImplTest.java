@@ -1,5 +1,6 @@
 package mate.academy.security;
 
+import static mate.academy.model.Role.RoleName.USER;
 import static org.mockito.ArgumentMatchers.any;
 
 import java.util.Optional;
@@ -10,7 +11,7 @@ import mate.academy.model.User;
 import mate.academy.service.RoleService;
 import mate.academy.service.UserService;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -27,9 +28,11 @@ class AuthenticationServiceImplTest {
     private static RoleService roleService;
     private static PasswordEncoder passwordEncoder;
     private static AuthenticationService authenticationService;
+    private static final String TEST_EMAIL = "some.name@test.test";
+    private static final String TEST_PASSWORD = "123456";
 
-    @BeforeEach
-    public void setUp() {
+    @BeforeAll
+    static void beforeAll() {
         passwordEncoder = new BCryptPasswordEncoder();
         authenticationService = new AuthenticationServiceImpl(
                 userService,
@@ -40,31 +43,27 @@ class AuthenticationServiceImplTest {
 
     @Test
     void register_validInput_ok() {
-        String email = "some.name@test.test";
-        String password = "123456";
-        Role userRole = new Role(Role.RoleName.USER);
+        Role userRole = new Role(USER);
         Mockito.when(userService.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
         Mockito.when(roleService.getRoleByName("USER")).thenReturn(userRole);
-        User actualUser = authenticationService.register(email, password);
+        User actualUser = authenticationService.register(TEST_EMAIL, TEST_PASSWORD);
         Set<Role> expectedRoles = Set.of(userRole);
         Set<Role> actualRoles = actualUser.getRoles();
         Assertions.assertEquals(expectedRoles, actualRoles,
                 "Method should create user with role " + userRole.getRoleName().name());
-        Assertions.assertEquals(email, actualUser.getEmail(),
+        Assertions.assertEquals(TEST_EMAIL, actualUser.getEmail(),
                 "Method should create user with email: "
-                        + email + " when this email passed as input");
+                        + TEST_EMAIL + " when this email passed as input");
     }
 
     @Test
     void login_validLoginAndPassword_ok() {
-        String email = "some.name@test.test";
-        String password = "123456";
         User expectedUser = new User();
-        expectedUser.setEmail(email);
-        expectedUser.setPassword(passwordEncoder.encode(password));
-        Mockito.when(userService.findByEmail(email)).thenReturn(Optional.of(expectedUser));
+        expectedUser.setEmail(TEST_EMAIL);
+        expectedUser.setPassword(passwordEncoder.encode(TEST_PASSWORD));
+        Mockito.when(userService.findByEmail(TEST_EMAIL)).thenReturn(Optional.of(expectedUser));
         try {
-            User actualUser = authenticationService.login(email, password);
+            User actualUser = authenticationService.login(TEST_EMAIL, TEST_PASSWORD);
             Assertions.assertEquals(expectedUser, actualUser,
                     "Method should return user with email and password matching input params");
         } catch (AuthenticationException e) {
@@ -74,14 +73,12 @@ class AuthenticationServiceImplTest {
 
     @Test
     void login_invalidPassword_notOk() {
-        String email = "some.name@test.test";
-        String password = "123456";
         User user = new User();
-        user.setEmail(email);
-        user.setPassword(passwordEncoder.encode(password));
-        Mockito.when(userService.findByEmail(email)).thenReturn(Optional.of(user));
+        user.setEmail(TEST_EMAIL);
+        user.setPassword(passwordEncoder.encode(TEST_PASSWORD));
+        Mockito.when(userService.findByEmail(TEST_EMAIL)).thenReturn(Optional.of(user));
         Assertions.assertThrows(AuthenticationException.class,
-                () -> authenticationService.login(email, "wrong password"),
+                () -> authenticationService.login(TEST_EMAIL, "wrong password"),
                 "Method should throw "
                         + AuthenticationException.class
                         + " when invalid password is passed");
@@ -89,11 +86,9 @@ class AuthenticationServiceImplTest {
 
     @Test
     void login_newEmail_notOk() {
-        String email = "some.name@test.test";
-        String password = "123456";
-        Mockito.when(userService.findByEmail(email)).thenReturn(Optional.empty());
+        Mockito.when(userService.findByEmail(TEST_EMAIL)).thenReturn(Optional.empty());
         Assertions.assertThrows(AuthenticationException.class,
-                () -> authenticationService.login(email, password),
+                () -> authenticationService.login(TEST_EMAIL, TEST_PASSWORD),
                 "Method should throw "
                         + AuthenticationException.class
                         + " when invalid login is passed");

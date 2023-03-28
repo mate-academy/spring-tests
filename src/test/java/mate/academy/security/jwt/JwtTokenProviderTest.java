@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -19,33 +19,32 @@ import org.springframework.test.util.ReflectionTestUtils;
 @ExtendWith(MockitoExtension.class)
 class JwtTokenProviderTest {
     @Mock
-    private UserDetailsService userDetailsService;
-    private JwtTokenProvider jwtTokenProvider;
-    private String secretKey;
-    private Long validityInMilliseconds;
+    private static UserDetailsService userDetailsService;
+    private static JwtTokenProvider jwtTokenProvider;
+    private static final String SECRET_KEY = "secretKey";
+    private static final Long VALIDITY_IN_MILLISECONDS = 3_600_000L;
+    private static final String TEST_EMAIL = "some.name@test.test";
+    private static Date NOW;
 
-    @BeforeEach
-    public void setUp() {
+    @BeforeAll
+    static void beforeAll() {
+        NOW = new Date();
         jwtTokenProvider = new JwtTokenProvider(userDetailsService);
-        secretKey = "secretKey";
-        validityInMilliseconds = 3_600_000L;
         ReflectionTestUtils.setField(
-                jwtTokenProvider, "secretKey", secretKey);
+                jwtTokenProvider, "secretKey", SECRET_KEY);
         ReflectionTestUtils.setField(
-                jwtTokenProvider, "validityInMilliseconds", validityInMilliseconds);
+                jwtTokenProvider, "validityInMilliseconds", VALIDITY_IN_MILLISECONDS);
     }
 
     @Test
     void createToken_validInput_ok() {
-        String login = "valid@email.com";
         List<String> roles = List.of("USER");
-        Date now = new Date();
-        String expected = createToken(login, roles, now);
-        String actual = jwtTokenProvider.createToken(login, roles);
+        String expected = createToken(TEST_EMAIL, roles, NOW);
+        String actual = jwtTokenProvider.createToken(TEST_EMAIL, roles);
         Assertions.assertEquals(expected, actual,
-                "Should create valid token for login: " + login
+                "Should create valid token for login: " + TEST_EMAIL
                         + ", roles: " + roles
-                        + ", time: " + now);
+                        + ", time: " + NOW);
     }
 
     @Test
@@ -71,27 +70,24 @@ class JwtTokenProviderTest {
 
     @Test
     void validateToken_validToken_ok() {
-        Date now = new Date();
-        String login = "some.name@test.test";
         List<String> roles = List.of("USER");
-        String token = createToken(login, roles, now);
+        String token = createToken(TEST_EMAIL, roles, NOW);
         boolean actual = jwtTokenProvider.validateToken(token);
         Assertions.assertTrue(actual,
-                "Method should return true for valid token created at: " + now
-                        + " and validity: " + validityInMilliseconds);
+                "Method should return true for valid token created at: " + NOW
+                        + " and validity: " + VALIDITY_IN_MILLISECONDS);
     }
 
     @Test
     void validateToken_expiredToken_notOk() {
-        Date now = new Date(new Date().getTime() - validityInMilliseconds - 1000L);
-        String login = "some.name@test.test";
+        Date now = new Date(NOW.getTime() - VALIDITY_IN_MILLISECONDS - 1000L);
         List<String> roles = List.of("USER");
-        String token = createToken(login, roles, now);
+        String token = createToken(TEST_EMAIL, roles, now);
         Assertions.assertThrows(
                 RuntimeException.class,
                 () -> jwtTokenProvider.validateToken(token),
                 "Method should throw RuntimeException for token created at: "
-                        + now + " and validity: " + validityInMilliseconds);
+                        + now + " and validity: " + VALIDITY_IN_MILLISECONDS);
     }
 
     @Test
@@ -106,12 +102,12 @@ class JwtTokenProviderTest {
     private String createToken(String login, List<String> roles, Date now) {
         Claims claims = Jwts.claims().setSubject(login);
         claims.put("roles", roles);
-        Date validity = new Date(now.getTime() + validityInMilliseconds);
+        Date validity = new Date(now.getTime() + VALIDITY_IN_MILLISECONDS);
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(validity)
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
 }

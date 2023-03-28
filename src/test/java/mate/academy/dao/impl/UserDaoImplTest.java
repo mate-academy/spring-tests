@@ -1,5 +1,7 @@
 package mate.academy.dao.impl;
 
+import static mate.academy.model.Role.RoleName.USER;
+
 import java.util.Optional;
 import java.util.Set;
 import mate.academy.dao.RoleDao;
@@ -7,28 +9,29 @@ import mate.academy.dao.UserDao;
 import mate.academy.model.Role;
 import mate.academy.model.User;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class UserDaoImplTest extends AbstractTest {
-    private UserDao userDao;
-    private RoleDao roleDao;
+    private static UserDao userDao;
+    private static RoleDao roleDao;
+    private static Role role;
 
     @Override
     protected Class<?>[] entities() {
         return new Class[]{User.class, Role.class};
     }
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void beforeAll() {
         userDao = new UserDaoImpl(getSessionFactory());
         roleDao = new RoleDaoImpl(getSessionFactory());
+        role = new Role(USER);
+        roleDao.save(role);
     }
 
     @Test
     void findByEmail_existingEmail_ok() {
-        Role role = new Role(Role.RoleName.USER);
-        roleDao.save(role);
         String email = "valid@email.in.db";
         User expected = new User();
         expected.setEmail(email);
@@ -46,12 +49,6 @@ class UserDaoImplTest extends AbstractTest {
 
     @Test
     void findByEmail_nonExistingEmail_ok() {
-        Role role = new Role(Role.RoleName.USER);
-        roleDao.save(role);
-        User expected = new User();
-        expected.setEmail("some.name@test.test");
-        expected.setRoles(Set.of(role));
-        userDao.save(expected);
         String notPresentEmail = "other.name@test.test";
         Optional<User> actual = userDao.findByEmail(notPresentEmail);
         Assertions.assertTrue(actual.isEmpty(),
