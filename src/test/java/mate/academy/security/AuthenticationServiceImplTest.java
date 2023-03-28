@@ -47,7 +47,7 @@ class AuthenticationServiceImplTest {
     void register_correct_ok() {
         defaultUser.setId(1L);
         defaultUser.setPassword("1234");
-        Mockito.when(roleService.getRoleByName("USER")).thenReturn(userRole);
+        Mockito.when(roleService.getRoleByName(Role.RoleName.USER.name())).thenReturn(userRole);
         Mockito.when(userService.save(any()))
                 .thenAnswer(i -> i.getArgument(0, User.class));
         User actual = authenticationService
@@ -68,7 +68,7 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    void login_incorrectPasswordAndLogin_notOk() throws AuthenticationException {
+    void login_incorrectPasswordAndLogin_notOk() {
         defaultUser.setPassword(passwordEncoder.encode("12345"));
         Mockito.when(userService.findByEmail(defaultUser.getEmail()))
                 .thenReturn(Optional.ofNullable(defaultUser));

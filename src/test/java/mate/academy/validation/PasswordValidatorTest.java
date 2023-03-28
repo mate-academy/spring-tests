@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.springframework.test.util.ReflectionTestUtils;
 
 class PasswordValidatorTest {
+    private static final String USER_LOGIN = "user@gmail.com";
     private static PasswordValidator passwordValidator;
     @Mock
     private static ConstraintValidatorContext context;
@@ -23,7 +24,7 @@ class PasswordValidatorTest {
     @Test
     void isValid_validCase_ok() {
         UserRegistrationDto registrationDto = new UserRegistrationDto();
-        registrationDto.setEmail("user@gmail.com");
+        registrationDto.setEmail(USER_LOGIN);
         registrationDto.setPassword("password");
         registrationDto.setRepeatPassword("password");
         Assertions.assertTrue(passwordValidator.isValid(registrationDto, context),
@@ -31,9 +32,9 @@ class PasswordValidatorTest {
     }
 
     @Test
-    void is_Valid_differentPassword_notOk() {
+    void isValid_differentPassword_notOk() {
         UserRegistrationDto registrationDto = new UserRegistrationDto();
-        registrationDto.setEmail("user@gmail.com");
+        registrationDto.setEmail(USER_LOGIN);
         registrationDto.setPassword("password");
         registrationDto.setRepeatPassword("password123");
         Assertions.assertFalse(passwordValidator.isValid(registrationDto, context),
@@ -41,9 +42,9 @@ class PasswordValidatorTest {
     }
 
     @Test
-    void is_Valid_withoutRepeatPassword_notOk() {
+    void isValid_withoutRepeatPassword_notOk() {
         UserRegistrationDto registrationDto = new UserRegistrationDto();
-        registrationDto.setEmail("user@gmail.com");
+        registrationDto.setEmail(USER_LOGIN);
         registrationDto.setPassword("password");
         Assertions.assertFalse(passwordValidator.isValid(registrationDto, context),
                 "Case without repeat password should fail");

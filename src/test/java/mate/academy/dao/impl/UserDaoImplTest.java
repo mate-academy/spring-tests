@@ -13,7 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class UserDaoImplTest extends AbstractTest {
-    private static Role userRole;
+    private static final String DEFAULT_EMAIL = "default@gmail.com";
     private static Role adminRole;
     private static User defaultUser;
     private UserDao userDao;
@@ -33,24 +33,27 @@ public class UserDaoImplTest extends AbstractTest {
     @BeforeAll
     public static void initUser() {
         defaultUser = new User();
-        defaultUser.setEmail("default@gmail.com");
+        defaultUser.setEmail(DEFAULT_EMAIL);
         defaultUser.setPassword("1234");
     }
 
     @Test
     void save_ok() {
-        setRoleDao();
+        Role userRole = new Role();
+        userRole.setRoleName(Role.RoleName.USER);
+        roleDao.save(userRole);
+        saveAdminRole();
         defaultUser.setRoles(Set.of(userRole, adminRole));
         Assertions.assertEquals(1L, userDao.save(defaultUser).getId(),
                 "Role should be add to DB");
     }
 
     @Test
-    void save_withoutPassword_ok() {
+    void save_withoutPassword_notOk() {
         User user = new User();
-        user.setEmail("testUser@gmail.com");
-        Assertions.assertEquals(1L, userDao.save(user).getId(),
-                "Role without the password should be add to DB");
+        user.setEmail(DEFAULT_EMAIL);
+        Assertions.assertThrows(DataProcessingException.class, () -> userDao.save(user),
+                "Role without the password, expect exception");
     }
 
     @Test
@@ -114,7 +117,8 @@ public class UserDaoImplTest extends AbstractTest {
     void findById_nullId_notOk() {
         userDao.save(defaultUser);
         Assertions.assertThrows(DataProcessingException.class,
-                () -> userDao.findById(null));
+                () -> userDao.findById(null),
+                "Method must throw DataProcessingException");
     }
 
     @Test
@@ -126,15 +130,8 @@ public class UserDaoImplTest extends AbstractTest {
                 "In DB only one record, we can't get user by id: 2");
     }
 
-    private void setRoleDao() {
-        try {
-            userRole = new Role(Role.RoleName.USER);
-            adminRole = new Role(Role.RoleName.ADMIN);
-            roleDao.save(userRole);
-            roleDao.save(adminRole);
-        } catch (Exception e) {
-            throw new DataProcessingException("You have some problem with initialize roles, "
-                    + "fix  problem in RoleDao)", e);
-        }
+    private void saveAdminRole() {
+        adminRole = new Role(Role.RoleName.ADMIN);
+        roleDao.save(adminRole);
     }
 }

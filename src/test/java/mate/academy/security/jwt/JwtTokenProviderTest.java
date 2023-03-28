@@ -3,7 +3,6 @@ package mate.academy.security.jwt;
 import static org.mockito.ArgumentMatchers.any;
 
 import java.util.List;
-import java.util.stream.Stream;
 import javax.servlet.http.HttpServletRequest;
 import mate.academy.model.Role;
 import org.junit.jupiter.api.Assertions;
@@ -36,9 +35,8 @@ class JwtTokenProviderTest {
         adminRole = new Role();
         adminRole.setId(2L);
         adminRole.setRoleName(Role.RoleName.ADMIN);
-        roleList = Stream.of(userRole, adminRole)
-                .map(a -> a.getRoleName().name())
-                .toList();
+        roleList = List.of(userRole.getRoleName().name(),
+                adminRole.getRoleName().name());
     }
 
     @BeforeEach
@@ -129,6 +127,7 @@ class JwtTokenProviderTest {
     void getAuthentication_nullUserDetailsService_notOk() {
         Mockito.when(userDetailsService.loadUserByUsername(any())).thenReturn(null);
         Assertions.assertThrows(NullPointerException.class,
-                () -> jwtTokenProvider.getAuthentication(token));
+                () -> jwtTokenProvider.getAuthentication(token),
+                "Method must throw NullPointerException");
     }
 }
