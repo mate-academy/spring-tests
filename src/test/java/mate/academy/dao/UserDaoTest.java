@@ -10,6 +10,7 @@ import mate.academy.dao.impl.UserDaoImpl;
 import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import mate.academy.model.User;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,15 +20,19 @@ class UserDaoTest extends AbstractTest {
     private static final String EMAIL = "bob@mate.academy";
     private static final String NOT_EXISTING_EMAIL = "alice@mate.academy";
     private static final String PASSWORD = "12345678";
+    private static User bob;
     private UserDao userDao;
-    private User bob;
+
+    @BeforeAll
+    static void beforeAll() {
+        bob = new User();
+        bob.setEmail(EMAIL);
+        bob.setPassword(PASSWORD);
+    }
 
     @BeforeEach
     void setUp() {
         userDao = new UserDaoImpl(getSessionFactory());
-        bob = new User();
-        bob.setEmail(EMAIL);
-        bob.setPassword(PASSWORD);
     }
 
     @Override
