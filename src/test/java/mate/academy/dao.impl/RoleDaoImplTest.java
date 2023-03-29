@@ -5,7 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Optional;
+import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -46,5 +48,29 @@ class RoleDaoImplTest extends AbstractTest {
                 "Expected to find some role when getting by saved role name");
         assertEquals(roleUser.getRoleName(), actualRole.get().getRoleName(),
                 "Expected to names match");
+    }
+
+    @Test
+    void getRoleByName_roleIsNotExist_notOk() {
+        Optional<Role> actual = roleDao.getRoleByName(Role.RoleName.USER.name());
+        Assertions.assertFalse(actual.isPresent(),
+                String.format("Should return empty optional for role name: USER, "
+                        + "but was: %s", actual));
+    }
+
+    @Test
+    void getRoleByName_roleNameIsNull_notOk() {
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            roleDao.getRoleByName(null);
+        });
+    }
+
+    @Test
+    void getRoleByName_nonExistingRoleName_notOk() {
+        String roleName = "NON_EXISTING_ROLE";
+        Assertions.assertThrows(DataProcessingException.class,
+                () -> roleDao.getRoleByName(roleName),
+                "Method should throw %s for non existing roleName '%s'\n"
+                        .formatted(DataProcessingException.class, roleName));
     }
 }

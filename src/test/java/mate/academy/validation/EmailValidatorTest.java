@@ -18,7 +18,7 @@ class EmailValidatorTest {
     }
 
     @Test
-    void isValid_validNullValue_notOk() {
+    void isValid_nullValue_notOk() {
         assertFalse(validator.isValid(null, null),
                 "Validator must return false in case passed through args email is null");
     }

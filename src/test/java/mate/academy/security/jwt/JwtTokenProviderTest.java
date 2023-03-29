@@ -8,6 +8,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.regex.Pattern;
 import mate.academy.model.Role;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -77,5 +78,19 @@ class JwtTokenProviderTest {
 
         assertTrue(jwtTokenProvider.validateToken(token),
                 "Just created JWT method must be valid");
+    }
+
+    @Test
+    void validateToken_tokenIsNull_notOk() {
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            jwtTokenProvider.validateToken(null);
+        });
+    }
+
+    @Test
+    void validateToken_tokenIsInvalid_notOk() {
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            jwtTokenProvider.validateToken("token");
+        });
     }
 }

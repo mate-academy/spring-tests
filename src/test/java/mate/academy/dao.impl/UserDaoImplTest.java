@@ -8,12 +8,14 @@ import java.util.Optional;
 import java.util.Set;
 import mate.academy.model.Role;
 import mate.academy.model.User;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class UserDaoImplTest extends AbstractTest {
     private static final String BOB_EMAIL = "bob@gmail.ua";
     private static final String ALICE_EMAIL = "alice@gmail.ua";
+    private static final String TEST_EMAIL = "test@gmail.ua";
     private static UserDaoImpl userDao;
     private Set<Role> roles;
 
@@ -59,5 +61,20 @@ class UserDaoImplTest extends AbstractTest {
                 "Expected to find some user when getting by saved user's email");
         assertEquals(userBob.getEmail(), actualUser.get().getEmail(),
                 "Expected to emails match");
+    }
+
+    @Test
+    void findByEmail_emailIsNotExist_notOk() {
+        Optional<User> actual = userDao.findByEmail(TEST_EMAIL);
+        Assertions.assertFalse(actual.isPresent(),
+                String.format("Should return empty optional for email: %s, "
+                        + "but was: %s", TEST_EMAIL, actual));
+    }
+
+    @Test
+    void findByEmail_emailIsNull_notOk() {
+        Optional<User> actual = userDao.findByEmail(null);
+        Assertions.assertFalse(actual.isPresent(),
+                String.format("Should return empty optional for null email, but was: ", actual));
     }
 }
