@@ -24,7 +24,7 @@ class EmailValidatorTest {
     }
 
     @Test
-    void isValid_Ok() {
+    void isValid_ok() {
         VALID_EMAILS.forEach(email -> assertTrue(
                 emailValidator.isValid(email, constraintValidatorContext),
                 String.format("Should be valid email: %s, but was invalid", email)));

@@ -37,7 +37,7 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    void register_Ok() {
+    void register_ok() throws AuthenticationException {
         Mockito.when(roleService.getRoleByName("USER"))
                 .thenReturn(new Role(Role.RoleName.USER));
         Mockito.when(userService.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
@@ -49,7 +49,26 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    void login_Ok() throws AuthenticationException {
+    void register_theSameUserNotOk() throws AuthenticationException {
+        Mockito.when(userService.findByEmail(EMAIL))
+                .thenReturn(Optional.of(new User(EMAIL, PASSWORD)));
+        Mockito.when(userService.save(any()))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+        AuthenticationException thrown
+                = Assertions.assertThrows(AuthenticationException.class, () -> {
+                    authenticationService.register(EMAIL, PASSWORD);
+                });
+        Assertions.assertEquals("Authentication exception occur,"
+                        + " user with such email already exist", thrown.getMessage(),
+                "Expected to receive Exception with message"
+                        + " \"Authentication exception occur, "
+                        + "user with such email already exist\","
+                        + " but was: " + thrown.getMessage()
+                        + " with exception: " + thrown.getCause());
+    }
+
+    @Test
+    void login_ok() throws AuthenticationException {
         Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(bob));
         User actual = authenticationService.login(EMAIL, PASSWORD);
         Assertions.assertNotNull(actual);

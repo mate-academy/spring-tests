@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 
 class UserDaoImplTest extends AbstractTest {
     private UserDao userDao;
-    private User bob;
 
     @Override
     protected Class<?>[] entities() {
@@ -19,14 +18,14 @@ class UserDaoImplTest extends AbstractTest {
     @BeforeEach
     void setUp() {
         userDao = new UserDaoImpl(getSessionFactory());
-        bob = new User();
-        bob.setEmail("bob@i.ua");
-        bob.setPassword("1234");
-        bob.setId(1L);
     }
 
     @Test
-    void save_Ok() {
+    void save_ok() {
+        User bob = new User();
+        bob.setEmail("bob@i.ua");
+        bob.setPassword("1234");
+        bob.setId(1L);
         User actual = userDao.save(bob);
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(1L, actual.getId());

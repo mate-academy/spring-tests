@@ -30,14 +30,14 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void createToken_Ok() {
+    void createToken_ok() {
         String actual = jwtTokenProvider.createToken(EMAIL, ROLES_LIST);
         Assertions.assertNotNull(actual,
                 String.format("Token couldn't be empty for email %s", EMAIL));
     }
 
     @Test
-    void getAuthentication_Ok() {
+    void getAuthentication_ok() {
         UserDetails userDetails = User.builder()
                 .username(EMAIL)
                 .password("1234")
@@ -50,14 +50,14 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void getUsername_Ok() {
+    void getUsername_ok() {
         String actual = jwtTokenProvider.getUsername(providerToken);
         Assertions.assertEquals(EMAIL, actual,
                 String.format("Should return email: %s, but was: %s", EMAIL, actual));
     }
 
     @Test
-    void resolveToken_Ok() {
+    void resolveToken_ok() {
         HttpServletRequest httpServletRequest = Mockito.mock(HttpServletRequest.class);
         Mockito.when(httpServletRequest.getHeader("Authorization"))
                 .thenReturn("Bearer " + providerToken);
@@ -67,8 +67,18 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void validateToken_Ok() {
+    void validateToken_ok() {
         boolean actual = jwtTokenProvider.validateToken(providerToken);
         Assertions.assertTrue(actual, "Should return true for valid token");
+    }
+
+    @Test
+    void validateToken_notValidToken_notOk() {
+        String notValidProviderToken = "notValidToken";
+        RuntimeException thrown = Assertions.assertThrows(RuntimeException.class, () -> {
+            jwtTokenProvider.validateToken(notValidProviderToken);
+        });
+        Assertions.assertEquals("Expired or invalid JWT token", thrown.getMessage(),
+                "Should return: java.lang.RuntimeException: Expired or invalid JWT token");
     }
 }

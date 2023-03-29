@@ -29,7 +29,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void save_Ok() {
+    void save_ok() {
         Mockito.when(passwordEncoder.encode(any())).thenReturn("1234");
         Mockito.when(userDao.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
         User actual = userDao.save(bob);
@@ -43,7 +43,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findById_Ok() {
+    void findById_ok() {
         Mockito.when(userDao.findById(any())).thenReturn(Optional.ofNullable(bob));
         Optional<User> actual = userService.findById(1L);
         Assertions.assertNotNull(actual, "User shouldn't be null");
@@ -53,12 +53,30 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findByEmail_Ok() {
+    void findByEmail_ok() {
         Mockito.when(userDao.findByEmail(any())).thenReturn(Optional.ofNullable(bob));
         Optional<User> actual = userService.findByEmail(bob.getEmail());
         Assertions.assertNotNull(actual, "User shouldn't be null");
         Assertions.assertEquals(actual.get().getEmail(), bob.getEmail(),
                 String.format("Should return user with email: %s, "
                         + "but was: %s", bob.getEmail(), actual.get().getEmail()));
+    }
+
+    @Test
+    void findByEmail_emailEmpty_notOk() {
+        Assertions.assertEquals(userService.findByEmail(""), Optional.empty(),
+                "Shouldn`t throw exception and should return Optional.empty()");
+    }
+
+    @Test
+    void findByEmail_emailNull_notOk() {
+        Assertions.assertEquals(userService.findByEmail(null), Optional.empty(),
+                "Shouldn`t throw exception and should return Optional.empty()");
+    }
+
+    @Test
+    void findByEmail_emailIsAbsent_notOk() {
+        Assertions.assertEquals(userService.findByEmail("alice@i.ua"), Optional.empty(),
+                "Shouldn`t throw exception and should return Optional.empty()");
     }
 }

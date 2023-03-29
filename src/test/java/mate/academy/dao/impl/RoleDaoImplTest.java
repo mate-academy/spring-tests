@@ -9,8 +9,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class RoleDaoImplTest extends AbstractTest {
+    public static final String ROLE_USER = "USER";
+    public static final String ROLE_ADMIN = "ADMIN";
     private RoleDao roleDao;
-    private Role role;
 
     @Override
     protected Class<?>[] entities() {
@@ -20,31 +21,31 @@ class RoleDaoImplTest extends AbstractTest {
     @BeforeEach
     void setUp() {
         roleDao = new RoleDaoImpl(getSessionFactory());
-        role = new Role(Role.RoleName.USER);
     }
 
     @Test
     void getRoleByName_ok() {
+        Role role = new Role(Role.RoleName.USER);
         Role expected = roleDao.save(role);
-        Optional<Role> actual = roleDao.getRoleByName("USER");
+        Optional<Role> actual = roleDao.getRoleByName(ROLE_USER);
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(expected.getRoleName(), actual.get().getRoleName(),
                 "Should return actual role" + expected.getRoleName());
     }
 
     @Test
-    void getRoleByName_NoSuchElementException() {
+    void getRoleByName_nonExistingRole_notOk() {
         Role expected = new Role(Role.RoleName.USER);
         roleDao.save(expected);
-        String roleName = "ADMIN";
+        String roleName = ROLE_ADMIN;
         Optional<Role> actual = roleDao.getRoleByName(roleName);
-        try {
-            actual.get().getRoleName();
-        } catch (NoSuchElementException e) {
-            Assertions.assertEquals("No value present",
-                    e.getMessage());
-            return;
-        }
-        Assertions.fail("Expected to receive NoSuchElementException");
+        NoSuchElementException thrown
+                = Assertions.assertThrows(NoSuchElementException.class, () -> {
+                    actual.get().getRoleName();
+                });
+        Assertions.assertEquals("No value present", thrown.getMessage(),
+                "Expected to receive NoSuchElementException with message"
+                        + " \"No value present\", but was: " + thrown.getMessage()
+                        + " with exception: " + thrown.getCause());
     }
 }
