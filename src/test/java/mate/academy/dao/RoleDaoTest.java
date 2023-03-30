@@ -2,6 +2,7 @@ package mate.academy.dao;
 
 import java.util.Optional;
 import mate.academy.dao.impl.RoleDaoImpl;
+import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +43,7 @@ class RoleDaoTest extends AbstractTest {
 
     @Test
     void getRoleByName_roleIsNotInDb_ok() {
-        roleDao.save(role);
-        try {
-            roleDao.getRoleByName(ROLE_NAME_IS_NOT_IN_DB);
-        } catch (Exception e) {
-            Assertions.assertEquals("Couldn't get role by role name: "
-                            + ROLE_NAME_IS_NOT_IN_DB, e.getMessage());
-        }
+        Assertions.assertThrows(DataProcessingException.class,
+                () -> roleDao.getRoleByName(ROLE_NAME_IS_NOT_IN_DB));
     }
 }

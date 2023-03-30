@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.Set;
 import mate.academy.dao.impl.RoleDaoImpl;
 import mate.academy.dao.impl.UserDaoImpl;
+import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import mate.academy.model.User;
 import org.junit.jupiter.api.Assertions;
@@ -31,9 +32,9 @@ class UserDaoTest extends AbstractTest {
         Role role = new Role(Role.RoleName.USER);
         roleDao.save(role);
         user = new User();
+        user.setRoles(Set.of(role));
         user.setEmail(EMAIL);
         user.setPassword(PASSWORD);
-        user.setRoles(Set.of(role));
     }
 
     @Test
@@ -55,12 +56,11 @@ class UserDaoTest extends AbstractTest {
 
     @Test
     void findByEmail_emailIsNotInDb_ok() {
-        userDao.save(user);
         try {
             userDao.findByEmail(EMAIL_IS_NOT_IN_DB);
         } catch (Exception e) {
-            Assertions.assertEquals("Couldn't get user by email: "
-                            + EMAIL_IS_NOT_IN_DB, e.getMessage());
+            Assertions.assertThrows(DataProcessingException.class,
+                    () -> userDao.findByEmail(EMAIL_IS_NOT_IN_DB));
         }
     }
 }

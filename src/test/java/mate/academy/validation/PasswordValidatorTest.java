@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 class PasswordValidatorTest {
-
     private static final String PASSWORD = "1234";
     private static final String PASSWORD_IS_WRONG = "0000";
     private PasswordValidator passwordValidator;
@@ -28,7 +27,7 @@ class PasswordValidatorTest {
     }
 
     @Test
-    void isValid_Ok() {
+    void isValid_ok() {
         userRegistrationDto.setRepeatPassword(PASSWORD);
         Assertions.assertTrue(passwordValidator.isValid(userRegistrationDto,
                 constraintValidatorContext));

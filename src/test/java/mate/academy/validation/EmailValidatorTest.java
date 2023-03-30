@@ -19,7 +19,7 @@ class EmailValidatorTest {
     }
 
     @Test
-    void isValid_Ok() {
+    void isValid_ok() {
         Assertions.assertTrue(emailValidator.isValid(EMAIL,
                 constraintValidatorContext));
     }

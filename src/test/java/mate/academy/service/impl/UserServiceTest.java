@@ -64,7 +64,7 @@ class UserServiceTest {
     }
 
     @Test
-    void findById_Ok() {
+    void findById_ok() {
         Mockito.when(userDao.findById(ID)).thenReturn(Optional.of(user));
         Optional<User> optionalUser = userService.findById(ID);
         Assertions.assertTrue(optionalUser.isPresent());

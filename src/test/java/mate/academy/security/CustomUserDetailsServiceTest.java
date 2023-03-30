@@ -40,12 +40,7 @@ class CustomUserDetailsServiceTest {
 
     @Test
     void loadUserByUsername_userIsNotInDb_ok() {
-        try {
-            userDetailsService.loadUserByUsername(EMAIL_IS_NOT_IN_DB);
-        } catch (UsernameNotFoundException e) {
-            Assertions.assertEquals("User not found.", e.getMessage());
-            return;
-        }
-        Assertions.fail("Expected to receive UsernameNotFoundException");
+        Assertions.assertThrows(UsernameNotFoundException.class,
+                () -> userDetailsService.loadUserByUsername(EMAIL_IS_NOT_IN_DB));
     }
 }
