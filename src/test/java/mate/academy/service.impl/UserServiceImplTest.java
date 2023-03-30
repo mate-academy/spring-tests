@@ -18,7 +18,6 @@ class UserServiceImplTest {
     private static UserService userService;
     private static final String email = "usermail@gmail.com";
     private User user;
-    private User actual;
 
     @BeforeEach
     void setUp() {
@@ -33,11 +32,11 @@ class UserServiceImplTest {
         Mockito.when(userDao.save(user)).thenReturn(user);
         Mockito.when(userDao.findById(1L)).thenReturn(Optional.ofNullable(user));
         Mockito.when(userDao.findByEmail(email)).thenReturn(Optional.ofNullable(user));
-        actual = userService.save(user);
     }
 
     @Test
     void saveUser_ok() {
+        User actual = userService.save(user);
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(user.getEmail(), actual.getEmail());
         Assertions.assertEquals(user.getPassword(), actual.getPassword());
@@ -53,13 +52,8 @@ class UserServiceImplTest {
 
     @Test
     void findById_idDoesntExist_notOk() {
-        try {
-            userService.findById(100L).get();
-        } catch (NoSuchElementException e) {
-            Assertions.assertEquals("No value present", e.getLocalizedMessage());
-            return;
-        }
-        Assertions.fail("Excepted to receive NoSuchElementException.");
+        Assertions.assertThrows(NoSuchElementException.class,
+                () -> userService.findById(100L).get());
     }
 
     @Test
@@ -72,13 +66,9 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findByEmail_emailDoesntExist_notOk() {
-        try {
-            userService.findByEmail("usermail1@gmail.com").get();
-        } catch (NoSuchElementException e) {
-            Assertions.assertEquals("No value present", e.getLocalizedMessage());
-            return;
-        }
-        Assertions.fail("Excepted to receive NoSuchElementException.");
+    void findByEmail_incorrectEmail_notOk() {
+        Assertions.assertThrows(NoSuchElementException.class,
+                () -> userService.findByEmail("usermail1@gmail.com").get(),
+                "Excepted to receive NoSuchElementException.");
     }
 }

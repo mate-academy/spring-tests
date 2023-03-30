@@ -21,7 +21,7 @@ class RoleServiceImplTest {
         RoleDao roleDao = Mockito.mock(RoleDao.class);
         roleService = new RoleServiceImpl(roleDao);
         Mockito.when(roleDao.save(role)).thenReturn(role);
-        Mockito.when(roleDao.getRoleByName("USER"))
+        Mockito.when(roleDao.getRoleByName(Role.RoleName.USER.name()))
                 .thenReturn(Optional.ofNullable(role));
     }
 
@@ -34,18 +34,13 @@ class RoleServiceImplTest {
 
     @Test
     void getRoleByName_roleExists_ok() {
-        Role role = roleService.getRoleByName("USER");
+        Role role = roleService.getRoleByName(Role.RoleName.USER.name());
         Assertions.assertNotNull(role);
     }
 
     @Test
     void getRoleByName_roleDoesntExist_notOk() {
-        try {
-            roleService.getRoleByName("TESTER");
-        } catch (NoSuchElementException e) {
-            Assertions.assertEquals("No value present", e.getLocalizedMessage());
-            return;
-        }
-        Assertions.fail("Expected to receive NoSuchElementException.");
+        Assertions.assertThrows(NoSuchElementException.class,
+                () -> roleService.getRoleByName("TESTER"));
     }
 }

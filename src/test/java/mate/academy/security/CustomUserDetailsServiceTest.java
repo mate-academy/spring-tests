@@ -39,12 +39,7 @@ class CustomUserDetailsServiceTest {
 
     @Test
     void loadUserByUsername_usernameDoesntExist_notOk() {
-        try {
-            userDetailsService.loadUserByUsername("usermail1@gmail.com");
-        } catch (UsernameNotFoundException e) {
-            Assertions.assertEquals("User not found.", e.getMessage());
-            return;
-        }
-        Assertions.fail("Expected to receive UsernameNotFoundException.");
+        Assertions.assertThrows(UsernameNotFoundException.class,
+                () -> userDetailsService.loadUserByUsername("usermail1@gmail.com"));
     }
 }

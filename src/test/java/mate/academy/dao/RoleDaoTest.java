@@ -40,7 +40,7 @@ class RoleDaoTest extends AbstractTest {
 
     @Test
     void getRoleByName_roleExists_ok() {
-        String adminRole = "ADMIN";
+        String adminRole = Role.RoleName.ADMIN.name();
         roleDao.save(roleAdmin);
         Role actual = roleDao.getRoleByName(adminRole).get();
         Assertions.assertNotNull(actual);

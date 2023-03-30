@@ -81,4 +81,3 @@ class UserDaoTest extends AbstractTest {
         assertEquals(Optional.empty(), optionalUser);
     }
 }
-
