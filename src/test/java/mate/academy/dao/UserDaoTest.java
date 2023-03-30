@@ -14,8 +14,6 @@ import org.junit.jupiter.api.Test;
 class UserDaoTest extends AbstractTest {
     private static final String EMAIL = "bob@i.ua";
     private static final String EMAIL_IS_NOT_IN_DB = "alice@i.ua";
-    private static final Long ID = 1L;
-    private static final Long ID_IS_NOT_IN_DB = 2L;
     private static final String PASSWORD = "1234";
     private UserDao userDao;
     private User user;
