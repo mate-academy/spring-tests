@@ -38,7 +38,7 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    void login_Ok() throws AuthenticationException {
+    void login_ok() throws AuthenticationException {
         Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
         Mockito.when(passwordEncoder.matches(PASSWORD, PASSWORD)).thenReturn(true);
         User actual = authenticationService.login(EMAIL, PASSWORD);
@@ -49,7 +49,7 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    void register_Ok() {
+    void register_ok() {
         Mockito.when(roleService.getRoleByName(any())).thenReturn(new Role(Role.RoleName.USER));
         Mockito.when(userService.save(any())).thenReturn(user);
         User actual = authenticationService.register(EMAIL, PASSWORD);

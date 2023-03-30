@@ -22,7 +22,7 @@ class RoleDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void getRoleByName_Ok() {
+    void getRoleByName_ok() {
         String roleName = "USER";
         Role role = new Role(Role.RoleName.USER);
         roleDao.save(role);
@@ -34,7 +34,7 @@ class RoleDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void getRoleByName_NotOk() {
+    void getRoleByName_notOk() {
         String roleName = "LORD";
         Assertions.assertThrows(DataProcessingException.class,
                 () -> roleDao.getRoleByName(roleName),

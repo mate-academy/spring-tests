@@ -23,7 +23,7 @@ class RoleServiceImplTest {
     }
 
     @Test
-    void getRoleByName_Ok() {
+    void getRoleByName_ok() {
         Role role = new Role(Role.RoleName.USER);
         Mockito.when(roleDao.getRoleByName(any())).thenReturn(Optional.of(role));
         Role actual = roleService.getRoleByName(Role.RoleName.USER.name());
@@ -33,7 +33,7 @@ class RoleServiceImplTest {
     }
 
     @Test
-    void getRoleByName_NotOk() {
+    void getRoleByName_notOk() {
         String roleName = "BOT";
         Mockito.when(roleDao.getRoleByName(roleName)).thenReturn(Optional.empty());
         Assertions.assertThrows(NoSuchElementException.class,

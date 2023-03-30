@@ -27,7 +27,7 @@ class PasswordValidatorTest {
     }
 
     @Test
-    void isValid_Ok() {
+    void isValid_ok() {
         userRegistrationDto.setRepeatPassword(VALID_PASSWORD);
         Assertions.assertTrue(passwordValidator.isValid(userRegistrationDto,
                         constraintValidatorContext),

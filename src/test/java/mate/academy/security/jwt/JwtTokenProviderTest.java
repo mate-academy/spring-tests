@@ -30,7 +30,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void createToken_Ok() {
+    void createToken_ok() {
         String actual = jwtTokenProvider.createToken(EMAIL, LIST_ROLES);
         Assertions.assertNotNull(actual,
                 "Token for email:"
@@ -38,7 +38,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void getAuthentication_Ok() {
+    void getAuthentication_ok() {
         UserDetails userDetails = User.builder()
                 .username(EMAIL)
                 .password("1234")
@@ -51,7 +51,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void getUsername_Ok() {
+    void getUsername_ok() {
         String actual = jwtTokenProvider.getUsername(token);
         Assertions.assertEquals(EMAIL, actual,
                 "Method should return email: "
@@ -59,7 +59,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void resolveToken_Ok() {
+    void resolveToken_ok() {
         HttpServletRequest httpServletRequest = Mockito.mock(HttpServletRequest.class);
         Mockito.when(httpServletRequest.getHeader("Authorization"))
                 .thenReturn("Bearer " + token);
@@ -70,7 +70,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void validateToken_Ok() {
+    void validateToken_ok() {
         boolean actual = jwtTokenProvider.validateToken(token);
         Assertions.assertTrue(actual, "Should return true for valid token");
     }

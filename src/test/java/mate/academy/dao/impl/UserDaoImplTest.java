@@ -27,7 +27,7 @@ class UserDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void findByEmail_Ok() {
+    void findByEmail_ok() {
         Role role = new Role(Role.RoleName.USER);
         roleDao.save(role);
         User user = new User();
@@ -42,7 +42,7 @@ class UserDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void findByEmail_NotOk() {
+    void findByEmail_notOk() {
         Optional<User> actual = userDao.findByEmail(TEST_EMAIL);
         Assertions.assertFalse(actual.isPresent(),
                 "Method should return empty optional for email: " + TEST_EMAIL

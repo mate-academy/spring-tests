@@ -33,7 +33,7 @@ class CustomUserDetailsServiceTest {
     }
 
     @Test
-    void loadUserByUsername_Ok() {
+    void loadUserByUsername_ok() {
         UserDetails actual = userDetailsService.loadUserByUsername(EMAIL);
         Assertions.assertNotNull(actual, "UserDetails can't be null");
         Assertions.assertEquals(EMAIL, actual.getUsername(),
