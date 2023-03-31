@@ -16,7 +16,6 @@ class UserDaoTest extends AbstractTest {
     private User userAlice;
     private User userBob;
     private UserDao userDao;
-    private RoleDao roleDao;
     
     @Override
     protected Class<?>[] entities() {
@@ -26,8 +25,8 @@ class UserDaoTest extends AbstractTest {
     @BeforeEach
     void setUp() {
         SessionFactory sessionFactory = getSessionFactory();
-        roleDao = new RoleDaoImpl(sessionFactory);
         Role adminRole = new Role(Role.RoleName.ADMIN);
+        RoleDao roleDao = new RoleDaoImpl(sessionFactory);
         roleDao.save(adminRole);
         userAlice = new User();
         userAlice.setEmail("alice@gmail.com");
@@ -41,14 +40,14 @@ class UserDaoTest extends AbstractTest {
     }
     
     @Test
-    void save_Ok() {
+    void save_ok() {
         User actual = userDao.save(userBob);
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(2L, actual.getId());
     }
     
     @Test
-    void findByEmail_Ok() {
+    void findByEmail_ok() {
         Optional<User> actual = userDao.findByEmail(userAlice.getEmail());
         Assertions.assertNotNull(actual.get());
         Assertions.assertEquals(userAlice.getEmail(), actual.get().getEmail());
@@ -61,7 +60,7 @@ class UserDaoTest extends AbstractTest {
     }
     
     @Test
-    void findById_Ok() {
+    void findById_ok() {
         Optional<User> actual = userDao.findById(1L);
         Assertions.assertNotNull(actual.get());
         Assertions.assertEquals(userAlice.getEmail(), actual.get().getEmail());

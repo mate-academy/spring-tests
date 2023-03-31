@@ -17,7 +17,7 @@ class EmailValidatorTest {
     }
     
     @Test
-    void isValid_Ok() {
+    void isValid_ok() {
         String email = "testuser@i.ua";
         boolean actual = emailValidator.isValid(email, constraintValidatorContext);
         Assertions.assertTrue(actual);

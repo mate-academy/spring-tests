@@ -23,7 +23,7 @@ class RoleServiceTest {
     }
     
     @Test
-    void save_Ok() {
+    void save_ok() {
         Mockito.when(roleDao.save(TEST_ROLE)).thenReturn(TEST_ROLE);
         Role actual = roleService.save(TEST_ROLE);
         Assertions.assertNotNull(actual);
@@ -31,7 +31,7 @@ class RoleServiceTest {
     }
     
     @Test
-    void getRoleByName_Ok() {
+    void getRoleByName_ok() {
         Mockito.when(roleDao.getRoleByName(TEST_ROLE.getRoleName().name()))
                 .thenReturn(Optional.of(TEST_ROLE));
         Role actual = roleService.getRoleByName(TEST_ROLE.getRoleName().name());

@@ -2,6 +2,7 @@ package mate.academy.service;
 
 import static org.mockito.ArgumentMatchers.any;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import mate.academy.dao.UserDao;
 import mate.academy.model.User;
@@ -32,7 +33,7 @@ class UserServiceTest {
     }
     
     @Test
-    void save_Ok() {
+    void save_ok() {
         Mockito.when(passwordEncoder.encode(user.getPassword())).thenReturn(USER_PASSWORD_ENCODED);
         Mockito.when(userDao.save(user)).thenReturn(user);
         User actual = userService.save(user);
@@ -42,16 +43,31 @@ class UserServiceTest {
     }
     
     @Test
-    void findById_Ok() {
+    void findById_ok() {
         Mockito.when(userDao.findById(any())).thenReturn(Optional.ofNullable(user));
         Optional<User> actual = userService.findById(1L);
         Assertions.assertNotNull(actual);
     }
     
     @Test
-    void findByEmail_Ok() {
+    void findById_unknownId_notOk() {
+        Mockito.when(userDao.findById(-1L)).thenReturn(Optional.empty());
+        Assertions.assertThrows(NoSuchElementException.class,
+                () -> userService.findById(-1L).get());
+    }
+    
+    @Test
+    void findByEmail_ok() {
         Mockito.when(userDao.findByEmail(any())).thenReturn(Optional.ofNullable(user));
-        Optional<User> actual = userService.findById(1L);
+        Optional<User> actual = userService.findByEmail(USER_EMAIL);
         Assertions.assertNotNull(actual);
+    }
+    
+    @Test
+    void findByEmail_unknownEmail_notOk() {
+        String emailNotFromDb = "mate@i.ua";
+        Mockito.when(userDao.findByEmail(emailNotFromDb)).thenReturn(Optional.empty());
+        Assertions.assertThrows(NoSuchElementException.class,
+                () -> userService.findByEmail(emailNotFromDb).get());
     }
 }

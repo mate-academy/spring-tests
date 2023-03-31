@@ -1,5 +1,6 @@
 package mate.academy.security;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 
 import java.util.Optional;
@@ -41,7 +42,7 @@ class AuthenticationServiceTest {
     }
     
     @Test
-    void registerNewUser_Ok() {
+    void registerNewUser_ok() {
         Mockito.when(roleService.getRoleByName("USER"))
                 .thenReturn(new Role(Role.RoleName.USER));
         Mockito.when(userService.save(any())).thenReturn(testUser);
@@ -54,7 +55,20 @@ class AuthenticationServiceTest {
     }
     
     @Test
-    void loginUser_Ok() throws AuthenticationException {
+    void register_WithDuplicateEmail_notOk() throws AuthenticationException {
+        Mockito.when(roleService.getRoleByName("USER"))
+                .thenReturn(new Role(Role.RoleName.USER));
+        Mockito.when(userService.save(any())).thenReturn(testUser);
+    
+        User registered = authenticationService.register(TEST_USER_EMAIL, TEST_USER_PASSWORD);
+        Mockito.when(userService.findByEmail(TEST_USER_EMAIL)).thenReturn(Optional.of(registered));
+        
+        Assertions.assertThrows(RuntimeException.class, () ->
+                authenticationService.register(TEST_USER_EMAIL, TEST_USER_PASSWORD));
+    }
+    
+    @Test
+    void loginUser_ok() throws AuthenticationException {
         Mockito.when(userService.findByEmail(TEST_USER_EMAIL)).thenReturn(Optional.of(testUser));
         Mockito.when(passwordEncoder.matches(TEST_USER_PASSWORD, TEST_USER_PASSWORD))
                 .thenReturn(true);
@@ -66,17 +80,17 @@ class AuthenticationServiceTest {
     }
     
     @Test
-    void loginWithIncorrectEmail_NotOk() {
+    void login_WithIncorrectEmail_notOk() {
         Mockito.when(userService.findByEmail(TEST_USER_EMAIL)).thenReturn(Optional.empty());
-        Assertions.assertThrows(AuthenticationException.class, () ->
+        assertThrows(AuthenticationException.class, () ->
                 authenticationService.login(TEST_USER_EMAIL, TEST_USER_PASSWORD));
     }
     
     @Test
-    void loginWithIncorrectPassword_NotOk() {
+    void login_WithIncorrectPassword_notOk() {
         Mockito.when(userService.findByEmail(TEST_USER_EMAIL)).thenReturn(Optional.of(testUser));
         Mockito.when(passwordEncoder.matches("", "")).thenReturn(false);
-        Assertions.assertThrows(AuthenticationException.class, () ->
+        assertThrows(AuthenticationException.class, () ->
                 authenticationService.login(TEST_USER_EMAIL, TEST_USER_PASSWORD));
     }
 }

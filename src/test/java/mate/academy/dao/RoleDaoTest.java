@@ -10,8 +10,6 @@ import org.junit.jupiter.api.Test;
 
 class RoleDaoTest extends AbstractTest {
     private RoleDao roleDao;
-    private Role adminRole;
-    private Role userRole;
     
     @Override
     protected Class<?>[] entities() {
@@ -21,20 +19,20 @@ class RoleDaoTest extends AbstractTest {
     @BeforeEach
     void setUp() {
         roleDao = new RoleDaoImpl(getSessionFactory());
-        userRole = new Role(Role.RoleName.USER);
-        adminRole = new Role(Role.RoleName.ADMIN);
-        roleDao.save(userRole);
     }
     
     @Test
-    void save_Ok() {
+    void save_ok() {
+        Role adminRole = new Role(Role.RoleName.ADMIN);
         Role actual = roleDao.save(adminRole);
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(2L, actual.getId());
+        Assertions.assertEquals(1L, actual.getId());
     }
     
     @Test
-    void getRoleByName_Ok() {
+    void getRoleByName_ok() {
+        Role userRole = new Role(Role.RoleName.USER);
+        roleDao.save(userRole);
         Optional<Role> actual = roleDao.getRoleByName(Role.RoleName.USER.name());
         Assertions.assertNotNull(actual.get());
         Assertions.assertEquals(Role.RoleName.USER, actual.get().getRoleName());

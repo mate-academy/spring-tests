@@ -34,7 +34,7 @@ class JwtTokenProviderTest {
     }
     
     @Test
-    void createToken_Ok() {
+    void createToken_ok() {
         String actual = token;
         Assertions.assertNotNull(actual);
         String actualLogin = Jwts.parser()
@@ -46,7 +46,7 @@ class JwtTokenProviderTest {
     }
     
     @Test
-    void getAuthentication_Ok() {
+    void getAuthentication_ok() {
         UserDetails userDetails = User.withUsername(EMAIL)
                 .password(PASSWORD)
                 .roles(USER_ROLE)
@@ -58,14 +58,14 @@ class JwtTokenProviderTest {
     }
     
     @Test
-    void getUsername_Ok() {
+    void getUsername_ok() {
         String actual = jwtTokenProvider.getUsername(token);
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(EMAIL, actual);
     }
     
     @Test
-    void resolveToken_Ok() {
+    void resolveToken_ok() {
         String bearerToken = "Bearer " + token;
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader("Authorization", bearerToken);
@@ -75,7 +75,23 @@ class JwtTokenProviderTest {
     }
     
     @Test
-    void validateToken_Ok() {
+    void validateToken_ok() {
         Assertions.assertTrue(jwtTokenProvider.validateToken(token));
+    }
+    
+    @Test
+    void validateToken_invalidToken_notOk() {
+        String unknownToken = "unknown token";
+        Assertions.assertThrows(RuntimeException.class,
+                () -> jwtTokenProvider.validateToken(unknownToken));
+    }
+    
+    @Test
+    void validateToken_tokenIsNullOrEmpty_notOk() {
+        String emptyToken = "";
+        Assertions.assertThrows(RuntimeException.class,
+                () -> jwtTokenProvider.validateToken(emptyToken));
+        Assertions.assertThrows(RuntimeException.class,
+                () -> jwtTokenProvider.validateToken(null));
     }
 }
