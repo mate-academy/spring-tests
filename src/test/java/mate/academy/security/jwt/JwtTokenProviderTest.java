@@ -71,9 +71,23 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void validateToken() {
+    void validateToken_ok() {
         String token = jwtTokenProvider.createToken(TEST_EMAIL, TEST_ROLES_LIST);
         boolean actual = jwtTokenProvider.validateToken(token);
         Assertions.assertTrue(actual, "Expect true for valid token");
+    }
+
+    @Test
+    void validateTokenIsNull_notOk() {
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            jwtTokenProvider.validateToken(null);
+        });
+    }
+
+    @Test
+    void validateTokenIsInvalid_notOk() {
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            jwtTokenProvider.validateToken("token");
+        });
     }
 }

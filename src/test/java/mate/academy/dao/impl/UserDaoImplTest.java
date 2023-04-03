@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 
 class UserDaoImplTest extends AbstractDaoTest {
     private static final String TEST_EMAIL = "dima@gmail.com";
-    private Role testRole;
     private User testUser;
     private UserDao userDao;
     private RoleDao roleDao;
@@ -24,7 +23,7 @@ class UserDaoImplTest extends AbstractDaoTest {
 
     @BeforeEach
     void setUp() {
-        testRole = new Role(Role.RoleName.USER);
+        Role testRole = new Role(Role.RoleName.USER);
         testUser = new User();
         testUser.setEmail(TEST_EMAIL);
         testUser.setPassword("1234");
@@ -40,7 +39,7 @@ class UserDaoImplTest extends AbstractDaoTest {
     }
 
     @Test
-    void findByEmail_Ok() {
+    void findByEmail_ok() {
         testUser.setRoles(Set.of(new Role(Role.RoleName.USER)));
         roleDao.save(new Role(Role.RoleName.USER));
         userDao.save(testUser);

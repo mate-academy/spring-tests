@@ -16,7 +16,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 class CustomUserDetailsServiceTest {
     private static final String TEST_VALID_EMAIL = "dima@gmail.com";
-    private static final String TEST_WRONG_EMAIL = "vlad@gmail.com";
     private static final String TEST_PASSWORD = "qwert";
     private static User testUser;
     private UserDetailsService userDetailsService;
@@ -49,7 +48,7 @@ class CustomUserDetailsServiceTest {
     @Test
     void loadUserByUsername_UsernameNotFound_notOk() {
         Assertions.assertThrows(UsernameNotFoundException.class, () -> {
-            userDetailsService.loadUserByUsername(TEST_WRONG_EMAIL);
+            userDetailsService.loadUserByUsername("vlad@gmail.com");
         });
     }
 }

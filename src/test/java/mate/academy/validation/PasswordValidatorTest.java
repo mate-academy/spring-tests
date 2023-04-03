@@ -25,7 +25,7 @@ class PasswordValidatorTest {
     }
 
     @Test
-    void passwordValid_ok() {
+    void isValid_ok() {
         boolean actual = passwordValidator.isValid(userRegistrationDto, constraintValidatorContext);
         Assertions.assertTrue(actual, String.format("Result should be true for password: %s,"
                 + " and repeat password: "
@@ -33,7 +33,7 @@ class PasswordValidatorTest {
     }
 
     @Test
-    void wrongPassword_notOk() {
+    void isValid_wrongRepeatPassword_notOk() {
         userRegistrationDto.setRepeatPassword(WRONG_PASSWORD);
         boolean actual = passwordValidator.isValid(userRegistrationDto,
                 constraintValidatorContext);
@@ -43,7 +43,7 @@ class PasswordValidatorTest {
     }
 
     @Test
-    void passwordIsNull_NotOk() {
+    void isValid_nullPassword_notOk() {
         userRegistrationDto.setPassword(null);
         userRegistrationDto.setRepeatPassword(VALID_PASSWORD);
         boolean actual = passwordValidator.isValid(userRegistrationDto, constraintValidatorContext);

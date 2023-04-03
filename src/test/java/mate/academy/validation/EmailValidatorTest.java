@@ -24,14 +24,14 @@ class EmailValidatorTest {
     }
 
     @Test
-    void emailValid_ok() {
+    void isValid_ok() {
         VALID_EMAILS.forEach(email -> assertTrue(
                 emailValidator.isValid(email, constraintValidatorContext),
                 String.format("Email %s must be valid!", email)));
     }
 
     @Test
-    void emailValid_notOk() {
+    void isValid_invalidEmail_notOk() {
         WRONG_EMAILS.forEach(email -> assertFalse(
                 emailValidator.isValid(email, constraintValidatorContext),
                 String.format("Email %s must be wrong!", email)));

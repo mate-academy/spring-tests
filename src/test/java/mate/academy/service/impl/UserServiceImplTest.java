@@ -13,7 +13,6 @@ import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 class UserServiceImplTest {
-    private static final String TEST_EMAIL = "dima@gmail.com";
     private User user;
     private UserService userService;
     private UserDao userDao;
@@ -22,7 +21,7 @@ class UserServiceImplTest {
     @BeforeEach
     void setUp() {
         user = new User();
-        user.setEmail(TEST_EMAIL);
+        user.setEmail("dima@gmail.com");
         userDao = Mockito.mock(UserDao.class);
         passwordEncoder = Mockito.mock(PasswordEncoder.class);
         userService = new UserServiceImpl(userDao, passwordEncoder);
