@@ -38,7 +38,7 @@ class CustomUserDetailsServiceTest {
     }
 
     @Test
-    void loadUserByUsername_notOk() {
+    void loadUserByUsername_usernameNotFound_notOk() {
         Assertions.assertThrows(UsernameNotFoundException.class,
                 () -> userDetailsService.loadUserByUsername("nonValidEmail@test.test"));
     }

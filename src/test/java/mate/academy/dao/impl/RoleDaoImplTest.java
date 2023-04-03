@@ -21,7 +21,7 @@ class RoleDaoImplTest extends AbstractDaoTest {
     }
 
     @Test
-    void getRoleName_ok() {
+    void getRoleName_roleNameExists_ok() {
         Role expected = new Role(Role.RoleName.USER);
         roleDao.save(expected);
         Optional<Role> actual = roleDao.getRoleByName(Role.RoleName.USER.name());
@@ -40,7 +40,7 @@ class RoleDaoImplTest extends AbstractDaoTest {
     }
 
     @Test
-    void roleIsNotExists_notOk() {
+    void getRoleName_roleIsNotExists_notOk() {
         Optional<Role> actual = roleDao.getRoleByName(Role.RoleName.USER.name());
         Assertions.assertFalse(actual.isPresent(),
                 String.format("Should return empty optional for USER but was: %s",
@@ -48,7 +48,7 @@ class RoleDaoImplTest extends AbstractDaoTest {
     }
 
     @Test
-    void roleNameIsNull_notOk() {
+    void getRoleName_roleNameIsNull_notOk() {
         Assertions.assertThrows(RuntimeException.class, () -> {
             roleDao.getRoleByName(null);
         });

@@ -40,7 +40,7 @@ class RoleServiceImplTest {
     }
 
     @Test
-    void getRoleByName_notOk() {
+    void getRoleByName_roleNameIsIncorrect_notOk() {
         Assertions.assertThrows(NoSuchElementException.class,
                 () -> roleService.getRoleByName("INCORRECT"));
     }

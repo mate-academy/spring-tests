@@ -28,7 +28,7 @@ class UserDaoImplTest extends AbstractDaoTest {
     }
 
     @Test
-    void findByEmail_ok() {
+    void findByEmail_emailExists_ok() {
         Role role = new Role(Role.RoleName.USER);
         roleDao.save(role);
         User expected = new User();
@@ -43,7 +43,7 @@ class UserDaoImplTest extends AbstractDaoTest {
     }
 
     @Test
-    void findByNonExistingEmail_notOk() {
+    void findByEmail_NonExistingEmail_notOk() {
         Role role = new Role(Role.RoleName.USER);
         roleDao.save(role);
         User expected = new User();

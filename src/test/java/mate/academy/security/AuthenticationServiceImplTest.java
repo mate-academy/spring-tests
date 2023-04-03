@@ -39,7 +39,7 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    void register_ok() {
+    void register_newUser_ok() {
         Mockito.when(roleService.getRoleByName("USER"))
                 .thenReturn(new Role(Role.RoleName.USER));
         Mockito.when(userService.save(any())).thenAnswer(invocation
@@ -51,7 +51,7 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    void login_ok() throws AuthenticationException {
+    void login_userExistsInDB_ok() throws AuthenticationException {
         Mockito.when(userService.findByEmail(VALID_EMAIL)).thenReturn(Optional.of(user));
         Mockito.when(passwordEncoder.matches(any(), any())).thenReturn(true);
         User actual = null;
@@ -62,7 +62,7 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    void login_notOk() {
+    void login_noSuchUserInDB_notOk() {
         User actual = null;
         Assertions.assertThrows(AuthenticationException.class,
                 () -> authenticationService.login("non_valid_email@test.test", TEST_PASSWORD));

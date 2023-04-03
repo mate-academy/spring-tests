@@ -71,4 +71,16 @@ class JwtTokenProviderTest {
     void validateToken_ok() {
         Assertions.assertTrue(jwtTokenProvider.validateToken(token));
     }
+
+    @Test
+    void validateToken_tokenIsNull_notOk() {
+        Assertions.assertThrows(RuntimeException.class,
+                () -> jwtTokenProvider.validateToken(null));
+    }
+
+    @Test
+    void validateToken_tokenIsIncorrect_notOk() {
+        Assertions.assertThrows(RuntimeException.class,
+                () -> jwtTokenProvider.validateToken("incorrect_token"));
+    }
 }

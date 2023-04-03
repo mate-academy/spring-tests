@@ -45,7 +45,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findById_ok() {
+    void findById_userExists_ok() {
         Optional<User> actual = userService.findById(1L);
         Assertions.assertTrue(actual.isPresent());
         Assertions.assertEquals(actual.get().getEmail(), user.getEmail());
@@ -53,13 +53,13 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findById_notOk() {
+    void findById_userWithSuchIdDoesNotExists_notOk() {
         Assertions.assertThrows(NoSuchElementException.class,
                 () -> userService.findById(4L).get());
     }
 
     @Test
-    void findByEmail_ok() {
+    void findByEmail_userExists_ok() {
         Optional<User> actual = userService.findByEmail(TEST_EMAIL);
         Assertions.assertTrue(actual.isPresent());
         Assertions.assertEquals(user.getEmail(), actual.get().getEmail());
@@ -67,7 +67,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findByEmail_notOk() {
+    void findByEmail_userWithSuchEmailDoesNotExists_notOk() {
         Assertions.assertThrows(NoSuchElementException.class,
                 () -> userService.findByEmail(FAKE).get());
     }
