@@ -17,13 +17,12 @@ class UserDaoImplTest extends AbstractDaoTest {
     private static final String WRONG_EMAIL = "wrong@gmail.com";
     private static final String PASSWORD = "1234";
     private UserDao userDao;
-    private RoleDao roleDao;
     private User expectedUser;
 
     @BeforeEach
     void setUp() {
         userDao = new UserDaoImpl(getSessionFactory());
-        roleDao = new RoleDaoImpl(getSessionFactory());
+        RoleDao roleDao = new RoleDaoImpl(getSessionFactory());
         Role userRole = new Role(Role.RoleName.USER);
         roleDao.save(userRole);
         User user = new User();

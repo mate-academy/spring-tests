@@ -17,8 +17,7 @@ class RoleServiceImplTest {
     @Mock
     private RoleDao roleDao;
     private Role user;
-    private Role admin;
-    private static final String USER_ROLE_NAME = "USER";
+    private static final String USER = Role.RoleName.USER.name();
 
     @BeforeEach
     void setUp() {
@@ -36,9 +35,9 @@ class RoleServiceImplTest {
 
     @Test
     void getRoleByName_ok() {
-        Mockito.when(roleDao.getRoleByName(USER_ROLE_NAME)).thenReturn(Optional.of(user));
-        Role actualRole = roleService.getRoleByName(USER_ROLE_NAME);
-        Assertions.assertEquals(actualRole.getRoleName().name(), USER_ROLE_NAME);
+        Mockito.when(roleDao.getRoleByName(USER)).thenReturn(Optional.of(user));
+        Role actualRole = roleService.getRoleByName(USER);
+        Assertions.assertEquals(actualRole.getRoleName().name(), USER);
     }
 
     @Test

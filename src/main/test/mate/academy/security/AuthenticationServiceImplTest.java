@@ -46,11 +46,18 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    void register_ok() {
+    void register_ok() throws AuthenticationException {
         User user = authenticationService.register(EMAIL, PASSWORD);
         Assertions.assertEquals(user.getEmail(), EMAIL);
         Assertions.assertEquals(user.getPassword(), PASSWORD);
         Assertions.assertNotNull(user);
+    }
+
+    @Test
+    void register_userAlreadyRegistered_NotOk() {
+        Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(expectedUser));
+        Assertions.assertThrows(AuthenticationException.class,
+                () -> authenticationService.register(EMAIL, PASSWORD));
     }
 
     @Test

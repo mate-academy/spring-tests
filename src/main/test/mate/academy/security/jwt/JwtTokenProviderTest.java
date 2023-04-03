@@ -4,6 +4,8 @@ import static org.mockito.ArgumentMatchers.any;
 
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+
+import mate.academy.model.Role;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +20,9 @@ import org.springframework.test.util.ReflectionTestUtils;
 class JwtTokenProviderTest {
     private static final String EMAIL = "email@gmail.com";
     private static final String PASSWORD = "qwerty";
-    private static final List<String> ROLES = List.of("USER");
+    private static final List<String> ROLES = List.of(
+            Role.RoleName.USER.name()
+    );
     private JwtTokenProvider jwtTokenProvider;
     @Mock
     private UserDetailsService userDetailsService;
@@ -76,7 +80,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void validationToken_tokenEmpty_notOk() {
+    void validateToken_tokenEmpty_notOk() {
         Assertions.assertThrows(RuntimeException.class,
                 () -> jwtTokenProvider.validateToken(""));
     }
@@ -91,7 +95,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void resolveToken_headerNull() {
+    void resolveToken_headerNull_ok() {
         Mockito.when(request.getHeader("Authorization")).thenReturn(null);
         String actualToken = jwtTokenProvider.resolveToken(request);
         Assertions.assertNull(actualToken);

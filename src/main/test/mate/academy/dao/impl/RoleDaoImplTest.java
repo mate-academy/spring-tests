@@ -13,13 +13,10 @@ class RoleDaoImplTest extends AbstractDaoTest {
     private RoleDao roleDao;
     private Role userRole;
 
-    private Role expectedRole;
-
     @BeforeEach
     void setUp() {
         roleDao = new RoleDaoImpl(getSessionFactory());
         userRole = new Role(Role.RoleName.USER);
-        expectedRole = roleDao.save(userRole);
     }
 
     @Override
@@ -29,11 +26,13 @@ class RoleDaoImplTest extends AbstractDaoTest {
 
     @Test
     void save_ok() {
+        roleDao.save(userRole);
         Assertions.assertEquals(userRole.getId(), 1L);
     }
 
     @Test
     void getRoleByName_ok() {
+        Role expectedRole = roleDao.save(userRole);
         Role actualRole = roleDao.getRoleByName(userRole.getRoleName().name()).get();
         Assertions.assertEquals(actualRole.getId(), 1L);
         Assertions.assertEquals(expectedRole.getRoleName(), actualRole.getRoleName());
