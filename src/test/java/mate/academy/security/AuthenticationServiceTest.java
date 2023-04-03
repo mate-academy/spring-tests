@@ -42,7 +42,7 @@ class AuthenticationServiceTest {
     }
     
     @Test
-    void registerNewUser_ok() {
+    void register_ok() {
         Mockito.when(roleService.getRoleByName("USER"))
                 .thenReturn(new Role(Role.RoleName.USER));
         Mockito.when(userService.save(any())).thenReturn(testUser);
@@ -55,7 +55,7 @@ class AuthenticationServiceTest {
     }
     
     @Test
-    void register_WithDuplicateEmail_notOk() throws AuthenticationException {
+    void register_withDuplicateEmail_notOk() throws AuthenticationException {
         Mockito.when(roleService.getRoleByName("USER"))
                 .thenReturn(new Role(Role.RoleName.USER));
         Mockito.when(userService.save(any())).thenReturn(testUser);
@@ -68,7 +68,7 @@ class AuthenticationServiceTest {
     }
     
     @Test
-    void loginUser_ok() throws AuthenticationException {
+    void login_ok() throws AuthenticationException {
         Mockito.when(userService.findByEmail(TEST_USER_EMAIL)).thenReturn(Optional.of(testUser));
         Mockito.when(passwordEncoder.matches(TEST_USER_PASSWORD, TEST_USER_PASSWORD))
                 .thenReturn(true);
@@ -80,14 +80,14 @@ class AuthenticationServiceTest {
     }
     
     @Test
-    void login_WithIncorrectEmail_notOk() {
+    void login_withIncorrectEmail_notOk() {
         Mockito.when(userService.findByEmail(TEST_USER_EMAIL)).thenReturn(Optional.empty());
         assertThrows(AuthenticationException.class, () ->
                 authenticationService.login(TEST_USER_EMAIL, TEST_USER_PASSWORD));
     }
     
     @Test
-    void login_WithIncorrectPassword_notOk() {
+    void login_withIncorrectPassword_notOk() {
         Mockito.when(userService.findByEmail(TEST_USER_EMAIL)).thenReturn(Optional.of(testUser));
         Mockito.when(passwordEncoder.matches("", "")).thenReturn(false);
         assertThrows(AuthenticationException.class, () ->

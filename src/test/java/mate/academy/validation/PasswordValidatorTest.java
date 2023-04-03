@@ -34,13 +34,13 @@ class PasswordValidatorTest {
     }
     
     @Test
-    void isValid_PasswordOrRepeatPasswordIsNull_notOk() {
+    void isValid_passwordOrRepeatPasswordIsNull_notOk() {
         boolean actual = passwordValidator.isValid(userRegistrationDto, constraintValidatorContext);
         Assertions.assertFalse(actual);
     }
     
     @Test
-    void isValid_PasswordAndRepeatPasswordNotMatch_notOk() {
+    void isValid_passwordAndRepeatPasswordNotMatch_notOk() {
         userRegistrationDto.setPassword(TEST_PASSWORD);
         userRegistrationDto.setRepeatPassword(TEST_PASSWORD + TEST_PASSWORD);
         boolean actual = passwordValidator.isValid(userRegistrationDto, constraintValidatorContext);

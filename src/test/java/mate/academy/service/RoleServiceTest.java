@@ -40,7 +40,7 @@ class RoleServiceTest {
     }
     
     @Test
-    void getRoleByName_IncorrectRoleName_notOk() {
+    void getRoleByName_incorrectRoleName_notOk() {
         Mockito.when(roleDao.getRoleByName(any())).thenReturn(Optional.empty());
         Assertions.assertThrows(RuntimeException.class, () ->
                 roleService.getRoleByName(Role.RoleName.USER.name()));

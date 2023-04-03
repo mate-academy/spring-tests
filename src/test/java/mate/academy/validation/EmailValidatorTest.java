@@ -24,41 +24,41 @@ class EmailValidatorTest {
     }
     
     @Test
-    void isValid_NullEmail_notOk() {
+    void isValid_nullEmail_notOk() {
         boolean actual = emailValidator.isValid(null, constraintValidatorContext);
         Assertions.assertFalse(actual);
     }
     
     @Test
-    void isValid_EmailWithoutAt_notOk() {
+    void isValid_emailWithoutAt_notOk() {
         String email = "testuseri.ua";
         boolean actual = emailValidator.isValid(email, constraintValidatorContext);
         Assertions.assertFalse(actual);
     }
     
     @Test
-    void isValid_EmailStartsWithAt_notOk() {
+    void isValid_emailStartsWithAt_notOk() {
         String email = "@i.ua";
         boolean actual = emailValidator.isValid(email, constraintValidatorContext);
         Assertions.assertFalse(actual);
     }
     
     @Test
-    void isValid_EmailEndsWithAt_notOk() {
+    void isValid_emailEndsWithAt_notOk() {
         String email = "testuser@";
         boolean actual = emailValidator.isValid(email, constraintValidatorContext);
         Assertions.assertFalse(actual);
     }
     
     @Test
-    void isValid_EmailWithoutDotAfterAt_notOk() {
+    void isValid_emailWithoutDotAfterAt_notOk() {
         String email = "testuser@iua";
         boolean actual = emailValidator.isValid(email, constraintValidatorContext);
         Assertions.assertFalse(actual);
     }
     
     @Test
-    void isValid_EmptyEmail_notOk() {
+    void isValid_emptyEmail_notOk() {
         String email = "";
         boolean actual = emailValidator.isValid(email, constraintValidatorContext);
         Assertions.assertFalse(actual);

@@ -87,10 +87,14 @@ class JwtTokenProviderTest {
     }
     
     @Test
-    void validateToken_tokenIsNullOrEmpty_notOk() {
+    void validateToken_tokenIsEmpty_notOk() {
         String emptyToken = "";
         Assertions.assertThrows(RuntimeException.class,
                 () -> jwtTokenProvider.validateToken(emptyToken));
+    }
+    
+    @Test
+    void validateToken_tokenIsNull_notOk() {
         Assertions.assertThrows(RuntimeException.class,
                 () -> jwtTokenProvider.validateToken(null));
     }
