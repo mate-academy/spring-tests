@@ -41,7 +41,7 @@ class UserDaoTest extends AbstractTest {
     void save_ok() {
         User actual = userDao.save(user);
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(1L, actual.getId());
+        Assertions.assertEquals(user.getId(), actual.getId());
     }
 
     @Test
@@ -49,14 +49,16 @@ class UserDaoTest extends AbstractTest {
         userDao.save(user);
         Optional<User> actual = userDao.findByEmail(EMAIL);
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(EMAIL, actual.get().getEmail());
+        Assertions.assertTrue(actual.isPresent());
+        Assertions.assertEquals(user.getEmail(), actual.get().getEmail());
     }
 
     @Test
     void findById_ok() {
         userDao.save(user);
-        Optional<User> actual = userDao.findById(1L);
+        Optional<User> actual = userDao.findById(user.getId());
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(actual.get().getId(), user.getId());
+        Assertions.assertTrue(actual.isPresent());
+        Assertions.assertEquals(user.getId(), actual.get().getId());
     }
 }
