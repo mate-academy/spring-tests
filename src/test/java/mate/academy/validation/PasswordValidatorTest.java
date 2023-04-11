@@ -9,8 +9,8 @@ import org.mockito.Mockito;
 import org.springframework.test.util.ReflectionTestUtils;
 
 class PasswordValidatorTest {
-    private static final String PASSWORD = "123456";
-    private static final String WRONG_REPEAT_PASSWORD = "654321";
+    private static final String PASSWORD = "12345678";
+    private static final String WRONG_REPEAT_PASSWORD = "87654321";
     private PasswordValidator passwordValidator;
     private UserRegistrationDto userRegistrationDto;
     private ConstraintValidatorContext constraintValidatorContext;

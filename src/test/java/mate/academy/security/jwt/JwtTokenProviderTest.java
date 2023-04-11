@@ -49,9 +49,10 @@ class JwtTokenProviderTest {
                 .build();
         Mockito.when(userDetailsService.loadUserByUsername(LOGIN))
                 .thenReturn(userDetails);
-        Authentication actual = jwtTokenProvider.getAuthentication(token);
-        Assertions.assertNotNull(actual);
-        Assertions.assertTrue(actual.getPrincipal().toString().contains(LOGIN));
+        Authentication authentication = jwtTokenProvider.getAuthentication(token);
+        Assertions.assertNotNull(authentication);
+        String actualUsername = ((UserDetails) authentication.getPrincipal()).getUsername();
+        Assertions.assertEquals(LOGIN, actualUsername);
     }
 
     @Test
