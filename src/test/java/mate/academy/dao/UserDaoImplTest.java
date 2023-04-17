@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class UserDaoTest extends AbstractTest {
+class UserDaoImplTest extends AbstractTest {
     private static final String EMAIL = "andrii@ukr.net";
     private static final String PASSWORD = "12345678";
     private UserDao userDao;
