@@ -1,8 +1,8 @@
 package mate.academy.dao;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import mate.academy.dao.impl.RoleDaoImpl;
+import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 class RoleDaoImplTest extends AbstractTest {
     private static final Role ROLE = new Role(Role.RoleName.USER);
-    private static final Role ROLE_ADMIN = new Role(Role.RoleName.ADMIN);
+    private static final String FAKE_ROLE = "FAKE";
     private static RoleDao roleDao;
 
     @BeforeEach
@@ -37,16 +37,14 @@ class RoleDaoImplTest extends AbstractTest {
 
     @Test
     void getRoleByName_NotOk() {
-        roleDao.save(ROLE);
-        Optional<Role> actual = roleDao.getRoleByName(ROLE_ADMIN.getRoleName().name());
+        Assertions.assertThrows(DataProcessingException.class,
+                () -> roleDao.getRoleByName(FAKE_ROLE));
+    }
 
-        try {
-            actual.get();
-        } catch (NoSuchElementException e) {
-            Assertions.assertEquals("No value present", e.getMessage());
-            return;
-        }
-        Assertions.fail();
+    @Test
+    void getRoleByName_RoleNameIsNull_NotOk() {
+        Assertions.assertThrows(DataProcessingException.class,
+                () -> roleDao.getRoleByName(null));
     }
 
     @Override

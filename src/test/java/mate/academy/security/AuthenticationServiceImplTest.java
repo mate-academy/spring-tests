@@ -58,16 +58,13 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    void login_ok() {
+    void login_ok() throws AuthenticationException {
         Mockito.when(userService.findByEmail(USER_NAME)).thenReturn(Optional.of(user));
         user.setPassword(passwordEncoder.encode(USER_PASSWORD));
-        try {
-            User actual = authenticationService.login(USER_NAME, USER_PASSWORD);
-            Assertions.assertNotNull(actual);
-            Assertions.assertEquals(actual.getPassword(), user.getPassword());
-        } catch (AuthenticationException e) {
-            Assertions.fail("Incorrect user name or password");
-        }
+        User actual = authenticationService.login(USER_NAME, USER_PASSWORD);
+        Assertions.assertNotNull(actual);
+        Assertions.assertEquals(USER_NAME, user.getEmail());
+        Assertions.assertEquals(actual.getPassword(), user.getPassword());
     }
 
     @Test

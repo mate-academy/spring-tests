@@ -17,6 +17,7 @@ class CustomUserDetailsServiceTest {
     private static final String EMAIL = "bob@i.ua";
     private static final String PASSWORD = "1234";
     private static final Role ROLE = new Role(Role.RoleName.USER);
+    private static final String FAKE_EMAIL = "fake@i.ua";
     private UserDetailsService userDetailsService;
     private UserService userService;
     private User user;
@@ -42,12 +43,9 @@ class CustomUserDetailsServiceTest {
 
     @Test
     void loadUserByUsername_UsernameNotFound() {
-        try {
-            userDetailsService.loadUserByUsername("alice@i.ua");
-        } catch (UsernameNotFoundException e) {
-            Assertions.assertEquals("User not found.", e.getMessage());
-            return;
-        }
-        Assertions.fail();
+        UsernameNotFoundException exception = Assertions
+                .assertThrows(UsernameNotFoundException.class,
+                        () -> userDetailsService.loadUserByUsername(FAKE_EMAIL));
+        Assertions.assertEquals("User not found.", exception.getMessage());
     }
 }
