@@ -46,7 +46,6 @@ class RoleDaoImplTest extends AbstractTest {
         Optional<Role> roleByName = roleDao.getRoleByName("USER");
         Assertions.assertTrue(roleByName.isPresent());
         Role actual = roleByName.get();
-        Assertions.assertNotNull(actual);
         Assertions.assertEquals(1L, actual.getId());
         Assertions.assertEquals(role.getRoleName(), actual.getRoleName());
     }

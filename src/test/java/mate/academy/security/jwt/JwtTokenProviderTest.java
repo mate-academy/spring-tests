@@ -65,4 +65,34 @@ class JwtTokenProviderTest {
     void validateToken_Ok() {
         Assertions.assertTrue(jwtTokenProvider.validateToken(token));
     }
+
+    @Test
+    void authenticationNull_NotOk() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            jwtTokenProvider.getAuthentication(null);
+        });
+    }
+
+    @Test
+    void username_NotOk() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            jwtTokenProvider.getUsername(null);
+        });
+    }
+
+    @Test
+    void resolveToken_WrongToken_NotOk() {
+        HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
+        Mockito.when(request.getHeader("Authorization"))
+                .thenReturn("Bearer " + "invalid_token");
+        String actual = jwtTokenProvider.resolveToken(request);
+        Assertions.assertEquals("invalid_token", actual);
+    }
+
+    @Test
+    void validateTokenNull_NotOk() {
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            jwtTokenProvider.validateToken(null);
+        });
+    }
 }
