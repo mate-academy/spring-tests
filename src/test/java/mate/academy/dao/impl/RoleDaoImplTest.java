@@ -26,17 +26,16 @@ class RoleDaoImplTest extends AbstractDaoTest {
     }
 
     @Test
-    void getRoleByName_Ok() {
+    void getRoleByName_ok() {
         Role actualRole = roleDao.getRoleByName(Role.RoleName.USER.name()).get();
         Assertions.assertNotNull(actualRole);
         Assertions.assertEquals(1L, actualRole.getId());
     }
 
     @Test
-    void getRoleByName_NoSuchElementException() {
-        Exception exception = Assertions.assertThrows(NoSuchElementException.class,
-                () -> {
-                    roleDao.getRoleByName(Role.RoleName.ADMIN.name()).get();
-                }, "NoSuchElementException was expected");
+    void getRoleByName_noSuchElementException() {
+        Assertions.assertThrows(NoSuchElementException.class, () -> {
+            roleDao.getRoleByName(Role.RoleName.ADMIN.name()).get();
+        }, "NoSuchElementException was expected");
     }
 }

@@ -72,10 +72,9 @@ class UserDaoImplTest extends AbstractDaoTest {
     }
 
     @Test
-    void findById_NoSuchElementException() {
-        Exception exception = Assertions.assertThrows(NoSuchElementException.class,
-                () -> {
-                    userDao.findById(1L).get();
-                }, "NoSuchElementException was expected.");
+    void findByEmail_noSuchElementException() {
+        Assertions.assertThrows(NoSuchElementException.class, () -> {
+            userDao.findByEmail(EMAIL).get();
+        }, "NoSuchElementException was expected.");
     }
 }
