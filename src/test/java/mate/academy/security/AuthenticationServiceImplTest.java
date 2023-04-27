@@ -70,21 +70,23 @@ public class AuthenticationServiceImplTest {
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(user.getEmail(), actual.getEmail());
         Assertions.assertEquals(user.getPassword(), actual.getPassword());
+        Assertions.assertTrue(user.getRoles().equals(actual.getRoles()));
     }
 
     @Test
     void login_InvalidEmail_NotOk() throws AuthenticationException {
         Mockito.when(userService.findByEmail(INVALID_USER_EMAIL)).thenReturn(Optional.empty());
         AuthenticationException exception = Assertions.assertThrows(AuthenticationException.class,
-                () -> authenticationService.login(INVALID_USER_EMAIL, INVALID_PASSWORD));
-        Assertions.assertEquals("Invalid username or password", exception.getMessage());
+                () -> authenticationService.login(USER_EMAIL, PASSWORD));
+        Assertions.assertEquals("Invalid username", exception.getMessage());
     }
 
     @Test
     void login_InvalidPassword_NotOk() {
-        Mockito.when(userService.findByEmail(INVALID_PASSWORD)).thenReturn(Optional.empty());
+        Mockito.when(userService.findByEmail(USER_EMAIL)).thenReturn(Optional.of(user));
+        Mockito.when(passwordEncoder.matches(PASSWORD, INVALID_PASSWORD)).thenReturn(false);
         AuthenticationException exception = Assertions.assertThrows(AuthenticationException.class,
-                () -> authenticationService.login(INVALID_USER_EMAIL, INVALID_PASSWORD));
-        Assertions.assertEquals("Invalid username or password", exception.getMessage());
+                () -> authenticationService.login(USER_EMAIL, PASSWORD));
+        Assertions.assertEquals("Invalid password", exception.getMessage());
     }
 }

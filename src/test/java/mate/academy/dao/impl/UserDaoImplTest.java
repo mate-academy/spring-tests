@@ -4,12 +4,12 @@ import java.util.Optional;
 import java.util.Set;
 import mate.academy.dao.RoleDao;
 import mate.academy.dao.UserDao;
-import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import mate.academy.model.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 public class UserDaoImplTest extends AbstractTest {
     private static final String CORRECT_EMAIL = "bob@i.ua";
@@ -35,6 +35,7 @@ public class UserDaoImplTest extends AbstractTest {
         User user = new User();
         user.setEmail("bob@i.ua");
         user.setPassword("1234");
+        user.setId(1L);
         user.setRoles(Set.of(role));
     }
 
@@ -58,9 +59,10 @@ public class UserDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void findById_UserNotExists_NotOk() {
-        Assertions.assertThrows(DataProcessingException.class,
-                () -> userDao.findById(2L));
+    void findById_UserDoesNotExist_NotOk() {
+        Mockito.when(userDao.findById(2L)).thenReturn(Optional.empty());
+        Optional<User> actual = userDao.findById(2L);
+        Assertions.assertFalse(actual.isPresent());
     }
 
     @Test
@@ -74,8 +76,10 @@ public class UserDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void findByEmail_UserNotExists_Ok() {
-        Assertions.assertThrows(DataProcessingException.class,
-                () -> userDao.findByEmail(WRONG_EMAIL));
+    void findByEmail_UserDoesNotExist_Ok() {
+        Mockito.when(userDao.findByEmail(WRONG_EMAIL)).thenReturn(Optional.empty());
+        Optional<User> actual = userDao.findByEmail(WRONG_EMAIL);
+        Assertions.assertFalse(actual.isPresent());
+
     }
 }

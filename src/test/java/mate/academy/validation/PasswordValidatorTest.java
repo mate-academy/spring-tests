@@ -35,14 +35,15 @@ public class PasswordValidatorTest {
     }
 
     @Test
-    void isValid_InvalidEmail_NotOk() {
+    void isValid_InvalidPassword_NotOk() {
         userRegistrationDto.setRepeatPassword(INVALID_PASSWORD);
         Assertions.assertFalse(passwordValidator.isValid(userRegistrationDto,
                 constraintValidatorContext));
     }
 
     @Test
-    void isValid_EmailNull_NotOk() {
+    void isValid_NullPassword_NotOk() {
+        userRegistrationDto.setPassword(null);
         userRegistrationDto.setRepeatPassword(null);
         Assertions.assertFalse(passwordValidator.isValid(userRegistrationDto,
                 constraintValidatorContext));

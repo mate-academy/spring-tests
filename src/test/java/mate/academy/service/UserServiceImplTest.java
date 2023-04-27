@@ -1,11 +1,11 @@
-package mate.academy.service.impl;
+package mate.academy.service;
 
 import java.util.Optional;
 import java.util.Set;
 import mate.academy.dao.UserDao;
 import mate.academy.model.Role;
 import mate.academy.model.User;
-import mate.academy.service.UserService;
+import mate.academy.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -67,7 +67,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void findByEmail_UserNotExists_NotOk() {
+    void findByEmail_UserDoesNotExist_NotOk() {
         Mockito.when(userDao.findByEmail(WRONG_EMAIL)).thenReturn(Optional.empty());
         Optional<User> actual = userService.findByEmail(WRONG_EMAIL);
         Assertions.assertTrue(actual.isPresent());

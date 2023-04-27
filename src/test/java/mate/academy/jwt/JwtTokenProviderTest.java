@@ -1,7 +1,8 @@
-package mate.academy.security.jwt;
+package mate.academy.jwt;
 
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import mate.academy.security.jwt.JwtTokenProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

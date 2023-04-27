@@ -1,10 +1,10 @@
-package mate.academy.service.impl;
+package mate.academy.service;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import mate.academy.dao.RoleDao;
 import mate.academy.model.Role;
-import mate.academy.service.RoleService;
+import mate.academy.service.impl.RoleServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
