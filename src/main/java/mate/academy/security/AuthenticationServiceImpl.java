@@ -25,6 +25,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public User register(String email, String password) {
+        if (userService.findByEmail(email).isPresent()) {
+            throw new RuntimeException("Email already in use");
+        }
         User user = new User();
         user.setEmail(email);
         user.setPassword(password);
