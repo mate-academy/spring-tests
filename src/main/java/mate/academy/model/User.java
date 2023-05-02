@@ -24,6 +24,15 @@ public class User {
     @ManyToMany
     private Set<Role> roles;
 
+    public User() {
+    }
+
+    public User(String email, String password, Set<Role> roles) {
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+    }
+
     public Set<Role> getRoles() {
         return roles;
     }
