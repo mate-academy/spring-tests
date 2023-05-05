@@ -39,7 +39,6 @@ class AuthenticationServiceImplTest {
         user = new User(1L, EMAIL, PASSWORD, Set.of(roleUser));
     }
 
-    //метод save повертає null;
     @Test
     void register_validValue_ok() {
         Role roleUser = new Role();
