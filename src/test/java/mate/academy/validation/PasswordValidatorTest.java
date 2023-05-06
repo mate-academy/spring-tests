@@ -3,7 +3,7 @@ package mate.academy.validation;
 import java.lang.reflect.Field;
 import javax.validation.ConstraintValidatorContext;
 import mate.academy.model.dto.UserRegistrationDto;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +15,6 @@ class PasswordValidatorTest {
     private PasswordValidator passwordValidator;
     @Mock
     private ConstraintValidatorContext context;
-
 
     @BeforeEach
     void setUp() throws NoSuchFieldException, IllegalAccessException {
@@ -36,7 +35,8 @@ class PasswordValidatorTest {
         registrationDto.setRepeatPassword("12345678");
 
         boolean actual = passwordValidator.isValid(registrationDto, context);
-        assertTrue(actual, "Method should return true for password " + registrationDto.getPassword());
+        Assertions.assertTrue(actual, "Method should return true for password "
+                + registrationDto.getPassword());
     }
 
     @Test
@@ -47,7 +47,7 @@ class PasswordValidatorTest {
         registrationDto.setRepeatPassword("12345678");
 
         boolean actual = passwordValidator.isValid(registrationDto, context);
-        assertFalse(actual, "Method should return false for null value password");
+        Assertions.assertFalse(actual, "Method should return false for null value password");
     }
 
     @Test
@@ -58,6 +58,7 @@ class PasswordValidatorTest {
         registrationDto.setRepeatPassword("12345678");
 
         boolean actual = passwordValidator.isValid(registrationDto, context);
-        assertFalse(actual, "Method should return false when password and repeatPassword don't match");
+        Assertions.assertFalse(actual,
+                "Method should return false when password and repeatPassword don't match");
     }
 }

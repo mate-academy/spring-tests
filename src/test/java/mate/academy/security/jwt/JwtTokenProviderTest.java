@@ -3,12 +3,10 @@ package mate.academy.security.jwt;
 import java.lang.reflect.Field;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import mate.academy.model.Role;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -19,7 +17,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 @ExtendWith(MockitoExtension.class)
 class JwtTokenProviderTest {
-    private final static String EMAIL = "bob@gmail.com";
+    private static final String EMAIL = "bob@gmail.com";
     @Mock
     private UserDetailsService userDetailsService;
     private JwtTokenProvider jwtTokenProvider;
@@ -30,7 +28,8 @@ class JwtTokenProviderTest {
         jwtTokenProvider = new JwtTokenProvider(userDetailsService);
         try {
             Field secretKey = JwtTokenProvider.class.getDeclaredField("secretKey");
-            Field validityInMilliseconds = JwtTokenProvider.class.getDeclaredField("validityInMilliseconds");
+            Field validityInMilliseconds =
+                    JwtTokenProvider.class.getDeclaredField("validityInMilliseconds");
             secretKey.setAccessible(true);
             secretKey.set(jwtTokenProvider, "secret");
             validityInMilliseconds.setAccessible(true);
@@ -65,7 +64,8 @@ class JwtTokenProviderTest {
         HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
         Mockito.when(request.getHeader("Authorization")).thenReturn(null);
         String resolvedToken = jwtTokenProvider.resolveToken(request);
-        Assertions.assertNull(resolvedToken, "Method should returns null when no header 'Authorization'");
+        Assertions.assertNull(resolvedToken,
+                "Method should returns null when no header 'Authorization'");
     }
 
     @Test
@@ -85,7 +85,8 @@ class JwtTokenProviderTest {
         builder.roles("USER", "ADMIN");
         UserDetails userDetails = builder.build();
 
-        Mockito.when(userDetailsService.loadUserByUsername(Mockito.anyString())).thenReturn(userDetails);
+        Mockito.when(userDetailsService.loadUserByUsername(Mockito.anyString()))
+                .thenReturn(userDetails);
         Authentication authentication = jwtTokenProvider.getAuthentication(createdToken);
         Assertions.assertNotNull(authentication, "Authentication must be not null");
         Assertions.assertEquals(authentication.getName(), EMAIL, "Username is not equal");
@@ -105,7 +106,8 @@ class JwtTokenProviderTest {
 
     @Test
     void validate_notValidToken_notOk() {
-        Assertions.assertThrows(RuntimeException.class, () -> jwtTokenProvider.validateToken("asdfq12"),
+        Assertions.assertThrows(RuntimeException.class,
+                () -> jwtTokenProvider.validateToken("asdfq12"),
                 "Method should throw exception for not valid token");
     }
 

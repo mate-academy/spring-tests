@@ -1,6 +1,5 @@
 package mate.academy.security;
 
-
 import java.util.Optional;
 import java.util.Set;
 import mate.academy.exception.AuthenticationException;
@@ -8,7 +7,6 @@ import mate.academy.model.Role;
 import mate.academy.model.User;
 import mate.academy.service.RoleService;
 import mate.academy.service.UserService;
-import mate.academy.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +26,7 @@ class AuthenticationServiceImplTest {
     private RoleService roleService;
     @Mock
     private PasswordEncoder passwordEncoder;
-    AuthenticationService authenticationService;
+    private AuthenticationService authenticationService;
     private User user;
 
     @BeforeEach
@@ -47,18 +45,18 @@ class AuthenticationServiceImplTest {
 
         Mockito.when(roleService.getRoleByName("USER")).thenReturn(roleUser);
         Mockito.when(userService.save(Mockito.any())).thenReturn(user);
-        User actual = authenticationService.register("bob@gmail.com", "1234");
+        User actual = authenticationService.register(EMAIL, PASSWORD);
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(user, actual);
     }
 
     @Test
     void login_successLogin_ok() throws AuthenticationException {
-        String expectedLogin = EMAIL;
-        String expectedPassword = PASSWORD;
-
         Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
         Mockito.when(passwordEncoder.matches(PASSWORD, user.getPassword())).thenReturn(true);
+
+        String expectedLogin = EMAIL;
+        String expectedPassword = PASSWORD;
 
         User actual = authenticationService.login(EMAIL, PASSWORD);
         Assertions.assertNotNull(actual);

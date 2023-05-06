@@ -3,11 +3,9 @@ package mate.academy.dao.impl;
 import java.util.List;
 import java.util.Optional;
 import mate.academy.dao.AbstractTest;
-import mate.academy.dao.RoleDao;
 import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import org.junit.jupiter.api.Assertions;
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -28,8 +26,8 @@ class RoleDaoImplTest extends AbstractTest {
     void save_successSave_ok() {
         Role expected = new Role(Role.RoleName.ADMIN);
         Role actual = roleDao.save(expected);
-        assertNotNull(actual, "There was no one role added to DB");
-        assertEquals(1L, actual.getId(), "ID doesn't equal");
+        Assertions.assertNotNull(actual, "There was no one role added to DB");
+        Assertions.assertEquals(1L, actual.getId(), "ID doesn't equal");
     }
 
     @Test
@@ -45,14 +43,16 @@ class RoleDaoImplTest extends AbstractTest {
         if (role.isEmpty()) {
             Assertions.fail("DB should has role with name " + expected.getRoleName());
         }
-        Assertions.assertEquals(expected.getRoleName(), role.get().getRoleName(), "Roles don't equal");
+        Assertions.assertEquals(expected.getRoleName(), role.get().getRoleName(),
+                "Roles don't equal");
     }
 
     @Test
     void getRoleByName_lowerCaseRole_notOk() {
         Role expected = new Role(Role.RoleName.USER);
         roleDao.save(expected);
-        Assertions.assertThrows(DataProcessingException.class, () -> roleDao.getRoleByName("user"),
+        Assertions.assertThrows(DataProcessingException.class,
+                () -> roleDao.getRoleByName("user"),
                 "Method should throw DataProcessingException for the value user");
     }
 
@@ -70,7 +70,8 @@ class RoleDaoImplTest extends AbstractTest {
 
     @Test
     void getRoleByName_noPresentRoleNameEnum_notOk() {
-        Assertions.assertThrows(DataProcessingException.class, () -> roleDao.getRoleByName("MANAGER"),
+        Assertions.assertThrows(DataProcessingException.class,
+                () -> roleDao.getRoleByName("MANAGER"),
                 "Method should throw DataProcessingException when no present RoleName");
     }
 
@@ -81,15 +82,16 @@ class RoleDaoImplTest extends AbstractTest {
         roleDao.save(role);
         roleDao.save(role);
         List<Role> allRoles = roleDao.findAll();
-        assertNotNull(allRoles, "List of roles should be not null");
-        assertEquals(allRoles.size(), 3, "List has to contain 3 element, but actual " + allRoles.size());
+        Assertions.assertNotNull(allRoles, "List of roles should be not null");
+        Assertions.assertEquals(allRoles.size(), 3,
+                "List has to contain 3 element, but actual " + allRoles.size());
     }
 
     @Test
     void findAll_noOneRolesPresentInDB_notOk() {
         List<Role> allRoles = roleDao.findAll();
-        assertNotNull(allRoles, "List of roles should be not null");
-        assertTrue(allRoles.isEmpty(), "List is not empty");
+        Assertions.assertNotNull(allRoles, "List of roles should be not null");
+        Assertions.assertTrue(allRoles.isEmpty(), "List is not empty");
     }
 
     @Test
@@ -107,7 +109,8 @@ class RoleDaoImplTest extends AbstractTest {
     @Test
     void findById_noRolePresentInDbById_notOk() {
         Optional<Role> roleById = roleDao.findById(1L);
-        Assertions.assertEquals(roleById, Optional.empty(), "Method should return Optional.empty()");
+        Assertions.assertEquals(roleById, Optional.empty(),
+                "Method should return Optional.empty()");
     }
 
     @Test
@@ -124,7 +127,7 @@ class RoleDaoImplTest extends AbstractTest {
         roleDao.save(role);
         roleDao.delete(1L);
         List<Role> allRoles = roleDao.findAll();
-        for(Role roleFromDB : allRoles) {
+        for (Role roleFromDB : allRoles) {
             if (roleFromDB.getId().equals(1L)) {
                 Assertions.fail("You don't delete role by id 1, or delete the wrong one");
             }
@@ -161,7 +164,7 @@ class RoleDaoImplTest extends AbstractTest {
     @Test
     void update_noRoleToUpdate_notOk() {
         Role role = new Role(Role.RoleName.USER);
-        Assertions.assertThrows(DataProcessingException.class, () ->roleDao.update(role),
+        Assertions.assertThrows(DataProcessingException.class, () -> roleDao.update(role),
                 "Method should throw DataProcessingException for transient object");
     }
 

@@ -30,7 +30,8 @@ class RoleServiceTest {
         Mockito.when(roleDao.save(role)).thenReturn(new Role(1L, Role.RoleName.USER));
         Role actual = roleService.save(role);
         Assertions.assertNotNull(actual, "Role must be not null");
-        Assertions.assertEquals(actual.getId(), 1L, "Id should be 1, but actual is " + actual.getId());
+        Assertions.assertEquals(actual.getId(), 1L,
+                "Id should be 1, but actual is " + actual.getId());
     }
 
     @Test

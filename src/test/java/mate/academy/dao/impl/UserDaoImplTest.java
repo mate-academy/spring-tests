@@ -9,15 +9,12 @@ import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import mate.academy.model.User;
 import org.junit.jupiter.api.Assertions;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class UserDaoImplTest extends AbstractTest {
-    private final static String EMAIL = "bob@gmail.com";
-    private final static String PASSWORD = "1234";
+    private static final String EMAIL = "bob@gmail.com";
+    private static final String PASSWORD = "1234";
     private UserDaoImpl userDao;
     private RoleDao roleDao;
     private Role userRole;
@@ -89,13 +86,15 @@ class UserDaoImplTest extends AbstractTest {
     @Test
     void findByEmail_nullValue_notOk() {
         Optional<User> userByEmail = userDao.findByEmail(null);
-        Assertions.assertEquals(userByEmail, Optional.empty(), "Method should return Optional.empty()");
+        Assertions.assertEquals(userByEmail, Optional.empty(),
+                "Method should return Optional.empty()");
     }
 
     @Test
     void findByEmail_noRolePresentInDB_notOk() {
         Optional<User> userByEmail = userDao.findByEmail("alice@gmail.com");
-        Assertions.assertEquals(userByEmail, Optional.empty(), "Method should return Optional.empty()");
+        Assertions.assertEquals(userByEmail, Optional.empty(),
+                "Method should return Optional.empty()");
     }
 
     @Test
@@ -111,15 +110,16 @@ class UserDaoImplTest extends AbstractTest {
         userDao.save(user);
 
         List<User> allRoles = userDao.findAll();
-        assertNotNull(allRoles, "List of roles should be not null");
-        assertEquals(allRoles.size(), 3, "List has to contain 3 element, but actual " + allRoles.size());
+        Assertions.assertNotNull(allRoles, "List of roles should be not null");
+        Assertions.assertEquals(allRoles.size(), 3,
+                "List has to contain 3 element, but actual " + allRoles.size());
     }
 
     @Test
     void findAll_noOneRolesPresentInDB_notOk() {
         List<User> allRoles = userDao.findAll();
-        assertNotNull(allRoles, "List of roles should be not null");
-        assertTrue(allRoles.isEmpty(), "List is not empty");
+        Assertions.assertNotNull(allRoles, "List of roles should be not null");
+        Assertions.assertTrue(allRoles.isEmpty(), "List is not empty");
     }
 
     @Test
@@ -140,7 +140,8 @@ class UserDaoImplTest extends AbstractTest {
     @Test
     void findById_noUserPresentInDbById_notOk() {
         Optional<User> userById = userDao.findById(1L);
-        Assertions.assertEquals(userById, Optional.empty(), "Method should return Optional.empty()");
+        Assertions.assertEquals(userById, Optional.empty(),
+                "Method should return Optional.empty()");
     }
 
     @Test
@@ -162,7 +163,7 @@ class UserDaoImplTest extends AbstractTest {
         userDao.save(user);
         userDao.delete(1L);
         List<User> users = userDao.findAll();
-        for(User userFromDB : users) {
+        for (User userFromDB : users) {
             if (userFromDB.getId().equals(1L)) {
                 Assertions.fail("You don't delete user by id 1, or delete the wrong one");
             }
@@ -207,7 +208,7 @@ class UserDaoImplTest extends AbstractTest {
         user.setEmail(EMAIL);
         user.setPassword(PASSWORD);
         user.setRoles(Set.of(userRole));
-        Assertions.assertThrows(DataProcessingException.class, () ->userDao.update(user),
+        Assertions.assertThrows(DataProcessingException.class, () -> userDao.update(user),
                 "Method should throw DataProcessingException for transient object");
     }
 

@@ -7,7 +7,6 @@ import mate.academy.model.Role;
 import mate.academy.model.User;
 import mate.academy.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.Assertions;
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,7 +43,8 @@ class UserServiceTest {
         expected.setRoles(Set.of(roleUser));
 
         Mockito.when(userDao.save(requestUser)).thenReturn(expected);
-        Mockito.when(passwordEncoder.encode(requestUser.getPassword())).thenReturn("difficultPassword");
+        Mockito.when(passwordEncoder.encode(requestUser.getPassword()))
+                .thenReturn("difficultPassword");
         User actual = userService.save(requestUser);
         Assertions.assertNotNull(actual,"User must be not null");
         Assertions.assertEquals(actual.getId(), expected.getId(),
