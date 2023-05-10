@@ -10,7 +10,7 @@ import mate.academy.model.User;
 import mate.academy.service.RoleService;
 import mate.academy.service.UserService;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,24 +18,26 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 class AuthenticationServiceImplTest {
     private static final String USER_EMAIL = "john@me.com";
     private static final String USER_PASSWORD = "12345678";
-    private User user;
-    private RoleService roleService;
-    private PasswordEncoder passwordEncoder;
-    private UserService userService;
-    private AuthenticationService authenticationService;
+    private static User user;
+    private static RoleService roleService;
+    private static PasswordEncoder passwordEncoder;
+    private static UserService userService;
+    private static AuthenticationService authenticationService;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void beforeAll() {
         userService = Mockito.mock(UserService.class);
         roleService = Mockito.mock(RoleService.class);
         passwordEncoder = Mockito.mock(PasswordEncoder.class);
         authenticationService = new AuthenticationServiceImpl(
                 userService, roleService, passwordEncoder);
 
+        Role userRole = new Role(Role.RoleName.USER);
+
         user = new User();
+        user.setRoles(Set.of(userRole));
         user.setEmail(USER_EMAIL);
         user.setPassword(USER_PASSWORD);
-        user.setRoles(Set.of(new Role(Role.RoleName.USER)));
     }
 
     @Test

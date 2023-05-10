@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import mate.academy.model.Role;
 import mate.academy.model.User;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.core.Authentication;
@@ -25,12 +25,12 @@ class JwtTokenProviderTest {
                     + "eyJzdWIiOiJqb2huQG1lLmNvbSIsInJvbGVzIjpbIlVTRV"
                     + "IiXSwiaWF0IjoxNjgzNTQxNTg4LCJleHAiOjE2ODM1NDUxODh9."
                     + "o8lfs7A_MgRqAczP_7PUmjpkGJh4h0Z7LTVqtjDdlpo";
-    private User user;
-    private JwtTokenProvider jwtTokenProvider;
-    private UserDetailsService userDetailsService;
+    private static User user;
+    private static JwtTokenProvider jwtTokenProvider;
+    private static UserDetailsService userDetailsService;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void beforeAll() {
         userDetailsService = Mockito.mock(UserDetailsService.class);
         jwtTokenProvider = new JwtTokenProvider(userDetailsService);
         ReflectionTestUtils.setField(jwtTokenProvider,
@@ -39,10 +39,12 @@ class JwtTokenProviderTest {
                 "validityInMilliseconds", EXPIRE_LENGTH);
         jwtTokenProvider.init();
 
+        Role userRole = new Role(Role.RoleName.USER);
+
         user = new User();
+        user.setRoles(Set.of(userRole));
         user.setEmail(USER_EMAIL);
         user.setPassword(USER_PASSWORD);
-        user.setRoles(Set.of(new Role(Role.RoleName.USER)));
     }
 
     @Test

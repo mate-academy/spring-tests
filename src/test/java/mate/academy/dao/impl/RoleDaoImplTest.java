@@ -5,6 +5,7 @@ import mate.academy.dao.RoleDao;
 import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,8 +13,8 @@ class RoleDaoImplTest extends AbstractTest {
     private static final long ADMIN_ROLE_ID = 1L;
     private static final long USER_ROLE_ID = 2L;
     private static final String NON_EXIST_ROLE = "CUSTOMER";
-    private Role adminRole;
-    private Role userRole;
+    private static Role adminRole;
+    private static Role userRole;
     private RoleDao roleDao;
 
     @Override
@@ -21,15 +22,19 @@ class RoleDaoImplTest extends AbstractTest {
         return new Class[] {Role.class};
     }
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void beforeAll() {
         adminRole = new Role(Role.RoleName.ADMIN);
         userRole = new Role(Role.RoleName.USER);
+    }
+
+    @BeforeEach
+    void setUp() {
         roleDao = new RoleDaoImpl(getSessionFactory());
     }
 
     @Test
-    void save_Ok() {
+    void save_validRoles_Ok() {
         Role actualAdmin = roleDao.save(adminRole);
         Role actualUser = roleDao.save(userRole);
         Assertions.assertNotNull(actualAdmin);

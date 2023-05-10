@@ -2,7 +2,7 @@ package mate.academy.validation;
 
 import javax.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -17,11 +17,11 @@ class EmailValidatorTest {
     private static final String INVALID_EMAIL_3 = "john smith@me.com";
     private static final String INVALID_EMAIL_4 = "john.smith@ me.com";
     private static final String INVALID_EMAIL_5 = "john.smith@me.";
-    private EmailValidator emailValidator;
-    private ConstraintValidatorContext constraintValidatorContext;
+    private static EmailValidator emailValidator;
+    private static ConstraintValidatorContext constraintValidatorContext;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void beforeAll() {
         emailValidator = new EmailValidator();
         constraintValidatorContext = Mockito.mock(ConstraintValidatorContext.class);
     }

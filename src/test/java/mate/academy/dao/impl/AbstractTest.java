@@ -19,7 +19,7 @@ public abstract class AbstractTest {
         }
 
         enum Database {
-            HSQLDB,
+            HSQLDB
         }
 
         String hibernateDialect();

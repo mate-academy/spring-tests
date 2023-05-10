@@ -9,6 +9,7 @@ import mate.academy.dao.UserDao;
 import mate.academy.model.Role;
 import mate.academy.model.User;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,6 +22,8 @@ class UserDaoImplTest extends AbstractTest {
     private static final String USER_PASSWORD = "87654321";
     private static final String NON_EXIST_EMAIL = "mary@me.com";
     private static final long NOT_EXIST_ID = 7L;
+    private static Role adminRole;
+    private static Role userRole;
     private User admin;
     private User user;
     private UserDao userDao;
@@ -30,22 +33,28 @@ class UserDaoImplTest extends AbstractTest {
         return new Class[] {Role.class, User.class};
     }
 
+    @BeforeAll
+    static void beforeAll() {
+        adminRole = new Role(Role.RoleName.ADMIN);
+        userRole = new Role(Role.RoleName.USER);
+    }
+
     @BeforeEach
     void setUp() {
         userDao = new UserDaoImpl(getSessionFactory());
         RoleDao roleDao = new RoleDaoImpl(getSessionFactory());
         admin = new User();
-        admin.setRoles(Set.of(roleDao.save(new Role(Role.RoleName.ADMIN))));
+        admin.setRoles(Set.of(roleDao.save(adminRole)));
         admin.setEmail(ADMIN_EMAIL);
         admin.setPassword(ADMIN_PASSWORD);
         user = new User();
-        user.setRoles(Set.of(roleDao.save(new Role(Role.RoleName.USER))));
+        user.setRoles(Set.of(roleDao.save(userRole)));
         user.setEmail(USER_EMAIL);
         user.setPassword(USER_PASSWORD);
     }
 
     @Test
-    void save_Ok() {
+    void save_validUsers_Ok() {
         User actualAdmin = userDao.save(admin);
         User actualUser = userDao.save(user);
         Assertions.assertNotNull(actualAdmin);

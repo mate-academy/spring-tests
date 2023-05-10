@@ -7,7 +7,7 @@ import mate.academy.model.Role;
 import mate.academy.model.User;
 import mate.academy.service.UserService;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,24 +18,25 @@ class UserServiceImplTest {
     private static final String USER_PASSWORD = "12345678";
     private static final long NON_EXIST_ID = 7L;
     private static final String NON_EXIST_EMAIL = "mary@me.com";
-    private User user;
-    private UserDao userDao;
-    private UserService userService;
+    private static User user;
+    private static UserDao userDao;
+    private static UserService userService;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void beforeAll() {
+        Role adminRole = new Role(Role.RoleName.ADMIN);
+
         user = new User();
-        user.setId(USER_ID);
+        user.setRoles(Set.of(adminRole));
         user.setEmail(USER_EMAIL);
         user.setPassword(USER_PASSWORD);
-        user.setRoles(Set.of(new Role(Role.RoleName.ADMIN)));
         userDao = Mockito.mock(UserDao.class);
         PasswordEncoder passwordEncoder = Mockito.mock(PasswordEncoder.class);
         userService = new UserServiceImpl(userDao, passwordEncoder);
     }
 
     @Test
-    void save_Ok() {
+    void save_validUser_Ok() {
         Mockito.when(userDao.save(user)).thenReturn(user);
         User actual = userService.save(user);
         Assertions.assertNotNull(actual);
@@ -47,7 +48,7 @@ class UserServiceImplTest {
 
     @Test
     void findById_existId_Ok() {
-        long existId = user.getId();
+        long existId = USER_ID;
         Mockito.when(userDao.findById(existId)).thenReturn(Optional.of(user));
         Optional<User> actual = userService.findById(existId);
         Assertions.assertTrue(actual.isPresent());
