@@ -1,7 +1,7 @@
-package mate.academy.dao.impl;
+package mate.academy.impl;
 
 import java.util.Optional;
-import mate.academy.dao.UserDao;
+import mate.academy.UserDao;
 import mate.academy.exception.DataProcessingException;
 import mate.academy.model.User;
 import org.hibernate.Session;
