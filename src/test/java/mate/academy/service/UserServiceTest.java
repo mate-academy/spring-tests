@@ -34,48 +34,47 @@ class UserServiceTest {
 
     @Test
     void save_Ok() {
-        userDao.save(actualUser);
         Mockito.when(userDao.save(actualUser)).thenReturn(actualUser);
         Mockito.when(passwordEncoder.encode(PASSWORD)).thenReturn(PASSWORD);
         User savedUser = userService.save(actualUser);
         Assertions.assertEquals(savedUser.getEmail(), EMAIL);
+        Mockito.verify(userDao).save(actualUser);
+        Mockito.verify(passwordEncoder).encode(PASSWORD);
     }
 
     @Test
     void findById_Ok() {
-        userDao.save(actualUser);
         Mockito.when(userDao.findById(actualUser.getId())).thenReturn(Optional.of(actualUser));
         User userId = userService.findById(actualUser.getId()).orElseThrow();
         Assertions.assertEquals(userId.getId(), actualUser.getId());
+        Mockito.verify(userDao).findById(actualUser.getId());
     }
 
     @Test
     void findByEmail_Ok() {
-        userDao.save(actualUser);
         Mockito.when(userDao.findByEmail(actualUser.getEmail()))
                 .thenReturn(Optional.of(actualUser));
         User userEmail = userService.findByEmail(actualUser.getEmail()).orElseThrow();
         Assertions.assertEquals(userEmail.getEmail(), actualUser.getEmail());
+        Mockito.verify(userDao).findByEmail(actualUser.getEmail());
     }
 
     @Test
     void save_NotOk() {
-        userDao.save(actualUser);
         Mockito.when(userDao.save(actualUser)).thenReturn(null);
         Mockito.when(passwordEncoder.encode(PASSWORD)).thenReturn(PASSWORD);
         Assertions.assertNull(userService.save(actualUser));
+        Mockito.verify(userDao).save(actualUser);
     }
 
     @Test
     void findById_NullId_NotOk() {
-        userDao.save(actualUser);
         Mockito.when(userDao.findById(Mockito.anyLong())).thenReturn(Optional.empty());
         Assertions.assertTrue(userService.findById(null).isEmpty());
     }
 
     @Test
     void findById_WrongId_NotOk() {
-        userDao.save(actualUser);
         Mockito.when(userDao.findById(WRONG_ID)).thenReturn(Optional.empty());
         Assertions.assertTrue(userService.findById(WRONG_ID).isEmpty());
     }
@@ -83,14 +82,12 @@ class UserServiceTest {
     @Test
     void findByEmail_EmptyEmail_NotOk() {
         actualUser.setEmail("");
-        userDao.save(actualUser);
         Mockito.when(userDao.findByEmail("")).thenReturn(Optional.empty());
         Assertions.assertTrue(userService.findByEmail("").isEmpty());
     }
 
     @Test
     void findByEmail_WrongEmail_NotOk() {
-        userDao.save(actualUser);
         Mockito.when(userDao.findByEmail(WRONG_EMAIL)).thenReturn(Optional.empty());
         Assertions.assertTrue(userService.findByEmail(WRONG_EMAIL).isEmpty());
     }

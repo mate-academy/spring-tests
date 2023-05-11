@@ -68,13 +68,10 @@ class UserDaoTest extends AbstractTest {
 
     @Test
     void findByEmail_NotFound_NotOk() {
-        try {
-            actualUser = userDao.save(getUserForTest());
-            if (userDao.findByEmail(EMAIL).isEmpty()) {
-                Assertions.fail("Expected to receive DataProcessingException");
-            }
-        } catch (DataProcessingException e) {
-            Assertions.assertEquals("Couldn't get user by email: ", e.getMessage());
+        userDao.save(getUserForTest());
+        Optional<User> savedUser = userDao.findByEmail(EMAIL);
+        if (savedUser.isEmpty()) {
+            Assertions.fail("Couldn't get user by email: " + EMAIL);
         }
     }
 

@@ -27,7 +27,7 @@ class CustomUserDetailsServiceTest {
 
     @Test
     void loadUserByUsername_Ok() {
-        User user = loadUserForTest();
+        User user = createTestUser();
         Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(EMAIL);
         Assertions.assertNotNull(userDetails);
@@ -37,7 +37,7 @@ class CustomUserDetailsServiceTest {
 
     @Test
     void loadUserByUsername_UsernameNotFound() {
-        User user = loadUserForTest();
+        User user = createTestUser();
         Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
         try {
             customUserDetailsService.loadUserByUsername(WRONG_EMAIL);
@@ -54,7 +54,7 @@ class CustomUserDetailsServiceTest {
                 () -> customUserDetailsService.loadUserByUsername(null));
     }
 
-    private User loadUserForTest() {
+    private User createTestUser() {
         User test = new User();
         test.setEmail(EMAIL);
         test.setPassword(PASSWORD);

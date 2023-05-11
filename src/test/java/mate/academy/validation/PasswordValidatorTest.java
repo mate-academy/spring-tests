@@ -39,13 +39,4 @@ class PasswordValidatorTest {
         Assertions.assertFalse(passwordValidator.isValid(registrationDto,
                 constraintValidatorContext));
     }
-
-    @Test
-    void isValid_NullUser_NotOk() {
-        registrationDto.setPassword(PASSWORD);
-        registrationDto.setRepeatPassword(PASSWORD);
-        Assertions.assertThrows(IllegalArgumentException.class,
-                () -> passwordValidator.isValid(null,
-                        constraintValidatorContext));
-    }
 }

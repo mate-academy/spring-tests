@@ -20,37 +20,32 @@ class RoleDaoTest extends AbstractTest {
     @BeforeEach
     void setUp() {
         roleDao = new RoleDaoImpl(getSessionFactory());
+        userRole = roleDao.save(new Role(Role.RoleName.USER));
+        adminRole = roleDao.save(new Role(Role.RoleName.ADMIN));
     }
 
     @Test
     void save_saveRoles_Ok() {
-        userRole = roleDao.save(new Role(Role.RoleName.USER));
-        adminRole = roleDao.save(new Role(Role.RoleName.ADMIN));
         Assertions.assertEquals(1L, userRole.getId());
         Assertions.assertEquals(2L, adminRole.getId());
     }
 
     @Test
-    void save_saveRoleNull_Ok() {
-        userRole = roleDao.save(new Role(Role.RoleName.USER));
-        adminRole = roleDao.save(new Role(Role.RoleName.ADMIN));
+    void save_saveNullRole_NotOk() {
         Assertions.assertThrows(Exception.class, () -> roleDao.save(null));
     }
 
     @Test
     void getRoleByName_Ok() {
-        userRole = roleDao.save(new Role(Role.RoleName.USER));
         Role userRoleFromDb = roleDao.getRoleByName(userRole.getRoleName().name()).orElseThrow();
         assertRoleEquals(userRoleFromDb, userRole);
-        adminRole = roleDao.save(new Role(Role.RoleName.ADMIN));
+
         Role adminRoleFromDb = roleDao.getRoleByName(adminRole.getRoleName().name()).orElseThrow();
         assertRoleEquals(adminRoleFromDb, adminRole);
     }
 
     @Test
-    void getRoleByName_getNullRoleByName_NotOk() {
-        userRole = roleDao.save(new Role(Role.RoleName.USER));
-        adminRole = roleDao.save(new Role(Role.RoleName.ADMIN));
+    void getRoleByName_NullName_NotOk() {
         Assertions.assertThrows(DataProcessingException.class,
                 () -> roleDao.getRoleByName(null).orElseThrow());
     }

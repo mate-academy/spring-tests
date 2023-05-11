@@ -21,7 +21,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 class JwtTokenProviderTest {
     private static final String EMAIL = "tom@gmail.com";
     private static final String PASSWORD = "1234";
-    private static final String SECRET_KEY = "secret";
+    private static final String SECRET_KEY = "secretKey";
     private static final Long MILLISECONDS = 3600000L;
     private JwtTokenProvider jwtTokenProvider;
     private UserDetailsService userDetailsService;
@@ -41,8 +41,15 @@ class JwtTokenProviderTest {
     @Test
     void init_Ok() {
         String expectedSecretKey = Base64.getEncoder().encodeToString(SECRET_KEY.getBytes());
+        ReflectionTestUtils.setField(jwtTokenProvider, SECRET_KEY, expectedSecretKey);
         jwtTokenProvider.init();
-        Assertions.assertEquals(expectedSecretKey, jwtTokenProvider.secretKey);
+
+        String actualSecretKey = (String) ReflectionTestUtils
+                .getField(jwtTokenProvider, SECRET_KEY);
+        Assertions.assertNotNull(actualSecretKey);
+        String decodedActualSecretKey = new String(Base64.getDecoder()
+                .decode(actualSecretKey));
+        Assertions.assertEquals(expectedSecretKey, decodedActualSecretKey);
     }
 
     @Test

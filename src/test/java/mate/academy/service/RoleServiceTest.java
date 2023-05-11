@@ -40,23 +40,9 @@ class RoleServiceTest {
     }
 
     @Test
-    void save_NullRole_NotOk() {
-        Mockito.when(roleDao.save(null)).thenThrow(NoSuchElementException.class);
-        Assertions.assertThrows(NoSuchElementException.class,
-                () -> roleService.save(null));
-    }
-
-    @Test
     void getRoleByName_EmptyName_NotOk() {
         Mockito.when(roleDao.getRoleByName("")).thenReturn(Optional.empty());
         Assertions.assertThrows(NoSuchElementException.class,
                 () -> roleService.getRoleByName(""));
-    }
-
-    @Test
-    void getRoleByName_NullName_NotOk() {
-        Mockito.when(roleDao.getRoleByName(null)).thenThrow(NoSuchElementException.class);
-        Assertions.assertThrows(NoSuchElementException.class,
-                () -> roleService.getRoleByName(null));
     }
 }

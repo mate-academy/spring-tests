@@ -8,7 +8,7 @@ import org.mockito.Mockito;
 
 class EmailValidatorTest {
     private static final String EMAIL = "tom@gmail.com";
-    private static final String WRONG_EMAIL = "alice@gmail.com";
+    private static final String WRONG_EMAIL = "$@alice@gmail@.com$";
     private EmailValidator emailValidator;
     private ConstraintValidatorContext constraintValidatorContext;
 
@@ -25,7 +25,7 @@ class EmailValidatorTest {
 
     @Test
     void isValid_NotOk() {
-        Assertions.assertTrue(emailValidator.isValid(WRONG_EMAIL, constraintValidatorContext));
+        Assertions.assertFalse(emailValidator.isValid(WRONG_EMAIL, constraintValidatorContext));
     }
 
     @Test
