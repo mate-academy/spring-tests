@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import io.jsonwebtoken.Jwts;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import mate.academy.model.Role;
@@ -34,14 +33,8 @@ class JwtTokenProviderTest {
         userDetailsService = Mockito.mock(UserDetailsService.class);
         jwtTokenProvider = new JwtTokenProvider(userDetailsService);
 
-        Field secretKey = JwtTokenProvider.class.getDeclaredField("secretKey");
-        secretKey.setAccessible(true);
-        secretKey.set(jwtTokenProvider, SECRET);
-
-        Field validityInMilliseconds =
-                JwtTokenProvider.class.getDeclaredField("validityInMilliseconds");
-        validityInMilliseconds.setAccessible(true);
-        validityInMilliseconds.setLong(jwtTokenProvider, VALIDITY_IN_MILLISECONDS);
+        jwtTokenProvider.setSecretKey(SECRET);
+        jwtTokenProvider.setValidityInMilliseconds(VALIDITY_IN_MILLISECONDS);
 
         roleList = new ArrayList<>();
         roleList.add(Role.RoleName.ADMIN.name());
