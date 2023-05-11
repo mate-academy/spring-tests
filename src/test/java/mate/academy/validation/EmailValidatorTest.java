@@ -2,28 +2,30 @@ package mate.academy.validation;
 
 import javax.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class EmailValidatorTest {
+    private static final String VALID_EMAIL = "bob@i.ua";
+    private static final String INVALID_EMAIL = "invalidEmail";
     private EmailValidator emailValidator;
-    private String validEmail = "bob@i.ua";
-    private String invalidEmail = "invalidEmail";
     private ConstraintValidatorContext constraintValidatorContext;
 
-    @BeforeEach
+    @BeforeAll
     void setUp() {
         emailValidator = new EmailValidator();
     }
 
     @Test
     void validate_Ok() {
-        Assertions.assertTrue(emailValidator.isValid(validEmail, constraintValidatorContext));
+        Assertions.assertTrue(emailValidator.isValid(VALID_EMAIL, constraintValidatorContext));
     }
 
     @Test
     void validate_invalidEmail_NotOk() {
-        Assertions.assertFalse(emailValidator.isValid(invalidEmail, constraintValidatorContext));
+        Assertions.assertFalse(emailValidator.isValid(INVALID_EMAIL, constraintValidatorContext));
     }
 
     @Test

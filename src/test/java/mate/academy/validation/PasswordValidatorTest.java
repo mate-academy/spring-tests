@@ -3,19 +3,21 @@ package mate.academy.validation;
 import javax.validation.ConstraintValidatorContext;
 import mate.academy.model.dto.UserRegistrationDto;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mockito;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PasswordValidatorTest {
-    private String email = "bob@i.ua";
-    private String password = "123456";
+    private static final String EMAIL = "bob@i.ua";
+    private static final String PASSWORD = "123456";
     private PasswordValidator passwordValidator;
     private UserRegistrationDto userRegistrationDto;
     private ConstraintValidatorContext constraintValidatorContext;
     private Password constraintAnnotation;
 
-    @BeforeEach
+    @BeforeAll
     void setUp() {
         constraintValidatorContext = Mockito.mock(ConstraintValidatorContext.class);
         constraintAnnotation = Mockito.mock(Password.class);
@@ -28,9 +30,9 @@ class PasswordValidatorTest {
 
     @Test
     void isValid_Ok() {
-        userRegistrationDto.setEmail(email);
-        userRegistrationDto.setPassword(password);
-        userRegistrationDto.setRepeatPassword(password);
+        userRegistrationDto.setEmail(EMAIL);
+        userRegistrationDto.setPassword(PASSWORD);
+        userRegistrationDto.setRepeatPassword(PASSWORD);
         Assertions.assertTrue(passwordValidator
                 .isValid(userRegistrationDto, constraintValidatorContext));
     }

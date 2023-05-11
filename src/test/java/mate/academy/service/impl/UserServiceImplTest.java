@@ -12,12 +12,12 @@ import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 class UserServiceImplTest {
+    private static final String EMAIL = "bob@i.ua";
+    private static final String PASSWORD = "1234";
     private UserService userService;
     private UserDao userDao;
     private PasswordEncoder passwordEncoder;
     private User bob;
-    private String email = "bob@i.ua";
-    private String password = "1234";
 
     @BeforeEach
     void setUp() {
@@ -25,8 +25,8 @@ class UserServiceImplTest {
         passwordEncoder = Mockito.mock(PasswordEncoder.class);
         userService = new UserServiceImpl(userDao, passwordEncoder);
         bob = new User();
-        bob.setEmail(email);
-        bob.setPassword(password);
+        bob.setEmail(EMAIL);
+        bob.setPassword(PASSWORD);
     }
 
     @Test
@@ -39,11 +39,11 @@ class UserServiceImplTest {
 
     @Test
     void findByEmail_Ok() {
-        Mockito.when(userDao.findByEmail(email)).thenReturn(Optional.of(bob));
-        Optional<User> actual = userService.findByEmail(email);
+        Mockito.when(userDao.findByEmail(EMAIL)).thenReturn(Optional.of(bob));
+        Optional<User> actual = userService.findByEmail(EMAIL);
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(actual.get().getPassword(), password);
-        Assertions.assertEquals(actual.get().getEmail(), email);
+        Assertions.assertEquals(actual.get().getPassword(), PASSWORD);
+        Assertions.assertEquals(actual.get().getEmail(), EMAIL);
     }
 
     @Test
@@ -51,7 +51,7 @@ class UserServiceImplTest {
         Mockito.when(userDao.findById(bob.getId())).thenReturn(Optional.of(bob));
         Optional<User> actual = userService.findById(bob.getId());
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(actual.get().getPassword(), password);
+        Assertions.assertEquals(actual.get().getPassword(), PASSWORD);
         Assertions.assertEquals(actual.get().getId(), bob.getId());
     }
 

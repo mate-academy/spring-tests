@@ -13,8 +13,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class UserDaoImplTest extends AbstractTest {
-    private String email = "bob@i.ua";
-    private String password = "1234";
+    private static final String EMAIL = "bob@i.ua";
+    private static final String PASSWORD = "1234";
     private UserDao userDao;
     private RoleDao roleDao;
     private User bob;
@@ -31,8 +31,8 @@ class UserDaoImplTest extends AbstractTest {
         Role role = new Role(Role.RoleName.USER);
         roleDao.save(role);
         bob = new User();
-        bob.setEmail(email);
-        bob.setPassword(password);
+        bob.setEmail(EMAIL);
+        bob.setPassword(PASSWORD);
         bob.setRoles(Set.of(role));
     }
 
@@ -46,7 +46,7 @@ class UserDaoImplTest extends AbstractTest {
     @Test
     void findByEmail_Ok() {
         userDao.save(bob);
-        User actual = userDao.findByEmail(email).get();
+        User actual = userDao.findByEmail(EMAIL).get();
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(1L, actual.getId());
     }

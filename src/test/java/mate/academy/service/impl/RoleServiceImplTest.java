@@ -6,16 +6,18 @@ import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import mate.academy.service.RoleService;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mockito;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RoleServiceImplTest {
     private RoleService roleService;
     private RoleDao roleDao;
     private Role role;
 
-    @BeforeEach
+    @BeforeAll
     void setUp() {
         roleDao = Mockito.mock(RoleDao.class);
         roleService = new RoleServiceImpl(roleDao);

@@ -4,27 +4,29 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import mate.academy.model.Role;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mockito;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.util.ReflectionTestUtils;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class JwtTokenProviderTest {
-    private String email = "bob@i.ua";
-    private String password = "123456";
+    private static final String EMAIL = "bob@i.ua";
+    private static final String PASSWORD = "123456";
     private UserDetailsService userDetailsService;
     private JwtTokenProvider jwtTokenProvider;
     private String token;
 
-    @BeforeEach
+    @BeforeAll
     void setUp() {
         userDetailsService = Mockito.mock(UserDetailsService.class);
         jwtTokenProvider = new JwtTokenProvider(userDetailsService);
         ReflectionTestUtils.setField(jwtTokenProvider, "secretKey", "secret");
         ReflectionTestUtils.setField(jwtTokenProvider, "validityInMilliseconds", 3600000L);
-        token = jwtTokenProvider.createToken(email, List.of(Role.RoleName.USER.name()));
+        token = jwtTokenProvider.createToken(EMAIL, List.of(Role.RoleName.USER.name()));
     }
 
     @Test
@@ -34,17 +36,17 @@ class JwtTokenProviderTest {
 
     @Test
     void getAuthentication_Ok() {
-        User.UserBuilder userBuilder = User.withUsername(email);
-        userBuilder.password(password);
+        User.UserBuilder userBuilder = User.withUsername(EMAIL);
+        userBuilder.password(PASSWORD);
         userBuilder.roles(Role.RoleName.USER.name());
-        Mockito.when(userDetailsService.loadUserByUsername(email))
+        Mockito.when(userDetailsService.loadUserByUsername(EMAIL))
                 .thenReturn(userBuilder.build());
         Assertions.assertNotNull(jwtTokenProvider.getAuthentication(token));
     }
 
     @Test
     void getUsername_Ok() {
-        Assertions.assertEquals(jwtTokenProvider.getUsername(token), email);
+        Assertions.assertEquals(jwtTokenProvider.getUsername(token), EMAIL);
     }
 
     @Test
