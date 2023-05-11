@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,10 +24,14 @@ public class JwtTokenProvider {
     private String secretKey;
     @Value("${security.jwt.token.expire-length:3600000}")
     private long validityInMilliseconds;
-    private final UserDetailsService userDetailsService;
+    private UserDetailsService userDetailsService;
 
+    @Autowired
     public JwtTokenProvider(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
+    }
+
+    public JwtTokenProvider() {
     }
 
     @PostConstruct
@@ -72,5 +77,13 @@ public class JwtTokenProvider {
         } catch (JwtException | IllegalArgumentException e) {
             throw new RuntimeException("Expired or invalid JWT token", e);
         }
+    }
+
+    public void setSecretKey(String secretKey) {
+        this.secretKey = secretKey;
+    }
+
+    public void setValidityInMilliseconds(long validityInMilliseconds) {
+        this.validityInMilliseconds = validityInMilliseconds;
     }
 }
