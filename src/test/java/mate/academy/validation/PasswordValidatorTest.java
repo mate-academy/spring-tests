@@ -1,8 +1,11 @@
 package mate.academy.validation;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
+
 import javax.validation.ConstraintValidatorContext;
 import mate.academy.model.dto.UserRegistrationDto;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,8 +27,8 @@ class PasswordValidatorTest {
         constraintValidatorContext = Mockito.mock(ConstraintValidatorContext.class);
         passwordValidator = new PasswordValidator();
         constraintAnnotation = Mockito.mock(Password.class);
-        Mockito.when(constraintAnnotation.field()).thenReturn("password");
-        Mockito.when(constraintAnnotation.fieldMatch()).thenReturn("repeatPassword");
+        when(constraintAnnotation.field()).thenReturn("password");
+        when(constraintAnnotation.fieldMatch()).thenReturn("repeatPassword");
         passwordValidator.initialize(constraintAnnotation);
     }
 
@@ -39,13 +42,13 @@ class PasswordValidatorTest {
     @Test
     void isValid_ok() {
         boolean actual = passwordValidator.isValid(registrationDto, constraintValidatorContext);
-        Assertions.assertTrue(actual);
+        assertTrue(actual);
     }
 
     @Test
     void isValid_notOk() {
         registrationDto.setRepeatPassword(WRONG_PASSWORD);
         boolean actual = passwordValidator.isValid(registrationDto, constraintValidatorContext);
-        Assertions.assertFalse(actual);
+        assertFalse(actual);
     }
 }

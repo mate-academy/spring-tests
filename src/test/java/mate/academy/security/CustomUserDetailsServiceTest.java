@@ -1,11 +1,14 @@
 package mate.academy.security;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.util.Optional;
 import java.util.Set;
 import mate.academy.model.Role;
 import mate.academy.model.User;
 import mate.academy.service.UserService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -16,7 +19,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 class CustomUserDetailsServiceTest {
     private static final String EMAIL = "bob@i.ua";
     private static final String PASSWORD = "111111111";
-    private static final String WRONG_EMAIL = "alice@i.ua";
     private UserDetailsService userDetailsService;
     private UserService userService;
     private User user;
@@ -36,20 +38,16 @@ class CustomUserDetailsServiceTest {
         Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
 
         UserDetails actual = userDetailsService.loadUserByUsername(EMAIL);
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(EMAIL, actual.getUsername());
-        Assertions.assertEquals(PASSWORD, actual.getPassword());
+        assertNotNull(actual);
+        assertEquals(EMAIL, actual.getUsername());
+        assertEquals(PASSWORD, actual.getPassword());
     }
 
     @Test
     void loadUserByUsername_UserNotFound() {
-        Mockito.when(userService.findByEmail(WRONG_EMAIL)).thenReturn(Optional.of(user));
-        try {
+        Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.empty());
+        assertThrows(UsernameNotFoundException.class, () -> {
             userDetailsService.loadUserByUsername(EMAIL);
-        } catch (UsernameNotFoundException e) {
-            Assertions.assertEquals("User not found.", e.getMessage());
-            return;
-        }
-        Assertions.fail("Expected to be failed");
+        }, "UsernameNotFoundException expected");
     }
 }

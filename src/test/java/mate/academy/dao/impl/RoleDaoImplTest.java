@@ -1,10 +1,14 @@
 package mate.academy.dao.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import mate.academy.dao.RoleDao;
 import mate.academy.model.Role;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -27,23 +31,23 @@ class RoleDaoImplTest extends AbstractTest {
     @Test
     void save_ok() {
         Role actual = roleDao.save(role);
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(1L, actual.getId());
+        assertNotNull(actual);
+        assertEquals(1L, actual.getId());
     }
 
     @Test
     void getRoleByName_ok() {
         roleDao.save(role);
         Optional<Role> actual = roleDao.getRoleByName(Role.RoleName.USER.name());
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(actual.get().getRoleName(), Role.RoleName.USER);
+        assertTrue(actual.isPresent());
+        assertEquals(actual.get().getRoleName(), Role.RoleName.USER);
     }
 
     @Test
     void getRoleByName_notOk() {
         roleDao.save(role);
-        Assertions.assertThrows(NoSuchElementException.class, () -> {
-            roleDao.getRoleByName(Role.RoleName.ADMIN.name()).get();
+        assertThrows(NoSuchElementException.class, () -> {
+            roleDao.getRoleByName(Role.RoleName.ADMIN.name()).orElseThrow();
         },"NoSuchElementException expected");
     }
 }

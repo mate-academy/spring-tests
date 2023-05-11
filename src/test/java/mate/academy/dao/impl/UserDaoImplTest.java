@@ -1,5 +1,10 @@
 package mate.academy.dao.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
@@ -7,7 +12,6 @@ import mate.academy.dao.RoleDao;
 import mate.academy.dao.UserDao;
 import mate.academy.model.Role;
 import mate.academy.model.User;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -45,40 +49,40 @@ class UserDaoImplTest extends AbstractTest {
     @Test
     void save_ok() {
         User actual = userDao.save(user);
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(ID, actual.getId());
+        assertNotNull(actual);
+        assertEquals(ID, actual.getId());
     }
 
     @Test
     void findByEmail_ok() {
         userDao.save(user);
         Optional<User> actual = userDao.findByEmail(EMAIL);
-        Assertions.assertNotNull(actual.get());
-        Assertions.assertEquals(actual.get().getId(), ID);
-        Assertions.assertEquals(actual.get().getEmail(), EMAIL);
-        Assertions.assertEquals(actual.get().getPassword(), PASSWORD);
+        assertTrue(actual.isPresent());
+        assertEquals(actual.get().getId(), ID);
+        assertEquals(actual.get().getEmail(), EMAIL);
+        assertEquals(actual.get().getPassword(), PASSWORD);
     }
 
     @Test
     void findByEmail_notOk() {
         userDao.save(user);
-        Assertions.assertThrows(NoSuchElementException.class, () -> {
-            userDao.findByEmail(ERROR).get();
+        assertThrows(NoSuchElementException.class, () -> {
+            userDao.findByEmail(ERROR).orElseThrow();
         }, "NoSuchElementException expected");
     }
 
     @Test
     void findById_Ok() {
         userDao.save(user);
-        User actual = userDao.findById(ID).get();
-        Assertions.assertNotNull(actual);
+        User actual = userDao.findById(ID).orElseThrow();
+        assertNotNull(actual);
     }
 
     @Test
     void findById_NotOk() {
         userDao.save(user);
-        Assertions.assertThrows(NoSuchElementException.class, () -> {
-            userDao.findById(WRONG_ID).get();
+        assertThrows(NoSuchElementException.class, () -> {
+            userDao.findById(WRONG_ID).orElseThrow();
         }, "NoSuchElementException expected");
     }
 }

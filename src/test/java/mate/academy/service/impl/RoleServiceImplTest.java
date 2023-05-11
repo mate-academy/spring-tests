@@ -1,11 +1,15 @@
 package mate.academy.service.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
+
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import mate.academy.dao.RoleDao;
 import mate.academy.model.Role;
 import mate.academy.service.RoleService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -28,30 +32,30 @@ class RoleServiceImplTest {
 
     @Test
     void save_ok() {
-        Mockito.when(roleDao.save(role)).thenReturn(new Role(ID, Role.RoleName.USER));
+        when(roleDao.save(role)).thenReturn(new Role(ID, Role.RoleName.USER));
 
         Role actual = roleService.save(role);
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(ID, actual.getId());
+        assertNotNull(actual);
+        assertEquals(ID, actual.getId());
     }
 
     @Test
     void getRoleByName_ok() {
-        Mockito.when(roleDao.getRoleByName(role.getRoleName().name()))
+        when(roleDao.getRoleByName(role.getRoleName().name()))
                 .thenReturn(Optional.of(new Role(ID, Role.RoleName.USER)));
 
         Role actual = roleService.getRoleByName(Role.RoleName.USER.name());
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(ID, actual.getId());
+        assertNotNull(actual);
+        assertEquals(ID, actual.getId());
     }
 
     @Test
     void getRoleByName_notOk() {
-        Mockito.when(roleDao.getRoleByName("ADMIN"))
-                .thenReturn(Optional.of(new Role(ID, Role.RoleName.USER)));
+        when(roleDao.getRoleByName(Role.RoleName.ADMIN.name()))
+                .thenReturn(Optional.empty());
 
-        Assertions.assertThrows(NoSuchElementException.class, () -> {
-            roleService.getRoleByName(Role.RoleName.USER.name());
+        assertThrows(NoSuchElementException.class, () -> {
+            roleService.getRoleByName(Role.RoleName.ADMIN.name());
         }, "NoSuchElementException expected");
     }
 }

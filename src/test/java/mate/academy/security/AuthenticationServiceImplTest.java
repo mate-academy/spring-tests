@@ -1,6 +1,11 @@
 package mate.academy.security;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 import java.util.Set;
@@ -9,7 +14,6 @@ import mate.academy.model.Role;
 import mate.academy.model.User;
 import mate.academy.service.RoleService;
 import mate.academy.service.UserService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,35 +51,35 @@ class AuthenticationServiceImplTest {
 
     @Test
     void register_ok() {
-        Mockito.when(roleService.getRoleByName(Role.RoleName.USER.name()))
+        when(roleService.getRoleByName(Role.RoleName.USER.name()))
                 .thenReturn(new Role(Role.RoleName.USER));
-        Mockito.when(userService.save(any())).thenReturn(user);
+        when(userService.save(any())).thenReturn(user);
 
         User actual = authenticationService.register(EMAIL, PASSWORD);
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(ID, actual.getId());
-        Assertions.assertEquals(EMAIL, actual.getEmail());
-        Assertions.assertEquals(PASSWORD, actual.getPassword());
+        assertNotNull(actual);
+        assertEquals(ID, actual.getId());
+        assertEquals(EMAIL, actual.getEmail());
+        assertEquals(PASSWORD, actual.getPassword());
     }
 
     @Test
     void login_ok() {
         user.setPassword(passwordEncoder.encode(PASSWORD));
-        Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
+        when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
         User actual = null;
         try {
             actual = authenticationService.login(EMAIL, PASSWORD);
         } catch (AuthenticationException e) {
-            Assertions.fail();
+            fail();
         }
-        Assertions.assertEquals(EMAIL, actual.getEmail());
+        assertEquals(EMAIL, actual.getEmail());
     }
 
     @Test
     void login_notOk() {
         user.setPassword(passwordEncoder.encode(PASSWORD));
-        Mockito.when(userService.findByEmail("ERROR")).thenReturn(Optional.of(user));
-        Assertions.assertThrows(AuthenticationException.class, () -> {
+        when(userService.findByEmail("ERROR")).thenReturn(Optional.of(user));
+        assertThrows(AuthenticationException.class, () -> {
             authenticationService.login(EMAIL, PASSWORD);
         }, "AuthenticationException expected");
     }

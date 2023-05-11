@@ -1,5 +1,10 @@
 package mate.academy.service.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
+
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
@@ -7,7 +12,6 @@ import mate.academy.dao.UserDao;
 import mate.academy.model.Role;
 import mate.academy.model.User;
 import mate.academy.service.UserService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -43,56 +47,56 @@ class UserServiceImplTest {
 
     @Test
     void save_ok() {
-        Mockito.when(passwordEncoder.encode(user.getPassword())).thenReturn(HASHED_PASSWORD);
-        Mockito.when(userDao.save(user)).thenReturn(new User(ID, EMAIL,
+        when(passwordEncoder.encode(user.getPassword())).thenReturn(HASHED_PASSWORD);
+        when(userDao.save(user)).thenReturn(new User(ID, EMAIL,
                 HASHED_PASSWORD, Set.of(role)));
         User actual = userService.save(user);
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(ID, actual.getId());
-        Assertions.assertEquals(EMAIL, actual.getEmail());
-        Assertions.assertEquals(HASHED_PASSWORD, actual.getPassword());
-        Assertions.assertEquals(Set.of(role), actual.getRoles());
+        assertNotNull(actual);
+        assertEquals(ID, actual.getId());
+        assertEquals(EMAIL, actual.getEmail());
+        assertEquals(HASHED_PASSWORD, actual.getPassword());
+        assertEquals(Set.of(role), actual.getRoles());
     }
 
     @Test
     void findByEmail_ok() {
-        Mockito.when(userDao.findByEmail(EMAIL)).thenReturn(Optional.of(new User(ID, EMAIL,
+        when(userDao.findByEmail(EMAIL)).thenReturn(Optional.of(new User(ID, EMAIL,
                 HASHED_PASSWORD, Set.of(role))));
-        User actual = userService.findByEmail(EMAIL).get();
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(ID, actual.getId());
-        Assertions.assertEquals(EMAIL, actual.getEmail());
-        Assertions.assertEquals(HASHED_PASSWORD, actual.getPassword());
-        Assertions.assertEquals(Set.of(role), actual.getRoles());
+        User actual = userService.findByEmail(EMAIL).orElseThrow();
+        assertNotNull(actual);
+        assertEquals(ID, actual.getId());
+        assertEquals(EMAIL, actual.getEmail());
+        assertEquals(HASHED_PASSWORD, actual.getPassword());
+        assertEquals(Set.of(role), actual.getRoles());
     }
 
     @Test
     void findByEmail_notOk() {
-        Mockito.when(userDao.findByEmail(EMAIL)).thenReturn(Optional.of(new User(ID, EMAIL,
+        when(userDao.findByEmail(EMAIL)).thenReturn(Optional.of(new User(ID, EMAIL,
                 HASHED_PASSWORD, Set.of(role))));
-        Assertions.assertThrows(NoSuchElementException.class, () -> {
-            userService.findByEmail(WRONG_EMAIL).get();
+        assertThrows(NoSuchElementException.class, () -> {
+            userService.findByEmail(WRONG_EMAIL).orElseThrow();
         }, "NoSuchElementException expected");
     }
 
     @Test
     void findById_Ok() {
-        Mockito.when(userDao.findById(ID)).thenReturn(Optional.of(new User(ID, EMAIL,
+        when(userDao.findById(ID)).thenReturn(Optional.of(new User(ID, EMAIL,
                 HASHED_PASSWORD, Set.of(role))));
-        User actual = userService.findById(ID).get();
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(ID, actual.getId());
-        Assertions.assertEquals(EMAIL, actual.getEmail());
-        Assertions.assertEquals(HASHED_PASSWORD, actual.getPassword());
-        Assertions.assertEquals(Set.of(role), actual.getRoles());
+        User actual = userService.findById(ID).orElseThrow();
+        assertNotNull(actual);
+        assertEquals(ID, actual.getId());
+        assertEquals(EMAIL, actual.getEmail());
+        assertEquals(HASHED_PASSWORD, actual.getPassword());
+        assertEquals(Set.of(role), actual.getRoles());
     }
 
     @Test
     void findById_NotOk() {
-        Mockito.when(userDao.findById(ID)).thenReturn(Optional.of(new User(ID, EMAIL,
+        when(userDao.findById(ID)).thenReturn(Optional.of(new User(ID, EMAIL,
                 HASHED_PASSWORD, Set.of(role))));
-        Assertions.assertThrows(NoSuchElementException.class, () -> {
-            userService.findById(WRONG_ID).get();
+        assertThrows(NoSuchElementException.class, () -> {
+            userService.findById(WRONG_ID).orElseThrow();
         }, "NoSuchElementException expected");
     }
 }
