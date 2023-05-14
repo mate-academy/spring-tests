@@ -1,5 +1,7 @@
 package mate.academy.security;
 
+import static org.mockito.ArgumentMatchers.any;
+
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
@@ -15,8 +17,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.util.ReflectionTestUtils;
-
-import static org.mockito.ArgumentMatchers.any;
 
 public class JwtTokenProviderTest {
     private UserDetailsService userDetailsService;

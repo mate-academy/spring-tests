@@ -1,12 +1,12 @@
 package mate.academy.validation;
 
+import javax.validation.ConstraintValidatorContext;
 import mate.academy.model.dto.UserRegistrationDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import javax.validation.ConstraintValidatorContext;
+import org.springframework.test.util.ReflectionTestUtils;
 
 public class PasswordValidatorTest {
     private PasswordValidator passwordValidator;
@@ -22,9 +22,8 @@ public class PasswordValidatorTest {
         userRegistrationDto.setPassword("password123");
         userRegistrationDto.setRepeatPassword("password123");
         password = Mockito.mock(Password.class);
-        Mockito.when(password.field()).thenReturn(userRegistrationDto.getPassword());
-        Mockito.when(password.fieldMatch()).thenReturn(userRegistrationDto.getRepeatPassword());
-        passwordValidator.initialize(password);
+        ReflectionTestUtils.setField(passwordValidator, "field", "password");
+        ReflectionTestUtils.setField(passwordValidator, "fieldMatch", "repeatPassword");
     }
 
     @Test
@@ -32,15 +31,16 @@ public class PasswordValidatorTest {
         Assertions.assertTrue(passwordValidator.isValid(userRegistrationDto, context),
                 "Expected valid passwords");
     }
+
     @Test
-    public void testInvalidPasswords() {
+    void isValid_invalidPasswords_notOk() {
         userRegistrationDto.setRepeatPassword("differentPassword");
         Assertions.assertFalse(passwordValidator.isValid(userRegistrationDto, context),
                 "Expected invalid passwords");
     }
 
     @Test
-    public void testNullPassword() {
+    void isValid_nullPassword_notOk() {
         userRegistrationDto.setPassword(null);
         Assertions.assertFalse(passwordValidator.isValid(userRegistrationDto, context),
                 "Expected invalid passwords");

@@ -1,8 +1,10 @@
 package mate.academy.security;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+
 import java.util.Optional;
 import java.util.Set;
-
 import mate.academy.exception.AuthenticationException;
 import mate.academy.model.Role;
 import mate.academy.model.User;
@@ -13,9 +15,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AuthenticationServiceImplTest {
     private AuthenticationService authenticationService;
@@ -35,7 +34,8 @@ public class AuthenticationServiceImplTest {
         userService = Mockito.mock(UserService.class);
         passwordEncoder = Mockito.mock(PasswordEncoder.class);
         Mockito.when(roleService.getRoleByName("USER")).thenReturn(role);
-        authenticationService = new AuthenticationServiceImpl(userService, roleService, passwordEncoder);
+        authenticationService =
+                new AuthenticationServiceImpl(userService, roleService, passwordEncoder);
     }
 
     @Test
