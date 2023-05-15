@@ -6,20 +6,20 @@ import mate.academy.model.Role;
 import mate.academy.model.User;
 import mate.academy.service.UserService;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 public class CustomUserDetailsServiceTest {
-    private UserService userService;
-    private CustomUserDetailsService customUserDetailsService;
-    private User user;
-    private Role role;
+    private static UserService userService;
+    private static CustomUserDetailsService customUserDetailsService;
+    private static User user;
+    private static Role role;
 
-    @BeforeEach
-    void setup() {
+    @BeforeAll
+    static void setup() {
         user = new User();
         user.setEmail("test@test.com");
         user.setPassword("test");

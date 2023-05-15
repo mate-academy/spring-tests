@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import mate.academy.model.Role;
 import mate.academy.security.jwt.JwtTokenProvider;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.core.Authentication;
@@ -19,11 +19,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.util.ReflectionTestUtils;
 
 public class JwtTokenProviderTest {
-    private UserDetailsService userDetailsService;
-    private JwtTokenProvider jwtTokenProvider;
+    private static UserDetailsService userDetailsService;
+    private static JwtTokenProvider jwtTokenProvider;
 
-    @BeforeEach
-    public void setup() {
+    @BeforeAll
+    static void setup() {
         userDetailsService = Mockito.mock(UserDetailsService.class);
         jwtTokenProvider = new JwtTokenProvider(userDetailsService);
         jwtTokenProvider = Mockito.spy(jwtTokenProvider);

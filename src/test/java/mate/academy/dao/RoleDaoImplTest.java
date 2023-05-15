@@ -31,7 +31,7 @@ public class RoleDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void save_notOk() {
+    void save_invalidSession_notOk() {
         RoleDao roleDao1 = new RoleDaoImpl(null);
         Assertions.assertThrows(DataProcessingException.class, () ->
                 roleDao1.save(role));

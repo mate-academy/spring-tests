@@ -7,9 +7,11 @@ import mate.academy.dao.impl.UserDaoImpl;
 import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import mate.academy.model.User;
+import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 public class UserDaoImplTest extends AbstractTest {
     private UserDao userDao;
@@ -39,7 +41,8 @@ public class UserDaoImplTest extends AbstractTest {
 
     @Test
     void save_notOk() {
-        UserDao userDao1 = new UserDaoImpl(null);
+        SessionFactory sessionFactory = Mockito.mock(SessionFactory.class);
+        UserDao userDao1 = new UserDaoImpl(sessionFactory);
         Assertions.assertThrows(DataProcessingException.class, () ->
                 userDao1.save(user)
         );
@@ -59,7 +62,8 @@ public class UserDaoImplTest extends AbstractTest {
     void findById_notOk() {
         User expected = userDao.save(user);
         Long id = expected.getId();
-        UserDao userDao1 = new UserDaoImpl(null);
+        SessionFactory sessionFactory = Mockito.mock(SessionFactory.class);
+        UserDao userDao1 = new UserDaoImpl(sessionFactory);
         Assertions.assertThrows(DataProcessingException.class, () ->
                 userDao1.findById(id)
         );
@@ -80,7 +84,8 @@ public class UserDaoImplTest extends AbstractTest {
 
     @Test
     void findByEmail_sessionIsAbsent_notOk() {
-        UserDao userDao1 = new UserDaoImpl(null);
+        SessionFactory sessionFactory = Mockito.mock(SessionFactory.class);
+        UserDao userDao1 = new UserDaoImpl(sessionFactory);
         Assertions.assertThrows(DataProcessingException.class, () ->
                 userDao1.findByEmail(null).get()
         );

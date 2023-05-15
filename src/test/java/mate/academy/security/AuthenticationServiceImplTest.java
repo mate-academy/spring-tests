@@ -11,20 +11,20 @@ import mate.academy.model.User;
 import mate.academy.service.RoleService;
 import mate.academy.service.UserService;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class AuthenticationServiceImplTest {
-    private AuthenticationService authenticationService;
-    private RoleService roleService;
-    private UserService userService;
-    private PasswordEncoder passwordEncoder;
-    private User user;
+    private static AuthenticationService authenticationService;
+    private static RoleService roleService;
+    private static UserService userService;
+    private static PasswordEncoder passwordEncoder;
+    private static User user;
 
-    @BeforeEach
-    void setup() {
+    @BeforeAll
+    static void setup() {
         user = new User();
         user.setEmail("test@test.com");
         user.setPassword("test");
