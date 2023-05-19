@@ -1,7 +1,6 @@
-package mate.academy.dao.impl;
+package mate.academy.dao;
 
 import java.util.Optional;
-import mate.academy.dao.RoleDao;
 import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import org.hibernate.Session;
