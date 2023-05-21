@@ -41,12 +41,11 @@ class AuthenticationServiceImplTest {
     @Test
     void register_ok() {
         Mockito.when(roleService.getRoleByName(USER_ROLE)).thenReturn(new Role(Role.RoleName.USER));
-        Mockito.when(roleService.getRoleByName(any())).thenReturn(new Role(Role.RoleName.USER));
         Mockito.when(userService.save(any())).thenReturn(user);
-        User register = authenticationService.register(EMAIL, PASSWORD);
-        Assertions.assertEquals(user.getEmail(), register.getEmail());
-        Assertions.assertEquals(user.getPassword(), register.getPassword());
-        Assertions.assertEquals(user.getRoles(), register.getRoles());
+        User registered = authenticationService.register(EMAIL, PASSWORD);
+        Assertions.assertEquals(EMAIL, registered.getEmail());
+        Assertions.assertEquals(PASSWORD, registered.getPassword());
+        Assertions.assertEquals(user.getRoles(), registered.getRoles());
     }
 
     @Test

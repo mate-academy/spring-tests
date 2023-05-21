@@ -18,8 +18,6 @@ class UserDaoTest extends AbstractTest {
     private static final String ELLIS_PASSWORD = "123";
     private static final String EMPTY_EMAIL = "";
     private static final String NOT_EXIST_EMAIL = "skjdfnkjdsfn";
-    private static final Long CHECK_ID = 1L;
-    private static final Long NULL_ID = null;
     private UserDao userDao;
     private User bob;
     private User elis;
@@ -47,14 +45,14 @@ class UserDaoTest extends AbstractTest {
     }
 
     @Test
-    void save_saveRole_ok() {
+    void save_ok() {
         User actual = userDao.save(bob);
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(CHECK_ID, actual.getId());
+        Assertions.assertEquals(1L, actual.getId());
     }
 
     @Test
-    void findByEmail_twoUsersSavedGetRight_ok() {
+    void findByEmail_ok() {
         userDao.save(elis);
         Optional<User> actual = userDao.findByEmail(ELLIS_EMAIL);
         Assertions.assertTrue(actual.isPresent());
@@ -62,17 +60,17 @@ class UserDaoTest extends AbstractTest {
     }
 
     @Test
-    void findById_twoUsersSavedGetRight_ok() {
-        userDao.save(elis);
-        Optional<User> actual = userDao.findById(CHECK_ID);
+    void findById_ok() {
+        elis = userDao.save(elis);
+        Optional<User> actual = userDao.findById(elis.getId());
         Assertions.assertTrue(actual.isPresent());
-        Assertions.assertEquals(CHECK_ID, actual.get().getId());
+        Assertions.assertEquals(1L, actual.get().getId());
     }
 
     @Test
     void findById_nullId_NotOk() {
         Assertions.assertThrows(DataProcessingException.class,
-                () -> userDao.findById(NULL_ID));
+                () -> userDao.findById(null));
     }
 
     @Test

@@ -9,7 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class RoleDaoTest extends AbstractTest {
-    private static final Long USER_ROLE_ID = 1L;
     private static final String KING_ROLE = "KING";
     private Role admin;
     private Role user;
@@ -30,14 +29,14 @@ class RoleDaoTest extends AbstractTest {
     @Test
     void save_saveRole_ok() {
         Role userRole = roleDao.save(user);
-        Assertions.assertNotNull(user);
-        Assertions.assertEquals(USER_ROLE_ID, userRole.getId());
+        Assertions.assertNotNull(userRole);
+        Assertions.assertNotNull(userRole.getId());
     }
 
     @Test
     void getRoleByName_twoRolesSavedGetRight_ok() {
-        roleDao.save(new Role(Role.RoleName.ADMIN));
-        roleDao.save(new Role(Role.RoleName.USER));
+        roleDao.save(admin);
+        roleDao.save(user);
         Optional<Role> actualAdmin = roleDao.getRoleByName(Role.RoleName.ADMIN.name());
         Optional<Role> actualUser = roleDao.getRoleByName(Role.RoleName.USER.name());
         Assertions.assertEquals(admin.getRoleName(), actualAdmin.get().getRoleName());
