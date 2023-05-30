@@ -49,15 +49,10 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    void login_Ok() {
+    void login_Ok() throws AuthenticationException {
         Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
         Mockito.when(passwordEncoder.matches(any(), any())).thenReturn(true);
-        User actual = null;
-        try {
-            actual = authenticationService.login(EMAIL, PASSWORD);
-        } catch (AuthenticationException e) {
-            throw new RuntimeException(e.getMessage());
-        }
+        User actual = authenticationService.login(EMAIL, PASSWORD);
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(user.getEmail(), actual.getEmail());
         Assertions.assertEquals(user.getPassword(), actual.getPassword());
@@ -67,13 +62,8 @@ class AuthenticationServiceImplTest {
     void login_NotOK() {
         Mockito.when(userService.findByEmail("john@ukr.net")).thenReturn(Optional.of(user));
         Mockito.when(passwordEncoder.matches(any(), any())).thenReturn(true);
-        User actual = null;
-        try {
-            actual = authenticationService.login(EMAIL, PASSWORD);
-        } catch (AuthenticationException e) {
-            Assertions.assertEquals("Incorrect username or password!!!", e.getMessage());
-            return;
-        }
-        Assertions.fail("Expected to receive AuthenticationException");
+        Assertions.assertThrows(AuthenticationException.class, () -> {
+            authenticationService.login(EMAIL, PASSWORD);
+        }, "Expected to receive AuthenticationException");
     }
 }

@@ -66,7 +66,6 @@ class UserDaoTest extends AbstractTest {
         assertTrue(optionalUser.isPresent());
         assertEquals(user.getEmail(), optionalUser.get().getEmail());
         assertEquals(user.getPassword(), optionalUser.get().getPassword());
-
     }
 
     @Test
