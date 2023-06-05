@@ -43,6 +43,7 @@ class AuthenticationServiceImplTest {
                 .thenReturn(new Role(Role.RoleName.USER));
         Mockito.when(userService.save(any())).thenReturn(testUser);
         User actual = authenticationService.register(VALID_EMAIL, VALID_PASSWORD);
+        Assertions.assertNotNull(actual);
         Assertions.assertEquals(testUser, actual);
     }
     
