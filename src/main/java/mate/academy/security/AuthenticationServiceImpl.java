@@ -16,8 +16,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final PasswordEncoder passwordEncoder;
 
     public AuthenticationServiceImpl(UserService userService,
-                                     RoleService roleService,
-                                     PasswordEncoder passwordEncoder) {
+            RoleService roleService,
+            PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
