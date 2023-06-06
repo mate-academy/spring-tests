@@ -64,7 +64,7 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <version>5.3.7</version>
-        </dependency>
+        </dependency>        
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
@@ -130,6 +130,12 @@
     		<artifactId>byte-buddy</artifactId>
     		<version>1.14.4</version>
 		</dependency>
+		<dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>5.3.7</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
