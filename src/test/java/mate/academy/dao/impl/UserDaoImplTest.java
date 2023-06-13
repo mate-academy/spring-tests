@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.Set;
 import mate.academy.dao.RoleDao;
 import mate.academy.dao.UserDao;
+import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import mate.academy.model.User;
 import org.junit.jupiter.api.Assertions;
@@ -58,7 +59,7 @@ class UserDaoImplTest extends AbstractTest {
     @Test
     void save_saveNull_NotOk() {
         //assert
-        Assertions.assertThrows(Exception.class, () -> userDao.save(null));
+        Assertions.assertThrows(DataProcessingException.class, () -> userDao.save(null));
     }
 
     @Test
@@ -70,6 +71,7 @@ class UserDaoImplTest extends AbstractTest {
         Optional<User> actual = userDao.findByEmail(EMAIL);
 
         //assert
+        Assertions.assertTrue(actual.isPresent());
         Assertions.assertEquals(EMAIL, actual.get().getEmail());
         Assertions.assertEquals(PASSWORD, actual.get().getPassword());
     }
@@ -77,22 +79,19 @@ class UserDaoImplTest extends AbstractTest {
     @Test
     void findByEmail_notExistingEmail_NotOk() {
         //assert
-        Assertions.assertThrows(Exception.class,
-                () -> userDao.findByEmail(NOT_EXISTING_EMAIL).orElseThrow());
+        Assertions.assertFalse(userDao.findByEmail(NOT_EXISTING_EMAIL).isPresent());
     }
 
     @Test
     void findByEmail_emptyEmail_NotOk() {
         //assert
-        Assertions.assertThrows(Exception.class,
-                () -> userDao.findByEmail(EMPTY_EMAIL).orElseThrow());
+        Assertions.assertFalse(userDao.findByEmail(EMPTY_EMAIL).isPresent());
     }
 
     @Test
     void findByEmail_nullEmail_NotOk() {
         //assert
-        Assertions.assertThrows(Exception.class,
-                () -> userDao.findByEmail(null).orElseThrow());
+        Assertions.assertFalse(userDao.findByEmail(null).isPresent());
     }
 
     @Test
@@ -105,6 +104,7 @@ class UserDaoImplTest extends AbstractTest {
         Optional<User> actual = userDao.findById(expected);
 
         //assert
+        Assertions.assertTrue(actual.isPresent());
         Assertions.assertEquals(expected, actual.get().getId());
         Assertions.assertEquals(EMAIL, actual.get().getEmail());
         Assertions.assertEquals(PASSWORD, actual.get().getPassword());
@@ -113,14 +113,13 @@ class UserDaoImplTest extends AbstractTest {
     @Test
     void findById_notExistingId_NotOk() {
         //assert
-        Assertions.assertThrows(Exception.class,
-                () -> userDao.findById(NOT_EXISTING_ID).orElseThrow());
+        Assertions.assertFalse(userDao.findById(NOT_EXISTING_ID).isPresent());
     }
 
     @Test
     void findById_nullId_NotOk() {
         //assert
-        Assertions.assertThrows(Exception.class,
-                () -> userDao.findById(null).orElseThrow());
+        Assertions.assertThrows(DataProcessingException.class,
+                () -> userDao.findById(null));
     }
 }
