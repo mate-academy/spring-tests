@@ -82,7 +82,7 @@ public abstract class AbstractTest {
     protected abstract Class<?>[] entities();
 
     protected String[] packages() {
-        return null;
+        return new String[]{};
     }
 
     protected Interceptor interceptor() {
