@@ -36,7 +36,7 @@ class RoleDaoImplTest extends AbstractTest {
     @Test
     void save_saveNull_NotOk() {
         //assert
-        Assertions.assertThrows(Exception.class, () -> roleDao.save(null));
+        Assertions.assertThrows(DataProcessingException.class, () -> roleDao.save(null));
     }
 
     @Test
@@ -45,25 +45,20 @@ class RoleDaoImplTest extends AbstractTest {
         Role actualAdminRole = roleDao.getRoleByName(adminRole.getRoleName().name()).orElseThrow();
 
         //assert
-        assertRoleEquals(adminRole, actualAdminRole);
+        Assertions.assertEquals(adminRole, actualAdminRole);
     }
 
     @Test
     void getRoleByName_notValidName_NotOk() {
         //assert
         Assertions.assertThrows(DataProcessingException.class,
-                () -> roleDao.getRoleByName(MODERATOR_ROLE).orElseThrow());
+                () -> roleDao.getRoleByName(MODERATOR_ROLE));
     }
 
     @Test
     void getRoleByName_nullNameOk() {
         //assert
         Assertions.assertThrows(DataProcessingException.class,
-                () -> roleDao.getRoleByName(null).orElseThrow());
-    }
-
-    private void assertRoleEquals(Role excepted, Role actual) {
-        Assertions.assertEquals(excepted.getId(), actual.getId());
-        Assertions.assertEquals(excepted.getRoleName(), actual.getRoleName());
+                () -> roleDao.getRoleByName(null));
     }
 }
