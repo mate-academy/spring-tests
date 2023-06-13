@@ -59,7 +59,7 @@ class RoleServiceImplTest {
 
         //act & assert
         Assertions.assertThrows(NoSuchElementException.class,
-                () -> roleDao.getRoleByName(NOT_EXISTING_ROLE).orElseThrow());
+                () -> roleService.getRoleByName(NOT_EXISTING_ROLE));
         Mockito.verify(roleDao).getRoleByName(NOT_EXISTING_ROLE);
     }
 
@@ -71,7 +71,7 @@ class RoleServiceImplTest {
 
         //act & assert
         Assertions.assertThrows(NoSuchElementException.class,
-                () -> roleDao.getRoleByName(null).orElseThrow());
+                () -> roleService.getRoleByName(null));
         Mockito.verify(roleDao).getRoleByName(null);
     }
 }
