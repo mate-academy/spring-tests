@@ -17,7 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 class CustomUserDetailsServiceTest {
     private static final String EMAIL = "bob@i.ua";
     private static final String PASSWORD = "qwerty";
-    private static final String NOT_EXISTING_EMAIL = "fake@i.ua";
+    private static final String NOT_EXISTING_EMAIL = "alice@i.ua";
     private UserService userService;
     private UserDetailsService userDetailsService;
     private User user;
@@ -49,11 +49,13 @@ class CustomUserDetailsServiceTest {
     @Test
     void loadUserByUsername_usernameNotFound_NotOk() {
         //arrange
+        Mockito.when(userService.findByEmail(NOT_EXISTING_EMAIL)).thenReturn(Optional.empty());
+
+        //act & assert
         UsernameNotFoundException exception =
                 Assertions.assertThrows(UsernameNotFoundException.class,
                         () -> userDetailsService.loadUserByUsername(NOT_EXISTING_EMAIL));
-
-        //act & assert
         Assertions.assertEquals("User not found.", exception.getMessage());
+        Mockito.verify(userService).findByEmail(NOT_EXISTING_EMAIL);
     }
 }
