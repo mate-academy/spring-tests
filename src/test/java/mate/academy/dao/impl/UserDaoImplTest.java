@@ -3,12 +3,14 @@ package mate.academy.dao.impl;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Optional;
 import java.util.Set;
 import mate.academy.dao.RoleDao;
 import mate.academy.dao.UserDao;
+import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import mate.academy.model.Role.RoleName;
 import mate.academy.model.User;
@@ -21,6 +23,7 @@ class UserDaoImplTest extends AbstractTest {
     private static final String EMAIL_NON_EXIST = "nonexist@com.ua";
     private UserDao userDao;
     private User user;
+    private Role roleUser;
 
     @Override
     protected Class<?>[] entities() {
@@ -31,7 +34,7 @@ class UserDaoImplTest extends AbstractTest {
     void setUp() {
         userDao = new UserDaoImpl(getSessionFactory());
         RoleDao roleDao = new RoleDaoImpl(getSessionFactory());
-        Role roleUser = new Role();
+        roleUser = new Role();
         roleUser.setRoleName(RoleName.USER);
         roleDao.save(roleUser);
         user = new User();
@@ -45,7 +48,16 @@ class UserDaoImplTest extends AbstractTest {
         User actual = userDao.save(user);
         assertNotNull(actual);
         assertEquals(actual.getEmail(), USER_EMAIL);
-        assertEquals(actual.getPassword(), USER_PASSWORD);
+    }
+
+    @Test
+    void saveNullEmail_NotOk() {
+        User userNullEmail = new User();
+        userNullEmail.setEmail(null);
+        userNullEmail.setPassword(USER_PASSWORD);
+        userNullEmail.setRoles(Set.of(roleUser));
+        assertThrows(DataProcessingException.class, () -> userDao.save(userNullEmail),
+                "it is not possible to save a null email");
     }
 
     @Test

@@ -13,7 +13,7 @@ import mate.academy.model.Role;
 import mate.academy.model.User;
 import mate.academy.service.RoleService;
 import mate.academy.service.UserService;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -21,15 +21,15 @@ class AuthenticationServiceImplTest {
     private static final String ROLE_USER_NAME = "USER";
     private static final String USER_EMAIL = "test@com.ua";
     private static final String USER_PASSWORD = "password";
-    private UserService userService;
-    private RoleService roleService;
-    private AuthenticationService authenticationService;
-    private Role userRole;
-    private PasswordEncoder passwordEncoder;
-    private User testUser;
+    private static UserService userService;
+    private static RoleService roleService;
+    private static AuthenticationService authenticationService;
+    private static Role userRole;
+    private static PasswordEncoder passwordEncoder;
+    private static User testUser;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void setUp() {
         userRole = new Role(Role.RoleName.USER);
         testUser = new User();
         testUser.setEmail(USER_EMAIL);

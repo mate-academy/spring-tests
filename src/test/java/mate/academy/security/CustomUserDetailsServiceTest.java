@@ -12,7 +12,7 @@ import mate.academy.model.Role;
 import mate.academy.model.Role.RoleName;
 import mate.academy.model.User;
 import mate.academy.service.UserService;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,12 +22,12 @@ class CustomUserDetailsServiceTest {
     private static final String USER_EMAIL = "test@com.ua";
     private static final String USER_PASSWORD = "password";
     private static final String EMAIL_NON_EXIST = "nonexist@com.ua";
-    private UserDetailsService userDetailsService;
-    private UserService userService;
-    private User user;
+    private static UserDetailsService userDetailsService;
+    private static UserService userService;
+    private static User user;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void setUp() {
         userService = mock(UserService.class);
         userDetailsService = new CustomUserDetailsService(userService);
         user = new User();

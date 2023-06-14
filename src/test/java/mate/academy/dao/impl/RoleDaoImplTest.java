@@ -1,6 +1,8 @@
 package mate.academy.dao.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Optional;
@@ -29,6 +31,7 @@ class RoleDaoImplTest extends AbstractTest {
     @Test
     void save_Ok() {
         Role actual = roleDao.save(roleUser);
+        assertNotNull(actual);
         assertEquals(actual, roleUser);
     }
 
@@ -37,5 +40,11 @@ class RoleDaoImplTest extends AbstractTest {
         Optional<Role> actual = roleDao.getRoleByName(RoleName.USER.name());
         assertTrue(actual.isPresent());
         assertEquals(actual.get().getRoleName().name(), roleUser.getRoleName().name());
+    }
+
+    @Test
+    void getNonExistentRole_NotOk() {
+        Optional<Role> actual = roleDao.getRoleByName(RoleName.ADMIN.name());
+        assertFalse(actual.isPresent());
     }
 }

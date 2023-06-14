@@ -1,5 +1,6 @@
 package mate.academy.validation;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -41,5 +42,10 @@ class PasswordValidatorTest {
     void isValid_NotOk() {
         dto.setRepeatPassword(PASSWORD_VALUE_INVALID);
         assertFalse(passwordValidator.isValid(dto, context));
+    }
+
+    @Test
+    void passwordsMatched_Ok() {
+        assertEquals(dto.getPassword(), dto.getRepeatPassword());
     }
 }

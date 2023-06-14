@@ -11,7 +11,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,12 +25,12 @@ class JwtTokenProviderTest {
     private static final String ROLE_USER = "USER";
     private static final String ROLE_ADMIN = "ADMIN";
     private static final Long MILLISECONDS = 3600000L;
-    private UserDetailsService userDetailsService;
-    private JwtTokenProvider jwtTokenProvider;
-    private String token;
+    private static UserDetailsService userDetailsService;
+    private static JwtTokenProvider jwtTokenProvider;
+    private static String token;
 
-    @BeforeEach
-    void setUp() throws NoSuchFieldException, IllegalAccessException {
+    @BeforeAll
+    static void setUp() throws NoSuchFieldException, IllegalAccessException {
         userDetailsService = mock(UserDetailsService.class);
         jwtTokenProvider = new JwtTokenProvider(userDetailsService);
         Field secretField = JwtTokenProvider.class.getDeclaredField(SECRET_KEY);
