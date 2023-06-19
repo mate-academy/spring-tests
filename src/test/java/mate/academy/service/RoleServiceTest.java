@@ -24,21 +24,22 @@ class RoleServiceTest {
 
     @Test
     void saveRole_Ok() {
-        Mockito.when(roleDao.save(Mockito.any())).thenReturn(USER_ROLE);
+        Mockito.when(roleDao.save(USER_ROLE)).thenReturn(USER_ROLE);
         Role actualRole = roleService.save(USER_ROLE);
         Assertions.assertEquals(USER_ROLE, actualRole);
     }
 
     @Test
     void getRoleByName_Ok() {
-        roleService.save(USER_ROLE);
-        Mockito.when(roleDao.getRoleByName(Mockito.any())).thenReturn(Optional.of(USER_ROLE));
+        Mockito.when(roleDao.getRoleByName(USER_ROLE.getRoleName().name()))
+                .thenReturn(Optional.of(USER_ROLE));
         Role actualRole = roleService.getRoleByName(USER_ROLE.getRoleName().name());
         Assertions.assertEquals(USER_ROLE, actualRole);
     }
 
     @Test
     void getRoleByName_invalidName_notOk() {
+        Mockito.when(roleDao.getRoleByName(Mockito.any())).thenReturn(Optional.empty());
         Assertions.assertThrows(NoSuchElementException.class,
                 () -> roleService.getRoleByName(INVALID_ROLE_NAME));
     }

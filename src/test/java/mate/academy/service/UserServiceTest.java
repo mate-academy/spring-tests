@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 class UserServiceTest {
@@ -26,7 +25,7 @@ class UserServiceTest {
 
     @BeforeEach
     void setUp() {
-        passwordEncoder = new BCryptPasswordEncoder();
+        passwordEncoder = Mockito.mock(PasswordEncoder.class);
         userDao = Mockito.mock(UserDao.class);
         userService = new UserServiceImpl(userDao, passwordEncoder);
         user = new User();
@@ -67,7 +66,7 @@ class UserServiceTest {
         Optional<User> userOptional = userService.findByEmail(USER_MAIL);
         Assertions.assertTrue(userOptional.isPresent());
         User actualUser = userOptional.get();
-        Assertions.assertNotNull(userOptional);
+        Assertions.assertNotNull(actualUser);
         Assertions.assertEquals(user, actualUser);
     }
 

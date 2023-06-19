@@ -33,7 +33,8 @@ class CustomUserDetailsServiceTest {
 
     @Test
     void loadUserByUserEmail_Ok() {
-        Mockito.when(userService.findByEmail(Mockito.any())).thenReturn(Optional.of(user));
+        Mockito.when(userService.findByEmail(Mockito.eq(VALID_EMAIL)))
+                .thenReturn(Optional.of(user));
         String actualUserMail = userDetailsService.loadUserByUsername(
                 user.getEmail()).getUsername();
         Assertions.assertEquals(user.getEmail(), actualUserMail);

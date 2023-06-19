@@ -28,6 +28,7 @@ class RoleDaoTest extends AbstractTest {
     void saveRole_Ok() {
         Role actualRole = roleDao.save(role);
         Assertions.assertEquals(actualRole, role);
+        Assertions.assertNotNull(actualRole.getId());
     }
 
     @Test
