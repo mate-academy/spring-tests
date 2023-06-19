@@ -25,7 +25,8 @@ public class InjectController {
         roleService.save(new Role(Role.RoleName.ADMIN));
         roleService.save(new Role(Role.RoleName.USER));
 
-        authenticationService.register("bob", "1234");
+        authenticationService.register("bob@mail.com", "1234");
+        authenticationService.register("alice@mail.com", "1234");
         // feel free to save some users for testing
         // hint: you can save users with different roles
         return "Done!";
