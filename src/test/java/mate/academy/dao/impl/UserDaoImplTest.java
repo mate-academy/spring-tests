@@ -60,13 +60,14 @@ class UserDaoImplTest extends AbstractTest {
         Assertions.assertEquals(EMAIL, actual.get().getEmail());
         Assertions.assertEquals(PASSWORD, actual.get().getPassword());
     }
+
     @Test
     void findByID_NotOk() {
         Optional<User> actual = userDao.findById(8L);
         Assertions.assertFalse(actual.isPresent());
     }
 
-        @Test
+    @Test
     void findById_Ok() {
         userDao.save(user);
         Optional<User> actual = userDao.findById(ID);

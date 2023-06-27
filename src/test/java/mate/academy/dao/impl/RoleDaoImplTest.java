@@ -20,7 +20,7 @@ class RoleDaoImplTest extends AbstractTest {
 
     @BeforeEach
     void setUp() {
-        roleDao =new RoleDaoImpl(getSessionFactory());
+        roleDao = new RoleDaoImpl(getSessionFactory());
         role = new Role();
         role.setRoleName(Role.RoleName.USER);
     }
