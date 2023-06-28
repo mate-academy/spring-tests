@@ -1,5 +1,10 @@
 package mate.academy.security.jwt;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
+
 import io.jsonwebtoken.Jwts;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +17,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 
 class JwtTokenProviderTest {
     private static final String EMAIL = "bob@i.ua";

@@ -12,29 +12,6 @@ import org.hsqldb.jdbc.JDBCDataSource;
 import org.junit.jupiter.api.BeforeEach;
 
 public abstract class AbstractTest {
-    protected interface DataSourceProvider {
-        enum IdentifierStrategy {
-            IDENTITY,
-            SEQUENCE
-        }
-
-        enum Database {
-            HSQLDB,
-        }
-
-        String hibernateDialect();
-
-        DataSource dataSource();
-
-        Class<? extends DataSource> dataSourceClassName();
-
-        Properties dataSourceProperties();
-
-        List<IdentifierStrategy> identifierStrategies();
-
-        Database database();
-    }
-
     private SessionFactory factory;
 
     @BeforeEach
@@ -95,6 +72,29 @@ public abstract class AbstractTest {
 
     public SessionFactory getSessionFactory() {
         return factory;
+    }
+
+    protected interface DataSourceProvider {
+        String hibernateDialect();
+
+        DataSource dataSource();
+
+        Class<? extends DataSource> dataSourceClassName();
+
+        Properties dataSourceProperties();
+
+        List<IdentifierStrategy> identifierStrategies();
+
+        Database database();
+
+        enum IdentifierStrategy {
+            IDENTITY,
+            SEQUENCE
+        }
+
+        enum Database {
+            HSQLDB,
+        }
     }
 
     public static class HsqldbDataSourceProvider implements DataSourceProvider {

@@ -1,13 +1,16 @@
 package mate.academy.dao.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Optional;
 import mate.academy.dao.AbstractTest;
 import mate.academy.dao.RoleDao;
 import mate.academy.model.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class RoleDaoImplTest extends AbstractTest {
     private static final Long ID = 1L;
@@ -18,7 +21,7 @@ class RoleDaoImplTest extends AbstractTest {
 
     @Override
     protected Class<?>[] entities() {
-        return new Class[] {Role.class};
+        return new Class[]{Role.class};
     }
 
     @BeforeEach

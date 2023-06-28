@@ -1,5 +1,13 @@
 package mate.academy.security;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
 import java.util.Optional;
 import java.util.Set;
 import mate.academy.exception.AuthenticationException;
@@ -14,14 +22,9 @@ import org.mockito.Mockito;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
-
 class AuthenticationServiceImplTest {
     private static final Long ID = 1L;
-    private static final String  EMAIL = "bob@i.ua";
+    private static final String EMAIL = "bob@i.ua";
     private static final String PASSWORD = "1234";
     private static final String INVALID_PASSWORD = "3214";
     private static final Role.RoleName USER_ROLE = Role.RoleName.USER;
@@ -36,7 +39,9 @@ class AuthenticationServiceImplTest {
         userService = Mockito.mock(UserService.class);
         roleService = Mockito.mock(RoleService.class);
         passwordEncoder = new BCryptPasswordEncoder();
-        authenticationService = new AuthenticationServiceImpl(userService, roleService, passwordEncoder);
+        authenticationService =
+                new AuthenticationServiceImpl(userService,
+                        roleService, passwordEncoder);
     }
 
     @BeforeEach

@@ -1,5 +1,10 @@
 package mate.academy.dao.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Optional;
 import java.util.Set;
 import mate.academy.dao.AbstractTest;
@@ -9,8 +14,6 @@ import mate.academy.model.Role;
 import mate.academy.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class UserDaoImplTest extends AbstractTest {
     private static final String EMAIL = "bob@i.ua";
@@ -25,7 +28,7 @@ class UserDaoImplTest extends AbstractTest {
 
     @Override
     protected Class<?>[] entities() {
-        return new Class[] {User.class, Role.class};
+        return new Class[]{User.class, Role.class};
     }
 
     @BeforeEach
