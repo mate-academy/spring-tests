@@ -6,6 +6,7 @@ import mate.academy.dao.UserDao;
 import mate.academy.model.Role;
 import mate.academy.model.User;
 import mate.academy.service.UserService;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -14,26 +15,30 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 class UserServiceImplTest {
     private static final Long ID = 1L;
-    private static final Long INVALID_ID = 2L;
     private static final String EMAIL = "bob@i.ua";
-    private static final String INVALID_EMAIL = "alice@i.ua";
     private static final String PASSWORD = "1234";
     private static final Role.RoleName USER_ROLE = Role.RoleName.USER;
-    private UserService userService;
-    private UserDao userDao;
+    private static UserService userService;
+    private static UserDao userDao;
+    private static PasswordEncoder passwordEncoder;
     private User user;
     private Role role;
-    private PasswordEncoder passwordEncoder;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void beforeAll() {
         passwordEncoder = new BCryptPasswordEncoder();
         userDao = Mockito.mock(UserDao.class);
         userService = new UserServiceImpl(userDao, passwordEncoder);
+    }
+
+    @BeforeEach
+    void setUp() {
         role = new Role(ID, USER_ROLE);
         user = new User();
         user.setEmail(EMAIL);
@@ -65,9 +70,9 @@ class UserServiceImplTest {
 
     @Test
     void findByEmail_invalidEmail_notOk() {
-        when(userDao.findByEmail(INVALID_EMAIL)).thenReturn(Optional.empty());
+        when(userDao.findByEmail(anyString())).thenReturn(Optional.empty());
 
-        Optional<User> actual = userService.findByEmail(INVALID_EMAIL);
+        Optional<User> actual = userService.findByEmail(EMAIL);
         assertFalse(actual.isPresent());
     }
 
@@ -84,9 +89,9 @@ class UserServiceImplTest {
 
     @Test
     void findById_invalidId_notOk() {
-        when(userDao.findById(INVALID_ID)).thenReturn(Optional.empty());
+        when(userDao.findById(anyLong())).thenReturn(Optional.empty());
 
-        Optional<User> actual = userService.findById(INVALID_ID);
+        Optional<User> actual = userService.findById(ID);
         assertFalse(actual.isPresent());
     }
 }
