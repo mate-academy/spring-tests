@@ -28,4 +28,5 @@ public class UserDaoImpl extends AbstractDao<User, Long> implements UserDao {
                     + email, e);
         }
     }
+
 }
