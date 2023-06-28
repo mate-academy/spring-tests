@@ -36,7 +36,7 @@ class RoleDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void getRoleByName_Ok() {
+    void getRoleByName_ok() {
         roleDao.save(role);
         Optional<Role> actual =
                 roleDao.getRoleByName(USER_ROLE.name());
@@ -45,7 +45,7 @@ class RoleDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void getRoleByName_InvalidName_NotOk() {
+    void getRoleByName_invalidName_notOk() {
         roleDao.save(role);
         Optional<Role> actual =
                 roleDao.getRoleByName(ADMIN_ROLE.name());
