@@ -1,5 +1,8 @@
 package mate.academy.security;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
 import java.util.Optional;
 import java.util.Set;
 import mate.academy.exception.AuthenticationException;
@@ -14,8 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 public class AuthenticationServiceTest {
     private static final Long ID = 1L;

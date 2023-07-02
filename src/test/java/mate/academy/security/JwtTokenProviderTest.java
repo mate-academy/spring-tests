@@ -1,8 +1,10 @@
 package mate.academy.security;
 
+import static org.mockito.Mockito.when;
+
+import io.jsonwebtoken.Jwts;
 import java.util.ArrayList;
 import java.util.List;
-import io.jsonwebtoken.Jwts;
 import mate.academy.model.Role;
 import mate.academy.security.jwt.JwtTokenProvider;
 import org.junit.jupiter.api.Assertions;
@@ -14,7 +16,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import static org.mockito.Mockito.when;
 
 public class JwtTokenProviderTest {
     private static final String EMAIL = "test@mail.com";
