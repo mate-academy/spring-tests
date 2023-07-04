@@ -3,6 +3,7 @@ package mate.academy.controller;
 import mate.academy.model.Role;
 import mate.academy.security.AuthenticationService;
 import mate.academy.service.RoleService;
+import mate.academy.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,7 +16,8 @@ public class InjectController {
     private final AuthenticationService authenticationService;
 
     public InjectController(RoleService roleService,
-                            AuthenticationService authenticationService) {
+                            AuthenticationService authenticationService,
+                            UserService userService) {
         this.roleService = roleService;
         this.authenticationService = authenticationService;
     }

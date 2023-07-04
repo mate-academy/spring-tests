@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
+
     private final UserService userService;
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
