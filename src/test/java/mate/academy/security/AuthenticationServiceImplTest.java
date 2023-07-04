@@ -4,7 +4,6 @@ import static org.mockito.ArgumentMatchers.any;
 
 import java.util.Optional;
 import java.util.Set;
-
 import mate.academy.exception.AuthenticationException;
 import mate.academy.model.Role;
 import mate.academy.model.User;
