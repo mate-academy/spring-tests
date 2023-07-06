@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/inject")
 public class InjectController {
     private final RoleService roleService;
-
     private final AuthenticationService authenticationService;
 
     public InjectController(RoleService roleService,
