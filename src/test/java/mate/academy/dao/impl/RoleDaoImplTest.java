@@ -1,11 +1,15 @@
 package mate.academy.dao.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Optional;
 import mate.academy.dao.AbstractTest;
 import mate.academy.dao.RoleDao;
 import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -27,15 +31,15 @@ class RoleDaoImplTest extends AbstractTest {
     @Test
     void saveRole_Ok() {
         Role actual = roleDao.save(role);
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(role, actual);
-        Assertions.assertEquals(1L, actual.getId());
-        Assertions.assertEquals(Role.RoleName.USER, actual.getRoleName());
+        assertNotNull(actual);
+        assertEquals(role, actual);
+        assertEquals(1L, actual.getId());
+        assertEquals(Role.RoleName.USER, actual.getRoleName());
     }
 
     @Test
     void saveRole_Not_Ok() {
-        Assertions.assertThrows(DataProcessingException.class, () ->
+        assertThrows(DataProcessingException.class, () ->
                 roleDao.save(null));
     }
 
@@ -43,14 +47,14 @@ class RoleDaoImplTest extends AbstractTest {
     void getRoleByName_Ok() {
         roleDao.save(role);
         Optional<Role> actual = roleDao.getRoleByName(role.getRoleName().name());
-        Assertions.assertTrue(actual.isPresent());
-        Assertions.assertEquals(role.getRoleName(), actual.get().getRoleName());
-        Assertions.assertEquals(role.getId(), actual.get().getId());
+        assertTrue(actual.isPresent());
+        assertEquals(role.getRoleName(), actual.get().getRoleName());
+        assertEquals(role.getId(), actual.get().getId());
     }
 
     @Test
     void getRoleByName_Not_Ok() {
-        Assertions.assertThrows(DataProcessingException.class, () ->
+        assertThrows(DataProcessingException.class, () ->
                 roleDao.getRoleByName("Wrong name"));
     }
 }

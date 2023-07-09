@@ -1,24 +1,25 @@
 package mate.academy.service.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import mate.academy.dao.RoleDao;
 import mate.academy.model.Role;
 import mate.academy.service.RoleService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 class RoleServiceImplTest {
-    private RoleService roleService;
-    private RoleDao roleDao;
+    private RoleDao roleDao = Mockito.mock(RoleDao.class);
+    private RoleService roleService = new RoleServiceImpl(roleDao);
     private Role role;
 
     @BeforeEach
     void setUp() {
-        roleDao = Mockito.mock(RoleDao.class);
-        roleService = new RoleServiceImpl(roleDao);
         role = new Role(Role.RoleName.USER);
     }
 
@@ -26,8 +27,8 @@ class RoleServiceImplTest {
     void save_Ok() {
         Mockito.when(roleDao.save(role)).thenReturn(role);
         Role actual = roleService.save(role);
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(role, actual);
+        assertNotNull(actual);
+        assertEquals(role, actual);
     }
 
     @Test
@@ -35,12 +36,12 @@ class RoleServiceImplTest {
         Mockito.when(roleDao.getRoleByName(Role.RoleName.USER.name()))
                 .thenReturn(Optional.of(role));
         Role actual = roleService.getRoleByName(Role.RoleName.USER.name());
-        Assertions.assertEquals(role, actual);
+        assertEquals(role, actual);
     }
 
     @Test
     void getRoleByName_Not_Ok() {
-        Assertions.assertThrows(NoSuchElementException.class, () ->
+        assertThrows(NoSuchElementException.class, () ->
                 roleService.getRoleByName("Wrong roleName"));
     }
 }
