@@ -17,7 +17,7 @@ class EmailValidatorTest {
     }
 
     @Test
-    void validateEmail_validEmail_Ok() {
+    void validateEmail_validEmail_ok() {
         String validEmail = "aboba@example.com";
         Assertions.assertTrue(emailValidator.isValid(validEmail, context));
     }

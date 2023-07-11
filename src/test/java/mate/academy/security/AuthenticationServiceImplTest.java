@@ -30,7 +30,7 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    void register_Ok() {
+    void register_ok() {
         User user = createUser();
         Mockito.when(userService.save(Mockito.any())).thenReturn(user);
         Mockito.when(passwordEncoder.encode(PASSWORD)).thenReturn(PASSWORD);
@@ -41,7 +41,7 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    void login_Ok() {
+    void login_ok() {
         User user = createUser();
         Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
         try {

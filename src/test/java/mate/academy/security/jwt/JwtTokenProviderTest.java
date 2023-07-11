@@ -43,7 +43,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void createToken_Ok() {
+    void createToken_ok() {
         jwtTokenProvider = Mockito.mock(JwtTokenProvider.class);
         Claims claims = Jwts.claims().setSubject(EMAIL);
         List<String> roles = new ArrayList<>();
@@ -63,7 +63,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void getAuthentication_validToken_Ok() {
+    void getAuthentication_validToken_ok() {
         jwtTokenProvider = Mockito.spy(jwtTokenProvider);
         User user = new User();
         user.setEmail(EMAIL);
@@ -76,7 +76,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void resolveToken_validToken_Ok() {
+    void resolveToken_validToken_ok() {
         HttpServletRequest req = Mockito.mock(HttpServletRequest.class);
         Mockito.when(req.getHeader("Authorization")).thenReturn("Bearer " + TOKEN);
         Assertions.assertNotNull(jwtTokenProvider.resolveToken(req));
@@ -90,7 +90,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void validateToken_validToken_Ok() {
+    void validateToken_validToken_ok() {
         jwtTokenProvider = Mockito.mock(JwtTokenProvider.class);
         String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib2JAaS51YSIsInJvbGVz"
                 + "IjpbIlVTRVIiXSwiaWF0IjoxNjg4NDYzODE3LCJleHAiOjIwMDM4MjM4MTd9.M7y6"

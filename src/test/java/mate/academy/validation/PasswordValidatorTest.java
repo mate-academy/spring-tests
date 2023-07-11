@@ -22,7 +22,7 @@ public class PasswordValidatorTest {
     }
 
     @Test
-    void validatePassword_Ok() {
+    void validatePassword_ok() {
         UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
         userRegistrationDto.setPassword("12345");
         userRegistrationDto.setRepeatPassword("12345");

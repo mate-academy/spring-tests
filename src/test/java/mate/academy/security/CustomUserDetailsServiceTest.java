@@ -26,7 +26,7 @@ class CustomUserDetailsServiceTest {
     }
 
     @Test
-    void loadUserByUsername_Ok() {
+    void loadUserByUsername_ok() {
         User user = createUser();
         Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
         UserDetails actual = userDetailsService.loadUserByUsername(EMAIL);

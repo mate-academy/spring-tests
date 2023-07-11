@@ -26,7 +26,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void save_validUser_Ok() {
+    void save_validUser_ok() {
         User user = new User();
         user.setId(1L);
         Mockito.when(userDao.save(user)).thenReturn(user);
@@ -36,7 +36,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findUserById_validUser_Ok() {
+    void findUserById_validUser_ok() {
         User user = createUserAndSave();
         Mockito.when(userDao.findById(user.getId())).thenReturn(Optional.of(user));
         Optional<User> actual = userService.findById(user.getId());
@@ -45,7 +45,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findUserById_invalidId_NotOk() {
+    void findUserById_invalidId_notOk() {
         User user = createUserAndSave();
         Mockito.when(userDao.findById(user.getId())).thenReturn(Optional.of(user));
         Optional<User> actual = userService.findById(999L);
@@ -53,7 +53,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findUserByEmail_Ok() {
+    void findUserByEmail_ok() {
         User user = createUserAndSave();
         Mockito.when(userDao.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
         Optional<User> actual = userService.findByEmail(user.getEmail());
