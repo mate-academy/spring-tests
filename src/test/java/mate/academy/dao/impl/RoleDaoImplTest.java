@@ -1,15 +1,20 @@
 package mate.academy.dao.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Optional;
 import mate.academy.dao.RoleDao;
 import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class RoleDaoImplTest extends AbstractTest {
     private RoleDao roleDao;
+    private Role actual;
 
     @Override
     protected Class<?>[] entities() {
@@ -19,32 +24,28 @@ class RoleDaoImplTest extends AbstractTest {
     @BeforeEach
     void setUp() {
         roleDao = new RoleDaoImpl(getSessionFactory());
+        actual = new Role();
+        actual.setRoleName(Role.RoleName.USER);
+        roleDao.save(actual);
     }
 
     @Test
-    void save_Ok() {
-        Role actual = createRole();
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(1L, actual.getId());
+    void save_ok() {
+
+        assertNotNull(actual);
+        assertEquals(1L, actual.getId());
     }
 
     @Test
-    void getRollName_validRollName_Ok() {
-        Role actual = createRole();
-        Optional<Role> expected = roleDao.getRoleByName(actual.getRoleName().name());
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(expected.get().getRoleName(), actual.getRoleName());
+    void getRollName_ok() {
+        Optional<Role> actual = roleDao.getRoleByName(Role.RoleName.USER.name());
+        assertTrue(actual.isPresent());
+        assertEquals(actual.get().getRoleName(), Role.RoleName.USER);
     }
 
     @Test
-    void getRollName_invalidRollName_Ok() {
-        Assertions.assertThrows(DataProcessingException.class, () ->
+    void getRollName_invalidRollName_notOk() {
+        assertThrows(DataProcessingException.class, () ->
                 roleDao.getRoleByName(null));
-    }
-
-    private Role createRole() {
-        Role role = new Role();
-        role.setRoleName(Role.RoleName.USER);
-        return roleDao.save(role);
     }
 }

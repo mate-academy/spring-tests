@@ -19,7 +19,7 @@ public abstract class AbstractTest {
         }
 
         enum Database {
-            HSQLDB,
+            HSQLDB
         }
 
         String hibernateDialect();
@@ -69,8 +69,6 @@ public abstract class AbstractTest {
         Properties properties = new Properties();
         properties.put("hibernate.dialect", getDataSourceProvider().hibernateDialect());
         properties.put("hibernate.hbm2ddl.auto", "create-drop");
-
-        //data source settings
         properties.put("hibernate.connection.datasource", newDataSource());
         return properties;
     }
