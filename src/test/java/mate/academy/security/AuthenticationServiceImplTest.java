@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
@@ -42,8 +43,8 @@ class AuthenticationServiceImplTest {
 
     @Test
     void register_ok() {
-        when(userService.save(Mockito.any())).thenReturn(user);
-        when(roleService.getRoleByName(Mockito.any()))
+        when(userService.save(any())).thenReturn(user);
+        when(roleService.getRoleByName(Role.RoleName.USER.name()))
                 .thenReturn(new Role(Role.RoleName.USER));
         User actual = authenticationService.register(EMAIL, PASSWORD);
         assertNotNull(actual);

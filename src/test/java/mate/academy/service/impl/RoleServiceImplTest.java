@@ -49,6 +49,8 @@ class RoleServiceImplTest {
 
     @Test
     void getRoleByName_invalidRoleName_notOk() {
+        when(roleDao.getRoleByName("NonExistingRole"))
+                .thenReturn(Optional.empty());
         assertThrows(NoSuchElementException.class, () ->
                 roleService.getRoleByName("NonExistingRole"));
     }

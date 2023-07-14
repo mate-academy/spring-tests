@@ -23,19 +23,20 @@ class CustomUserDetailsServiceTest {
     private static final String PASSWORD = "1234";
     private UserDetailsService userDetailsService;
     private UserService userService;
+    private User user;
 
     @BeforeEach
     void setUp() {
         userService = Mockito.mock(UserService.class);
         userDetailsService = new CustomUserDetailsService(userService);
+        user = new User();
+        user.setEmail(EMAIL);
+        user.setPassword(PASSWORD);
+        user.setRoles(Set.of(new Role(Role.RoleName.USER)));
     }
 
     @Test
     void loadUserByUsername_ok() {
-        User user = new User();
-        user.setEmail(EMAIL);
-        user.setPassword(PASSWORD);
-        user.setRoles(Set.of(new Role(Role.RoleName.USER)));
         when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
         UserDetails actual = userDetailsService.loadUserByUsername(EMAIL);
         assertNotNull(actual);
@@ -44,11 +45,7 @@ class CustomUserDetailsServiceTest {
     }
 
     @Test
-    void loadUserByUsername_UsernameNotFound() {
-        User user = new User();
-        user.setEmail(EMAIL);
-        user.setPassword(PASSWORD);
-        user.setRoles(Set.of(new Role(Role.RoleName.USER)));
+    void loadUserByUsername_usernameNotFound() {
         when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
         assertThrows(UsernameNotFoundException.class, () -> {
             userDetailsService.loadUserByUsername(NOT_EXISTING_USER);

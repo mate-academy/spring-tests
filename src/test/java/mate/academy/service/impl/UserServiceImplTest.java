@@ -1,9 +1,9 @@
 package mate.academy.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 import mate.academy.dao.UserDao;
@@ -35,7 +35,7 @@ class UserServiceImplTest {
 
     @Test
     void save_ok() {
-        Mockito.when(userDao.save(user)).thenReturn(user);
+        when(userDao.save(user)).thenReturn(user);
         User actual = userService.save(user);
         assertNotNull(actual);
         assertEquals(1L, actual.getId());
@@ -44,30 +44,30 @@ class UserServiceImplTest {
 
     @Test
     void findById_ok() {
-        Mockito.when(userDao.findById(user.getId())).thenReturn(Optional.of(user));
+        when(userDao.findById(user.getId())).thenReturn(Optional.of(user));
         Optional<User> actual = userService.findById(user.getId());
         assertEquals(1L, actual.get().getId());
     }
 
     @Test
     void findById_invalidId_ok() {
-        Mockito.when(userDao.findById(user.getId())).thenReturn(Optional.of(user));
+        when(userDao.findById(user.getId())).thenReturn(Optional.of(user));
         Optional<User> actual = userService.findById(2L);
         assertTrue(actual.isEmpty());
     }
 
     @Test
     void findByEmail_ok() {
-        Mockito.when(userDao.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        when(userDao.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
         Optional<User> actual = userService.findByEmail(user.getEmail());
-        assertFalse(actual.isEmpty());
+        assertTrue(actual.isPresent());
         assertEquals(1L, actual.get().getId());
         assertEquals(EMAIL, actual.get().getEmail());
     }
 
     @Test
     void findByEmail_invalidEmail_ok() {
-        Mockito.when(userDao.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        when(userDao.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
         Optional<User> actual = userService.findByEmail(INVALID_EMAIL);
         assertTrue(actual.isEmpty());
     }

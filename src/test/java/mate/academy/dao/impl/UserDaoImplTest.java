@@ -1,6 +1,7 @@
 package mate.academy.dao.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -46,20 +47,24 @@ class UserDaoImplTest extends AbstractTest {
 
     @Test
     void findById_invalidId_ok() {
-        assertEquals(Optional.empty(), userDao.findById(2L));
+        Optional<User> userById = userDao.findById(2L);
+        assertFalse(userById.isPresent());
+        assertEquals(Optional.empty(), userById);
     }
 
     @Test
     void findById_ok() {
-        User actual = userDao.save(user);
-        Optional<User> expected = userDao.findById(actual.getId());
-        assertTrue(expected.isPresent());
-        assertEquals(expected.get().getId(), actual.getId());
-        assertEquals(expected.get().getEmail(), actual.getEmail());
+        User savedUser = userDao.save(user);
+        Optional<User> actual = userDao.findById(savedUser.getId());
+        assertTrue(actual.isPresent());
+        assertEquals(savedUser.getId(), actual.get().getId());
+        assertEquals(savedUser.getEmail(), actual.get().getEmail());
     }
 
     @Test
     void findByEmail_invalidEmail_ok() {
-        assertEquals(Optional.empty(), userDao.findByEmail(""));
+        Optional<User> actual = userDao.findByEmail("");
+        assertTrue(actual.isEmpty());
+        assertEquals(Optional.empty(), actual);
     }
 }
