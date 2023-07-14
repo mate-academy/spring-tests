@@ -3,6 +3,7 @@ package mate.academy.service.impl;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
@@ -11,7 +12,6 @@ import mate.academy.model.User;
 import mate.academy.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 class UserServiceImplTest {
@@ -24,8 +24,8 @@ class UserServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        userDao = Mockito.mock(UserDao.class);
-        PasswordEncoder passwordEncoder = Mockito.mock(PasswordEncoder.class);
+        userDao = mock(UserDao.class);
+        PasswordEncoder passwordEncoder = mock(PasswordEncoder.class);
         userService = new UserServiceImpl(userDao, passwordEncoder);
         user = new User();
         user.setId(1L);
@@ -46,6 +46,7 @@ class UserServiceImplTest {
     void findById_ok() {
         when(userDao.findById(user.getId())).thenReturn(Optional.of(user));
         Optional<User> actual = userService.findById(user.getId());
+        assertTrue(actual.isPresent());
         assertEquals(1L, actual.get().getId());
     }
 

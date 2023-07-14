@@ -2,11 +2,11 @@ package mate.academy.validation;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
 
 import javax.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 class EmailValidatorTest {
     private static final String EMAIL = "bob@i.ua";
@@ -19,7 +19,7 @@ class EmailValidatorTest {
     @BeforeEach
     void setUp() {
         emailValidator = new EmailValidator();
-        constraintValidatorContext = Mockito.mock(ConstraintValidatorContext.class);
+        constraintValidatorContext = mock(ConstraintValidatorContext.class);
     }
 
     @Test

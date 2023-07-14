@@ -1,7 +1,6 @@
 package mate.academy.dao.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -48,7 +47,7 @@ class UserDaoImplTest extends AbstractTest {
     @Test
     void findById_invalidId_ok() {
         Optional<User> userById = userDao.findById(2L);
-        assertFalse(userById.isPresent());
+        assertTrue(userById.isEmpty());
         assertEquals(Optional.empty(), userById);
     }
 

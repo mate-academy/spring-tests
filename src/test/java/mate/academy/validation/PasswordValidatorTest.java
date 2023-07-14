@@ -2,12 +2,13 @@ package mate.academy.validation;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import javax.validation.ConstraintValidatorContext;
 import mate.academy.model.dto.UserRegistrationDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 class PasswordValidatorTest {
     private static final String PASSWORD = "12345678";
@@ -20,10 +21,10 @@ class PasswordValidatorTest {
     void setUp() {
         userRegistrationDto = new UserRegistrationDto();
         passwordValidator = new PasswordValidator();
-        constraintValidatorContext = Mockito.mock(ConstraintValidatorContext.class);
-        Password password = Mockito.mock(Password.class);
-        Mockito.when(password.field()).thenReturn("password");
-        Mockito.when(password.fieldMatch()).thenReturn("repeatPassword");
+        constraintValidatorContext = mock(ConstraintValidatorContext.class);
+        Password password = mock(Password.class);
+        when(password.field()).thenReturn("password");
+        when(password.fieldMatch()).thenReturn("repeatPassword");
         passwordValidator.initialize(password);
     }
 

@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
@@ -16,7 +17,6 @@ import mate.academy.service.RoleService;
 import mate.academy.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 class AuthenticationServiceImplTest {
@@ -31,9 +31,9 @@ class AuthenticationServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        userService = Mockito.mock(UserService.class);
-        roleService = Mockito.mock(RoleService.class);
-        passwordEncoder = Mockito.mock(PasswordEncoder.class);
+        userService = mock(UserService.class);
+        roleService = mock(RoleService.class);
+        passwordEncoder = mock(PasswordEncoder.class);
         authenticationService = new AuthenticationServiceImpl(userService, roleService,
                 passwordEncoder);
         user = new User();
