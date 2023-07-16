@@ -1,14 +1,21 @@
 package mate.academy.security.jwt;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
+
 import java.lang.reflect.Field;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import mate.academy.model.Role;
 import mate.academy.security.CustomUserDetailsService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,13 +23,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 class JwtTokenProviderTest {
     private static final String VALID_USERNAME = "bob@i.ua";
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService =
+            mock(CustomUserDetailsService.class);
     private JwtTokenProvider jwtTokenProvider;
     private String token;
 
     @BeforeEach
     void setUp() {
-        userDetailsService = Mockito.mock(CustomUserDetailsService.class);
         jwtTokenProvider = new JwtTokenProvider(userDetailsService);
         try {
             Field secretKey = jwtTokenProvider.getClass().getDeclaredField("secretKey");
@@ -43,8 +50,8 @@ class JwtTokenProviderTest {
         String actual = jwtTokenProvider.createToken(
                   VALID_USERNAME, List.of(Role.RoleName.USER.name()));
 
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(token, actual);
+        assertNotNull(actual);
+        assertEquals(token, actual);
     }
 
     @Test
@@ -54,44 +61,44 @@ class JwtTokenProviderTest {
                 .roles(Role.RoleName.USER.name())
                 .build();
 
-        JwtTokenProvider spy = Mockito.spy(jwtTokenProvider);
-        Mockito.doReturn(userDetails.getUsername())
-              .when(spy).getUsername(token);
+        JwtTokenProvider spy = spy(jwtTokenProvider);
+        doReturn(userDetails.getUsername())
+                .when(spy)
+                .getUsername(token);
 
-        Mockito.when(userDetailsService
-                .loadUserByUsername(VALID_USERNAME))
+        when(userDetailsService.loadUserByUsername(VALID_USERNAME))
                 .thenReturn(userDetails);
 
         Authentication actual = spy.getAuthentication(token);
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(userDetails, actual.getPrincipal());
+        assertNotNull(actual);
+        assertEquals(userDetails, actual.getPrincipal());
     }
 
     @Test
     void getUsername_Ok() {
         String actual = jwtTokenProvider.getUsername(token);
 
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(VALID_USERNAME, actual);
+        assertNotNull(actual);
+        assertEquals(VALID_USERNAME, actual);
     }
 
     @Test
     void resolveToken_Ok() {
-        HttpServletRequest servletRequest = Mockito.mock(HttpServletRequest.class);
-        Mockito.when(servletRequest.getHeader("Authorization"))
+        HttpServletRequest servletRequest = mock(HttpServletRequest.class);
+        when(servletRequest.getHeader("Authorization"))
                 .thenReturn("Bearer " + token);
 
         String actual = jwtTokenProvider.resolveToken(servletRequest);
 
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(token, actual);
+        assertNotNull(actual);
+        assertEquals(token, actual);
     }
 
     @Test
     void validateToken_Ok() {
         boolean actual = jwtTokenProvider.validateToken(token);
 
-        Assertions.assertTrue(actual);
+        assertTrue(actual);
     }
 
     @Test
@@ -105,7 +112,7 @@ class JwtTokenProviderTest {
             throw new RuntimeException(e);
         }
 
-        Assertions.assertThrows(RuntimeException.class, () -> {
+        assertThrows(RuntimeException.class, () -> {
             jwtTokenProvider.validateToken(token);
         });
     }

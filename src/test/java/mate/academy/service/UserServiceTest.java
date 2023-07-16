@@ -1,47 +1,48 @@
 package mate.academy.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.Optional;
 import java.util.Set;
 import mate.academy.dao.UserDao;
 import mate.academy.model.Role;
 import mate.academy.model.User;
 import mate.academy.service.impl.UserServiceImpl;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 class UserServiceTest {
     private static final String EMAIL = "bob@i.ua";
     private static final String PASSWORD = "123456";
-    private UserDao userDao;
-    private PasswordEncoder passwordEncoder;
-    private UserService userService;
+    private final UserDao userDao = mock(UserDao.class);
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final UserService userService =
+            new UserServiceImpl(userDao, passwordEncoder);
     private User user;
 
     @BeforeEach
     void setUp() {
-        userDao = Mockito.mock(UserDao.class);
-        passwordEncoder = new BCryptPasswordEncoder();
-
         user = new User();
         user.setEmail(EMAIL);
         user.setPassword(PASSWORD);
         user.setRoles(Set.of(new Role(Role.RoleName.USER)));
-
-        userService = new UserServiceImpl(userDao, passwordEncoder);
     }
 
     @Test
     void save_Ok() {
-        Mockito.when(userDao.save(user)).thenReturn(user);
+        when(userDao.save(user)).thenReturn(user);
 
         User actual = userService.save(user);
 
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(user, actual);
+        assertNotNull(actual);
+        assertEquals(user, actual);
     }
 
     @Test
@@ -49,11 +50,11 @@ class UserServiceTest {
         Long id = user.getId();
         userService.save(user);
 
-        Mockito.when(userDao.findById(id)).thenReturn(Optional.ofNullable(user));
+        when(userDao.findById(id)).thenReturn(Optional.ofNullable(user));
         Optional<User> byId = userService.findById(id);
 
-        Assertions.assertTrue(byId.isPresent());
-        Assertions.assertEquals(Optional.ofNullable(user), byId);
+        assertTrue(byId.isPresent());
+        assertEquals(Optional.ofNullable(user), byId);
     }
 
     @Test
@@ -61,12 +62,12 @@ class UserServiceTest {
         Long id = user.getId();
         userService.save(user);
 
-        Mockito.when(userDao.findById(id))
+        when(userDao.findById(id))
                 .thenReturn(Optional.ofNullable(user));
         Optional<User> byId = userService.findById(6L);
 
-        Assertions.assertFalse(byId.isPresent());
-        Assertions.assertEquals(Optional.empty(), byId);
+        assertFalse(byId.isPresent());
+        assertEquals(Optional.empty(), byId);
     }
 
     @Test
@@ -74,12 +75,12 @@ class UserServiceTest {
         String email = user.getEmail();
         userService.save(user);
 
-        Mockito.when(userDao.findByEmail(email))
+        when(userDao.findByEmail(email))
                 .thenReturn(Optional.ofNullable(user));
         Optional<User> byEmail = userService.findByEmail(email);
 
-        Assertions.assertTrue(byEmail.isPresent());
-        Assertions.assertEquals(Optional.ofNullable(user), byEmail);
+        assertTrue(byEmail.isPresent());
+        assertEquals(Optional.ofNullable(user), byEmail);
     }
 
     @Test
@@ -87,11 +88,11 @@ class UserServiceTest {
         String email = user.getEmail();
         userService.save(user);
 
-        Mockito.when(userDao.findByEmail(email))
+        when(userDao.findByEmail(email))
                 .thenReturn(Optional.ofNullable(user));
         Optional<User> byEmail = userService.findByEmail("alice");
 
-        Assertions.assertFalse(byEmail.isPresent());
-        Assertions.assertEquals(Optional.empty(), byEmail);
+        assertFalse(byEmail.isPresent());
+        assertEquals(Optional.empty(), byEmail);
     }
 }

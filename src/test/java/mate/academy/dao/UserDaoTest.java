@@ -1,12 +1,15 @@
 package mate.academy.dao;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.util.Optional;
 import java.util.Set;
 import mate.academy.dao.impl.RoleDaoImpl;
 import mate.academy.dao.impl.UserDaoImpl;
 import mate.academy.model.Role;
 import mate.academy.model.User;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -41,8 +44,8 @@ class UserDaoTest extends AbstractTest {
     void save_Ok() {
         User actual = userDao.save(user);
 
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(user, actual);
+        assertNotNull(actual);
+        assertEquals(user, actual);
     }
 
     @Test
@@ -50,7 +53,7 @@ class UserDaoTest extends AbstractTest {
         userDao.save(user);
         User actual = userDao.findById(1L).get();
 
-        Assertions.assertEquals(1L, actual.getId());
+        assertEquals(1L, actual.getId());
     }
 
     @Test
@@ -58,7 +61,7 @@ class UserDaoTest extends AbstractTest {
         userDao.save(user);
         User actual = userDao.findByEmail(EMAIL).get();
 
-        Assertions.assertEquals(EMAIL, actual.getEmail());
+        assertEquals(EMAIL, actual.getEmail());
     }
 
     @Test
@@ -66,6 +69,6 @@ class UserDaoTest extends AbstractTest {
         userDao.save(user);
         Optional<User> actualOptional = userDao.findByEmail("bob");
 
-        Assertions.assertFalse(actualOptional.isPresent());
+        assertFalse(actualOptional.isPresent());
     }
 }

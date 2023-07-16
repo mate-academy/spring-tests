@@ -1,9 +1,12 @@
 package mate.academy.dao;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Optional;
 import mate.academy.dao.impl.RoleDaoImpl;
 import mate.academy.model.Role;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -26,9 +29,9 @@ class RoleDaoTest extends AbstractTest {
     void save_Ok() {
         Role actual = roleDao.save(role);
 
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(role, actual);
-        Assertions.assertEquals(1L, actual.getId());
+        assertNotNull(actual);
+        assertEquals(role, actual);
+        assertEquals(1L, actual.getId());
     }
 
     @Test
@@ -37,8 +40,8 @@ class RoleDaoTest extends AbstractTest {
         Optional<Role> actual = roleDao.getRoleByName(
                 role.getRoleName().name());
 
-        Assertions.assertTrue(actual.isPresent());
-        Assertions.assertEquals(
+        assertTrue(actual.isPresent());
+        assertEquals(
                 Role.RoleName.USER.name(), actual.get().getRoleName().name());
     }
 }
