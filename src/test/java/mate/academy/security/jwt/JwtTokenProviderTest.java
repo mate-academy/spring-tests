@@ -1,5 +1,15 @@
 package mate.academy.security.jwt;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
@@ -16,11 +26,9 @@ import mate.academy.model.Role;
 import mate.academy.model.User;
 import mate.academy.security.CustomUserDetailsService;
 import mate.academy.service.UserService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
-import org.mockito.Mockito;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -37,21 +45,21 @@ class JwtTokenProviderTest {
 
     @BeforeEach
     void setUp() {
-        userService = Mockito.mock(UserService.class);
+        userService = mock(UserService.class);
         UserDetailsService userDetailsService = new CustomUserDetailsService(userService);
         jwtTokenProvider = new JwtTokenProvider(userDetailsService);
     }
 
     @Test
-    void createToken_ok() {
-        jwtTokenProvider = Mockito.mock(JwtTokenProvider.class);
+    void createToken_Ok() {
+        jwtTokenProvider = mock(JwtTokenProvider.class);
         Claims claims = Jwts.claims().setSubject(EMAIL);
         List<String> roles = new ArrayList<>();
         roles.add(ROLE.getRoleName().name());
         claims.put("roles", roles);
         Date now = new Date();
         Date validity = new Date(now.getTime() + 100000000L);
-        Mockito.when(jwtTokenProvider.createToken(
+        when(jwtTokenProvider.createToken(
                         ArgumentMatchers.anyString(), ArgumentMatchers.anyList()))
                 .thenReturn(Jwts.builder().setClaims(claims)
                         .setIssuedAt(now)
@@ -59,43 +67,43 @@ class JwtTokenProviderTest {
                         .signWith(SignatureAlgorithm.HS256, Base64.getEncoder()
                                 .encode("secret".getBytes()))
                         .compact());
-        Assertions.assertNotNull(jwtTokenProvider.createToken(EMAIL, roles));
+        assertNotNull(jwtTokenProvider.createToken(EMAIL, roles));
     }
 
     @Test
-    void getAuthentication_validToken_ok() {
-        jwtTokenProvider = Mockito.spy(jwtTokenProvider);
+    void getAuthentication_validToken_Ok() {
+        jwtTokenProvider = spy(jwtTokenProvider);
         User user = new User();
         user.setEmail(EMAIL);
         user.setPassword(PASSWORD);
         user.setRoles(Set.of(ROLE));
-        Mockito.doReturn(EMAIL).when(jwtTokenProvider).getUsername(TOKEN);
-        Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
+        doReturn(EMAIL).when(jwtTokenProvider).getUsername(TOKEN);
+        when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
         Authentication authentication = jwtTokenProvider.getAuthentication(TOKEN);
-        Assertions.assertNotNull(authentication);
+        assertNotNull(authentication);
     }
 
     @Test
-    void resolveToken_validToken_ok() {
-        HttpServletRequest req = Mockito.mock(HttpServletRequest.class);
-        Mockito.when(req.getHeader("Authorization")).thenReturn("Bearer " + TOKEN);
-        Assertions.assertNotNull(jwtTokenProvider.resolveToken(req));
+    void resolveToken_validToken_Ok() {
+        HttpServletRequest req = mock(HttpServletRequest.class);
+        when(req.getHeader("Authorization")).thenReturn("Bearer " + TOKEN);
+        assertNotNull(jwtTokenProvider.resolveToken(req));
     }
 
     @Test
     void resolveToken_invalidToken_notOk() {
-        HttpServletRequest req = Mockito.mock(HttpServletRequest.class);
-        Mockito.when(req.getHeader("Authorization")).thenReturn(TOKEN);
-        Assertions.assertNull(jwtTokenProvider.resolveToken(req));
+        HttpServletRequest req = mock(HttpServletRequest.class);
+        when(req.getHeader("Authorization")).thenReturn(TOKEN);
+        assertNull(jwtTokenProvider.resolveToken(req));
     }
 
     @Test
-    void validateToken_validToken_ok() {
-        jwtTokenProvider = Mockito.mock(JwtTokenProvider.class);
+    void validateToken_validToken_Ok() {
+        jwtTokenProvider = mock(JwtTokenProvider.class);
         String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib2JAaS51YSIsInJvbGVz"
                 + "IjpbIlVTRVIiXSwiaWF0IjoxNjg4NDYzODE3LCJleHAiOjIwMDM4MjM4MTd9.M7y6"
                 + "0o_yqULv7EfPGo5kIervVhyOXDVxohYqmPEasis";
-        Mockito.doAnswer(invocation -> {
+        doAnswer(invocation -> {
             try {
                 Jws<Claims> claims = Jwts.parser().setSigningKey(Base64.getEncoder()
                         .encode("secret".getBytes())).parseClaimsJws(token);
@@ -104,31 +112,21 @@ class JwtTokenProviderTest {
                 throw new RuntimeException("Expired or invalid JWT token", e);
             }
         }).when(jwtTokenProvider).validateToken(token);
-        boolean valid = jwtTokenProvider.validateToken(token);
-        Assertions.assertTrue(valid);
+        assertTrue(jwtTokenProvider.validateToken(token));
     }
 
     @Test
     void validateToken_expiredToken_notOk() {
-        try {
-            jwtTokenProvider.validateToken(TOKEN);
-        } catch (RuntimeException e) {
-            Assertions.assertEquals("Expired or invalid JWT token", e.getMessage());
-            return;
-        }
-
-        Assertions.fail("Expected to receive RuntimeException");
+        assertThrows(RuntimeException.class, () ->
+                        jwtTokenProvider.validateToken(TOKEN),
+                "Expired or invalid JWT token");
     }
 
     @Test
     void validateToken_invalidToken_notOk() {
         String token = "mjud,kajrb,awvf,habr,kh arel";
-        try {
-            jwtTokenProvider.validateToken(token);
-        } catch (RuntimeException e) {
-            Assertions.assertEquals("Expired or invalid JWT token", e.getMessage());
-            return;
-        }
-        Assertions.fail("validateToken() is expected to throw RuntimeException");
+        assertThrows(RuntimeException.class, () ->
+                        jwtTokenProvider.validateToken(token),
+                "Expired or invalid JWT token");
     }
 }

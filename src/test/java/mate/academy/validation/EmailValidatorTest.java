@@ -1,10 +1,12 @@
 package mate.academy.validation;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+
 import javax.validation.ConstraintValidatorContext;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 class EmailValidatorTest {
     private EmailValidator emailValidator;
@@ -13,18 +15,18 @@ class EmailValidatorTest {
     @BeforeEach
     void setUp() {
         emailValidator = new EmailValidator();
-        context = Mockito.mock(ConstraintValidatorContext.class);
+        context = mock(ConstraintValidatorContext.class);
     }
 
     @Test
-    void validateEmail_validEmail_ok() {
+    void validateEmail_validEmail_Ok() {
         String validEmail = "aboba@example.com";
-        Assertions.assertTrue(emailValidator.isValid(validEmail, context));
+        assertTrue(emailValidator.isValid(validEmail, context));
     }
 
     @Test
     void validateEmail_invalidEmail_notOk() {
         String invalidEmail = "grihfdaw";
-        Assertions.assertFalse(emailValidator.isValid(invalidEmail, context));
+        assertFalse(emailValidator.isValid(invalidEmail, context));
     }
 }

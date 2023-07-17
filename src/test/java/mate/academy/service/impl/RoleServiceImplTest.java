@@ -1,57 +1,53 @@
 package mate.academy.service.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import mate.academy.dao.RoleDao;
 import mate.academy.model.Role;
 import mate.academy.service.RoleService;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 class RoleServiceImplTest {
-    private static final Role ROLE = new Role(Role.RoleName.USER);
     private RoleService roleService;
     private RoleDao roleDao;
+    private Role role;
 
     @BeforeEach
     void setUp() {
-        roleDao = Mockito.mock(RoleDao.class);
+        roleDao = mock(RoleDao.class);
         roleService = new RoleServiceImpl(roleDao);
-    }
-
-    @AfterEach
-    void tearDown() {
-        ROLE.setId(null);
-    }
-
-    @Test
-    void save_validRole_ok() {
-        ROLE.setId(1L);
-        Mockito.when(roleDao.save(ROLE)).thenReturn(ROLE);
-        Role actual = roleService.save(ROLE);
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(1L, actual.getId());
+        role = new Role();
+        role.setRoleName(Role.RoleName.USER);
+        role.setId(1L);
     }
 
     @Test
-    void getRoleByName_validName_ok() {
-        Mockito.when(roleDao.getRoleByName(ROLE.getRoleName().name()))
-                .thenReturn(Optional.of(ROLE));
-        Role actual = roleService.getRoleByName(ROLE.getRoleName().name());
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(ROLE.getRoleName(), actual.getRoleName());
+    void save_validRole_Ok() {
+        when(roleDao.save(role)).thenReturn(role);
+        Role actual = roleService.save(role);
+        assertNotNull(actual);
+        assertEquals(1L, actual.getId());
+    }
+
+    @Test
+    void getRoleByName_validName_Ok() {
+        when(roleDao.getRoleByName(role.getRoleName().name()))
+                .thenReturn(Optional.of(role));
+        Role actual = roleService.getRoleByName(role.getRoleName().name());
+        assertNotNull(actual);
+        assertEquals(role.getRoleName(), actual.getRoleName());
     }
 
     @Test
     void getRoleByName_invalidName_notOk() {
-        try {
-            roleService.getRoleByName("dwadawdawd");
-        } catch (NoSuchElementException e) {
-            return;
-        }
-        Assertions.fail("getRoleByName() is expected to throw NoSuchElementException");
+        assertThrows(NoSuchElementException.class, () ->
+                roleService.getRoleByName("dwadawdawd"));
     }
 }
