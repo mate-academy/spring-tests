@@ -1,11 +1,14 @@
 package mate.academy.validation;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import javax.validation.ConstraintValidatorContext;
 import mate.academy.model.dto.UserRegistrationDto;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 class PasswordValidatorTest {
     private ConstraintValidatorContext context;
@@ -14,10 +17,10 @@ class PasswordValidatorTest {
     @BeforeEach
     public void setUp() {
         passwordValidator = new PasswordValidator();
-        context = Mockito.mock(ConstraintValidatorContext.class);
-        Password passwordAnnotation = Mockito.mock(Password.class);
-        Mockito.when(passwordAnnotation.field()).thenReturn("password");
-        Mockito.when(passwordAnnotation.fieldMatch()).thenReturn("repeatPassword");
+        context = mock(ConstraintValidatorContext.class);
+        Password passwordAnnotation = mock(Password.class);
+        when(passwordAnnotation.field()).thenReturn("password");
+        when(passwordAnnotation.fieldMatch()).thenReturn("repeatPassword");
         passwordValidator.initialize(passwordAnnotation);
     }
 
@@ -26,7 +29,7 @@ class PasswordValidatorTest {
         UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
         userRegistrationDto.setPassword("1234");
         userRegistrationDto.setRepeatPassword("1234");
-        Assertions.assertTrue(passwordValidator.isValid(userRegistrationDto, context));
+        assertTrue(passwordValidator.isValid(userRegistrationDto, context));
     }
 
     @Test
@@ -34,7 +37,7 @@ class PasswordValidatorTest {
         UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
         userRegistrationDto.setPassword("1234");
         userRegistrationDto.setRepeatPassword("12345");
-        Assertions.assertFalse(passwordValidator.isValid(userRegistrationDto, context));
+        assertFalse(passwordValidator.isValid(userRegistrationDto, context));
     }
 
     @Test
@@ -42,7 +45,7 @@ class PasswordValidatorTest {
         UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
         userRegistrationDto.setPassword("");
         userRegistrationDto.setRepeatPassword("");
-        Assertions.assertTrue(passwordValidator.isValid(userRegistrationDto, context));
+        assertTrue(passwordValidator.isValid(userRegistrationDto, context));
     }
 
     @Test
@@ -50,7 +53,7 @@ class PasswordValidatorTest {
         UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
         userRegistrationDto.setPassword(null);
         userRegistrationDto.setRepeatPassword("1234");
-        Assertions.assertFalse(passwordValidator.isValid(userRegistrationDto, context));
+        assertFalse(passwordValidator.isValid(userRegistrationDto, context));
     }
 
     @Test
@@ -58,6 +61,6 @@ class PasswordValidatorTest {
         UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
         userRegistrationDto.setPassword("1234");
         userRegistrationDto.setRepeatPassword(null);
-        Assertions.assertFalse(passwordValidator.isValid(userRegistrationDto, context));
+        assertFalse(passwordValidator.isValid(userRegistrationDto, context));
     }
 }

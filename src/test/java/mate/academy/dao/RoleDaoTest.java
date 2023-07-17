@@ -1,51 +1,52 @@
 package mate.academy.dao;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.util.Optional;
 import mate.academy.dao.impl.RoleDaoImpl;
 import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class RoleDaoTest extends AbstractTest {
-    private static final Role.RoleName ROLE = Role.RoleName.ADMIN;
+    private static final Role.RoleName ROLE_NAME = Role.RoleName.ADMIN;
     private RoleDao roleDao;
+    private Role role;
 
     @Override
     protected Class<?>[] entities() {
-        return new Class[] {Role.class};
+        return new Class[]{Role.class};
     }
 
     @BeforeEach
     void setUp() {
         roleDao = new RoleDaoImpl(getSessionFactory());
+        role = new Role();
+        role.setRoleName(ROLE_NAME);
     }
 
     @Test
-    void save_Ok() {
-        Role actual = getRole();
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(1L, actual.getId());
+    void save_ok() {
+        Role actual = roleDao.save(role);
+        assertNotNull(actual);
+        assertEquals(1L, actual.getId());
     }
 
     @Test
-    void getRoleByName_existedRole_Ok() {
-        getRole();
-        Optional<Role> actual = roleDao.getRoleByName(ROLE.name());
-        Assertions.assertFalse(actual.isEmpty());
-        Assertions.assertEquals(Role.RoleName.valueOf(ROLE.name()), actual.get().getRoleName());
+    void getRoleByName_existedRole_ok() {
+        roleDao.save(role);
+        Optional<Role> actual = roleDao.getRoleByName(ROLE_NAME.name());
+        assertFalse(actual.isEmpty());
+        assertEquals(Role.RoleName.valueOf(ROLE_NAME.name()), actual.get().getRoleName());
     }
 
     @Test
     void getRoleByName_notExistedRole_notOk() {
-        Assertions.assertThrows(DataProcessingException.class,
+        assertThrows(DataProcessingException.class,
                 () -> roleDao.getRoleByName(null));
-    }
-
-    private Role getRole() {
-        Role role = new Role();
-        role.setRoleName(ROLE);
-        return roleDao.save(role);
     }
 }
