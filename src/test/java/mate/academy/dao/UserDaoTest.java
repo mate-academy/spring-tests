@@ -77,7 +77,7 @@ class UserDaoTest extends AbstractTest {
     }
 
     @Test
-    void findUserById_IncorrectId_NotOk() {
+    void findUserById_NullId_NotOk() {
         Assertions.assertThrows(DataProcessingException.class, () ->
                 userDao.findById(null));
     }

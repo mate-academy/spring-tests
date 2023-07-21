@@ -48,5 +48,4 @@ class PasswordValidatorTest {
         Assertions.assertFalse(passwordValidator.isValid(userRegistrationDto,
                 constraintValidatorContext));
     }
-
 }

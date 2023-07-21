@@ -75,7 +75,7 @@ class UserServiceTest {
     }
 
     @Test
-    void findByEmail_MotOk() {
+    void findByEmail_NotOk() {
         Mockito.when(userDao.findByEmail(WRONG_EMAIL)).thenReturn(Optional.empty());
         Optional<User> actual = userDao.findByEmail(WRONG_EMAIL);
         Assertions.assertTrue(actual.isEmpty());

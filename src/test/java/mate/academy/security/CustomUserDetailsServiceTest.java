@@ -43,12 +43,10 @@ class CustomUserDetailsServiceTest {
     @Test
     void loadUserByUsername_UserNameNotFound() {
         Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(bob));
-        try {
-            userDetailsService.loadUserByUsername(WRONG_EMAIL);
-        } catch (UsernameNotFoundException e) {
-            Assertions.assertEquals("User not found.", e.getMessage());
-            return;
-        }
-        Assertions.fail("Expected to receive UserNotFoundException");
+        UsernameNotFoundException exception = Assertions.assertThrows(
+                UsernameNotFoundException.class,
+                () -> userDetailsService.loadUserByUsername(WRONG_EMAIL)
+        );
+        Assertions.assertEquals("User not found.", exception.getMessage());
     }
 }

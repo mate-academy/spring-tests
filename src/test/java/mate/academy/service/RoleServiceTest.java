@@ -42,7 +42,7 @@ class RoleServiceTest {
     }
 
     @Test
-    void getRoleByName_IncorrectRole_NotOk() {
+    void getRoleByName_NullRole_NotOk() {
         Assertions.assertThrows(NoSuchElementException.class,
                 () -> roleService.getRoleByName(null));
     }
