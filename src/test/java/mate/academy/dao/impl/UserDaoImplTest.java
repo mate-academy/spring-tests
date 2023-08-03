@@ -10,10 +10,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class UserDaoImplTest extends AbstractTest {
+class UserDaoImplTest extends AbstractDaoTest {
     private static final String EMAIL = "bob@gmail.com";
     private static final String PASSWORD = "123456789";
-    private static final long ID = 1L;
+    private static final long BOB_ID = 1L;
     private static final String INVALID_EMAIL = "invalidEmail";
     private static final Long INVALID_ID = -2L;
     private UserDao userDao;
@@ -43,7 +43,9 @@ class UserDaoImplTest extends AbstractTest {
     void save_Ok() {
         User actual = userDao.save(user);
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(ID, actual.getId());
+        Assertions.assertEquals(BOB_ID, actual.getId());
+        Assertions.assertEquals(EMAIL, actual.getEmail());
+        Assertions.assertEquals(PASSWORD, actual.getPassword());
     }
 
     @Test
@@ -52,13 +54,13 @@ class UserDaoImplTest extends AbstractTest {
         Optional<User> actual = userDao.findByEmail(EMAIL);
 
         Assertions.assertTrue(actual.isPresent());
-        Assertions.assertEquals(ID, actual.get().getId());
+        Assertions.assertEquals(BOB_ID, actual.get().getId());
         Assertions.assertEquals(EMAIL, actual.get().getEmail());
         Assertions.assertEquals(PASSWORD, actual.get().getPassword());
     }
 
     @Test
-    void findByEmail_NotOk() {
+    void findByEmail_invalidEmail_notOk() {
         Optional<User> actual = userDao.findByEmail(INVALID_EMAIL);
         Assertions.assertFalse(actual.isPresent());
     }
@@ -66,16 +68,16 @@ class UserDaoImplTest extends AbstractTest {
     @Test
     void findById_Ok() {
         userDao.save(user);
-        Optional<User> actual = userDao.findById(ID);
+        Optional<User> actual = userDao.findById(BOB_ID);
 
         Assertions.assertTrue(actual.isPresent());
-        Assertions.assertEquals(ID, actual.get().getId());
+        Assertions.assertEquals(BOB_ID, actual.get().getId());
         Assertions.assertEquals(EMAIL, actual.get().getEmail());
         Assertions.assertEquals(PASSWORD, actual.get().getPassword());
     }
 
     @Test
-    void findById_NotOk() {
+    void findById_invalidId_notOk() {
         Optional<User> actual = userDao.findById(INVALID_ID);
         Assertions.assertFalse(actual.isPresent());
     }

@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import mate.academy.model.Role;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -24,8 +23,7 @@ class JwtTokenProviderTest {
     private JwtTokenProvider jwtTokenProvider;
     private String token;
 
-    @BeforeEach
-    void setUp() {
+    {
         userDetailsService = Mockito.mock(UserDetailsService.class);
         jwtTokenProvider = new JwtTokenProvider(userDetailsService);
         jwtTokenProvider.setSecretKey(SECRET);
@@ -56,7 +54,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void getUsername_ok() {
+    void getUsername_Ok() {
         String actual = jwtTokenProvider.getUsername(token);
         Assertions.assertEquals(EMAIL, actual);
     }
@@ -73,7 +71,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void resolveToken_InvalidToken() {
+    void resolveToken_invalidToken_notOk() {
         String bearerToken = "InvalidToken ";
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader("Authorization", bearerToken);
@@ -89,7 +87,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void validateToken_NotOk() {
+    void validateToken_invalidToken_notOk() {
         String invalidToken = "InvalidToken";
         Assertions.assertThrows(RuntimeException.class,
                 () -> jwtTokenProvider.validateToken(invalidToken));

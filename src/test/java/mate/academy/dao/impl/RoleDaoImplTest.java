@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class RoleDaoImplTest extends AbstractTest {
-    private static final long ID = 1L;
+class RoleDaoImplTest extends AbstractDaoTest {
+    private static final long BOB_ID = 1L;
     private RoleDao roleDao;
     private Role role;
 
@@ -18,11 +18,14 @@ class RoleDaoImplTest extends AbstractTest {
         return new Class[] {User.class, Role.class};
     }
 
+    {
+        role = new Role();
+        role.setRoleName(Role.RoleName.USER);
+    }
+
     @BeforeEach
     void setUp() {
         roleDao = new RoleDaoImpl(getSessionFactory());
-        role = new Role();
-        role.setRoleName(Role.RoleName.USER);
     }
 
     @Test
@@ -30,7 +33,7 @@ class RoleDaoImplTest extends AbstractTest {
         Role actual = roleDao.save(role);
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(Role.RoleName.USER, actual.getRoleName());
-        Assertions.assertEquals(ID, actual.getId());
+        Assertions.assertEquals(BOB_ID, actual.getId());
     }
 
     @Test
@@ -39,12 +42,12 @@ class RoleDaoImplTest extends AbstractTest {
         Optional<Role> actual = roleDao.getRoleByName("USER");
 
         Assertions.assertTrue(actual.isPresent());
-        Assertions.assertEquals(ID, actual.get().getId());
+        Assertions.assertEquals(BOB_ID, actual.get().getId());
         Assertions.assertEquals(Role.RoleName.USER, actual.get().getRoleName());
     }
 
     @Test
-    void getRoleByName_NotOk() {
+    void getRoleByName_roleNotExist_notOk() {
         Optional<Role> actual = roleDao.getRoleByName("ADMIN");
         Assertions.assertFalse(actual.isPresent());
     }

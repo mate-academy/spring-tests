@@ -3,7 +3,6 @@ package mate.academy.validation;
 import javax.validation.ConstraintValidatorContext;
 import mate.academy.model.dto.UserRegistrationDto;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -16,8 +15,7 @@ class PasswordValidatorTest {
     private UserRegistrationDto userRegistrationDto;
     private Password constraintAnnotation;
 
-    @BeforeEach
-    void setUp() {
+    {
         constraintValidatorContext = Mockito.mock(ConstraintValidatorContext.class);
         passwordValidator = new PasswordValidator();
         userRegistrationDto = new UserRegistrationDto();
@@ -40,7 +38,7 @@ class PasswordValidatorTest {
     }
 
     @Test
-    void isValid_NotOk() {
+    void isValid_invalidPassword_notOk() {
         userRegistrationDto.setRepeatPassword(INVALID_PASSWORD);
         boolean isValid = passwordValidator.isValid(userRegistrationDto,
                 constraintValidatorContext);

@@ -2,7 +2,6 @@ package mate.academy.validation;
 
 import javax.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -15,8 +14,7 @@ class EmailValidatorTest {
     private EmailValidator emailValidator;
     private ConstraintValidatorContext constraintValidatorContext;
 
-    @BeforeEach
-    void setUp() {
+    {
         constraintValidatorContext = Mockito.mock(ConstraintValidatorContext.class);
         emailValidator = new EmailValidator();
     }
@@ -28,31 +26,31 @@ class EmailValidatorTest {
     }
 
     @Test
-    void isValid_invalidEmail_NotOk() {
+    void isValid_invalidEmail_notOk() {
         boolean isValid = emailValidator.isValid(INVALID_EMAIL, constraintValidatorContext);
         Assertions.assertFalse(isValid);
     }
 
     @Test
-    void isValid_invalidEmailSnail_NotOk() {
+    void isValid_invalidEmailSnail_notOk() {
         boolean isValid = emailValidator.isValid(INVALID_EMAIL_SNAIL, constraintValidatorContext);
         Assertions.assertFalse(isValid);
     }
 
     @Test
-    void isValid_invalidEmailDot_NotOk() {
+    void isValid_invalidEmailDot_notOk() {
         boolean isValid = emailValidator.isValid(INVALID_EMAIL_DOT, constraintValidatorContext);
         Assertions.assertFalse(isValid);
     }
 
     @Test
-    void isValid_invalidEmailEmpty_NotOk() {
+    void isValid_invalidEmailEmpty_notOk() {
         boolean isValid = emailValidator.isValid(INVALID_EMAIL_EMPTY, constraintValidatorContext);
         Assertions.assertFalse(isValid);
     }
 
     @Test
-    void isValid_null_NotOk() {
+    void isValid_null_notOk() {
         boolean isValid = emailValidator.isValid(null, constraintValidatorContext);
         Assertions.assertFalse(isValid);
     }

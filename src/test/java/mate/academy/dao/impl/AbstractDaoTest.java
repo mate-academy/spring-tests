@@ -11,7 +11,7 @@ import org.hibernate.cfg.Configuration;
 import org.hsqldb.jdbc.JDBCDataSource;
 import org.junit.jupiter.api.BeforeEach;
 
-public abstract class AbstractTest {
+public abstract class AbstractDaoTest {
     protected interface DataSourceProvider {
         enum IdentifierStrategy {
             IDENTITY,
