@@ -1,5 +1,8 @@
 package mate.academy.security;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.util.Optional;
 import java.util.Set;
 import mate.academy.model.Role;
@@ -27,31 +30,23 @@ class CustomUserDetailsServiceTest {
         user.setEmail(EMAIL);
         user.setPassword("12345678");
         user.setRoles(Set.of(new Role(Role.RoleName.USER)));
-
     }
 
     @Test
     void loadUserByUsername_Ok() {
-
         Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
-
         UserDetails actual = userDetailsService.loadUserByUsername(EMAIL);
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(EMAIL, actual.getUsername());
-        Assertions.assertEquals("12345678", actual.getPassword());
+        assertEquals(EMAIL, actual.getUsername());
+        assertEquals("12345678", actual.getPassword());
     }
 
     @Test
     void loadUserByUsername_UsernameNotFound() {
         Mockito.when(userService.findByEmail(EMAIL)).thenReturn(Optional.of(user));
-
-        try {
+        Exception exception = assertThrows(UsernameNotFoundException.class, () -> {
             userDetailsService.loadUserByUsername("user@user");
-        } catch (UsernameNotFoundException e) {
-            Assertions.assertEquals("User not found.", e.getMessage());
-            return;
-        }
-
-        Assertions.fail("Expected to receive UserNotFoundException");
+        });
+        assertEquals("User not found.", exception.getMessage());
     }
 }

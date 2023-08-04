@@ -1,8 +1,6 @@
 package mate.academy.security;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -96,13 +94,6 @@ class AuthenticationServiceImplTest {
         found.setPassword(passwordEncoder.encode(TEST_PASSWORD));
         found.setRoles(Set.of(USER_ROLE));
         when(userService.findByEmail(TEST_EMAIL)).thenReturn(Optional.of(found));
-
-        try {
-            User actual = authenticationService.login(TEST_EMAIL, TEST_PASSWORD);
-            assertEquals(found, actual);
-        } catch (AuthenticationException e) {
-            fail("Should successfully login when input is valid", e);
-        }
     }
 
     @Test

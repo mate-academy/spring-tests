@@ -20,12 +20,12 @@ class EmailValidatorTest {
     }
 
     @Test
-    void isValid_invalidEmail_ok() {
+    void isValid_invalidEmail_notOk() {
         Assertions.assertFalse(emailValidator.isValid(INVALID_EMAIL, context));
     }
 
     @Test
-    void isValid_emailIsNull_ok() {
+    void isValid_emailIsNull_notOk() {
         Assertions.assertFalse(emailValidator.isValid(null, context));
     }
 }

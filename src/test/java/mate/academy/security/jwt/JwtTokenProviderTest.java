@@ -123,7 +123,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void validateToken_tokenIsExpired_ok() {
+    void validateToken_tokenIsExpired_notOk() {
         setField(jwtTokenProvider, "validityInMilliseconds", 0);
         String token = jwtTokenProvider.createToken(VALID_USERNAME, VALID_ROLES);
         Assertions.assertThrows(RuntimeException.class,
@@ -131,13 +131,13 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void validateToken_invalidToken_ok() {
+    void validateToken_invalidToken_notOk() {
         Assertions.assertThrows(Exception.class,
                 () -> jwtTokenProvider.validateToken(INVALID_TOKEN));
     }
 
     @Test
-    void validateToken_tokenIsNull_ok() {
+    void validateToken_tokenIsNull_notOk() {
         Assertions.assertThrows(Exception.class,
                 () -> jwtTokenProvider.validateToken(null));
     }

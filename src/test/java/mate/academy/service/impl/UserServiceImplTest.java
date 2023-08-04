@@ -55,6 +55,11 @@ class UserServiceImplTest {
     }
 
     @Test
+    void save_userIsNull_notOk() {
+        assertThrows(NullPointerException.class, () -> userService.save(null));
+    }
+
+    @Test
     void findByEmail_userFound_ok() {
         user.setId(1L);
         when(userDao.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
@@ -68,15 +73,10 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findByEmail_UserNotFound_Ok() {
+    void findByEmail_userNotFound_ok() {
         when(userDao.findByEmail("wrongEmail")).thenReturn(Optional.empty());
 
         Optional<User> actual = userService.findByEmail("wrongEmail");
         Assertions.assertTrue(actual.isEmpty());
-    }
-
-    @Test
-    void save_userIsNull_notOk() {
-        assertThrows(NullPointerException.class, () -> userService.save(null));
     }
 }

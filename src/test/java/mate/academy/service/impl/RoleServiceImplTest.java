@@ -45,7 +45,7 @@ class RoleServiceImplTest {
     }
 
     @Test
-    void getRoleByName_roleFound_ok() {
+    void getRoleByName_existingRole_ok() {
         Role roleFromDB = new Role(Role.RoleName.USER);
         roleFromDB.setId(1L);
         when(roleDao.getRoleByName(role.getRoleName().name())).thenReturn(Optional.of(roleFromDB));
