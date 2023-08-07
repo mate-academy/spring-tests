@@ -56,7 +56,7 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void getUserName_Not_Ok_NullLogin() {
+    void getUserName_Null_Login_Not_Ok() {
         List<String> roles = new ArrayList<>();
         roles.add("ADMIN");
         roles.add("USER");

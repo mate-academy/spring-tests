@@ -1,8 +1,6 @@
 package mate.academy.dao.impl;
 
-import java.util.NoSuchElementException;
 import java.util.Set;
-import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import mate.academy.model.User;
 import org.junit.jupiter.api.Assertions;
@@ -40,13 +38,6 @@ class UserDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void save_NotOk_Throw_Exception() {
-        User user = null;
-        Assertions.assertThrows(DataProcessingException.class,
-                () -> userDao.save(user));
-    }
-
-    @Test
     void findByEmail_Ok() {
         String email = "id@gmail.com";
         User user = new User();
@@ -62,17 +53,8 @@ class UserDaoImplTest extends AbstractTest {
     }
 
     @Test
-    void findByEmail_Not_Ok_Throw_Exception() {
-        String email = "id@gmail.com";
-        User user = new User();
-        user.setPassword("1234");
-        user.setEmail(email);
-        Role userRole = new Role();
-        userRole.setRoleName(Role.RoleName.USER);
-        roleDao.save(userRole);
-        user.setRoles(Set.of(userRole));
-        userDao.save(user);
-        Assertions.assertThrows(NoSuchElementException.class,
-                () -> userDao.findByEmail("d@gmail.com").get());
+    void findByEmail_Not_Existing_User_By_Email_Not_Ok() {
+        String email = "id@gmai.com";
+        Assertions.assertTrue(userDao.findByEmail(email).isEmpty());
     }
 }

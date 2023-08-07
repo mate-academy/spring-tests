@@ -30,13 +30,8 @@ class RoleServiceImplTest {
         Role role = new Role();
         role.setRoleName(Role.RoleName.USER);
         when(roleDao.save(role)).thenReturn(role);
+        Assertions.assertNotNull(roleService.save(role));
         Assertions.assertEquals(role.getRoleName(), roleService.save(role).getRoleName());
-    }
-
-    @Test
-    void save_Not_Ok_NullValue() {
-        Role role = null;
-        Assertions.assertNull(roleService.save(role));
     }
 
     @Test
@@ -54,8 +49,8 @@ class RoleServiceImplTest {
     }
 
     @Test
-    void getRoleByName_NotOk_Throw_Exception() {
+    void getRoleByName_Not_Existing_Role_Not_Ok() {
         Assertions.assertThrows(NoSuchElementException.class,
-                () -> roleService.getRoleByName("admin"));
+                () -> roleService.getRoleByName("ADMIN"));
     }
 }

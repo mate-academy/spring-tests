@@ -28,7 +28,7 @@ class EmailValidatorTest {
     }
 
     @Test
-    void isValid_NotOk_Invalid_Email() {
+    void isValid_Invalid_Email_Not_Ok() {
         String invalidEmail = "id12gmail.co";
         assertFalse(emailValidator.isValid(invalidEmail, constraintValidatorContext));
     }
