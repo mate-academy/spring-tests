@@ -34,7 +34,9 @@ class UserDaoImplTest extends AbstractTest {
         roleDao.save(userRole);
         roleDao.save(adminRole);
         user.setRoles(Set.of(userRole, adminRole));
-        Assertions.assertNotNull(userDao.save(user));
+        userDao.save(user);
+        Assertions.assertEquals("1234",
+                userDao.findByEmail("id@gmail.com").get().getPassword());
     }
 
     @Test

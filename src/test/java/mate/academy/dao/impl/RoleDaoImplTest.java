@@ -1,5 +1,6 @@
 package mate.academy.dao.impl;
 
+import java.util.Optional;
 import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import org.junit.jupiter.api.Assertions;
@@ -18,7 +19,9 @@ class RoleDaoImplTest extends AbstractTest {
     void save_Ok() {
         Role role = new Role();
         role.setRoleName(Role.RoleName.USER);
-        Assertions.assertNotNull(roleDao.save(role));
+        roleDao.save(role);
+        Optional<Role> byName = roleDao.getRoleByName("USER");
+        Assertions.assertEquals("USER", byName.get().getRoleName().name());
     }
 
     @Test

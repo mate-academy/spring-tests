@@ -62,17 +62,13 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    void login_Ok() {
+    void login_Ok() throws AuthenticationException {
         User user = new User();
         user.setEmail("id@hello.ua");
         user.setPassword("1234");
         when(userService.findByEmail(any())).thenReturn(Optional.of(user));
         when(!passwordEncoder.matches(any(), any())).thenReturn(true);
-        try {
-            Assertions.assertNotNull(authenticationService.login("id@hello.ua", "1234"));
-        } catch (AuthenticationException e) {
-            throw new RuntimeException(e);
-        }
+        Assertions.assertNotNull(authenticationService.login("id@hello.ua", "1234"));
     }
 
     @Test
