@@ -15,7 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 class AuthenticationServiceImplTest {
-
+    private static final String INCORRECT_PASSWORD = "12345";
     private AuthenticationServiceImpl authenticationService;
     private UserService userService;
     private RoleService roleService;
@@ -46,9 +46,9 @@ class AuthenticationServiceImplTest {
 
     @Test
     void register_ok() {
-        user.setPassword("1234");
+        user.setPassword(password);
 
-        Mockito.when(roleService.getRoleByName("USER")).thenReturn(userRole);
+        Mockito.when(roleService.getRoleByName(Role.RoleName.USER.name())).thenReturn(userRole);
         Mockito.when(userService.save(Mockito.eq(user))).thenReturn(user);
 
         User actual = authenticationService.register(login, password);
@@ -68,17 +68,16 @@ class AuthenticationServiceImplTest {
 
     @Test
     void login_PasswordNotMatches_notOk() {
-        String nonCorrectPassword = "12345";
-
         Mockito.when(userService.findByEmail(login)).thenReturn(Optional.of(user));
 
         try {
-            authenticationService.login(login, nonCorrectPassword);
+            authenticationService.login(login, INCORRECT_PASSWORD);
         } catch (AuthenticationException e) {
             Assertions.assertEquals("Incorrect username or password!!!", e.getMessage());
             return;
         }
-        Assertions.fail("Excepted to receive AuthenticationException");
+        Assertions.assertThrows(AuthenticationException.class,
+                () -> authenticationService.login(login, INCORRECT_PASSWORD));
     }
 
     @Test
@@ -91,6 +90,7 @@ class AuthenticationServiceImplTest {
             Assertions.assertEquals("Incorrect username or password!!!", e.getMessage());
             return;
         }
-        Assertions.fail("Excepted to receive AuthenticationException");
+        Assertions.assertThrows(AuthenticationException.class,
+                () -> authenticationService.login(user.getEmail(), user.getPassword()));
     }
 }

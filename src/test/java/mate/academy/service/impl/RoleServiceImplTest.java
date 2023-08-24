@@ -32,7 +32,7 @@ class RoleServiceImplTest {
     }
 
     @Test
-    void testSaveRole_OK() {
+    void testSaveRole_ok() {
         Role role = new Role(Role.RoleName.USER);
 
         when(roleDao.save(role)).thenReturn(role);
@@ -45,9 +45,9 @@ class RoleServiceImplTest {
     }
 
     @Test
-    void testGetRoleByName_OK() {
+    void testGetRoleByName_ok() {
         Role role = new Role(Role.RoleName.USER);
-        String roleName = "USER";
+        String roleName = Role.RoleName.USER.name();
 
         when(roleDao.getRoleByName(roleName)).thenReturn(Optional.of(role));
 
@@ -59,8 +59,8 @@ class RoleServiceImplTest {
     }
 
     @Test
-    void testGetRoleByNameNotFound_Not_OK() {
-        String roleName = "ADMIN";
+    void testGetRoleByNameNotFound_NotOk() {
+        String roleName = Role.RoleName.ADMIN.name();
 
         when(roleDao.getRoleByName(roleName)).thenReturn(Optional.empty());
 
@@ -69,7 +69,7 @@ class RoleServiceImplTest {
     }
 
     @Test
-    void testGetRoleByNameInvalidRoleName_Not_OK() {
+    void testGetRoleByNameInvalidRoleName_NotOk() {
         String roleName = "INVALID_ROLE";
 
         when(roleDao.getRoleByName(roleName)).thenThrow(DataProcessingException.class);
@@ -79,7 +79,7 @@ class RoleServiceImplTest {
     }
 
     @Test
-    void testGetRoleByNonExistName_OK() {
+    void testGetRoleByNonexistentName_ok() {
         String roleName = "UgEr";
 
         when(roleDao.getRoleByName(roleName)).thenReturn(Optional.empty());

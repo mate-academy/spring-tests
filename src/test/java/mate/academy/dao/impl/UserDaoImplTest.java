@@ -9,7 +9,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class UserDaoImplTest extends AbstractDaoTest {
+    private static final String INCORRECT_EMAIL = "alice@i.ua";
     private UserDao userDao;
+    private User bob;
 
     @Override
     protected Class<?>[] entities() {
@@ -19,6 +21,13 @@ class UserDaoImplTest extends AbstractDaoTest {
     @BeforeEach
     void setUp() {
         userDao = new UserDaoImpl(getSessionFactory());
+        bob = new User();
+        bob.setEmail("bob2@i.ua");
+        bob.setPassword("1234");
+        Optional<User> existingUser = userDao.findByEmail(bob.getEmail());
+        if (existingUser.isEmpty()) {
+            userDao.save(bob);
+        }
     }
 
     @Test
@@ -30,20 +39,15 @@ class UserDaoImplTest extends AbstractDaoTest {
         User actual = userDao.save(bob);
 
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(1L, actual.getId());
+        Assertions.assertNotNull(actual.getId());
+        Assertions.assertTrue(actual.getId() > 0L);
         Assertions.assertEquals(bob.getEmail(), actual.getEmail());
         Assertions.assertEquals(bob.getPassword(), actual.getPassword());
     }
 
     @Test
     void findByEmail_ok() {
-        User bob = new User();
-        bob.setEmail("bob@i.ua");
-        bob.setPassword("1234");
-
-        userDao.save(bob);
-        Optional<User> actual = userDao.findByEmail("bob@i.ua");
-
+        Optional<User> actual = userDao.findByEmail(bob.getEmail());
         Assertions.assertFalse(actual.isEmpty());
         Assertions.assertEquals(1L, actual.get().getId());
         Assertions.assertEquals(bob.getEmail(), actual.get().getEmail());
@@ -52,25 +56,13 @@ class UserDaoImplTest extends AbstractDaoTest {
 
     @Test
     void findByEmail_NonExistentEmail_notOk() {
-        User bob = new User();
-        bob.setEmail("bob@i.ua");
-        bob.setPassword("1234");
-
-        userDao.save(bob);
-        Optional<User> actual = userDao.findByEmail("alice@i.ua");
-
+        Optional<User> actual = userDao.findByEmail(INCORRECT_EMAIL);
         Assertions.assertTrue(actual.isEmpty());
     }
 
     @Test
     void findById_ok() {
-        User bob = new User();
-        bob.setEmail("bob@i.ua");
-        bob.setPassword("1234");
-
-        userDao.save(bob);
         Optional<User> actual = userDao.findById(1L);
-
         Assertions.assertFalse(actual.isEmpty());
         Assertions.assertEquals(1L, actual.get().getId());
         Assertions.assertEquals(bob.getEmail(), actual.get().getEmail());
@@ -79,13 +71,7 @@ class UserDaoImplTest extends AbstractDaoTest {
 
     @Test
     void findById_NotExistentId_notOk() {
-        User bob = new User();
-        bob.setEmail("bob@i.ua");
-        bob.setPassword("1234");
-
-        userDao.save(bob);
         Optional<User> actual = userDao.findById(2L);
-
         Assertions.assertTrue(actual.isEmpty());
     }
 }

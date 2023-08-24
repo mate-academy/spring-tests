@@ -20,6 +20,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 class UserServiceImplTest {
+    private static final String EMAIL = "bob@gmail.com";
+    private static final String PASSWORD = "1234";
 
     @Mock
     private UserDao userDao;
@@ -37,9 +39,9 @@ class UserServiceImplTest {
         MockitoAnnotations.openMocks(this);
 
         bob = new User();
-        bob.setEmail("bob@gmail.com");
+        bob.setEmail(EMAIL);
         bob.setId(1L);
-        bob.setPassword("1234");
+        bob.setPassword(PASSWORD);
         bob.setRoles(Set.of(new Role(Role.RoleName.USER)));
     }
 
@@ -64,14 +66,15 @@ class UserServiceImplTest {
         } catch (NoSuchElementException e) {
             return;
         }
-        Assertions.fail("Excepted to receive NoSuchElementException");
+        Assertions.assertThrows(NoSuchElementException.class,
+                () -> userService.findById(bob.getId()).get());
     }
 
     @Test
     void findByEmail_ok() {
-        when(userDao.findByEmail("bob@gmail.com")).thenReturn(Optional.ofNullable(bob));
+        when(userDao.findByEmail(EMAIL)).thenReturn(Optional.ofNullable(bob));
 
-        Optional<User> actual = userService.findByEmail("bob@gmail.com");
+        Optional<User> actual = userService.findByEmail(EMAIL);
 
         assertNotNull(actual.get());
         assertEquals(bob, actual.get());
@@ -93,7 +96,7 @@ class UserServiceImplTest {
     @Test
     void save_ok() {
         when(userDao.save(bob)).thenReturn(bob);
-        when(passwordEncoder.encode("1234")).thenReturn("encodedPassword");
+        when(passwordEncoder.encode(PASSWORD)).thenReturn("encodedPassword");
 
         User actual = userService.save(bob);
 

@@ -32,19 +32,19 @@ class PasswordValidatorTest {
     }
 
     @Test
-    void isValid_matchingPasswords_returnsTrue() {
+    void isValid_matchingPasswords_ok() {
         registrationDto.setRepeatPassword(PASSWORD);
         assertTrue(passwordValidator.isValid(registrationDto, constraintValidatorContext));
     }
 
     @Test
-    void isValid_nonMatchingPasswords_returnsFalse() {
+    void isValid_nonMatchingPasswords_notOk() {
         registrationDto.setRepeatPassword("different");
         assertFalse(passwordValidator.isValid(registrationDto, constraintValidatorContext));
     }
 
     @Test
-    void isValid_nullPasswords_returnsFalse() {
+    void isValid_nullPasswords_NotOk() {
         registrationDto.setPassword(null);
         registrationDto.setRepeatPassword(null);
         assertFalse(passwordValidator.isValid(registrationDto, constraintValidatorContext));
