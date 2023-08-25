@@ -31,7 +31,7 @@ class UserDaoTest extends AbstractTest {
     }
 
     @Test
-    void save() {
+    void save_Ok() {
         User bob = createTestUser();
         User actual = userDao.save(bob);
 
@@ -41,7 +41,7 @@ class UserDaoTest extends AbstractTest {
     }
 
     @Test
-    void findByEmail() {
+    void findByEmail_Ok() {
         User testUser = userDao.save(createTestUser());
         Optional<User> actual = userDao.findByEmail(EMAIL);
         Assertions.assertFalse(actual.isEmpty());
