@@ -1,5 +1,8 @@
 package mate.academy.security.jwt;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -19,14 +22,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
 
 class JwtTokenProviderTest {
-    private final static String USER_EMAIL = "bob@gmail.ua";
-    private final static String USER_PASSWORD = "1234";
-    private final static String ROLE = "USER";
-    private final static String TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+    private static final String USER_EMAIL = "bob@gmail.ua";
+    private static final String USER_PASSWORD = "1234";
+    private static final String ROLE = "USER";
+    private static final String TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
             + ".eyJzdWIiOiJleGFtcGxlVXNlciIsInJvbGUiOiJST0xFX1VTRVIiLCJp"
             + "YXQiOjE2MzEwNjI1NzksImV4cCI6MTYzMTA2NjE3OX0"
             + ".7j8y33UfH1sP3gYKv7L7eACUPUVb9Sjz_eG4ICe3bRY";
@@ -65,8 +66,8 @@ class JwtTokenProviderTest {
         User user = new User();
         user.setEmail(USER_EMAIL);
         user.setPassword(USER_PASSWORD);
-        user.setRoles(Set.of(userRole));
-        Mockito.when(jwtTokenProvider.getUsername(TOKEN)).thenReturn(USER_EMAIL);
+        user.setRoles(Set.of(new Role(Role.RoleName.USER)));
+        Mockito.doReturn(USER_EMAIL).when(jwtTokenProvider).getUsername(TOKEN);
         Mockito.when(userService.findByEmail(USER_EMAIL)).thenReturn(Optional.of(user));
         Authentication authentication = jwtTokenProvider.getAuthentication(TOKEN);
         Assertions.assertNotNull(authentication);

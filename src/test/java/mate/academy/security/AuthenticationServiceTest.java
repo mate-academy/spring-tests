@@ -1,5 +1,7 @@
 package mate.academy.security;
 
+import static org.mockito.ArgumentMatchers.any;
+
 import java.util.Optional;
 import java.util.Set;
 import mate.academy.exception.AuthenticationException;
@@ -12,12 +14,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import static org.mockito.ArgumentMatchers.any;
 
 public class AuthenticationServiceTest {
-    private final static String USER_EMAIL = "bob@gmail.ua";
-    private final static String USER_PASSWORD = "1234";
-    private final static String ROLE = "USER";
+    private static final String USER_EMAIL = "bob@gmail.ua";
+    private static final String USER_PASSWORD = "1234";
+    private static final String ROLE = "USER";
     private final Role userRole = new Role(Role.RoleName.USER);
     private UserService userService;
     private RoleService roleService;

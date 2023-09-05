@@ -14,8 +14,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 class CustomUserDetailsServiceTest {
-    private final static String email = "bob@gmail.ua";
-    private final static String password = "1234";
+    private static final String EMAIL = "bob@gmail.ua";
+    private static final String PASSWORD = "1234";
     private User user;
     private UserDetailsService userDetailsService;
     private UserService userService;
@@ -23,8 +23,8 @@ class CustomUserDetailsServiceTest {
     @BeforeEach
     void setUp() {
         user = new User();
-        user.setEmail(email);
-        user.setPassword(password);
+        user.setEmail(EMAIL);
+        user.setPassword(PASSWORD);
         user.setRoles(Set.of(new Role(Role.RoleName.USER)));
         userService = Mockito.mock(UserService.class);
         userDetailsService = new CustomUserDetailsService(userService);
@@ -32,12 +32,12 @@ class CustomUserDetailsServiceTest {
 
     @Test
     void loadUserByUsername_Ok() {
-        Mockito.when(userService.findByEmail(email))
+        Mockito.when(userService.findByEmail(EMAIL))
                 .thenReturn(Optional.of(user));
-        UserDetails actual = userDetailsService.loadUserByUsername(email);
+        UserDetails actual = userDetailsService.loadUserByUsername(EMAIL);
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(email, actual.getUsername());
-        Assertions.assertEquals(password, actual.getPassword());
+        Assertions.assertEquals(EMAIL, actual.getUsername());
+        Assertions.assertEquals(PASSWORD, actual.getPassword());
     }
 
     @Test
@@ -45,7 +45,7 @@ class CustomUserDetailsServiceTest {
         Mockito.when(userService.findByEmail("incorrect_email"))
                 .thenReturn(Optional.of(user));
         try {
-            userDetailsService.loadUserByUsername(email);
+            userDetailsService.loadUserByUsername(EMAIL);
         } catch (UsernameNotFoundException exception) {
             Assertions.assertEquals("User not found.", exception.getMessage());
             return;

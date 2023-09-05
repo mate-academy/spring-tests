@@ -35,8 +35,8 @@ class RoleDaoTest extends AbstractTest {
 
     @Test
     void getRoleByName_incorrectRoleName_notOk() {
-       Assertions.assertThrows(DataProcessingException.class,() -> roleDao
-               .getRoleByName("CUSTOMER"), "Planning to get a DataProcessingException");
+        Assertions.assertThrows(DataProcessingException.class, () -> roleDao
+                .getRoleByName("CUSTOMER"), "Planning to get a DataProcessingException");
     }
 
     @Override

@@ -11,10 +11,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class UserDaoTest extends AbstractTest {
-    private final static String USER_EMAIL = "bob@gmail.ua";
-    private final static String USER_PASSWORD = "1234";
-    private final static String ADMIN_EMAIL = "alica@gmail.ua";
-    private final static String ADMIN_PASSWORD = "4321";
+    private static final String USER_EMAIL = "bob@gmail.ua";
+    private static final String USER_PASSWORD = "1234";
+    private static final String ADMIN_EMAIL = "alica@gmail.ua";
+    private static final String ADMIN_PASSWORD = "4321";
     private UserDao userDao;
     private User user;
     private User admin;
