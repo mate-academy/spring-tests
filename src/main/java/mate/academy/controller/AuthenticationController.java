@@ -27,7 +27,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public void register(@RequestBody @Valid UserRegistrationDto userRequestDto) {
+    public void register(@RequestBody @Valid UserRegistrationDto userRequestDto)
+            throws AuthenticationException {
         authenticationService.register(userRequestDto.getEmail(), userRequestDto.getPassword());
     }
 
