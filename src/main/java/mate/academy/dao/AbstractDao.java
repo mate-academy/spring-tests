@@ -1,4 +1,4 @@
-package mate.academy.dao.impl;
+package mate.academy.dao;
 
 import java.io.Serializable;
 import java.util.List;
