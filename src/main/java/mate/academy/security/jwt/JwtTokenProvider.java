@@ -73,4 +73,12 @@ public class JwtTokenProvider {
             throw new RuntimeException("Expired or invalid JWT token", e);
         }
     }
+
+    public void setSecretKey(String secretKey) {
+        this.secretKey = secretKey;
+    }
+
+    public void setValidityInMilliseconds(long validityInMilliseconds) {
+        this.validityInMilliseconds = validityInMilliseconds;
+    }
 }
