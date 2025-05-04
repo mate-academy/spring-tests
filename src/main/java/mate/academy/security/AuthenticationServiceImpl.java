@@ -6,6 +6,7 @@ import mate.academy.exception.AuthenticationException;
 import mate.academy.model.User;
 import mate.academy.service.RoleService;
 import mate.academy.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
 
+    @Autowired
     public AuthenticationServiceImpl(UserService userService,
                                      RoleService roleService,
                                      PasswordEncoder passwordEncoder) {
