@@ -57,6 +57,20 @@ public class User {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj != null && obj.getClass().equals(User.class)) {
+            User casted = (User) obj;
+            return this.email.equals(casted.email)
+                    && this.password.equals(casted.password)
+                    && this.roles.equals(casted.roles);
+        }
+        return false;
+    }
+
+    @Override
     public String toString() {
         return "User{"
                 + "id=" + id
