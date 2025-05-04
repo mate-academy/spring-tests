@@ -1,5 +1,6 @@
 package mate.academy.service.impl;
 
+import java.util.NoSuchElementException;
 import mate.academy.dao.RoleDao;
 import mate.academy.model.Role;
 import mate.academy.service.RoleService;
@@ -20,6 +21,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role getRoleByName(String roleName) {
-        return roleDao.getRoleByName(roleName).orElseThrow();
+        return roleDao.getRoleByName(roleName)
+                .orElseThrow(NoSuchElementException::new);
     }
 }
