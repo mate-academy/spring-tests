@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class RoleDaoImpl extends AbstractDao<Role, Long> implements RoleDao {
     @Autowired
-    protected RoleDaoImpl(SessionFactory sessionFactory) {
+    public RoleDaoImpl(SessionFactory sessionFactory) {
         super(sessionFactory, Role.class);
     }
 
