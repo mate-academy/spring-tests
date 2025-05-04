@@ -1,4 +1,4 @@
-package mate.academy.dao;
+package mate.academy;
 
 import java.util.Optional;
 import mate.academy.model.Role;

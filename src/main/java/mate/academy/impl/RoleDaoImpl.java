@@ -1,7 +1,7 @@
-package mate.academy.dao.impl;
+package mate.academy.impl;
 
 import java.util.Optional;
-import mate.academy.dao.RoleDao;
+import mate.academy.RoleDao;
 import mate.academy.exception.DataProcessingException;
 import mate.academy.model.Role;
 import org.hibernate.Session;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class RoleDaoImpl extends AbstractDao<Role, Long> implements RoleDao {
     @Autowired
-    protected RoleDaoImpl(SessionFactory sessionFactory) {
+    public RoleDaoImpl(SessionFactory sessionFactory) {
         super(sessionFactory, Role.class);
     }
 
