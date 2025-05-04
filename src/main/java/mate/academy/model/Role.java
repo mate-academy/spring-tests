@@ -1,5 +1,6 @@
 package mate.academy.model;
 
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -42,5 +43,22 @@ public class Role {
 
     public enum RoleName {
         ADMIN, USER
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Role role = (Role) o;
+        return id.equals(role.id) && roleName == role.roleName;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, roleName);
     }
 }
