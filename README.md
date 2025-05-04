@@ -25,15 +25,15 @@ To start working with app locally
 ### Requirements
 Your task is to cover with unit tests some classes:
 - `security` package:
-    - JwtTokenProvider
-    - AuthenticationServiceImpl
-    - CustomUserDetailsService
+    - JwtTokenProvider (HOW!!!!)
+    - AuthenticationServiceImpl +
+    - CustomUserDetailsService +
 - `validation` package:
-    - EmailValidator
-    - PasswordValidator
+    - EmailValidator +
+    - PasswordValidator +
 - `dao` package:
-    - RoleDaoImpl
-    - UserDaoImpl
-- all classes from `service` package
+    - RoleDaoImpl +
+    - UserDaoImpl +
+- all classes from `service` package +
 
 #### [Try to avoid these common mistakes while solving task](https://mate-academy.github.io/jv-program-common-mistakes/java-spring-boot/testing/java-spring-tests.html)
